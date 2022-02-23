@@ -1,0 +1,75 @@
+<project name="MyProject" default="dist" basedir=".">
+	<description>
+		Ejemplo de fichero ant-build para procesadores de lenguajes. Debe tener la siguiente estructura:
+		* diretorio "src", que contenga el fuenta "proj.jj" y los directorios con las clases requeridas
+		* opcionalmente, directorio "lib" con librerías requeridas
+		* directorio "doc" con la documentación del compilador
+		Creará, en el directorio "dist" el programa "proj.jar" que contendrá todo
+
+		* "ant clean" limpiará todo lo generado
+		* "ant" compilarará lo necesario
+	</description>
+
+	<!-- El fuente de jcc será ${project}.jj, y generará  ${project}.tar -->
+	<property name="project" value="ejemplo"/>
+	<property name="java_compiler" value="/usr/lib/jvm/java-8-openjdk-amd64/bin/javac"/>
+	<!-- <property name="java_compiler" value="javac"/> -->
+
+	<!-- Variables -->
+	<property name="dir_traductor" value="traductor"/>
+	<property name="doc" location="doc"/>
+	<property name="build" location="build"/>
+	<property name="build_META_INF" location="build/META-INF"/>
+	<property name="dist" location="dist"/>
+	<property name="lib" location="lib"/>
+	<property name="jcc_src" location="traductor"/>
+	<property name="jcc_files" location="jcc_files"/>
+
+	<target name="init">
+		<!-- Crear marca de tiempo -->
+		<tstamp/>
+		<!-- Crear la estructura de directorios -->
+		<mkdir dir="${build}"/>
+		<mkdir dir="${build_META_INF}"/>
+	  	<mkdir dir="${jcc_files}"/>
+	  	<mkdir dir="${dist}"/>
+		<!-- Copiar direcctorios doc" a ${build}, si existe -->
+		<copy todir="${dist}" failonerror="false">  
+			<fileset dir="." includes="doc/**" />
+		</copy>
+	</target>
+
+	<target name="jcc" depends="init"> 
+	  	<!-- Generar el código fuente del traductor desde ${src_compiler} hasta ${jcc_files} -->
+	  	<javacc target="${jcc_src}/${project}.jj"
+	      	javacchome="${user.home}/aplicaciones/javacc/target"
+	      	outputdirectory="${jcc_files}"
+	      	static="true"
+	  	/>
+	</target>
+
+	<target name="compile" depends="init,jcc" description="compile the source">
+	  	<!-- Compilar el código java desde ${lib} y ${jcc_files} en ${build} -->
+	  	<javac executable="${java_compiler}" destdir="${build}" includeantruntime="false">
+	      	<src path="${jcc_files}"/>
+	      	<src path="${lib}"/>
+	      	<compilerarg value="-Xlint:-unchecked"/>
+	  	</javac>
+	</target>
+
+	<!-- Crear el jar con todo en ${dist} -->
+	<target name="dist" depends="compile">
+		<manifest file="${build_META_INF}/MANIFEST.MF" >
+	  		<attribute name="Class-Path" value="${dir_traductor}/${project}.jar" />
+	    	<attribute name="Main-Class" value="${dir_traductor}/${project}" />  
+ 		</manifest>
+		<jar manifest="${build_META_INF}/MANIFEST.MF" jarfile="${dist}/${project}.jar" basedir="${build}" />
+	</target>
+
+	<!-- Limpiar todo -->
+	<target name="clean" description="clean up">
+	  	<delete dir="${build}"/>
+	  	<delete dir="${dist}"/>
+	  	<delete dir="${jcc_files}"/>
+	</target>
+</project>

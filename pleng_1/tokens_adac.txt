@@ -1,0 +1,69 @@
+ADAC 
+GENERAL:
+    COMMENT     --.*$
+    SEPARATOR   ";"
+    NEXTELEMENT ","
+    LPARAN      "("
+    RPARAN      ")"
+    LBRACE      "["
+    RBRACE      "]"
+    BLANK       [:space:]
+
+DEFINICIONES, TIPOS Y CONSTANTES:
+    NAME        [_]?[A-Za-z]([_]?[A-Za-z0-9]+)*
+    VALUETYPE   {"integer"|"character"|"boolean"}
+    INTVALUE    {0|[1-9][0-9]*}
+    CHARVALUE   '.'
+    BOOLVALUE   {"true"|"false"}
+    STRING      \".*\"
+
+OPERACIONES DE ASIGNACION Y ARITMETICOLOGICAS:
+    ASIGNATION  ":="
+    ADD         "+"
+    SUB         "-"
+    MUL         "*"
+    DIV         "div"
+    MOD         "mod"
+    EQUAL       "="
+    NOTEQUAL    "<>"
+    LESSTHAN    "<"
+    GREATERTHAN ">"
+    LTOREQUAL   "<="
+    GTOREQUAL   ">="
+    AND         "and"
+    OR          "or"
+    NOT         "not"
+
+OPERACIONES ESPECIALES (???):
+    PUT         "put"
+    PUT_LINE    "put_line"
+
+DECLARACION. FUNCION & PROCEDIMIENTO:
+    FUNCTION    "function"
+    PROCEDURE   "procedure"
+    IS          "is"
+    VALPARAM    "val"
+    REFPARAM    "ref"
+    RETURN      "return"
+
+ESTRUCTURAS DE CONTROL. IF & WHILE:
+    IF          "if"
+    THEN        "then"
+    ELSE        "else
+    WHILE       "while"
+    DO          "do"
+
+CUERPO:
+    BEGIN       "begin"
+    END         "end"
+
+
+
+
+
+
+
+
+
+
+

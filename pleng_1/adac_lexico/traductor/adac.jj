@@ -1,0 +1,200 @@
+//*****************************************************************
+// File:   adac.jj
+// Author: Sergio Gabete César (774631) & Devid Dokash (780131).
+// Date:   19/02/2022 (last version).
+// Coms:   Un tutorial sobre el análisis léxico con javacc
+//         https://javacc.github.io/javacc/tutorials/token-manager.html
+//*****************************************************************
+
+// options {
+//   IGNORE_CASE = false;
+//   COMMON_TOKEN_ACTION = false;
+//   ...
+// }
+
+PARSER_BEGIN(adac)
+package traductor;
+
+public class adac {
+    public static void main(String[] args) throws java.io.FileNotFoundException, ParseException {
+    	adac parser;
+
+    	try {
+	    	if(args.length == 0) { //entrada desde stdin
+				parser = new adac(System.in);
+			}
+			else { //entrada desde fichero en args[0]
+	            parser = new adac(new java.io.FileInputStream(args[0])); 
+			}
+			parser.S(); //invoca símbolo inicial de la gramática
+			System.out.println("Compilacion con exito");
+
+		} catch (java.io.FileNotFoundException e) {
+			System.err.println ("Fichero " + args[0] + " no encontrado.");
+		} catch (TokenMgrError e) {
+        	System.err.println("LEX_ERROR: " + e.getMessage());
+        } 
+    }
+}
+PARSER_END(adac)
+
+//-- Descripcion del AL.
+SKIP: {
+	" " | "\t" | "\r"
+}
+
+//-- Conjuntos.
+TOKEN: {
+ 		< #LETTER: ["a"-"z","A"-"Z"] >
+	|	< #DIGIT: ["0"-"9"] >
+	|	< #ALNUM: ["a"-"z","A"-"Z","0"-"9"] >
+	|	< LINE: "\n" >
+}
+
+//-- Comentarios.
+TOKEN: {
+		< INITCOMMENT: "--" > : Comment
+}
+<Comment> TOKEN: {
+		< ENDCOMMENT: < LINE > > : DEFAULT
+	| 	< COMMENT: (~[]) >
+}
+
+//-- Sintaxis general.
+TOKEN: {
+		< SEMICOLON: ";" >
+	|	< COLON: "," >
+	|	< LPAREN: "(" >
+	|	< RPAREN: ")" >
+	|	< LBRACK: "[" >
+	|	< RBRACK: "]" > 
+}
+
+//-- Definiciones, tipos y constantes
+TOKEN: {
+		< INTDEF: "integer" >
+	|	< BOOLDEF: "boolean" >
+	|	< CHARDEF: "character" >
+	|	< INTVAL: ("+"|"-")?(< DIGIT >)+ >
+	|   < CHARVAL: "'"(~[])"'" >
+	|   < BOOLVAL: "true" | "false" >
+}
+
+//-- Strings.
+TOKEN: {
+	< INITQUOTE: "\"" > : String
+}
+<String> TOKEN: {
+		< ENDQUOTE: <INITQUOTE> > : DEFAULT
+	|	< STRING: (~[]) >
+}
+
+//-- Operaciones de asignacion y aritmeticologicas.
+TOKEN: {
+    	< ASSIGNATION: ":=" > 
+    |	< ADD: "+" >
+    |	< SUB: "-" >
+    |	< MUL: "*" >
+    |	< DIV: "div" >
+    |	< MOD: "mod" >
+    |	< EQUAL: "=" >
+    |	< NOTEQUAL: "<>" >
+    |	< LESSTHAN: "<" >
+    |	< GREATERTHAN: ">" >
+    |	< LTOREQUAL: "<=" >
+    |	< GTOREQUAL: ">=" >
+    |	< AND: "and" >
+    |	< OR: "or" >
+    |	< NOT: "not" >
+}
+
+//-- Declaraciones. Funciones & procedimientos.
+TOKEN: {
+		< FUNCTION: "function" >
+	|	< PROCEDURE: "procedure" >
+	|	< IS: "is" >
+	|	< VALPARAM: "val" >
+	|	< REFPARAM: "ref" >
+	|	< RETURN: "return" >
+}
+
+//-- Declaraciones. Estructuras de control: if & while.
+TOKEN: {
+    	< IF: "if" >
+    |	< THEN: "then" >
+    |	< ELSE: "else" >
+    |	< WHILE: "while" >
+    |	< DO: "do" >
+}
+
+//-- Declaraciones. Cuerpo:
+TOKEN: {
+		< BEGIN: "begin" >
+    |	< END: "end" >
+}
+
+//-- Declaraciones. Nombres:
+TOKEN: {
+	< NAME: ("_")?(< LETTER >)(("_")?(< ALNUM >)+)* >
+}
+
+//-- Símbolo inicial de la gramática. Para análisis léxico no hace falta más
+void S (): 
+{
+	int lines = 1;
+	Token t;
+}
+{
+	//-- (linea,columna): token lexema
+	( 
+		t = < LINE > { lines++; }
+	|   t = < INITCOMMENT > { System.out.print("(" + lines + "," + t.beginColumn + "): COMMENT --"); }
+	|	t = < COMMENT > { System.out.print(t); }
+	|   t = < ENDCOMMENT > { System.out.println(); }
+	|	t = < SEMICOLON > { System.out.println("(" + lines + "," + t.beginColumn + "): SEMICOLON \"" + t + "\""); }
+	|	t = < COLON > { System.out.println("(" + lines + "," + t.beginColumn + "): COLON \"" + t + "\""); }
+	|	t = < LPAREN > { System.out.println("(" + lines + "," + t.beginColumn + "): LPAREN \"" + t + "\""); }
+	|	t = < RPAREN > { System.out.println("(" + lines + "," + t.beginColumn + "): RPAREN \"" + t + "\""); }
+	| 	t = < LBRACK > { System.out.println("(" + lines + "," + t.beginColumn + "): LBRACK \"" + t + "\""); }
+	|	t = < RBRACK > { System.out.println("(" + lines + "," + t.beginColumn + "): RBRACK \"" + t + "\""); }
+	|   t = < INTDEF > { System.out.println("(" + lines + "," + t.beginColumn + "): INTDEF \"" + t + "\""); }
+	|	t = < BOOLDEF > { System.out.println("(" + lines + "," + t.beginColumn + "): BOOLDEF \"" + t + "\""); }
+	|	t = < CHARDEF > { System.out.println("(" + lines + "," + t.beginColumn + "): CHARDEF \"" + t + "\""); }
+	|	t = < INTVAL > { System.out.println("(" + lines + "," + t.beginColumn + "): INTVAL \"" + t + "\""); }
+	|   t = < CHARVAL > { System.out.println("(" + lines + "," + t.beginColumn + "): CHARVAL \"" + t + "\""); }
+	|   t = < BOOLVAL > { System.out.println("(" + lines + "," + t.beginColumn + "): BOOLVAL \"" + t + "\""); }
+	|   t = < INITQUOTE > { System.out.print("(" + lines + "," + t.beginColumn + "): STRING \""); }
+	|   t = < STRING > { System.out.print(t); }
+	|   t = < ENDQUOTE > { System.out.println("\""); }
+	|   t = < ASSIGNATION > { System.out.println("(" + lines + "," + t.beginColumn + "): ASSIGNATION \"" + t + "\""); }
+    |	t = < ADD > { System.out.println("(" + lines + "," + t.beginColumn + "): ADD \"" + t + "\""); }
+    |	t = < SUB > { System.out.println("(" + lines + "," + t.beginColumn + "): SUB \"" + t + "\""); }
+    |	t = < MUL > { System.out.println("(" + lines + "," + t.beginColumn + "): MUL \"" + t + "\""); }
+    |	t = < DIV > { System.out.println("(" + lines + "," + t.beginColumn + "): DIV \"" + t + "\""); }
+    |	t = < MOD > { System.out.println("(" + lines + "," + t.beginColumn + "): MOD \"" + t + "\""); }
+    |	t = < EQUAL > { System.out.println("(" + lines + "," + t.beginColumn + "): EQUAL \"" + t + "\""); }
+    |	t = < NOTEQUAL > { System.out.println("(" + lines + "," + t.beginColumn + "): NOTEQUAL \"" + t + "\""); }
+    |	t = < LESSTHAN > { System.out.println("(" + lines + "," + t.beginColumn + "): LESSTHAN \"" + t + "\""); }
+    |	t = < GREATERTHAN > { System.out.println("(" + lines + "," + t.beginColumn + "): GREATERTHAN \"" + t + "\""); }
+    |	t = < LTOREQUAL > { System.out.println("(" + lines + "," + t.beginColumn + "): LTOREQUAL \"" + t + "\""); }
+    |	t = < GTOREQUAL > { System.out.println("(" + lines + "," + t.beginColumn + "): GTOREQUAL \"" + t + "\""); }
+    |	t = < AND > { System.out.println("(" + lines + "," + t.beginColumn + "): AND \"" + t + "\""); }
+    |	t = < OR > { System.out.println("(" + lines + "," + t.beginColumn + "): OR \"" + t + "\""); }
+    |	t = < NOT > { System.out.println("(" + lines + "," + t.beginColumn + "): NOT \"" + t + "\""); }
+	|	t = < FUNCTION > { System.out.println("(" + lines + "," + t.beginColumn + "): FUNCTION \"" + t + "\""); }
+	|	t = < PROCEDURE > { System.out.println("(" + lines + "," + t.beginColumn + "): PROCEDURE \"" + t + "\""); }
+	|	t = < IS > { System.out.println("(" + lines + "," + t.beginColumn + "): IS \"" + t + "\""); }
+	|	t = < VALPARAM > { System.out.println("(" + lines + "," + t.beginColumn + "): VALPARAM \"" + t + "\""); }
+	|	t = < REFPARAM > { System.out.println("(" + lines + "," + t.beginColumn + "): REFPARAM \"" + t + "\""); }
+	|	t = < RETURN > { System.out.println("(" + lines + "," + t.beginColumn + "): RETURN \"" + t + "\""); }
+	|	t = < IF > { System.out.println("(" + lines + "," + t.beginColumn + "): IF \"" + t + "\""); }
+    |	t = < THEN > { System.out.println("(" + lines + "," + t.beginColumn + "): THEN \"" + t + "\""); }
+    |	t = < ELSE > { System.out.println("(" + lines + "," + t.beginColumn + "): ELSE \"" + t + "\""); }
+    |	t = < WHILE > { System.out.println("(" + lines + "," + t.beginColumn + "): WHILE \"" + t + "\""); }
+    |	t = < DO > { System.out.println("(" + lines + "," + t.beginColumn + "): DO \"" + t + "\""); }
+	|	t = < BEGIN > { System.out.println("(" + lines + "," + t.beginColumn + "): BEGIN \"" + t + "\""); }
+    |	t = < END > { System.out.println("(" + lines + "," + t.beginColumn + "): END \"" + t + "\""); }
+	|   t = < NAME > { System.out.println("(" + lines + "," + t.beginColumn + "): NAME \"" + t + "\""); }
+	)+
+	< EOF >
+}
