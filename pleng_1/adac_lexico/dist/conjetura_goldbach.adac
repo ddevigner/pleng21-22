@@ -1,0 +1,80 @@
+------------------------------------------------------------------------
+--  conjetura_goldbach.adac
+------------------------------------------------------------------------
+procedure goldbach is
+
+integer n, i;
+
+------------------------------------------------------------------------
+function integer pedir_entero () is
+
+integer n;
+------------------------------------------------------------------------
+begin
+    n := 0;
+    while (n <= 2) or (n mod 2 <> 0) do
+        put("Dame un numero PAR mayor que 2: ");
+        get (n);
+    end
+    return n;
+end
+       
+------------------------------------------------------------------------
+function boolean es_primo (val integer k) is
+
+integer i;
+boolean primo;
+------------------------------------------------------------------------
+begin
+    i := 2;
+    primo := true;
+    while (i <= (k div 2)) and (primo) do
+        primo := (k mod i) <> 0;
+        i := i + 1;
+    end
+    return primo;
+end
+
+------------------------------------------------------------------------
+function boolean hay_un_par (val integer k) is
+
+integer i, n, a, b;
+------------------------------------------------------------------------
+begin
+    a := 2;
+    b := 2;
+    n := 0;
+    put (k, " es la suma de: ");
+    while (a < k) and (b < k) do
+        if es_primo (a) and es_primo (b) and ((a + b) = k) then
+            put(a, "+", b,", ");
+            n := n + 1;
+        end
+        a := a + 1;
+        if a = k then
+            b := b + 1;
+            a := b;
+        end
+    end
+
+    put_line(n, " parejas de primos en total.");
+    return n > 0;
+end
+
+------------------------------------------------------------------------
+begin
+    put_line ("Conjetura de Golbach: todo número par mayor que 2 puede escribirse como suma de dos números primos.");
+    put_line ("https://es.wikipedia.org/wiki/Conjetura_de_Goldbach");
+    put_line();
+    put_line ("Este programa comprueba si es cierta hasta el número que le digas.");
+    put_line();
+
+    n := pedir_entero ();
+    i := 4;
+    while i <= n do
+        if not hay_un_par (i) then
+            put_line ("L conjetura no se cumple para ", i, "! (Seguro que por error del compilador!)");
+        end
+        i := i + 2;
+    end
+end
