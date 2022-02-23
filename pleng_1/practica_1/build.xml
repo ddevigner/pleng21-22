@@ -48,17 +48,19 @@
 		</copy>
 	</target>
 
+
 	<target name="jcc" depends="init"> 
 	  	<!-- Generar el código fuente del traductor desde ${src_compiler} hasta ${jcc_files} -->
+		<!--/home/gabete/JavaCC/javacc/target-->
+		<!--C:\tools\javacc\target-->
 	  	<javacc target="${jcc_src}/${project}.jj"
-	      	javacchome="/home/gabete/JavaCC/javacc/target"
+	      	javacchome="C:\tools\javacc\target"
 	      	outputdirectory="${jcc_files}"
 	      	static="true"
 	  	/>
 	</target>
 
-	<!--/home/gabete/JavaCC/javacc/target-->
-	<!--C:\tools\javacc\target-->
+
 	<target name="compile" depends="init,jcc" description="compile the source">
 	  	<!-- Compilar el código java desde ${lib} y ${jcc_files} en ${build} -->
 	  	<javac destdir="${build}" includeantruntime="false">
