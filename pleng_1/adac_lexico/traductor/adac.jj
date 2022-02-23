@@ -37,6 +37,10 @@ public class adac {
 PARSER_END(adac)
 
 //-- Descripcion del AL.
+SKIP: {
+	" " | "\t" | "\r" | "\n"
+}
+
 TOKEN_MGR_DECLS: {
 	static void CommonTokenAction(Token t){
 		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
@@ -44,20 +48,15 @@ TOKEN_MGR_DECLS: {
 	}
 }
 
-SKIP: {
-	" " | "\t" | "\r" | "\n"
-}
-
 //-- Conjuntos.
 TOKEN: {
  		< #LETTER: ["a"-"z","A"-"Z"] >
 	|	< #DIGIT: ["0"-"9"] >
-	|	< #ALNUM: ["a"-"z","A"-"Z","0"-"9"] >
 }
 
 //-- Comentarios.
 SPECIAL_TOKEN: {
-		< INITCOMMENT: "--"(~["\n"])*"\n" >
+		< COMMENT: "--"(~["\n"])*"\n" >
 }
 
 //-- Sintaxis general.
@@ -75,30 +74,26 @@ TOKEN: {
 		< INTDEF: "integer" >				
 	|	< BOOLDEF: "boolean" >				
 	|	< CHARDEF: "character" >			
-	|	< INTVAL: ("+"|"-")?(< DIGIT >)+ >	
+	|	< INTVAL: (< DIGIT >)+ >	
 	|   < CHARVAL: "'"(~[])"'" >			
 	|   < BOOLVAL: "true" | "false" >
-}
-
-//-- Strings.
-TOKEN: {
-	< STRING: "\""(~["\""])*"\"" >
+	|	< STRING: "\""(~["\""])*"\"" >
 }
 
 //-- Operaciones de asignacion y aritmeticologicas.
 TOKEN: {
-    	< ASSIGNATION: ":=" > 
+    	< ASSIGN: ":=" > 
     |	< ADD: "+" >		
     |	< SUB: "-" >		
     |	< MUL: "*" >		
     |	< DIV: "div" >		
     |	< MOD: "mod" >		
     |	< EQUAL: "=" >		
-    |	< NOTEQUAL: "<>" >	
-    |	< LESSTHAN: "<" >	
-    |	< GREATERTHAN: ">" >
-    |	< LTOREQUAL: "<=" >	
-    |	< GTOREQUAL: ">=" >	
+    |	< NE: "<>" >	
+    |	< LT: "<" >	
+    |	< GT: ">" >
+    |	< LE: "<=" >	
+    |	< GE: ">=" >	
     |	< AND: "and" >		
     |	< OR: "or" >		
     |	< NOT: "not" >		
@@ -106,12 +101,20 @@ TOKEN: {
 
 //-- Declaraciones. Funciones & procedimientos.
 TOKEN: {
-		< FUNCTION: "function" >
-	|	< PROCEDURE: "procedure" >
+		< FUNC: "function" >
+	|	< PROC: "procedure" >
 	|	< IS: "is" >			
-	|	< VALPARAM: "val" >		
-	|	< REFPARAM: "ref" >		
+	|	< VALPAR: "val" >		
+	|	< REFPAR: "ref" >		
 	|	< RETURN: "return" >	
+}
+
+//-- Declaraciones. Funciones predefinidas.
+TOKEN: {
+		< PUT: "put" >
+	|	< PUTLINE: "put_line" >
+	| 	< CHAR2INT: "charToInt" >
+	|	< INT2CHAR: "intToChar" >
 }
 
 //-- Declaraciones. Estructuras de control: if & while.
@@ -131,7 +134,9 @@ TOKEN: {
 
 //-- Declaraciones. Nombres:
 TOKEN: {
-	< NAME: ("_")?(< LETTER >)(("_")?(< ALNUM >)+)* >
+	< ID:
+		("_" | < LETTER > | < LETTER >"_")(< LETTER > | < LETTER >"_" | < DIGIT > | < DIGIT >"_")*
+	>
 }
 
 SPECIAL_TOKEN: {
@@ -162,27 +167,31 @@ void S ():
 	|   < CHARVAL >
 	|   < BOOLVAL >
 	|   < STRING >
-	|   < ASSIGNATION >
+	|   < ASSIGN >
     |	< ADD >
     |	< SUB >
     |	< MUL >
     |	< DIV >
     |	< MOD >
     |	< EQUAL >
-    |	< NOTEQUAL >
-    |	< LESSTHAN >
-    |	< GREATERTHAN >
-    |	< LTOREQUAL >
-    |	< GTOREQUAL >
+    |	< NE >
+    |	< LT >
+    |	< GT >
+    |	< LE >
+    |	< GE >
     |	< AND >
     |	< OR >
     |	< NOT >
-	|	< FUNCTION >
-	|	< PROCEDURE >
+	|	< FUNC >
+	|	< PROC >
 	|	< IS >
-	|	< VALPARAM >
-	|	< REFPARAM >
+	|	< VALPAR >
+	|	< REFPAR >
 	|	< RETURN >
+	|   < PUT >
+	|   < PUTLINE >
+	|   < CHAR2INT >
+	|   < INT2CHAR >
 	|	< IF >
     |	< THEN >
     |	< ELSE >
@@ -190,7 +199,7 @@ void S ():
     |	< DO >
 	|	< BEGIN >
     |	< END >
-	|   < NAME >
+	|   < ID >
 	)+
 	< EOF >
 }

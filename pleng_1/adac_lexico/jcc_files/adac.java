@@ -80,8 +80,8 @@ public class adac implements adacConstants {
         jj_consume_token(STRING);
         break;
         }
-      case ASSIGNATION:{
-        jj_consume_token(ASSIGNATION);
+      case ASSIGN:{
+        jj_consume_token(ASSIGN);
         break;
         }
       case ADD:{
@@ -108,24 +108,24 @@ public class adac implements adacConstants {
         jj_consume_token(EQUAL);
         break;
         }
-      case NOTEQUAL:{
-        jj_consume_token(NOTEQUAL);
+      case NE:{
+        jj_consume_token(NE);
         break;
         }
-      case LESSTHAN:{
-        jj_consume_token(LESSTHAN);
+      case LT:{
+        jj_consume_token(LT);
         break;
         }
-      case GREATERTHAN:{
-        jj_consume_token(GREATERTHAN);
+      case GT:{
+        jj_consume_token(GT);
         break;
         }
-      case LTOREQUAL:{
-        jj_consume_token(LTOREQUAL);
+      case LE:{
+        jj_consume_token(LE);
         break;
         }
-      case GTOREQUAL:{
-        jj_consume_token(GTOREQUAL);
+      case GE:{
+        jj_consume_token(GE);
         break;
         }
       case AND:{
@@ -140,28 +140,44 @@ public class adac implements adacConstants {
         jj_consume_token(NOT);
         break;
         }
-      case FUNCTION:{
-        jj_consume_token(FUNCTION);
+      case FUNC:{
+        jj_consume_token(FUNC);
         break;
         }
-      case PROCEDURE:{
-        jj_consume_token(PROCEDURE);
+      case PROC:{
+        jj_consume_token(PROC);
         break;
         }
       case IS:{
         jj_consume_token(IS);
         break;
         }
-      case VALPARAM:{
-        jj_consume_token(VALPARAM);
+      case VALPAR:{
+        jj_consume_token(VALPAR);
         break;
         }
-      case REFPARAM:{
-        jj_consume_token(REFPARAM);
+      case REFPAR:{
+        jj_consume_token(REFPAR);
         break;
         }
       case RETURN:{
         jj_consume_token(RETURN);
+        break;
+        }
+      case PUT:{
+        jj_consume_token(PUT);
+        break;
+        }
+      case PUTLINE:{
+        jj_consume_token(PUTLINE);
+        break;
+        }
+      case CHAR2INT:{
+        jj_consume_token(CHAR2INT);
+        break;
+        }
+      case INT2CHAR:{
+        jj_consume_token(INT2CHAR);
         break;
         }
       case IF:{
@@ -192,8 +208,8 @@ public class adac implements adacConstants {
         jj_consume_token(END);
         break;
         }
-      case NAME:{
-        jj_consume_token(NAME);
+      case ID:{
+        jj_consume_token(ID);
         break;
         }
       default:
@@ -215,27 +231,31 @@ public class adac implements adacConstants {
       case CHARVAL:
       case BOOLVAL:
       case STRING:
-      case ASSIGNATION:
+      case ASSIGN:
       case ADD:
       case SUB:
       case MUL:
       case DIV:
       case MOD:
       case EQUAL:
-      case NOTEQUAL:
-      case LESSTHAN:
-      case GREATERTHAN:
-      case LTOREQUAL:
-      case GTOREQUAL:
+      case NE:
+      case LT:
+      case GT:
+      case LE:
+      case GE:
       case AND:
       case OR:
       case NOT:
-      case FUNCTION:
-      case PROCEDURE:
+      case FUNC:
+      case PROC:
       case IS:
-      case VALPARAM:
-      case REFPARAM:
+      case VALPAR:
+      case REFPAR:
       case RETURN:
+      case PUT:
+      case PUTLINE:
+      case CHAR2INT:
+      case INT2CHAR:
       case IF:
       case THEN:
       case ELSE:
@@ -243,7 +263,7 @@ public class adac implements adacConstants {
       case DO:
       case BEGIN:
       case END:
-      case NAME:{
+      case ID:{
         ;
         break;
         }
@@ -273,10 +293,10 @@ public class adac implements adacConstants {
 	   jj_la1_init_1();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0xfffffe00,0xfffffe00,};
+	   jj_la1_0 = new int[] {0xffffff00,0xffffff00,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x7ffff,0x7ffff,};
+	   jj_la1_1 = new int[] {0x3fffff,0x3fffff,};
 	}
 
   /** Constructor with InputStream. */
@@ -422,7 +442,7 @@ public class adac implements adacConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
 	 jj_expentries.clear();
-	 boolean[] la1tokens = new boolean[52];
+	 boolean[] la1tokens = new boolean[55];
 	 if (jj_kind >= 0) {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
@@ -439,7 +459,7 @@ public class adac implements adacConstants {
 		 }
 	   }
 	 }
-	 for (int i = 0; i < 52; i++) {
+	 for (int i = 0; i < 55; i++) {
 	   if (la1tokens[i]) {
 		 jj_expentry = new int[1];
 		 jj_expentry[0] = i;
