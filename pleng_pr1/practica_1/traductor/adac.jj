@@ -18,13 +18,13 @@ public class adac {
     	adac parser;
 
     	try {
-	    	if(args.length == 0) { //entrada desde stdin
+	    	if(args.length == 0) { // Entrada desde stdin.
 				parser = new adac(System.in);
 			}
-			else { //entrada desde fichero en args[0]
+			else { // Entrada desde fichero en args[0].
 	            parser = new adac(new java.io.FileInputStream(args[0])); 
 			}
-			parser.S(); //invoca símbolo inicial de la gramática
+			parser.S(); // Invoca símbolo inicial de la gramática.
 			System.out.println("Compilacion con exito");
 
 		} catch (java.io.FileNotFoundException e) {
@@ -41,6 +41,7 @@ SKIP: {
 	" " | "\t" | "\r" | "\n"
 }
 
+// -- Funciones globales.
 TOKEN_MGR_DECLS: {
 	static void CommonTokenAction(Token t){
 		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
@@ -56,7 +57,7 @@ TOKEN: {
 
 //-- Comentarios.
 SPECIAL_TOKEN: {
-		< COMMENT: "--"(~["\n"])*"\n" >
+	< COMMENT: "--"(~["\n"])*"\n" >
 }
 
 //-- Sintaxis general.
@@ -69,7 +70,7 @@ TOKEN: {
 	|	< RBRACK: "]" >
 }
 
-//-- Definiciones, tipos y constantes
+//-- Definiciones, tipos y constantes.
 TOKEN: {
 		< INTDEF: "integer" >				
 	|	< BOOLDEF: "boolean" >				
@@ -134,17 +135,15 @@ TOKEN: {
 
 //-- Declaraciones. Nombres:
 TOKEN: {
-	< ID:
-		("_" | < LETTER > | < LETTER >"_")(< LETTER > | < LETTER >"_" | < DIGIT > | < DIGIT >"_")*
-	>
+	< ID: ("_" | < LETTER > | < LETTER >"_")(< LETTER > | < LETTER >"_" | < DIGIT > | < DIGIT >"_")* >
 }
 
 SPECIAL_TOKEN: {
 	< UNKNOWN: (~[]) >	
 		{ 
 			System.err.println("ERROR LEXICO: (" + 
-				matchedToken.beginLine + "," + matchedToken.beginColumn + "): "
-				+ "simbolo no reconocido: " + matchedToken);
+				matchedToken.beginLine + "," + matchedToken.beginColumn + 
+				"): simbolo no reconocido: " + matchedToken);
 		}
 }
 
@@ -152,7 +151,6 @@ SPECIAL_TOKEN: {
 void S (): 
 {}
 {
-	//-- (linea,columna): token lexema
 	( 
 		< SEMICOLON >
 	|	< COLON >
