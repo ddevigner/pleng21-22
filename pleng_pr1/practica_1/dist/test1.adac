@@ -1,0 +1,20 @@
+--test1
+------------------------------
+
+integer;
+character mensaje = 'Hola mundo';
+boolean = 1;
+
+integer i,j = 0;
+character IF;
+
+
+procedure b_dec() is
+begin
+	putline("Valor de la variable" , mensaje);
+    mensaje = 'mensaje cambiado';
+    put_line("El mensaje ha cambiado" , mensaje);
+end
+
+
+
