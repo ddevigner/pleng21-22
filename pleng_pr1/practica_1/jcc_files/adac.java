@@ -7,13 +7,13 @@ public class adac implements adacConstants {
         adac parser;
 
         try {
-                if(args.length == 0) { //entrada desde stdin
+                if(args.length == 0) { // Entrada desde stdin.
                                 parser = new adac(System.in);
                         }
-                        else { //entrada desde fichero en args[0]
+                        else { // Entrada desde fichero en args[0].
                     parser = new adac(new java.io.FileInputStream(args[0]));
                         }
-                        parser.S(); //invoca símbolo inicial de la gramática
+                        parser.S(); // Invoca símbolo inicial de la gramática.
                         System.out.println("Compilacion con exito");
 
                 } catch (java.io.FileNotFoundException e) {

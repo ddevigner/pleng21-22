@@ -998,8 +998,8 @@ static void SkipLexicalActions(Token matchedToken)
       case 54 :
          image.append(input_stream.GetSuffix(jjimageLen + (lengthOfMatch = jjmatchedPos + 1)));
                         System.err.println("ERROR LEXICO: (" +
-                                matchedToken.beginLine + "," + matchedToken.beginColumn + "): "
-                                + "simbolo no reconocido: " + matchedToken);
+                                matchedToken.beginLine + "," + matchedToken.beginColumn +
+                                "): simbolo no reconocido: " + matchedToken);
          break;
       default :
          break;

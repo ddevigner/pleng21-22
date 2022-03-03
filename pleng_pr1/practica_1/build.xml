@@ -54,7 +54,7 @@
 		<!--/home/gabete/JavaCC/javacc/target-->
 		<!--C:\tools\javacc\target-->
 	  	<javacc target="${jcc_src}/${project}.jj"
-	      	javacchome="C:\tools\javacc\target"
+	      	javacchome="/home/gabete/JavaCC/javacc/target"
 	      	outputdirectory="${jcc_files}"
 	      	static="true"
 	  	/>
