@@ -41,7 +41,7 @@ SKIP: {
 	" " | "\t" | "\r" | "\n"
 }
 
-// -- Funciones globales.
+//-- Funciones globales.
 TOKEN_MGR_DECLS: {
 	static void CommonTokenAction(Token t){
 		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
