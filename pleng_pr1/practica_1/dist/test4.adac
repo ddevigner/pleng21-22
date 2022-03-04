@@ -1,0 +1,51 @@
+--test4 
+
+procedure p1 is
+-------------------------- 
+begin
+
+-----------------------------------
+end
+
+fuction integer p2(ref integer r1, val integer r2) is
+begin
+    if r1 == r2 and 0==0 then
+        put_line("mostrando la variable r1", r1);
+        c = intToChar(r1);
+        put_line("mostrando la variable r1 en forma de caracter", c);
+    else
+        while r1 < r2 do
+            r1+= 1;
+        end
+    end
+
+    return r1;
+end
+
+character resul[100];
+--------------------------------
+fuction character p3() is
+    integer i:=1;
+begin
+    while i mod 100 == 1 do
+        character[i-1] := intToChar(i);
+        i := i * 2;
+    end
+    return resul;
+end
+
+fuction boolean p4(val integer a,b) is--------------------------
+begin
+    return a*b mod 10 == 20 div 2;
+end
+
+
+begin
+    if p4(100*100) then
+        put_line("No es un buen numero");
+
+    else
+        integer num = p2(20,30);
+        
+    end 
+end

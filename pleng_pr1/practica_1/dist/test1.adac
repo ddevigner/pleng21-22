@@ -1,0 +1,40 @@
+--test1
+--El programa dara error en la variable en los '' de mensaje y el && __var 7var
+------------------------------
+
+integer;
+character mensaje := 'H';
+boolean := 1;
+
+integer i,j := 0;
+character IF, FOR__;
+
+
+procedure b_dec() is
+begin
+	putline("Valor de la variable" , mensaje);
+    mensaje := 'm';
+    put_line("El mensaje ha cambiado" , mensaje);
+end
+
+
+function integer sum(val integer n,b) is
+	integer resul;
+begin
+    resul := 0;
+	while resul < n and resul <> n do
+        sum += b;
+    end
+end
+
+begin
+    put_line ("");
+  put_line ("Este programa muestra dos mensajes y acumula un numero");
+  put_line ("");
+  b_dec();
+  i := sum(10,1);
+    j := sum(10,2)
+  put_line ("");
+  putline ("i y j",i,j)
+
+end
