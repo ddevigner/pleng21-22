@@ -1,27 +1,30 @@
 programa  : 
-  <tPROCEDURE>
-  <tID>
-  <tIS>
+  <PROC>
+  <ID>
+  <IS>
   declaracion_variables
   declaracion_procs_funcs
   bloque_sentencias
+  //bloque sentencias puede estar vacio pero siempre acaba en end
 
-declaracion_variables :
-  ( declaracion <tPC> )*
+  
 
-declaracion :
-  tipo_variable lista_vars
+def_vars:
+  ( define <SEMICOLON> )*
 
-tipo_variable :
-  <tINT> | <tCHAR> | <tBOOL>
+define:
+  var_type vars_list
 
-lista_vars :
-  variable ( <tC> variable )*
+var_type:
+  <INTDEF> | <CHARDEF> | <BOOLDEF>
 
-variable :
+next_var:
+  the_var ( <COLON> next_var )*
+
+the_var:
   LOOKAHEAD(2)
-  <tID> <tACOR> <tCONST_INT> <tCCOR>
-| <tID>
+    <ID> <LBRACK> <INTVAL> <RBRACK>
+  | <ID>
 
 declaracion_procs_funcs :
   ( declaracion_proc_func )*

@@ -57,7 +57,7 @@ TOKEN: {
 
 //-- Comentarios.
 SPECIAL_TOKEN: {
-	< COMMENT: "--"(~["\n"])*"\n" >
+	< COMMENT: "--"(~["\n"])*("\n")? >
 }
 
 //-- Sintaxis general.
@@ -148,57 +148,68 @@ SPECIAL_TOKEN: {
 		}
 }
 
+
+//---------------------------------------------------------
+//--	GRAMATICA
+//---------------------------------------------------------
+
 //-- Símbolo inicial de la gramática. Para análisis léxico no hace falta más
 void S (): 
+{} {
+	(vars_def_lines()) < EOF >
+}
+
+void main() :
 {}
 {
-	( 
-		< SEMICOLON >
-	|	< COLON >
-	|	< LPAREN >
-	|	< RPAREN >
-	| 	< LBRACK >
-	|	< RBRACK >
-	|   < INTDEF > 
-	|	< BOOLDEF >
-	|	< CHARDEF >
-	|	< INTVAL >
-	|   < CHARVAL >
-	|   < BOOLVAL >
-	|   < STRING >
-	|   < ASSIGN >
-    |	< ADD >
-    |	< SUB >
-    |	< MUL >
-    |	< DIV >
-    |	< MOD >
-    |	< EQUAL >
-    |	< NE >
-    |	< LT >
-    |	< GT >
-    |	< LE >
-    |	< GE >
-    |	< AND >
-    |	< OR >
-    |	< NOT >
-	|	< FUNC >
-	|	< PROC >
-	|	< IS >
-	|	< VALPAR >
-	|	< REFPAR >
-	|	< RETURN >
-	|   < PUT >
-	|   < PUTLINE >
-	|   < CHAR2INT >
-	|   < INT2CHAR >
-	|	< IF >
-    |	< THEN >
-    |	< ELSE >
-    |	< WHILE >
-    |	< DO >
-	|	< BEGIN >
-    |	< END >
-	|   < ID >
-	)+
-	< EOF >
+	<PROC> <ID> <IS> var_def_lines() operation_def() bloque_sentencias()
+}
+
+//(parametros | ) es que a veces puede a ver parametros o estar vacio
+void operation_def ():
+{} {
+	(proc_type() proc_def() bloque_sentencias())*
+}
+
+void proc_type()
+{} {
+	<PROC> | <FUNC>
+}
+
+void proc_def():
+{} {
+	vars_type() <ID> <LPAREN> params_def() <RPAREN> 
+}
+
+//empieza en begin y acaba en end, sirve para proc_def a parte de para el main
+void bloque_sentencias():
+{} {
+	<BEGIN> instructions() <END>
+}
+
+
+void vars_def_lines ():
+{} {
+	(vars_def() <SEMICOLON> )*
+}
+
+void vars_def ():
+{} {
+	vars_type() vars_ids()
+}
+
+void vars_type ():
+{} {
+	<INTDEF> | <CHARDEF> | <BOOLDEF>
+}
+
+void vars_ids():
+{} {
+	var_id() ( <COLON> vars_ids() )*
+}
+
+void var_id ():
+{} {
+	LOOKAHEAD(2)
+	<ID> <LBRACK> <INTVAL> <RBRACK> | <ID>
 }
