@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.10.7
+Created-By: 11.0.14+9-Ubuntu-0ubuntu2.20.04 (Ubuntu)
+Main-Class: traductor/calc_enteros
+Class-Path: traductor/calc_enteros.jar
+
