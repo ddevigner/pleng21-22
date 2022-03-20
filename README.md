@@ -1,5 +1,5 @@
 # PROCESADORES DEL LENGUAJE 2021-22
-## 1.Material adicional de soporte
+## 1. Material adicional de soporte
 ### Documentacion
 - [xamples](https://github.com/ddevigner/pleng21-22/tree/main/doc/xamples): ejemplos en adac.
 - [javacc_intro](https://github.com/ddevigner/pleng21-22/blob/main/doc/javacc_intro.pdf): introduccion a javacc.
@@ -45,7 +45,7 @@
     maquinap <binario>
     ```
 
-## 2.Practicas
+## 2. Practicas
 - [Practica 1](https://github.com/ddevigner/pleng21-22/tree/main/practica_1): implementacion del analizador lexico de lenguaje ADAC.
 - [Practica 2](https://github.com/ddevigner/pleng21-22/tree/main/practica_2): implementacion del analizador sintactico de lenguaje ADAC.
 
