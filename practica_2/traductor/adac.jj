@@ -1,10 +1,13 @@
-//*****************************************************************
-// File:   adac.jj
-// Author: Sergio Gabete César (774631) & Devid Dokash (780131).
-// Date:   19/02/2022 (last version).
-// Coms:   Un tutorial sobre el análisis léxico con javacc
-//         https://javacc.github.io/javacc/tutorials/token-manager.html
-//*****************************************************************
+//-----------------------------------------------------------------------------
+// - File: adac.jj
+// - Author: Sergio Gabete César (774631) & Devid Dokash (780131).
+// - Date: 20/03/2022 (last version).
+// - Coms: https://javacc.github.io/javacc/tutorials/token-manager.html. Imple-
+// mentacion del analizador sintactico.
+// - Version: 1.
+// - Version-Info: nuevas reglas respecto a funciones definidas en adac para su 
+// diferenciacion a nombres de variable, correccion de regex de comentarios.
+//-----------------------------------------------------------------------------
 
 options {
    COMMON_TOKEN_ACTION = true;
@@ -14,17 +17,21 @@ PARSER_BEGIN(adac)
 package traductor;
 
 public class adac {
-    public static void main(String[] args) throws java.io.FileNotFoundException, ParseException {
+    public static void main(String[] args) throws java.io.FileNotFoundException, 
+			ParseException {
     	adac parser;
 
     	try {
-	    	if(args.length == 0) { // Entrada desde stdin.
+			// Entrada desde stdin.
+	    	if(args.length == 0) {
 				parser = new adac(System.in);
 			}
-			else { // Entrada desde fichero en args[0].
+			// Entrada desde fichero en args[0].
+			else {
 	            parser = new adac(new java.io.FileInputStream(args[0])); 
 			}
-			parser.S(); // Invoca símbolo inicial de la gramática.
+			// Invoca símbolo inicial de la gramática.
+			parser.S();
 			System.out.println("Compilacion con exito");
 
 		} catch (java.io.FileNotFoundException e) {
@@ -36,12 +43,19 @@ public class adac {
 }
 PARSER_END(adac)
 
-//-- Descripcion del AL.
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// ANALIZADOR LEXICO.
+//-----------------------------------------------------------------------------
+// Se ignoran espacios, saltos de linea, caracteres que no aportan informacion
+// al analisis lexico.
 SKIP: {
-	" " | "\t" | "\r" | "\n"
+	" " | "\t" | "\r" | "\n" | "\r\n"
 }
 
-//-- Funciones globales.
+//-----------------------------------------------------------------------------
+// Funcion global para todos los tokens. Imprimir por pantalla la linea, la 
+// columna, el tipo de token y el valor del token que ha hecho match.
 TOKEN_MGR_DECLS: {
 	static void CommonTokenAction(Token t){
 		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
@@ -49,18 +63,22 @@ TOKEN_MGR_DECLS: {
 	}
 }
 
-//-- Conjuntos.
+//-----------------------------------------------------------------------------
+// Conjuntos.
 TOKEN: {
  		< #LETTER: ["a"-"z","A"-"Z"] >
 	|	< #DIGIT: ["0"-"9"] >
 }
 
-//-- Comentarios.
+//-----------------------------------------------------------------------------
+// Comentarios: SPECIAL_TOKEN ya que interesa ignorar los comentarios y no 
+// procesarlos.
 SPECIAL_TOKEN: {
 	< COMMENT: "--"(~["\n"])*("\n")? >
 }
 
-//-- Sintaxis general.
+//-----------------------------------------------------------------------------
+// Sintaxis general.
 TOKEN: {
 		< SEMICOLON: ";" >
 	|	< COLON: "," >
@@ -70,7 +88,10 @@ TOKEN: {
 	|	< RBRACK: "]" >
 }
 
-//-- Definiciones, tipos y constantes.
+//-----------------------------------------------------------------------------
+// Tipos y constantes: enteros, booleanos y caracteres, tanto como dato simple
+// como array. En algunas funciones se permite el uso de strings pero no como
+// variables.
 TOKEN: {
 		< INTDEF: "integer" >				
 	|	< BOOLDEF: "boolean" >				
@@ -81,7 +102,8 @@ TOKEN: {
 	|	< STRING: "\""(~["\""])*"\"" >
 }
 
-//-- Operaciones de asignacion y aritmeticologicas.
+//-----------------------------------------------------------------------------
+// Operaciones de asignacion y aritmeticologicas.
 TOKEN: {
     	< ASSIGN: ":=" > 
     |	< ADD: "+" >		
@@ -100,7 +122,8 @@ TOKEN: {
     |	< NOT: "not" >		
 }
 
-//-- Declaraciones. Funciones & procedimientos.
+//-----------------------------------------------------------------------------
+// Declaracion de funciones y procedimientos.
 TOKEN: {
 		< FUNC: "function" >
 	|	< PROC: "procedure" >
@@ -110,7 +133,9 @@ TOKEN: {
 	|	< RETURN: "return" >	
 }
 
-//-- Declaraciones. Funciones predefinidas.
+
+//-----------------------------------------------------------------------------
+// Declaracion de funciones existentes en adac.
 TOKEN: {
 		< PUT: "put" >
 	|	< PUTLINE: "put_line" >
@@ -119,7 +144,8 @@ TOKEN: {
 	|   < SKIPLINE: "skip_line" >
 }
 
-//-- Declaraciones. Estructuras de control: if & while.
+//-----------------------------------------------------------------------------
+// Declaracion de estructuras de control: if & while.
 TOKEN: {
     	< IF: "if" > 
 	| 	< THEN: "then" >
@@ -128,17 +154,21 @@ TOKEN: {
     |	< DO: "do" >	
 }
 
-//-- Declaraciones. Cuerpo:
+//-----------------------------------------------------------------------------
+// Declaracion de cuerpo.
 TOKEN: {
 		< BEGIN: "begin" > 
 	| 	< END: "end" >
 }
 
-//-- Declaraciones. Nombres:
+//-----------------------------------------------------------------------------
+// Declaracion de nombres.
 TOKEN: {
 	< ID: ("_" | < LETTER > | < LETTER >"_")(< LETTER > | < LETTER >"_" | < DIGIT > | < DIGIT >"_")* >
 }
 
+//-----------------------------------------------------------------------------
+// Errores.
 SPECIAL_TOKEN: {
 	< UNKNOWN: (~[]) >	
 		{ 
@@ -148,11 +178,10 @@ SPECIAL_TOKEN: {
 		}
 }
 
-
-//---------------------------------------------------------
-//--	GRAMATICA
-//---------------------------------------------------------
-
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// ANALIZADOR SINTATICO.
+//-----------------------------------------------------------------------------
 //-- Símbolo inicial de la gramática. Para análisis léxico no hace falta más
 void S (): 
 {} {
@@ -213,3 +242,5 @@ void var_id ():
 	LOOKAHEAD(2)
 	<ID> <LBRACK> <INTVAL> <RBRACK> | <ID>
 }
+
+//-----------------------------------------------------------------------------

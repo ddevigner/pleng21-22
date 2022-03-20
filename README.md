@@ -43,3 +43,7 @@
     maquinap <binario>
     ```
 
+## Practicas:
+- Practica 1: implementacion del analizador lexico de lenguaje ADAC.
+- Practica 2: implementacion del analizador sintactico de lenguaje ADAC.
+
