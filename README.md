@@ -1,10 +1,11 @@
 # Material adicional de soporte
 ## Documentacion
-- xamples: ejemplos en adac.
-- javacc_intro: introduccion a javacc.
-- javacc_intro_xample: un primer programa compilado de JavaCC de contacto.
-- javacc_xamples: archivos javacc de ejemplo.
-- wc_v[0..3]: comando wc implementado con JavaCC.
+- [xamples](https://github.com/ddevigner/pleng21-22/tree/main/doc/xamples): ejemplos en adac.
+- [javacc_intro](): introduccion a javacc.
+- [javacc_intro_xample](): un primer programa compilado de JavaCC de contacto.
+- [javacc_xamples](): archivos javacc de ejemplo.
+- [int calculator](): calculadora de enteros implementada con JavaCC (analizador lexico + sintactico).
+- [wc](): comando wc implementado con JavaCC.
 
 ## Ejecutables: compilados para Hendrix.
 - adac_cpp: compilador de adac a C++.
