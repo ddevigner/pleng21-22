@@ -11,107 +11,107 @@ public interface adacConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int LETTER = 5;
+  int LETTER = 6;
   /** RegularExpression Id. */
-  int DIGIT = 6;
+  int DIGIT = 7;
   /** RegularExpression Id. */
-  int COMMENT = 7;
+  int COMMENT = 8;
   /** RegularExpression Id. */
-  int SEMICOLON = 8;
+  int SCOLON = 9;
   /** RegularExpression Id. */
-  int COLON = 9;
+  int COLON = 10;
   /** RegularExpression Id. */
-  int LPAREN = 10;
+  int LPAREN = 11;
   /** RegularExpression Id. */
-  int RPAREN = 11;
+  int RPAREN = 12;
   /** RegularExpression Id. */
-  int LBRACK = 12;
+  int LBRACK = 13;
   /** RegularExpression Id. */
-  int RBRACK = 13;
+  int RBRACK = 14;
   /** RegularExpression Id. */
-  int INTDEF = 14;
+  int INT = 15;
   /** RegularExpression Id. */
-  int BOOLDEF = 15;
+  int BOOL = 16;
   /** RegularExpression Id. */
-  int CHARDEF = 16;
+  int CHAR = 17;
   /** RegularExpression Id. */
-  int INTVAL = 17;
+  int INTVAL = 18;
   /** RegularExpression Id. */
-  int CHARVAL = 18;
+  int CHARVAL = 19;
   /** RegularExpression Id. */
-  int BOOLVAL = 19;
+  int BOOLVAL = 20;
   /** RegularExpression Id. */
-  int STRING = 20;
+  int STRING = 21;
   /** RegularExpression Id. */
-  int ASSIGN = 21;
+  int ASS = 22;
   /** RegularExpression Id. */
-  int ADD = 22;
+  int ADD = 23;
   /** RegularExpression Id. */
-  int SUB = 23;
+  int SUB = 24;
   /** RegularExpression Id. */
-  int MUL = 24;
+  int MUL = 25;
   /** RegularExpression Id. */
-  int DIV = 25;
+  int DIV = 26;
   /** RegularExpression Id. */
-  int MOD = 26;
+  int MOD = 27;
   /** RegularExpression Id. */
-  int EQUAL = 27;
+  int EQ = 28;
   /** RegularExpression Id. */
-  int NE = 28;
+  int NE = 29;
   /** RegularExpression Id. */
-  int LT = 29;
+  int LT = 30;
   /** RegularExpression Id. */
-  int GT = 30;
+  int GT = 31;
   /** RegularExpression Id. */
-  int LE = 31;
+  int LE = 32;
   /** RegularExpression Id. */
-  int GE = 32;
+  int GE = 33;
   /** RegularExpression Id. */
-  int AND = 33;
+  int AND = 34;
   /** RegularExpression Id. */
-  int OR = 34;
+  int OR = 35;
   /** RegularExpression Id. */
-  int NOT = 35;
+  int NOT = 36;
   /** RegularExpression Id. */
-  int FUNC = 36;
+  int FUNC = 37;
   /** RegularExpression Id. */
-  int PROC = 37;
+  int PROC = 38;
   /** RegularExpression Id. */
-  int IS = 38;
+  int IS = 39;
   /** RegularExpression Id. */
-  int VALPAR = 39;
+  int VAL = 40;
   /** RegularExpression Id. */
-  int REFPAR = 40;
+  int REF = 41;
   /** RegularExpression Id. */
-  int RETURN = 41;
+  int RETURN = 42;
   /** RegularExpression Id. */
-  int PUT = 42;
+  int PUT = 43;
   /** RegularExpression Id. */
-  int PUTLINE = 43;
+  int PUTLINE = 44;
   /** RegularExpression Id. */
-  int CHAR2INT = 44;
+  int CHAR2INT = 45;
   /** RegularExpression Id. */
-  int INT2CHAR = 45;
+  int INT2CHAR = 46;
   /** RegularExpression Id. */
-  int SKIPLINE = 46;
+  int SKIPLINE = 47;
   /** RegularExpression Id. */
-  int IF = 47;
+  int IF = 48;
   /** RegularExpression Id. */
-  int THEN = 48;
+  int THEN = 49;
   /** RegularExpression Id. */
-  int ELSE = 49;
+  int ELSE = 50;
   /** RegularExpression Id. */
-  int WHILE = 50;
+  int WHILE = 51;
   /** RegularExpression Id. */
-  int DO = 51;
+  int DO = 52;
   /** RegularExpression Id. */
-  int BEGIN = 52;
+  int BEGIN = 53;
   /** RegularExpression Id. */
-  int END = 53;
+  int END = 54;
   /** RegularExpression Id. */
-  int ID = 54;
+  int ID = 55;
   /** RegularExpression Id. */
-  int UNKNOWN = 55;
+  int UNKNOWN = 56;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -123,6 +123,7 @@ public interface adacConstants {
     "\"\\t\"",
     "\"\\r\"",
     "\"\\n\"",
+    "\"\\r\\n\"",
     "<LETTER>",
     "<DIGIT>",
     "<COMMENT>",

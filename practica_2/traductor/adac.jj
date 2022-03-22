@@ -31,7 +31,7 @@ public class adac {
 	            parser = new adac(new java.io.FileInputStream(args[0])); 
 			}
 			// Invoca símbolo inicial de la gramática.
-			parser.S();
+			parser.main();
 			System.out.println("Compilacion con exito");
 
 		} catch (java.io.FileNotFoundException e) {
@@ -80,7 +80,7 @@ SPECIAL_TOKEN: {
 //-----------------------------------------------------------------------------
 // Sintaxis general.
 TOKEN: {
-		< SEMICOLON: ";" >
+		< SCOLON: ";" >
 	|	< COLON: "," >
 	|	< LPAREN: "(" > 
 	|	< RPAREN: ")" > 
@@ -93,9 +93,9 @@ TOKEN: {
 // como array. En algunas funciones se permite el uso de strings pero no como
 // variables.
 TOKEN: {
-		< INTDEF: "integer" >				
-	|	< BOOLDEF: "boolean" >				
-	|	< CHARDEF: "character" >			
+		< INT: "integer" >				
+	|	< BOOL: "boolean" >				
+	|	< CHAR: "character" >			
 	|	< INTVAL: (< DIGIT >)+ >	
 	|   < CHARVAL: "'"(~[])"'" >			
 	|   < BOOLVAL: "true" | "false" >
@@ -105,13 +105,13 @@ TOKEN: {
 //-----------------------------------------------------------------------------
 // Operaciones de asignacion y aritmeticologicas.
 TOKEN: {
-    	< ASSIGN: ":=" > 
+    	< ASS: ":=" > 
     |	< ADD: "+" >		
     |	< SUB: "-" >		
     |	< MUL: "*" >		
     |	< DIV: "div" >		
     |	< MOD: "mod" >		
-    |	< EQUAL: "=" >		
+    |	< EQ: "=" >		
     |	< NE: "<>" >	
     |	< LT: "<" >	
     |	< GT: ">" >
@@ -128,8 +128,8 @@ TOKEN: {
 		< FUNC: "function" >
 	|	< PROC: "procedure" >
 	|	< IS: "is" >			
-	|	< VALPAR: "val" >		
-	|	< REFPAR: "ref" >		
+	|	< VAL: "val" >		
+	|	< REF: "ref" >		
 	|	< RETURN: "return" >	
 }
 
@@ -182,44 +182,101 @@ SPECIAL_TOKEN: {
 //-----------------------------------------------------------------------------
 // ANALIZADOR SINTATICO.
 //-----------------------------------------------------------------------------
-//-- Símbolo inicial de la gramática. Para análisis léxico no hace falta más
-void S (): 
-{} {
-	(vars_def_lines()) < EOF >
-}
-
 void main() :
 {}
 {
-	<PROC> <ID> <IS> var_def_lines() operation_def() bloque_sentencias()
+	<PROC> <ID> <IS> vars_def_lines() procs_funcs_def() proc_body()
 }
 
-//(parametros | ) es que a veces puede a ver parametros o estar vacio
-void operation_def ():
+void procs_funcs_def ():
 {} {
-	(proc_type() proc_def() bloque_sentencias())*
+	(proc_type() proc_def() vars_def_lines() proc_body())*
 }
 
-void proc_type()
+void proc_type():
 {} {
 	<PROC> | <FUNC>
 }
 
 void proc_def():
 {} {
-	vars_type() <ID> <LPAREN> params_def() <RPAREN> 
+	proc_return() <ID> <LPAREN> params_def() <RPAREN> <IS>
+}
+
+void proc_return():
+{} {
+	vars_type() | {}
+}
+
+void params_def():
+{} {
+	param_type() vars_def() | <COLON> params_def() 
+}
+
+void param_type():
+{} {
+	<VAL> | <REF>
 }
 
 //empieza en begin y acaba en end, sirve para proc_def a parte de para el main
-void bloque_sentencias():
+void proc_body():
 {} {
-	<BEGIN> instructions() <END>
+	<BEGIN> (instructions())* <END>
 }
 
-
-void vars_def_lines ():
+void instructions():
 {} {
-	(vars_def() <SEMICOLON> )*
+	simple_insts() | conditional_insts()
+}
+
+void simple_insts():
+{} {
+	<ID> <ASS> assign() <SCOLON>
+}
+
+void assign(): 
+{} {
+	term() (arith_op() term())*
+}
+
+void term():
+{} {
+	<ID> | var_val()
+}
+
+void arith_op():
+{} {
+	<ADD> | <SUB> | <MUL> | <DIV> | <MOD>
+}
+
+void conditional_insts():
+{} {
+	<WHILE> condition() <DO> instructions() <END> |
+	<IF> condition() <THEN> instructions() aditional_else() <END>
+}
+
+void aditional_else():
+{} {
+	<ELSE> instructions() | {}
+}
+
+void condition():
+{} {
+	term() (compare_op() term() | logical_op() (term() | compare_op() term()))*
+}
+
+void compare_op():
+{} {
+	<EQ> | <NE> | <LT> | <GT> | <LE> | <GE> 
+}
+void logical_op():
+{} {
+	<AND> | <OR>
+}
+
+void vars_def_lines():
+{} {
+	(vars_def() <SCOLON>)*
 }
 
 void vars_def ():
@@ -229,12 +286,12 @@ void vars_def ():
 
 void vars_type ():
 {} {
-	<INTDEF> | <CHARDEF> | <BOOLDEF>
+	<INT> | <CHAR> | <BOOL>
 }
 
 void vars_ids():
 {} {
-	var_id() ( <COLON> vars_ids() )*
+	var_id() (<COLON> var_id())*
 }
 
 void var_id ():
@@ -243,4 +300,8 @@ void var_id ():
 	<ID> <LBRACK> <INTVAL> <RBRACK> | <ID>
 }
 
+void var_val():
+{} {
+	<INTVAL> | <CHARVAL> | <BOOLVAL> 
+}
 //-----------------------------------------------------------------------------

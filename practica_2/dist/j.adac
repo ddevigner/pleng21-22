@@ -1,0 +1,26 @@
+------------------------------------------------------
+procedure calcular_mcd is 
+
+integer i, j;
+------------------------------------------------------
+procedure dato (ref integer d) is
+begin
+	while d <= 0 do
+		if d <= 0 then
+			j := 1;
+		end
+	end
+end
+
+------------------------------------------------------
+function integer mcd(val integer a, b) is
+integer i, j, k;
+begin
+	i := a;
+	while i <> 0 AND 3 do
+		a := a + 1 - 2;
+	end
+end
+------------------------------------------------------
+begin
+end

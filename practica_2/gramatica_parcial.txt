@@ -1,30 +1,35 @@
-programa  : 
-  <PROC>
-  <ID>
-  <IS>
-  declaracion_variables
-  declaracion_procs_funcs
-  bloque_sentencias
-  //bloque sentencias puede estar vacio pero siempre acaba en end
 
-  
+i := 1;
+i := 8 + 3;
 
-def_vars:
-  ( define <SEMICOLON> )*
+<ID> <ASS> assign()
 
-define:
-  var_type vars_list
+assign():
+{} {
+  term() |
+  term() operator() assign()
+}
 
-var_type:
-  <INTDEF> | <CHARDEF> | <BOOLDEF>
 
-next_var:
-  the_var ( <COLON> next_var )*
 
-the_var:
-  LOOKAHEAD(2)
-    <ID> <LBRACK> <INTVAL> <RBRACK>
-  | <ID>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 declaracion_procs_funcs :
   ( declaracion_proc_func )*
