@@ -305,7 +305,7 @@ void expresion ():
 }
 
 
-operador_relacional ():
+void operador_relacional():
 {}
 {
 	  <EQ>
@@ -317,7 +317,7 @@ operador_relacional ():
 }
 
 
-expresion_simple (): 
+void expresion_simple (): 
 {}
 {
 	( <ADD> | <SUB> )?
@@ -325,7 +325,7 @@ expresion_simple ():
 } 
   
 
-operador_aditivo ():
+void operador_aditivo ():
 {}
 {
 	<ADD>
@@ -333,13 +333,13 @@ operador_aditivo ():
 	| <OR>
 }
 
-termino ():
+void termino ():
 {}
 {
 	factor() ( operador_multiplicativo() factor() )*
 }
 
-operador_multiplicativo ():
+void operador_multiplicativo ():
 {}
 {
 	  <MUL>
@@ -349,7 +349,7 @@ operador_multiplicativo ():
 }
 
 
-factor ():
+void factor ():
 {}
 {
 	  <NOT> factor()
