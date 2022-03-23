@@ -95,23 +95,25 @@ public interface adacConstants {
   /** RegularExpression Id. */
   int SKIPLINE = 47;
   /** RegularExpression Id. */
-  int IF = 48;
+  int GET = 48;
   /** RegularExpression Id. */
-  int THEN = 49;
+  int IF = 49;
   /** RegularExpression Id. */
-  int ELSE = 50;
+  int THEN = 50;
   /** RegularExpression Id. */
-  int WHILE = 51;
+  int ELSE = 51;
   /** RegularExpression Id. */
-  int DO = 52;
+  int WHILE = 52;
   /** RegularExpression Id. */
-  int BEGIN = 53;
+  int DO = 53;
   /** RegularExpression Id. */
-  int END = 54;
+  int BEGIN = 54;
   /** RegularExpression Id. */
-  int ID = 55;
+  int END = 55;
   /** RegularExpression Id. */
-  int UNKNOWN = 56;
+  int ID = 56;
+  /** RegularExpression Id. */
+  int UNKNOWN = 57;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -166,6 +168,7 @@ public interface adacConstants {
     "\"char2int\"",
     "\"int2char\"",
     "\"skip_line\"",
+    "\"get\"",
     "\"if\"",
     "\"then\"",
     "\"else\"",

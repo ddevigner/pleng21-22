@@ -142,6 +142,7 @@ TOKEN: {
 	| 	< CHAR2INT: "char2int" >
 	|	< INT2CHAR: "int2char" >
 	|   < SKIPLINE: "skip_line" >
+	|	< GET: "get" >
 }
 
 //-----------------------------------------------------------------------------
@@ -196,7 +197,13 @@ void vars_def():
 
 void vars_decl():
 {} {
-	vars_type() variable() ( <COLON> variable() )*
+	vars_type() vars_list()
+}
+
+void vars_list():
+{}
+{
+	variable() ( <COLON> variable() )*
 }
 
 void vars_type():
@@ -231,7 +238,8 @@ void func_return():
 
 void params_decl():
 {} {
-	param_class() vars_decl() (<COLON> params_decl())* 
+	param_class() vars_decl() (<SCOLON> param_class() vars_decl())* 
+	| {}
 }
 
 void param_class():
@@ -247,13 +255,15 @@ void proc_func_body():
 
 void instructions():
 {} {
-	asignable() <ASS> expresion() <SCOLON> 
+	LOOKAHEAD(2) <ID> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON>
+	| asignable() <ASS> expresion() <SCOLON> 
 	| <PUTLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
 	| <PUT> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
+	| <GET> <LPAREN> ( expresion() (<COLON> expresion())*) <RPAREN> <SCOLON> 
 	| <SKIPLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
 	| <RETURN> expresion() <SCOLON>
-	| <WHILE> expresion() <DO> instructions() <END> 
-	| <IF> expresion() <THEN> instructions() aditional_else() <END>
+	| <WHILE> expresion() <DO> (instructions())* <END> 
+	| <IF> expresion() <THEN> (instructions())* aditional_else() <END> 
 }
 
 void aditional_else():
@@ -264,8 +274,8 @@ void aditional_else():
 
 void asignable():
 {} {
-	LOOKAHEAD(2) <ID> 
-	| LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK> 
+	LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK> 
+	| <ID> 
 }
 
 void expresion (): 
@@ -328,6 +338,7 @@ void factor ():
 	| <CHAR2INT> <LPAREN> expresion() <RPAREN>
 	| <PUTLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN>
 	| <PUT> <LPAREN> ( expresion() (<COLON> expresion())*) <RPAREN>
+	| <GET> <LPAREN> ( expresion() (<COLON> expresion())*) <RPAREN> <SCOLON>
 	| <SKIPLINE> <LPAREN>  <RPAREN>
 	| LOOKAHEAD(2)  <ID> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN>
 	| LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK>
