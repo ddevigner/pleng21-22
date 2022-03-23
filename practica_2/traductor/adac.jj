@@ -228,17 +228,16 @@ void proc_body():
 
 void instructions():
 {} {
-	simple_insts() | conditional_insts()
+		asignable() <ASS> expresion() <SCOLON> 
+	| <WHILE> expresion() <DO> instructions() <END> 
+	| <IF> expresion() <THEN> instructions() aditional_else() <END>
 }
 
-void simple_insts():
-{} {
-	<ID> <ASS> assign() <SCOLON>
-}
-
-void assign(): 
-{} {
-	term() (arith_op() term())*
+void asignable():
+{}
+{
+	LOOKAHEAD(2) <ID>
+	| LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK>
 }
 
 void term():
@@ -251,21 +250,11 @@ void arith_op():
 	<ADD> | <SUB> | <MUL> | <DIV> | <MOD>
 }
 
-void conditional_insts():
-{} {
-	<WHILE> condition() <DO> instructions() <END> |
-	<IF> condition() <THEN> instructions() aditional_else() <END>
-}
-
 void aditional_else():
 {} {
 	<ELSE> instructions() | {}
 }
 
-void condition():
-{} {
-	term() (compare_op() term() | logical_op() (term() | compare_op() term()))*
-}
 
 void compare_op():
 {} {
