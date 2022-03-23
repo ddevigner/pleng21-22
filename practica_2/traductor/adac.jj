@@ -182,6 +182,8 @@ SPECIAL_TOKEN: {
 //-----------------------------------------------------------------------------
 // ANALIZADOR SINTATICO.
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
 void main() :
 {}
 {
@@ -305,3 +307,71 @@ void var_val():
 	<INTVAL> | <CHARVAL> | <BOOLVAL> 
 }
 //-----------------------------------------------------------------------------
+
+
+void expresion (): 
+{}
+{
+  expresion_simple() ( operador_relacional() expresion_simple() )?
+}
+
+
+operador_relacional ():
+{}
+{
+	  <EQ>
+	| <LT>
+	| <GT>
+	| <LE>
+	| <GE>
+	| <NE>
+}
+
+
+expresion_simple (): 
+{}
+{
+	( <ADD> | <SUB> )?
+  termino() ( operador_aditivo() termino() )*
+} 
+  
+
+operador_aditivo ():
+{}
+{
+	<ADD>
+	| <SUB>
+	| <OR>
+}
+
+termino ():
+{}
+{
+	factor() ( operador_multiplicativo() factor() )*
+}
+
+operador_multiplicativo ():
+{}
+{
+	  <MUL>
+	| <MOD>
+	| <DIV>
+	| <AND>
+}
+
+
+factor ():
+{}
+{
+	  <NOT> factor()
+	| <LPAREN> expresion() <RPAREN>
+	| <INT2CHAR> <LPAREN> expresion() <RPAREN>
+	| <CHAR2INT> <LPAREN> expresion() <RPAREN>
+	| LOOKAHEAD(2)  <ID> <LPAREN> (expresion())* <RPAREN>
+	| LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK>
+	| <ID>
+	| <INTVAL>
+	| <CHARVAL>
+	| <STRING>
+	| <BOOLVAL>
+}
