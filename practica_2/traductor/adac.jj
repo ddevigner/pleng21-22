@@ -191,7 +191,7 @@ void main() :
 
 void vars_def():
 {} {
-	( vars_decl <SCOLON> )*
+	( vars_decl() <SCOLON> )*
 }
 
 void vars_decl():
@@ -206,17 +206,17 @@ void vars_type():
 
 void variable():
 {} {
-	LOOKAHEAD(2) <ID> <OBRACK> <INTVAL> <CBRACK> | <ID> 
+	LOOKAHEAD(2) <ID> <LBRACK> <INTVAL> <RBRACK> | <ID> 
 }
 
 void procs_funcs_decl ():
 {} {
-	(proc_func_decl)*
+	(proc_func_decl())*
 }
 
 void proc_func_decl():
 {} {
-	proc_or_func() func_return() <ID> <LPAREN> params_decl() <RPAREN> <IS> proc_func_body()
+	proc_or_func() func_return() <ID> <LPAREN> params_decl() <RPAREN> <IS> vars_def() proc_func_body()
 }
 
 void proc_or_func():
@@ -248,13 +248,24 @@ void proc_func_body():
 void instructions():
 {} {
 	asignable() <ASS> expresion() <SCOLON> 
+	| <PUTLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
+	| <PUT> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
+	| <SKIPLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
+	| <RETURN> expresion() <SCOLON>
 	| <WHILE> expresion() <DO> instructions() <END> 
 	| <IF> expresion() <THEN> instructions() aditional_else() <END>
 }
 
+void aditional_else():
+{}
+{
+	<ELSE> (instructions())* | {}
+}
+
 void asignable():
 {} {
-	LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK> | <ID>
+	LOOKAHEAD(2) <ID> 
+	| LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK> 
 }
 
 void expresion (): 
@@ -315,7 +326,10 @@ void factor ():
 	| <LPAREN> expresion() <RPAREN>
 	| <INT2CHAR> <LPAREN> expresion() <RPAREN>
 	| <CHAR2INT> <LPAREN> expresion() <RPAREN>
-	| LOOKAHEAD(2)  <ID> <LPAREN> (expresion())* <RPAREN>
+	| <PUTLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN>
+	| <PUT> <LPAREN> ( expresion() (<COLON> expresion())*) <RPAREN>
+	| <SKIPLINE> <LPAREN>  <RPAREN>
+	| LOOKAHEAD(2)  <ID> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN>
 	| LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK>
 	| <ID>
 	| <INTVAL>
