@@ -184,167 +184,179 @@ SPECIAL_TOKEN: {
 // ANALIZADOR SINTATICO.
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-
+// Declaracion del procedimiento principal del fichero.
 void main() :
 {} {
 	<PROC> <ID> <IS> vars_def() procs_funcs_decl() proc_func_body()
 }
 
-void vars_def():
-{} {
-	( vars_decl() <SCOLON> )*
-}
-
-void vars_decl():
-{} {
-	vars_type() vars_list()
-}
-
-void vars_list():
-{}
-{
-	variable() ( <COLON> variable() )*
-}
-
-void vars_type():
-{} {
-	<INT> | <BOOL> | <CHAR>
-}
-
-void variable():
-{} {
-	LOOKAHEAD(2) <ID> <LBRACK> <INTVAL> <RBRACK> | <ID> 
-}
-
+//-----------------------------------------------------------------------------
+// Declaracion de procedimientos/funciones del fichero.
 void procs_funcs_decl ():
 {} {
 	(proc_func_decl())*
 }
 
+//-----------------------------------------------------------------------------
+// Declaracion de procedimiento/funcion.
 void proc_func_decl():
 {} {
 	proc_or_func() func_return() <ID> <LPAREN> params_decl() <RPAREN> <IS> vars_def() proc_func_body()
 }
 
+//-----------------------------------------------------------------------------
+// Declaracion de si es procedimiento o funcion.
 void proc_or_func():
 {} {
 	<PROC> | <FUNC>
 }
 
+//-----------------------------------------------------------------------------
+// Tipo de dato que devuelve la funcion.
 void func_return():
 {} {
 	vars_type() | {}
 }
 
+//-----------------------------------------------------------------------------
+// Parametros de procedimiento/funcion.
 void params_decl():
 {} {
-	param_class() vars_decl() (<SCOLON> param_class() vars_decl())* 
-	| {}
+	(param_class() vars_decl() (<SCOLON> param_class() vars_decl())*)?
 }
 
+//-----------------------------------------------------------------------------
+// Clase del parametro: por valor o por referencia.
 void param_class():
 {} {
 	<VAL> | <REF>
 }
 
-//empieza en begin y acaba en end, sirve para proc_def a parte de para el main
+//-----------------------------------------------------------------------------
+// Variables de procedimiento/funcion.
+void vars_def():
+{} {
+	( vars_decl() <SCOLON> )*
+}
+
+//-----------------------------------------------------------------------------
+// Tipos de variable y variables asociadas.
+void vars_decl():
+{} {
+	vars_type() vars_list()
+}
+
+//-----------------------------------------------------------------------------
+// Variables del mismo tipo.
+void vars_list():
+{}
+{
+	var() ( <COLON> var() )*
+}
+
+//-----------------------------------------------------------------------------
+// Tipos de una variable.
+void vars_type():
+{} {
+	<INT> | <BOOL> | <CHAR>
+}
+
+//-----------------------------------------------------------------------------
+// Nombre de la variable.
+void var():
+{} {
+	LOOKAHEAD(2) <ID> <LBRACK> <INTVAL> <RBRACK> | <ID> 
+}
+
+//-----------------------------------------------------------------------------
+// Cuerpo de procedimiento/funcion.
 void proc_func_body():
 {} {
-	<BEGIN> (instructions())* <END>
+	<BEGIN> instructions_list() <END>
 }
 
-void instructions():
+//-----------------------------------------------------------------------------
+// Conjunto de instrucciones.
+void instructions_list():
 {} {
-	LOOKAHEAD(2) <ID> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON>
-	| asignable() <ASS> expresion() <SCOLON> 
-	| <PUTLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
-	| <PUT> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
-	| <GET> <LPAREN> ( expresion() (<COLON> expresion())*) <RPAREN> <SCOLON> 
-	| <SKIPLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN> <SCOLON> 
-	| <RETURN> expresion() <SCOLON>
-	| <WHILE> expresion() <DO> (instructions())* <END> 
-	| <IF> expresion() <THEN> (instructions())* aditional_else() <END> 
+	(instruction())*
 }
 
-void aditional_else():
-{}
-{
-	<ELSE> (instructions())* | {}
-}
-
-void asignable():
+//-----------------------------------------------------------------------------
+// Instruccion:
+//	- Procedimientos predefinidos: get, put, putline, skipline.
+//  - Procedimientos del usuario.
+//	- Asignacion.
+//	- While/If-Else.
+//	- Return.
+void instruction():
 {} {
-	LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK> 
-	| <ID> 
+	  <GET> <LPAREN> expression() (<COLON> expression())* <RPAREN> <SCOLON>
+	| <PUT> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+	| <PUTLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+	| <SKIPLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+	| LOOKAHEAD(2) <ID> <LPAREN> ( expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+	| assignable() <ASS> expression() <SCOLON> 
+	| <WHILE> expression() <DO> instructions_list() <END> 
+	| <IF> expression() <THEN> instructions_list() (<ELSE> instructions_list())? <END> 
+	| <RETURN> expression() <SCOLON>
 }
 
-void expresion (): 
-{}
-{
-  expresion_simple() ( operador_relacional() expresion_simple() )?
-}
-
-
-void operador_relacional():
-{}
-{
-	  <EQ>
-	| <LT>
-	| <GT>
-	| <LE>
-	| <GE>
-	| <NE>
+//-----------------------------------------------------------------------------
+// Elementos asignables.
+void assignable():
+{} {
+	LOOKAHEAD(2) <ID> <LBRACK> expression() <RBRACK> | <ID> 
 }
 
 
-void expresion_simple (): 
-{}
-{
-	( <ADD> | <SUB> )?
-  termino() ( operador_aditivo() termino() )*
+//-----------------------------------------------------------------------------
+// Expresion relacional.
+void expression (): 
+{} {
+	simple_expr() ( relational_op() simple_expr() )?
+}
+
+//-----------------------------------------------------------------------------
+// Expresion aritmetica.
+void simple_expr (): 
+{} {
+	( <ADD> | <SUB> )? term() ( additive_op() term() )*
 } 
-  
 
-void operador_aditivo ():
-{}
-{
-	<ADD>
-	| <SUB>
-	| <OR>
+//-----------------------------------------------------------------------------
+// Expresion multiplicativa.
+void term():
+{} {
+	factor() ( multiplicative_op() factor() )*
 }
 
-void termino ():
-{}
-{
-	factor() ( operador_multiplicativo() factor() )*
-}
-
-void operador_multiplicativo ():
-{}
-{
-	  <MUL>
-	| <MOD>
-	| <DIV>
-	| <AND>
-}
-
-
-void factor ():
-{}
-{
+void factor():
+{} {
 	  <NOT> factor()
-	| <LPAREN> expresion() <RPAREN>
-	| <INT2CHAR> <LPAREN> expresion() <RPAREN>
-	| <CHAR2INT> <LPAREN> expresion() <RPAREN>
-	| <PUTLINE> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN>
-	| <PUT> <LPAREN> ( expresion() (<COLON> expresion())*) <RPAREN>
-	| <GET> <LPAREN> ( expresion() (<COLON> expresion())*) <RPAREN> <SCOLON>
-	| <SKIPLINE> <LPAREN>  <RPAREN>
-	| LOOKAHEAD(2)  <ID> <LPAREN> ( expresion() (<COLON> expresion())* | {}) <RPAREN>
-	| LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK>
+	| <LPAREN> expression() <RPAREN>
+	| <INT2CHAR> <LPAREN> expression() <RPAREN>
+	| <CHAR2INT> <LPAREN> expression() <RPAREN>
+	| LOOKAHEAD(2) <ID> <LPAREN> ( expression() (<COLON> expression())*)? <RPAREN>
+	| LOOKAHEAD(2) <ID> <LBRACK> expression() <RBRACK>
 	| <ID>
 	| <INTVAL>
 	| <CHARVAL>
-	| <STRING>
 	| <BOOLVAL>
+	| <STRING>
+}
+
+void relational_op():
+{} {
+	<EQ> | <LT> | <GT> | <LE> | <GE> | <NE>
+}
+
+void additive_op():
+{} {
+	<ADD> | <SUB> | <OR>
+}
+
+void multiplicative_op():
+{} {
+	  <MUL> | <MOD> | <DIV> | <AND>
 }
