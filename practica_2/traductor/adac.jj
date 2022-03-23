@@ -185,118 +185,77 @@ SPECIAL_TOKEN: {
 //-----------------------------------------------------------------------------
 
 void main() :
-{}
-{
-	<PROC> <ID> <IS> vars_def_lines() procs_funcs_def() proc_body()
-}
-
-void procs_funcs_def ():
 {} {
-	(proc_type() proc_def() vars_def_lines() proc_body())*
+	<PROC> <ID> <IS> vars_def() procs_funcs_decl() proc_func_body()
 }
 
-void proc_type():
+void vars_def():
+{} {
+	( vars_decl <SCOLON> )*
+}
+
+void vars_decl():
+{} {
+	vars_type() variable() ( <COLON> variable() )*
+}
+
+void vars_type():
+{} {
+	<INT> | <BOOL> | <CHAR>
+}
+
+void variable():
+{} {
+	LOOKAHEAD(2) <ID> <OBRACK> <INTVAL> <CBRACK> | <ID> 
+}
+
+void procs_funcs_decl ():
+{} {
+	(proc_func_decl)*
+}
+
+void proc_func_decl():
+{} {
+	proc_or_func() func_return() <ID> <LPAREN> params_decl() <RPAREN> <IS> proc_func_body()
+}
+
+void proc_or_func():
 {} {
 	<PROC> | <FUNC>
 }
 
-void proc_def():
-{} {
-	proc_return() <ID> <LPAREN> params_def() <RPAREN> <IS>
-}
-
-void proc_return():
+void func_return():
 {} {
 	vars_type() | {}
 }
 
-void params_def():
+void params_decl():
 {} {
-	param_type() vars_def() | <COLON> params_def() 
+	param_class() vars_decl() (<COLON> params_decl())* 
 }
 
-void param_type():
+void param_class():
 {} {
 	<VAL> | <REF>
 }
 
 //empieza en begin y acaba en end, sirve para proc_def a parte de para el main
-void proc_body():
+void proc_func_body():
 {} {
 	<BEGIN> (instructions())* <END>
 }
 
 void instructions():
 {} {
-		asignable() <ASS> expresion() <SCOLON> 
+	asignable() <ASS> expresion() <SCOLON> 
 	| <WHILE> expresion() <DO> instructions() <END> 
 	| <IF> expresion() <THEN> instructions() aditional_else() <END>
 }
 
 void asignable():
-{}
-{
-	LOOKAHEAD(2) <ID>
-	| LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK>
-}
-
-void term():
 {} {
-	<ID> | var_val()
+	LOOKAHEAD(2)  <ID> <LBRACK> expresion() <RBRACK> | <ID>
 }
-
-void arith_op():
-{} {
-	<ADD> | <SUB> | <MUL> | <DIV> | <MOD>
-}
-
-void aditional_else():
-{} {
-	<ELSE> instructions() | {}
-}
-
-
-void compare_op():
-{} {
-	<EQ> | <NE> | <LT> | <GT> | <LE> | <GE> 
-}
-void logical_op():
-{} {
-	<AND> | <OR>
-}
-
-void vars_def_lines():
-{} {
-	(vars_def() <SCOLON>)*
-}
-
-void vars_def ():
-{} {
-	vars_type() vars_ids()
-}
-
-void vars_type ():
-{} {
-	<INT> | <CHAR> | <BOOL>
-}
-
-void vars_ids():
-{} {
-	var_id() (<COLON> var_id())*
-}
-
-void var_id ():
-{} {
-	LOOKAHEAD(2)
-	<ID> <LBRACK> <INTVAL> <RBRACK> | <ID>
-}
-
-void var_val():
-{} {
-	<INTVAL> | <CHARVAL> | <BOOLVAL> 
-}
-//-----------------------------------------------------------------------------
-
 
 void expresion (): 
 {}
