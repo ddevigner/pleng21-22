@@ -7,7 +7,7 @@ procedure dato (ref integer d) is
 begin
 	while d <= 0 do
 		if d <= 0 then
-			j := 1;
+			j := ;
 		end
 	end
 end
@@ -17,7 +17,7 @@ function integer mcd(val integer a, b) is
 integer i, j, k;
 begin
 	i := a;
-	while i <> 0 AND 3 do
+	while i <> 0 and 3 do
 		a := a + 1 - 2;
 	end
 end

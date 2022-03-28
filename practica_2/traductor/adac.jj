@@ -17,6 +17,19 @@ PARSER_BEGIN(adac)
 package traductor;
 
 public class adac {
+
+	public static void panicMode(Token err /*, Set<Integer> sync_set*/) {
+		System.err.println("----> Recupero en modo panico: "
+			+ "\n----> saltando todo hasta token de conjunto de sincronizacion");
+		Token t = getNextToken();
+		while(/*!sync_set.contains(t.kind) &&*/ t.kind != SCOLON && t.kind != END && t.kind != EOF) {
+			System.err.println("Descartando token ("
+					+ adacConstants.tokenImage[t.kind] + "," + t.image + ")");
+			t = getNextToken();
+		}
+	}
+
+
     public static void main(String[] args) throws java.io.FileNotFoundException, 
 			ParseException {
     	adac parser;
@@ -33,7 +46,6 @@ public class adac {
 			// Invoca símbolo inicial de la gramática.
 			parser.main();
 			System.out.println("Compilacion con exito");
-
 		} catch (java.io.FileNotFoundException e) {
 			System.err.println ("Fichero " + args[0] + " no encontrado.");
 		} catch (TokenMgrError e) {
@@ -291,15 +303,19 @@ void instructions_list():
 //	- Return.
 void instruction():
 {} {
-	  <GET> <LPAREN> expression() (<COLON> expression())* <RPAREN> <SCOLON>
-	| <PUT> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
-	| <PUTLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
-	| <SKIPLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
-	| LOOKAHEAD(2) <ID> <LPAREN> ( expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
-	| assignable() <ASS> expression() <SCOLON> 
-	| <WHILE> expression() <DO> instructions_list() <END> 
-	| <IF> expression() <THEN> instructions_list() (<ELSE> instructions_list())? <END> 
-	| <RETURN> expression() <SCOLON>
+	try {
+		  <GET> <LPAREN> expression() (<COLON> expression())* <RPAREN> <SCOLON>
+		| <PUT> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+		| <PUTLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+		| <SKIPLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+		| LOOKAHEAD(2) <ID> <LPAREN> ( expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+		| assignable() <ASS> expression() <SCOLON> 
+		| <WHILE> expression() <DO> instructions_list() <END> 
+		| <IF> expression() <THEN> instructions_list() (<ELSE> instructions_list())? <END> 
+		| <RETURN> expression() <SCOLON>
+	} catch (ParseException e) {
+		panicMode(e.currentToken.next);
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -358,5 +374,5 @@ void additive_op():
 
 void multiplicative_op():
 {} {
-	  <MUL> | <MOD> | <DIV> | <AND>
+	<MUL> | <MOD> | <DIV> | <AND>
 }

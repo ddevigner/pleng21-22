@@ -3,6 +3,19 @@
 package traductor;
 
 public class adac implements adacConstants {
+
+        public static void panicMode(Token err /*, Set<Integer> sync_set*/) {
+                System.err.println("----> Recupero en modo panico: "
+                        + "\n----> saltando todo hasta token de conjunto de sincronizacion");
+                Token t = getNextToken();
+                while(/*!sync_set.contains(t.kind) &&*/ t.kind != SCOLON && t.kind != END && t.kind != EOF) {
+                        System.err.println("Descartando token ("
+                                        + adacConstants.tokenImage[t.kind] + "," + t.image + ")");
+                        t = getNextToken();
+                }
+        }
+
+
     public static void main(String[] args) throws java.io.FileNotFoundException,
                         ParseException {
         adac parser;
@@ -19,7 +32,6 @@ public class adac implements adacConstants {
                         // Invoca símbolo inicial de la gramática.
                         parser.main();
                         System.out.println("Compilacion con exito");
-
                 } catch (java.io.FileNotFoundException e) {
                         System.err.println ("Fichero " + args[0] + " no encontrado.");
                 } catch (TokenMgrError e) {
@@ -294,46 +306,13 @@ public class adac implements adacConstants {
 //	- While/If-Else.
 //	- Return.
   static final public void instruction() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case GET:{
-      jj_consume_token(GET);
-      jj_consume_token(LPAREN);
-      expression();
-      label_6:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-        case COLON:{
-          ;
-          break;
-          }
-        default:
-          jj_la1[11] = jj_gen;
-          break label_6;
-        }
-        jj_consume_token(COLON);
-        expression();
-      }
-      jj_consume_token(RPAREN);
-      jj_consume_token(SCOLON);
-      break;
-      }
-    case PUT:{
-      jj_consume_token(PUT);
-      jj_consume_token(LPAREN);
+    try {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case LPAREN:
-      case INTVAL:
-      case CHARVAL:
-      case BOOLVAL:
-      case STRING:
-      case ADD:
-      case SUB:
-      case NOT:
-      case CHAR2INT:
-      case INT2CHAR:
-      case ID:{
+      case GET:{
+        jj_consume_token(GET);
+        jj_consume_token(LPAREN);
         expression();
-        label_7:
+        label_6:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case COLON:{
@@ -341,106 +320,18 @@ public class adac implements adacConstants {
             break;
             }
           default:
-            jj_la1[12] = jj_gen;
-            break label_7;
+            jj_la1[11] = jj_gen;
+            break label_6;
           }
           jj_consume_token(COLON);
           expression();
         }
+        jj_consume_token(RPAREN);
+        jj_consume_token(SCOLON);
         break;
         }
-      default:
-        jj_la1[13] = jj_gen;
-        ;
-      }
-      jj_consume_token(RPAREN);
-      jj_consume_token(SCOLON);
-      break;
-      }
-    case PUTLINE:{
-      jj_consume_token(PUTLINE);
-      jj_consume_token(LPAREN);
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case LPAREN:
-      case INTVAL:
-      case CHARVAL:
-      case BOOLVAL:
-      case STRING:
-      case ADD:
-      case SUB:
-      case NOT:
-      case CHAR2INT:
-      case INT2CHAR:
-      case ID:{
-        expression();
-        label_8:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case COLON:{
-            ;
-            break;
-            }
-          default:
-            jj_la1[14] = jj_gen;
-            break label_8;
-          }
-          jj_consume_token(COLON);
-          expression();
-        }
-        break;
-        }
-      default:
-        jj_la1[15] = jj_gen;
-        ;
-      }
-      jj_consume_token(RPAREN);
-      jj_consume_token(SCOLON);
-      break;
-      }
-    case SKIPLINE:{
-      jj_consume_token(SKIPLINE);
-      jj_consume_token(LPAREN);
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case LPAREN:
-      case INTVAL:
-      case CHARVAL:
-      case BOOLVAL:
-      case STRING:
-      case ADD:
-      case SUB:
-      case NOT:
-      case CHAR2INT:
-      case INT2CHAR:
-      case ID:{
-        expression();
-        label_9:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case COLON:{
-            ;
-            break;
-            }
-          default:
-            jj_la1[16] = jj_gen;
-            break label_9;
-          }
-          jj_consume_token(COLON);
-          expression();
-        }
-        break;
-        }
-      default:
-        jj_la1[17] = jj_gen;
-        ;
-      }
-      jj_consume_token(RPAREN);
-      jj_consume_token(SCOLON);
-      break;
-      }
-    default:
-      jj_la1[21] = jj_gen;
-      if (jj_2_2(2)) {
-        jj_consume_token(ID);
+      case PUT:{
+        jj_consume_token(PUT);
         jj_consume_token(LPAREN);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case LPAREN:
@@ -455,7 +346,7 @@ public class adac implements adacConstants {
         case INT2CHAR:
         case ID:{
           expression();
-          label_10:
+          label_7:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
             case COLON:{
@@ -463,8 +354,8 @@ public class adac implements adacConstants {
               break;
               }
             default:
-              jj_la1[18] = jj_gen;
-              break label_10;
+              jj_la1[12] = jj_gen;
+              break label_7;
             }
             jj_consume_token(COLON);
             expression();
@@ -472,58 +363,183 @@ public class adac implements adacConstants {
           break;
           }
         default:
-          jj_la1[19] = jj_gen;
+          jj_la1[13] = jj_gen;
           ;
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
-      } else {
+        break;
+        }
+      case PUTLINE:{
+        jj_consume_token(PUTLINE);
+        jj_consume_token(LPAREN);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case LPAREN:
+        case INTVAL:
+        case CHARVAL:
+        case BOOLVAL:
+        case STRING:
+        case ADD:
+        case SUB:
+        case NOT:
+        case CHAR2INT:
+        case INT2CHAR:
         case ID:{
-          assignable();
-          jj_consume_token(ASS);
           expression();
-          jj_consume_token(SCOLON);
-          break;
-          }
-        case WHILE:{
-          jj_consume_token(WHILE);
-          expression();
-          jj_consume_token(DO);
-          instructions_list();
-          jj_consume_token(END);
-          break;
-          }
-        case IF:{
-          jj_consume_token(IF);
-          expression();
-          jj_consume_token(THEN);
-          instructions_list();
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case ELSE:{
-            jj_consume_token(ELSE);
-            instructions_list();
-            break;
+          label_8:
+          while (true) {
+            switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+            case COLON:{
+              ;
+              break;
+              }
+            default:
+              jj_la1[14] = jj_gen;
+              break label_8;
             }
-          default:
-            jj_la1[20] = jj_gen;
-            ;
+            jj_consume_token(COLON);
+            expression();
           }
-          jj_consume_token(END);
-          break;
-          }
-        case RETURN:{
-          jj_consume_token(RETURN);
-          expression();
-          jj_consume_token(SCOLON);
           break;
           }
         default:
-          jj_la1[22] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
+          jj_la1[15] = jj_gen;
+          ;
+        }
+        jj_consume_token(RPAREN);
+        jj_consume_token(SCOLON);
+        break;
+        }
+      case SKIPLINE:{
+        jj_consume_token(SKIPLINE);
+        jj_consume_token(LPAREN);
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case LPAREN:
+        case INTVAL:
+        case CHARVAL:
+        case BOOLVAL:
+        case STRING:
+        case ADD:
+        case SUB:
+        case NOT:
+        case CHAR2INT:
+        case INT2CHAR:
+        case ID:{
+          expression();
+          label_9:
+          while (true) {
+            switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+            case COLON:{
+              ;
+              break;
+              }
+            default:
+              jj_la1[16] = jj_gen;
+              break label_9;
+            }
+            jj_consume_token(COLON);
+            expression();
+          }
+          break;
+          }
+        default:
+          jj_la1[17] = jj_gen;
+          ;
+        }
+        jj_consume_token(RPAREN);
+        jj_consume_token(SCOLON);
+        break;
+        }
+      default:
+        jj_la1[21] = jj_gen;
+        if (jj_2_2(2)) {
+          jj_consume_token(ID);
+          jj_consume_token(LPAREN);
+          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+          case LPAREN:
+          case INTVAL:
+          case CHARVAL:
+          case BOOLVAL:
+          case STRING:
+          case ADD:
+          case SUB:
+          case NOT:
+          case CHAR2INT:
+          case INT2CHAR:
+          case ID:{
+            expression();
+            label_10:
+            while (true) {
+              switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+              case COLON:{
+                ;
+                break;
+                }
+              default:
+                jj_la1[18] = jj_gen;
+                break label_10;
+              }
+              jj_consume_token(COLON);
+              expression();
+            }
+            break;
+            }
+          default:
+            jj_la1[19] = jj_gen;
+            ;
+          }
+          jj_consume_token(RPAREN);
+          jj_consume_token(SCOLON);
+        } else {
+          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+          case ID:{
+            assignable();
+            jj_consume_token(ASS);
+            expression();
+            jj_consume_token(SCOLON);
+            break;
+            }
+          case WHILE:{
+            jj_consume_token(WHILE);
+            expression();
+            jj_consume_token(DO);
+            instructions_list();
+            jj_consume_token(END);
+            break;
+            }
+          case IF:{
+            jj_consume_token(IF);
+            expression();
+            jj_consume_token(THEN);
+            instructions_list();
+            switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+            case ELSE:{
+              jj_consume_token(ELSE);
+              instructions_list();
+              break;
+              }
+            default:
+              jj_la1[20] = jj_gen;
+              ;
+            }
+            jj_consume_token(END);
+            break;
+            }
+          case RETURN:{
+            jj_consume_token(RETURN);
+            expression();
+            jj_consume_token(SCOLON);
+            break;
+            }
+          default:
+            jj_la1[22] = jj_gen;
+            jj_consume_token(-1);
+            throw new ParseException();
+          }
         }
       }
+    } catch (ParseException e) {
+panicMode(e.currentToken.next);
     }
 }
 
@@ -859,6 +875,13 @@ public class adac implements adacConstants {
     finally { jj_save(4, xla); }
   }
 
+  static private boolean jj_3_5()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
   static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
@@ -884,13 +907,6 @@ public class adac implements adacConstants {
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 
