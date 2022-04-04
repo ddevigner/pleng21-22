@@ -266,6 +266,8 @@ void vars_list():
 	var() ( <COLON> var() )*
 }
 
+
+
 //-----------------------------------------------------------------------------
 // Tipos de una variable.
 void vars_type():

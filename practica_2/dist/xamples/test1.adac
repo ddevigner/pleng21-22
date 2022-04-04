@@ -1,13 +1,14 @@
 --test1
 --El programa dara error en la variable en los '' de mensaje y el && __var 7var
 ------------------------------
+procedure mcd is
 
-integer;
-character mensaje := 'H';
-boolean := 1;
+integer a;
+character mensaje;
+boolean pruebaBooleano;
 
-integer i,j := 0;
-character IF, FOR__;
+integer i,j;
+character IF, FOR_;
 
 
 procedure b_dec() is
@@ -18,13 +19,13 @@ begin
 end
 
 
-function integer sum(val integer n,b) is
+function integer sum(val integer n;val integer b) is
 	integer resul;
 begin
-    resul := 0;
+  resul := 0;
 	while resul < n and resul <> n do
-        sum += b;
-    end
+    sum += b;
+  end
 end
 
 begin
