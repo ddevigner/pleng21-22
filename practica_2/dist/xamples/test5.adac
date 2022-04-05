@@ -1,6 +1,7 @@
----
---Programa de prueba 5 para el analizador sintactico 
+----------------
+--Test 5 del analizador sintactico
 --Autores: Sergio Gabete y Devid Dokash
+----------------
 
 
 procedure test5 is
