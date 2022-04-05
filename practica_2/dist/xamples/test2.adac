@@ -1,55 +1,44 @@
---test2
---Se ponen las palabras reconocidas
+----------------
+--Test 2 del analizador sintactico
+--Autores: Sergio Gabete y Devid Dokash
+----------------
 
-function
-procedure
-var
-and
-or
-not
+procedure Test2 is
+
+integer i, n;
+-----------------------------------------------------------
+procedure muestreo_informacion (val integer n) is
+-----------------------------------------------------------
 begin
+  put (int2char (n), int2char (n + 10));
 end
-if
-do
-then
-integer
-else
-while
-cout
-<<
-put()
-mod
-boolean
-character
-true
-false
-return
-val
-ref
-is
-----
->
-<
-=
->=
-<=
-<>
-:=
-+
--
-div
-*
-"+" >		
-"-" >		
-"*" >		
-"div" >		
-"mod" >		
-"=" >		
-"<>" >	
-"<" >	
-">" >
-"<=" >	
-">=" >	
-"and" >		
-"or" >		
-"not" >
+-----------------------------------------------------------
+procedure dame_informacion (ref integer dato) is 
+-----------------------------------------------------------
+begin
+    dato := 0;
+    
+    while (dato <= 0) and (dato >=100) do
+      put ("Intervalo incorrecto");
+      get (dato);
+    end
+end
+procedure dame_informacion2 (ref integer dato) is
+
+boolean correcto;
+begin
+  dato := 0;
+  while dato <= 0 do
+     pedir_dato (dato);
+     if dato <= 0 then
+        put ("El dato es menor o igual que 0, introduce otro.");
+     end
+  end
+end
+
+-----------------------------------------------------------
+begin
+  dame_informacion2(n);
+  muestreo_informacion(n);
+  put("Acaba el el programa con n = ", n);
+end
