@@ -6,12 +6,13 @@
 procedure p1 is
 -------------------------- 
 character resul[100];
+integer num ;
 
 function integer p2(ref integer r1; val integer r2) is
 begin
     if (r1 = r2) and (0=0) then
         put_line("mostrando la variable r1", r1);
-        c = intToChar(r1);
+        c := intToChar(r1);
         put_line("mostrando la variable r1 en forma de caracter", c);
     else
         while r1 < r2 do
@@ -37,7 +38,7 @@ end
 
 function boolean p4(val integer a,b) is--------------------------
 begin
-    return a*b mod 10 == 20 div 2;
+    return ((a*b) mod 10) = (20 div 2);
 end
 
 
@@ -46,7 +47,7 @@ begin
         put_line("No es un buen numero");
 
     else
-        integer num = p2(20,30);
+        num := p2(20,30);
         
     end 
 end
