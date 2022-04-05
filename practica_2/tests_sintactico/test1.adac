@@ -25,7 +25,7 @@ function integer sum(val integer n;val integer b) is
 begin
   resul := 0;
 	while (resul < n) and (resul <> n) do
-    sum += b;
+    sum := sum + b;
   end
 end
 
@@ -35,7 +35,7 @@ begin
   put_line ("");
   b_dec();
   i := sum(10,1);
-    j := sum(10,2)
+  j := sum(10,2);
   put_line ("");
   putline ("i y j",i,j);
 

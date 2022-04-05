@@ -1,0 +1,55 @@
+--test2
+--Se ponen las palabras reconocidas
+
+function
+procedure
+var
+and
+or
+not
+begin
+end
+if
+do
+then
+integer
+else
+while
+cout
+<<
+put()
+mod
+boolean
+character
+true
+false
+return
+val
+ref
+is
+----
+>
+<
+=
+>=
+<=
+<>
+:=
++
+-
+div
+*
+"+" >		
+"-" >		
+"*" >		
+"div" >		
+"mod" >		
+"=" >		
+"<>" >	
+"<" >	
+">" >
+"<=" >	
+">=" >	
+"and" >		
+"or" >		
+"not" >

@@ -21,12 +21,10 @@ end
 -------------------------------------------------------------------
 
 begin
-
 	while (char1 <> palabra1) do
 		put("Escribe una palabra");
 		get(char2);
-		int2char(char1);
-		if (char2 = char1) then
+		if (char2 = int2char(char1)) then
 		 put("Bien has acertado");
         end
 	end
