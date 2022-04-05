@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 options {
-   COMMON_TOKEN_ACTION = true;
+   //COMMON_TOKEN_ACTION = true;
 }
 
 PARSER_BEGIN(adac)
@@ -18,9 +18,14 @@ package traductor;
 
 public class adac {
 
+	static int errors = 0;
+
 	public static void panicMode(Token err /*, Set<Integer> sync_set*/) {
-		System.err.println("----> Recupero en modo panico: "
-			+ "\n----> saltando todo hasta token de conjunto de sincronizacion");
+		errors++;
+		System.err.println("ERROR SINTACTICO: (" + err.beginLine + "," 
+			+ err.beginColumn + "): " + err);
+		System.err.println("----> Iniciando recuperacion en modo panico..."
+			+ "\n----> Saltando todo hasta token de conjunto de sincronizacion");
 		Token t = getNextToken();
 		while(/*!sync_set.contains(t.kind) &&*/ t.kind != SCOLON && t.kind != END && t.kind != EOF) {
 			System.err.println("Descartando token ("
@@ -45,7 +50,8 @@ public class adac {
 			}
 			// Invoca símbolo inicial de la gramática.
 			parser.main();
-			System.out.println("Compilacion con exito");
+			if (errors == 0) System.out.println("Compilacion con exito.");
+			else System.out.println("Compilacion con errores.");
 		} catch (java.io.FileNotFoundException e) {
 			System.err.println ("Fichero " + args[0] + " no encontrado.");
 		} catch (TokenMgrError e) {
@@ -68,12 +74,12 @@ SKIP: {
 //-----------------------------------------------------------------------------
 // Funcion global para todos los tokens. Imprimir por pantalla la linea, la 
 // columna, el tipo de token y el valor del token que ha hecho match.
-TOKEN_MGR_DECLS: {
-	static void CommonTokenAction(Token t){
-		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
-			+ adacConstants.tokenImage[t.kind] + " \"" + t + "\"");
-	}
-}
+//TOKEN_MGR_DECLS: {
+//	static void CommonTokenAction(Token t){
+//		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
+//			+ adacConstants.tokenImage[t.kind] + " \"" + t + "\"");
+//	}
+//}
 
 //-----------------------------------------------------------------------------
 // Conjuntos.
