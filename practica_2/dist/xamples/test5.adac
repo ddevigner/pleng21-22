@@ -1,76 +1,29 @@
---Test 5 
---No deberia haber fallos
+---
+--Programa de prueba 5 para el analizador sintactico 
+--Autores: Sergio Gabete y Devid Dokash
 
 
-int main(int argc, char *argv[])
-    if(argc != 2)
-        cout<<"Argumentos equivados, formato main <ficheroEntrada>"<<endl;
-        return 0;
-    
-    string fichEntrada = argv[1];
-    int numNodos = 0;
-    ifstream myfile (fichEntrada);
-    if (myfileis_open())
-        myfile>>numNodos;
-    else
-        cout << "Unable to open file"<<endl; 
-        return 0;
-    
-    int ** matriz = new int*[numNodos];
-    for(int i= 0;i < numNodos; i++)
-        matriz[i] = new int[numNodos];
-    
-    for(int i=0;i<numNodos;i++)
-        for(int j=0;j<numNodos;j++)
-            myfile>>matriz[i][j];
-        
-    
-    myfileclose();
-     cout<<"Tamanyo "<<numNodos<<endl;
-    map<int,Nodo*> creacionGrafo;
-    Nodo* anyadirNodo;
-    Con la matriz generada hay que crear los nodos
-    Para cada nodo se calcula su lista de adyacentes recorriendo la fila sin contarse a el mismo
-    for(int i=0;i<numNodos;i++)
-        anyadirNodo = new Nodo(i+1);    Se crean los num nodos
-        creacionGrafo[i+1] = anyadirNodo;
-     
-    for(int i=0;i<numNodos;i++)
-        anyadirNodo = Nodo(i+1);
-        for(int j=0;j<numNodos;j++)
-            if(i != j)
-                if(matriz[i][j]==1)    Si es 1 es que son adyacentes
-                    creacionGrafo[i+1]->adyacentes[j+1] = creacionGrafo[j+1];
-                    creacionGrafo[i+1]->anyadirNodoAdyacente( creacionGrafo[j+1]);
-                    cout<<"Se anyade al nodo "<<i+1<< " el adyacente "<<j+1<<endl; 
-                
-            
-        
-    
-    Wisun grafo(creacionGrafo);
-    Calcular el tiempo de ejecucin
-    unsigned t0, t1;
-    t0=clock();
- 
-    grafoobtenerSolucion();
-
-    t1 = clock();
-    double time = (double(t1-t0)CLOCKS_PER_SEC);
-
-    cout<<"El tamaño del conjunto dominante es " << grafosolucionsize()<< " e incluye"<<endl;
-    
-    map<int, Nodo*>iterator it;
-    Se muestran los nodos del conjunto solucion
-    for(it=grafosolucionbegin(); it!=grafosolucionend(); ++it)
-        cout<<"Nodo "<<it->first<< " ";
-    
-    cout<<endl;
-
-    cout<< "El tiempo de ejecucin es "<<time<<" segundos"<<endl;
-    
-    for(int i=0;i<numNodos;i++)
-        delete [] matriz[i];
-    
-    delete [] matriz;
-
-    return 0;
+procedure test5 is
+ character nombre;
+ boolean hecha;
+integer piezas,nLadrillos;
+integer i;
+-------------------------------------------------------------------
+function ponerLadrillo(val integer nLadrillos; ref boolean puestos) is
+begin
+	i:= 0;
+	while (i < nLadrillos) do
+		put("He puesto el ladrillo numero ", i);
+	end
+	puestos := true;
+end
+------------------------------------------------------------------
+begin
+	
+	put("Cuantos ladrillos quieres poner?");
+	get(ladrillos);
+	ponerLadrillo(ladrillos,hecha);
+	if (hecha = true) then
+		put("Se ha derrumbado");
+	end
+end
