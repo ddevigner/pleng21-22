@@ -1,0 +1,13 @@
+const cx = 1 ;
+const cy = 2 ;
+var x ;
+var y ;
+
+
+x = cx + 27;
+y = 64;
+x = cy * (x + y);
+escribir x;
+escribir y;
+escribir (2*x) - (3*x) + x;
+
