@@ -1,0 +1,103 @@
+------------------------------------------------------------------------
+--  criba_eratostenes.adac
+------------------------------------------------------------------------
+procedure eratostenes is
+
+integer n;
+boolean criba[101];
+
+------------------------------------------------------------------------
+function integer pedir_entero () is
+
+integer n;
+------------------------------------------------------------------------
+begin
+        n := 0;
+        while (n < 1) or (n > 100) do
+                put("Dame un numero entre 1 y 100: ");
+                get (n);
+        end
+        return n;
+end
+
+------------------------------------------------------------------------
+procedure escrib_vect (val boolean v[101]) is
+
+integer i, m;
+boolean salir;
+------------------------------------------------------------------------
+begin
+    i := 2;
+    m := 0;
+    salir := false;
+    put_line ("");
+    put_line ("Numeros primos hasta ", n, ": ");
+    put_line ("");
+    while not salir do
+        if i > n
+        then
+            salir := true;
+        else
+            if v[i] then
+                put_line (i, " es primo.");
+                m := m + 1;
+            end
+            i := i + 1;
+        end
+    end
+    put_line ("");
+    put_line ("Hasta ", n, " hay ", m, " números primos.");
+end
+
+----------------------------------------------------------------
+procedure inicializar (ref boolean v[101]) is
+
+integer i;
+----------------------------------------------------------------
+begin
+        i := 1;
+        while i <= n do
+                v[i] := true;
+                i := i + 1;
+        end
+end
+
+----------------------------------------------------------------
+procedure eliminar_no_primos (ref boolean v[101]) is
+
+integer i, j;
+----------------------------------------------------------------
+begin
+        i := 2;
+        while i <= n div 2 do
+                if v[i] then
+                        j := 2 * i;
+                        while j <= n do
+                                v[j] := false;
+                                j := j + i;
+                        end
+                end
+                i := i + 1;
+        end
+end
+----------------------------------------------------------------
+
+------------------------------------------------------------------------
+procedure procesar (ref boolean v[101]) is
+------------------------------------------------------------------------
+
+begin
+        inicializar (v);
+        eliminar_no_primos (v);
+        escrib_vect (v);
+end
+
+------------------------------------------------------------------------
+begin
+        put_line ("Criba de Eratóstenes: determinación de qué números son primos hasta un n dado.");
+        put_line ("https://es.wikipedia.org/wiki/Criba_de_Erat%C3%B3stenes");
+        put_line();
+
+        n := pedir_entero ();
+        procesar (criba);
+end

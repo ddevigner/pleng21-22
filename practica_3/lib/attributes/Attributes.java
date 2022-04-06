@@ -40,6 +40,6 @@ public class Attributes implements Cloneable {
             "type = " + type + "\n" +
             "parClass = " + parClass + "\n" ;
             //COMPLETAR
-        ;
+        
     }
 }

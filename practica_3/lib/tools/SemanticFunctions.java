@@ -24,4 +24,44 @@ public class SemanticFunctions {
 	}
 
 	//COMPLETAR
+
+	public static void CreateClassVar(SymbolTable st, Token t, Symbol.Types var_type, Symbol.ParameterClass _class){
+		if (_class != Symbol.ParameterClass.NONE) {
+			if (var_type == Symbol.Types.INT) {
+				st.insertSymbol(new SymbolInt(t.image, _class));
+				System.err.println(new SymbolInt(t.image));
+			} 
+			else if (var_type == Symbol.Types.BOOL) {
+				st.insertSymbol(new SymbolBool(t.image, _class));
+				System.err.println(new SymbolBool(t.image));
+			}
+			else if (var_type == Symbol.Types.CHAR) {
+				st.insertSymbol(new SymbolChar(t.image, _class));
+				System.err.println(new SymbolChar(t.image));
+			}
+		} else {
+			if (var_type == Symbol.Types.INT) {
+				st.insertSymbol(new SymbolInt(t.image));
+				System.err.println(new SymbolInt(t.image));
+			} 
+			else if (var_type == Symbol.Types.BOOL) {
+				st.insertSymbol(new SymbolBool(t.image));
+				System.err.println(new SymbolBool(t.image));
+			}
+			else if (var_type == Symbol.Types.CHAR) {
+				st.insertSymbol(new SymbolChar(t.image));
+				System.err.println(new SymbolChar(t.image));
+			}
+		}
+	}
+
+	public static void CreateClassVar(SymbolTable _st, String _name, int _nElem, Symbol.Types _baseType, Symbol.ParameterClass _class) {
+		if (_class != Symbol.ParameterClass.NONE) {
+			try {
+				_st.insertSymbol(new SymbolArray(_name, _nElem, _baseType, _class));
+			}
+		} else {
+			_st.insertSymbol(new SymbolArray(_name, _nElem, _baseType));
+		}
+	}
 }
