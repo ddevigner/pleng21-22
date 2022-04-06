@@ -1,0 +1,386 @@
+//-----------------------------------------------------------------------------
+// - File: adac.jj
+// - Author: Sergio Gabete César (774631) & Devid Dokash (780131).
+// - Date: 20/03/2022 (last version).
+// - Coms: https://javacc.github.io/javacc/tutorials/token-manager.html. Imple-
+// mentacion del analizador sintactico.
+// - Version: 1.
+// - Version-Info: nuevas reglas respecto a funciones definidas en adac para su 
+// diferenciacion a nombres de variable, correccion de regex de comentarios.
+//-----------------------------------------------------------------------------
+
+options {
+   //COMMON_TOKEN_ACTION = true;
+}
+
+PARSER_BEGIN(adac)
+package traductor;
+
+public class adac {
+
+	static int errors = 0;
+
+	public static void panicMode(Token err /*, Set<Integer> sync_set*/) {
+		errors++;
+		System.err.println("ERROR SINTACTICO: (" + err.beginLine + "," 
+			+ err.beginColumn + "): " + err);
+		System.err.println("----> Iniciando recuperacion en modo panico..."
+			+ "\n----> Saltando todo hasta token de conjunto de sincronizacion");
+		Token t = getNextToken();
+		while(/*!sync_set.contains(t.kind) &&*/ t.kind != SCOLON && t.kind != END && t.kind != EOF) {
+			System.err.println("Descartando token ("
+					+ adacConstants.tokenImage[t.kind] + "," + t.image + ")");
+			t = getNextToken();
+		}
+	}
+
+
+    public static void main(String[] args) throws java.io.FileNotFoundException, 
+			ParseException {
+    	adac parser;
+
+    	try {
+			// Entrada desde stdin.
+	    	if(args.length == 0) {
+				parser = new adac(System.in);
+			}
+			// Entrada desde fichero en args[0].
+			else {
+	            parser = new adac(new java.io.FileInputStream(args[0])); 
+			}
+			// Invoca símbolo inicial de la gramática.
+			parser.main();
+			if (errors == 0) System.out.println("Compilacion con exito.");
+			else System.out.println("Compilacion con errores.");
+		} catch (java.io.FileNotFoundException e) {
+			System.err.println ("Fichero " + args[0] + " no encontrado.");
+		} catch (TokenMgrError e) {
+        	System.err.println("LEX_ERROR: " + e.getMessage());
+        } 
+    }
+}
+PARSER_END(adac)
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// ANALIZADOR LEXICO.
+//-----------------------------------------------------------------------------
+// Se ignoran espacios, saltos de linea, caracteres que no aportan informacion
+// al analisis lexico.
+SKIP: {
+	" " | "\t" | "\r" | "\n" | "\r\n"
+}
+
+//-----------------------------------------------------------------------------
+// Funcion global para todos los tokens. Imprimir por pantalla la linea, la 
+// columna, el tipo de token y el valor del token que ha hecho match.
+//TOKEN_MGR_DECLS: {
+//	static void CommonTokenAction(Token t){
+//		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
+//			+ adacConstants.tokenImage[t.kind] + " \"" + t + "\"");
+//	}
+//}
+
+//-----------------------------------------------------------------------------
+// Conjuntos.
+TOKEN: {
+ 		< #LETTER: ["a"-"z","A"-"Z"] >
+	|	< #DIGIT: ["0"-"9"] >
+}
+
+//-----------------------------------------------------------------------------
+// Comentarios: SPECIAL_TOKEN ya que interesa ignorar los comentarios y no 
+// procesarlos.
+SPECIAL_TOKEN: {
+	< COMMENT: "--"(~["\n"])*("\n")? >
+}
+
+//-----------------------------------------------------------------------------
+// Sintaxis general.
+TOKEN: {
+		< SCOLON: ";" >
+	|	< COLON: "," >
+	|	< LPAREN: "(" > 
+	|	< RPAREN: ")" > 
+	|	< LBRACK: "[" > 
+	|	< RBRACK: "]" >
+}
+
+//-----------------------------------------------------------------------------
+// Tipos y constantes: enteros, booleanos y caracteres, tanto como dato simple
+// como array. En algunas funciones se permite el uso de strings pero no como
+// variables.
+TOKEN: {
+		< INT: "integer" >				
+	|	< BOOL: "boolean" >				
+	|	< CHAR: "character" >			
+	|	< INTVAL: (< DIGIT >)+ >	
+	|   < CHARVAL: "'"(~[])"'" >			
+	|   < BOOLVAL: "true" | "false" >
+	|	< STRING: "\""(~["\""])*"\"" >
+}
+
+//-----------------------------------------------------------------------------
+// Operaciones de asignacion y aritmeticologicas.
+TOKEN: {
+    	< ASS: ":=" > 
+    |	< ADD: "+" >		
+    |	< SUB: "-" >		
+    |	< MUL: "*" >		
+    |	< DIV: "div" >		
+    |	< MOD: "mod" >		
+    |	< EQ: "=" >		
+    |	< NE: "<>" >	
+    |	< LT: "<" >	
+    |	< GT: ">" >
+    |	< LE: "<=" >	
+    |	< GE: ">=" >	
+    |	< AND: "and" >		
+    |	< OR: "or" >		
+    |	< NOT: "not" >		
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de funciones y procedimientos.
+TOKEN: {
+		< FUNC: "function" >
+	|	< PROC: "procedure" >
+	|	< IS: "is" >			
+	|	< VAL: "val" >		
+	|	< REF: "ref" >		
+	|	< RETURN: "return" >	
+}
+
+
+//-----------------------------------------------------------------------------
+// Declaracion de funciones existentes en adac.
+TOKEN: {
+		< PUT: "put" >
+	|	< PUTLINE: "put_line" >
+	| 	< CHAR2INT: "char2int" >
+	|	< INT2CHAR: "int2char" >
+	|   < SKIPLINE: "skip_line" >
+	|	< GET: "get" >
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de estructuras de control: if & while.
+TOKEN: {
+    	< IF: "if" > 
+	| 	< THEN: "then" >
+	| 	< ELSE: "else" >
+	|	< WHILE: "while" >
+    |	< DO: "do" >	
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de cuerpo.
+TOKEN: {
+		< BEGIN: "begin" > 
+	| 	< END: "end" >
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de nombres.
+TOKEN: {
+	< ID: ("_" | < LETTER > | < LETTER >"_")(< LETTER > | < LETTER >"_" | < DIGIT > | < DIGIT >"_")* >
+}
+
+//-----------------------------------------------------------------------------
+// Errores.
+SPECIAL_TOKEN: {
+	< UNKNOWN: (~[]) >	
+		{ 
+			System.err.println("ERROR LEXICO: (" + 
+				matchedToken.beginLine + "," + matchedToken.beginColumn + 
+				"): simbolo no reconocido: " + matchedToken);
+		}
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// ANALIZADOR SINTATICO.
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// Declaracion del procedimiento principal del fichero.
+void main() :
+{} {
+	<PROC> <ID> <IS> vars_def() procs_funcs_decl() proc_func_body()
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de procedimientos/funciones del fichero.
+void procs_funcs_decl ():
+{} {
+	(proc_func_decl())*
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de procedimiento/funcion.
+void proc_func_decl():
+{} {
+	proc_or_func() func_return() <ID> <LPAREN> params_decl() <RPAREN> <IS> vars_def() proc_func_body()
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de si es procedimiento o funcion.
+void proc_or_func():
+{} {
+	<PROC> | <FUNC>
+}
+
+//-----------------------------------------------------------------------------
+// Tipo de dato que devuelve la funcion.
+void func_return():
+{} {
+	vars_type() | {}
+}
+
+//-----------------------------------------------------------------------------
+// Parametros de procedimiento/funcion.
+void params_decl():
+{} {
+	(param_class() vars_decl() (<SCOLON> param_class() vars_decl())*)?
+}
+
+//-----------------------------------------------------------------------------
+// Clase del parametro: por valor o por referencia.
+void param_class():
+{} {
+	<VAL> | <REF>
+}
+
+//-----------------------------------------------------------------------------
+// Variables de procedimiento/funcion.
+void vars_def():
+{} {
+	( vars_decl() <SCOLON> )*
+}
+
+//-----------------------------------------------------------------------------
+// Tipos de variable y variables asociadas.
+void vars_decl():
+{} {
+	vars_type() vars_list()
+}
+
+//-----------------------------------------------------------------------------
+// Variables del mismo tipo.
+void vars_list():
+{}
+{
+	var() ( <COLON> var() )*
+}
+
+
+
+//-----------------------------------------------------------------------------
+// Tipos de una variable.
+void vars_type():
+{} {
+	<INT> | <BOOL> | <CHAR>
+}
+
+//-----------------------------------------------------------------------------
+// Nombre de la variable.
+void var():
+{} {
+	LOOKAHEAD(2) <ID> <LBRACK> <INTVAL> <RBRACK> | <ID> 
+}
+
+//-----------------------------------------------------------------------------
+// Cuerpo de procedimiento/funcion.
+void proc_func_body():
+{} {
+	<BEGIN> instructions_list() <END>
+}
+
+//-----------------------------------------------------------------------------
+// Conjunto de instrucciones.
+void instructions_list():
+{} {
+	(instruction())*
+}
+
+//-----------------------------------------------------------------------------
+// Instruccion:
+//	- Procedimientos predefinidos: get, put, putline, skipline.
+//  - Procedimientos del usuario.
+//	- Asignacion.
+//	- While/If-Else.
+//	- Return.
+void instruction():
+{} {
+	try {
+		  <GET> <LPAREN> expression() (<COLON> expression())* <RPAREN> <SCOLON>
+		| <PUT> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+		| <PUTLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+		| <SKIPLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+		| LOOKAHEAD(2) <ID> <LPAREN> ( expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+		| assignable() <ASS> expression() <SCOLON> 
+		| <WHILE> expression() <DO> instructions_list() <END> 
+		| <IF> expression() <THEN> instructions_list() (<ELSE> instructions_list())? <END> 
+		| <RETURN> expression() <SCOLON>
+	} catch (ParseException e) {
+		panicMode(e.currentToken.next);
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Elementos asignables.
+void assignable():
+{} {
+	LOOKAHEAD(2) <ID> <LBRACK> expression() <RBRACK> | <ID> 
+}
+
+
+//-----------------------------------------------------------------------------
+// Expresion relacional.
+void expression (): 
+{} {
+	simple_expr() ( relational_op() simple_expr() )?
+}
+
+//-----------------------------------------------------------------------------
+// Expresion aritmetica.
+void simple_expr (): 
+{} {
+	( <ADD> | <SUB> )? term() ( additive_op() term() )*
+} 
+
+//-----------------------------------------------------------------------------
+// Expresion multiplicativa.
+void term():
+{} {
+	factor() ( multiplicative_op() factor() )*
+}
+
+void factor():
+{} {
+	  <NOT> factor()
+	| <LPAREN> expression() <RPAREN>
+	| <INT2CHAR> <LPAREN> expression() <RPAREN>
+	| <CHAR2INT> <LPAREN> expression() <RPAREN>
+	| LOOKAHEAD(2) <ID> <LPAREN> ( expression() (<COLON> expression())*)? <RPAREN>
+	| LOOKAHEAD(2) <ID> <LBRACK> expression() <RBRACK>
+	| <ID>
+	| <INTVAL>
+	| <CHARVAL>
+	| <BOOLVAL>
+	| <STRING>
+}
+
+void relational_op():
+{} {
+	<EQ> | <LT> | <GT> | <LE> | <GE> | <NE>
+}
+
+void additive_op():
+{} {
+	<ADD> | <SUB> | <OR>
+}
+
+void multiplicative_op():
+{} {
+	<MUL> | <MOD> | <DIV> | <AND>
+}
