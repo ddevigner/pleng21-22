@@ -15,12 +15,16 @@ import java.util.AbstractMap.SimpleEntry;
 public class Attributes implements Cloneable {
     public Symbol.Types type;
     public Symbol.ParameterClass parClass;
+    public ArrayList<Symbol> parList;
+    public Symbol.Types returnType;
+    public String name;
 
     public int valInt;
     public boolean valBool;
     public char valChar;
     public String valString;
     //COMPLETAR
+
 
     public Attributes() {
         //COMPLETAR

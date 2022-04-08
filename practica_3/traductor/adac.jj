@@ -17,14 +17,13 @@ PARSER_BEGIN(adac)
 package traductor;
 import lib.symbolTable.*;
 import lib.symbolTable.exceptions.*;
-import lib.tools.SemanticFunctions.*;
+import lib.tools.SemanticFunctions;
+import java.util.ArrayList;
 
 public class adac {
 
 	//Se declara la tabla de simbolos
 	static SymbolTable st;
-
-	staticsf;
 
 	static int errors = 0;
 
@@ -61,8 +60,6 @@ public class adac {
 			//Se iniciar y crea la tabla de simbolos pero esta vacia
 			st = new SymbolTable();
     		initSymbolTable();
-			sf = new SemanticFunctions();
-			
 
 			// Entrada desde stdin.
 	    	if(args.length == 0) {
@@ -228,8 +225,20 @@ SPECIAL_TOKEN: {
 //-----------------------------------------------------------------------------
 // Declaracion del procedimiento principal del fichero.
 void main() :
-{} {
-	<PROC> <ID> <IS> vars_def() procs_funcs_decl() proc_func_body()
+{
+	Token t;
+} 
+{
+	<PROC>
+	t = <ID> 
+		{ 
+			SemanticFunctions.CreateProcedure(st, t, Symbol.Types.PROCEDURE, 
+				Symbol.Types.UNDEFINED); 
+		}
+	<IS> 
+	vars_def() 
+	procs_funcs_decl() 
+	proc_func_body()
 }
 
 //-----------------------------------------------------------------------------
@@ -242,61 +251,92 @@ void procs_funcs_decl ():
 //-----------------------------------------------------------------------------
 // Declaracion de procedimiento/funcion
 void proc_func_decl():
-{} {
-	proc_or_func() func_return() <ID> <LPAREN> params_def() <RPAREN> <IS> vars_def() procs_funcs_decl() proc_func_body()
+{
+	Symbol.Types baseType;
+	Symbol.Types returnType;
+	Token t;
+	ArrayList<Symbol> parList;
+} {
+	baseType = proc_or_func() 
+	returnType = func_return(baseType)
+	t = <ID> { parList = SemanticFunctions.CreateProcedure(st, t, baseType, returnType);}
+	<LPAREN>
+	params_def(parList) 
+	<RPAREN> 
+	<IS> 
+	vars_def() 
+	procs_funcs_decl()
+	proc_func_body()
 }
 
 //-----------------------------------------------------------------------------
 // Declaracion de si es procedimiento o funcion.
-void proc_or_func():
+Symbol.Types proc_or_func():
 {} {
-	<PROC> | <FUNC>
+		<PROC> { return Symbol.Types.PROCEDURE; } 
+	| 	<FUNC> { return Symbol.Types.FUNCTION;  }
 }
 
 //-----------------------------------------------------------------------------
 // Tipo de dato que devuelve la funcion.
-void func_return():
-{} {
-	vars_type() | {}
+Symbol.Types func_return(Symbol.Types procType):
+{
+	Symbol.Types returnType;
+} {
+	returnType = vars_type() 
+		{ 
+			if (procType == Symbol.Types.PROCEDURE)
+				System.err.println("Error - did you define a return data type in your procedure?");
+			return returnType;
+		}
+	| 	{}
+		{
+			if (procType == Symbol.Types.FUNCTION)
+				System.err.println("Error -- did you forget about the return data type in your function?");
+			return Symbol.Types.UNDEFINED;
+		}
 }
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
-void params_def():
-{} {
-	(param_class() params_decl() (<SCOLON> param_class() vars_decl())*)?
+void params_def(ArrayList<Symbol> parList):
+{
+	Symbol.ParameterClass parClass;
+} {
+	(parClass = param_class() vars_decl(parClass, parList) (<SCOLON> param_class() vars_decl(parClass, parList))*)?
 }
 
 //-----------------------------------------------------------------------------
 // Clase del parametro: por valor o por referencia.
-void param_class():
+Symbol.ParameterClass param_class():
 {} {
-	<VAL> | <REF>
+		<VAL> { return Symbol.ParameterClass.VAL; }
+	| 	<REF> { return Symbol.ParameterClass.REF; }
 }
 
 //-----------------------------------------------------------------------------
 // Variables de procedimiento/funcion.
 void vars_def():
 {} {
-	( vars_decl() <SCOLON> )*
+	( vars_decl(Symbol.ParameterClass.NONE, null) <SCOLON> )*
 }
 
 //-----------------------------------------------------------------------------
 // Tipos de variable y variables asociadas.
-void vars_decl():
+void vars_decl(Symbol.ParameterClass parClass, ArrayList<Symbol> parList):
 {
-	Symbol.Types var_type;
+	Symbol.Types baseType;
 }
 {
-	var_type = vars_type() vars_list(var_type)
+	baseType = vars_type() vars_list(baseType, parClass, parList)
 }
 
 //-----------------------------------------------------------------------------
 // Variables del mismo tipo.
-void vars_list(Symbol.Types var_type):
+void vars_list(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol> parList):
 {}
 {
-	var(var_type) ( <COLON> var(var_type) )*
+	var(baseType, parClass, parList) ( <COLON> var(baseType, parClass, parList))*
 }
 
 //-----------------------------------------------------------------------------
@@ -310,35 +350,22 @@ Symbol.Types vars_type():
 
 //-----------------------------------------------------------------------------
 // Nombre de la variable.
-void var(Symbol.Types var_type, Symbol.ParameterClass _class):
+void var(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol> parList):
 {
 	Token t, ind;
 } 
 {
-	LOOKAHEAD(2) t = <ID> <LBRACK> ind = <INTVAL> <RBRACK>
-			{ 
-				try {
-					sf.CreateClassVar();
-				} catch (AlreadyDefinedSymbolException e) {
-					System.err.println(t.image + " ya esta definido");
-				}
-			}
+	LOOKAHEAD(2) t = <ID> <LBRACK> ind = <INTVAL> <RBRACK> 
+		{ SemanticFunctions.CreateVar(st, parList, t, Integer.parseInt(ind.image), baseType, parClass); }
 	| 	t = <ID> 
-			{ 
-				try{
-					sf.CreateClassVar(st, t, var_type, _class);
-					st.toString();	
-				} catch (AlreadyDefinedSymbolException e) {
-					System.err.println(t.image + " ya esta definido");
-				}
-			}
+		{ SemanticFunctions.CreateVar(st, parList, t, 0, baseType, parClass); }
 }
 
 //-----------------------------------------------------------------------------
 // Cuerpo de procedimiento/funcion.
 void proc_func_body():
 {} {
-	<BEGIN> instructions_list() <END>
+	<BEGIN> instructions_list() <END> { st.removeBlock(); }
 }
 
 //-----------------------------------------------------------------------------

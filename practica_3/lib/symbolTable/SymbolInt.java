@@ -10,23 +10,24 @@ package lib.symbolTable;
 public class SymbolInt extends Symbol implements Cloneable {
     public int value;
     
-    public SymbolInt(String _name) {
-    	super(_name, Types.INT, ParameterClass.NONE); 
+    public SymbolInt(String _name, int _line, int _column) {
+    	super(_name, Types.INT, ParameterClass.NONE, _line, _column); 
     	value = 0;
     }
 
-    public SymbolInt(String _name, ParameterClass _class) {
-    	super(_name, Types.INT, _class); 
+    public SymbolInt(String _name, ParameterClass _class, int _line, int _column) {
+    	super(_name, Types.INT, _class, _line, _column); 
     	value = 0;
     }
 
-    public SymbolInt(String _name, int _value, ParameterClass _class) {
-    	super(_name, Types.INT, _class); 
+    public SymbolInt(String _name, int _value, ParameterClass _class, int _line, int _column) {
+    	super(_name, Types.INT, _class, _line, _column); 
         value = _value;
     }
 
     public String toString() {
-        return "(" + name + "," + type + "," + value + "," + parClass + "," + nivel + ")";
+        return "(" + name + "," + type + "," + value + "," + parClass + "," + 
+                nivel + "," + line + "," + column + ")";
     }
     
     public SymbolInt clone () {

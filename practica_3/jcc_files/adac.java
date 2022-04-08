@@ -3,6 +3,8 @@
 package traductor;
 import lib.symbolTable.*;
 import lib.symbolTable.exceptions.*;
+import lib.tools.SemanticFunctions;
+import java.util.ArrayList;
 
 public class adac implements adacConstants {
 
@@ -70,9 +72,11 @@ public class adac implements adacConstants {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // Declaracion del procedimiento principal del fichero.
-  static final public void main() throws ParseException {
+  static final public void main() throws ParseException {Token t;
     jj_consume_token(PROC);
-    jj_consume_token(ID);
+    t = jj_consume_token(ID);
+SemanticFunctions.CreateProcedure(st, t, Symbol.Types.PROCEDURE,
+                                Symbol.Types.UNDEFINED);
     jj_consume_token(IS);
     vars_def();
     procs_funcs_decl();
@@ -100,12 +104,16 @@ public class adac implements adacConstants {
 
 //-----------------------------------------------------------------------------
 // Declaracion de procedimiento/funcion
-  static final public void proc_func_decl() throws ParseException {
-    proc_or_func();
-    func_return();
-    jj_consume_token(ID);
+  static final public void proc_func_decl() throws ParseException {Symbol.Types baseType;
+        Symbol.Types returnType;
+        Token t;
+        ArrayList<Symbol> parList;
+    baseType = proc_or_func();
+    returnType = func_return(baseType);
+    t = jj_consume_token(ID);
+parList = SemanticFunctions.CreateProcedure(st, t, baseType, returnType);
     jj_consume_token(LPAREN);
-    params_decl();
+    params_def(parList);
     jj_consume_token(RPAREN);
     jj_consume_token(IS);
     vars_def();
@@ -115,14 +123,16 @@ public class adac implements adacConstants {
 
 //-----------------------------------------------------------------------------
 // Declaracion de si es procedimiento o funcion.
-  static final public void proc_or_func() throws ParseException {
+  static final public Symbol.Types proc_or_func() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case PROC:{
       jj_consume_token(PROC);
+{if ("" != null) return Symbol.Types.PROCEDURE;}
       break;
       }
     case FUNC:{
       jj_consume_token(FUNC);
+{if ("" != null) return Symbol.Types.FUNCTION;}
       break;
       }
     default:
@@ -130,32 +140,40 @@ public class adac implements adacConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
 }
 
 //-----------------------------------------------------------------------------
 // Tipo de dato que devuelve la funcion.
-  static final public void func_return() throws ParseException {
+  static final public Symbol.Types func_return(Symbol.Types procType) throws ParseException {Symbol.Types returnType;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:
     case BOOL:
     case CHAR:{
-      vars_type();
+      returnType = vars_type();
+if (procType == Symbol.Types.PROCEDURE)
+                                System.err.println("Error - did you define a return data type in your procedure?");
+                        {if ("" != null) return returnType;}
       break;
       }
     default:
       jj_la1[2] = jj_gen;
 
+if (procType == Symbol.Types.FUNCTION)
+                                System.err.println("Error -- did you forget about the return data type in your function?");
+                        {if ("" != null) return Symbol.Types.UNDEFINED;}
     }
+    throw new Error("Missing return statement in function");
 }
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
-  static final public void params_decl() throws ParseException {
+  static final public void params_def(ArrayList<Symbol> parList) throws ParseException {Symbol.ParameterClass parClass;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case VAL:
     case REF:{
-      param_class();
-      vars_decl();
+      parClass = param_class();
+      vars_decl(parClass, parList);
       label_2:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -169,7 +187,7 @@ public class adac implements adacConstants {
         }
         jj_consume_token(SCOLON);
         param_class();
-        vars_decl();
+        vars_decl(parClass, parList);
       }
       break;
       }
@@ -181,14 +199,16 @@ public class adac implements adacConstants {
 
 //-----------------------------------------------------------------------------
 // Clase del parametro: por valor o por referencia.
-  static final public void param_class() throws ParseException {
+  static final public Symbol.ParameterClass param_class() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case VAL:{
       jj_consume_token(VAL);
+{if ("" != null) return Symbol.ParameterClass.VAL;}
       break;
       }
     case REF:{
       jj_consume_token(REF);
+{if ("" != null) return Symbol.ParameterClass.REF;}
       break;
       }
     default:
@@ -196,6 +216,7 @@ public class adac implements adacConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
 }
 
 //-----------------------------------------------------------------------------
@@ -214,22 +235,22 @@ public class adac implements adacConstants {
         jj_la1[6] = jj_gen;
         break label_3;
       }
-      vars_decl();
+      vars_decl(Symbol.ParameterClass.NONE, null);
       jj_consume_token(SCOLON);
     }
 }
 
 //-----------------------------------------------------------------------------
 // Tipos de variable y variables asociadas.
-  static final public void vars_decl() throws ParseException {Symbol.Types var_type;
-    var_type = vars_type();
-    vars_list(var_type);
+  static final public void vars_decl(Symbol.ParameterClass parClass, ArrayList<Symbol> parList) throws ParseException {Symbol.Types baseType;
+    baseType = vars_type();
+    vars_list(baseType, parClass, parList);
 }
 
 //-----------------------------------------------------------------------------
 // Variables del mismo tipo.
-  static final public void vars_list(Symbol.Types var_type) throws ParseException {
-    var(var_type);
+  static final public void vars_list(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol> parList) throws ParseException {
+    var(baseType, parClass, parList);
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -242,7 +263,7 @@ public class adac implements adacConstants {
         break label_4;
       }
       jj_consume_token(COLON);
-      var(var_type);
+      var(baseType, parClass, parList);
     }
 }
 
@@ -275,33 +296,18 @@ public class adac implements adacConstants {
 
 //-----------------------------------------------------------------------------
 // Nombre de la variable.
-  static final public void var(Symbol.Types var_type) throws ParseException {Token t, ind;
+  static final public void var(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol> parList) throws ParseException {Token t, ind;
     if (jj_2_1(2)) {
       t = jj_consume_token(ID);
       jj_consume_token(LBRACK);
       ind = jj_consume_token(INTVAL);
       jj_consume_token(RBRACK);
-try {
-                                        st.insertSymbol(new SymbolArray(t.image, Integer.parseInt(ind.image), var_type));
-                                        st.toString();
-                                } catch (AlreadyDefinedSymbolException e) {
-                                        System.err.println(t.image + " ya esta definido");
-                                }
+SemanticFunctions.CreateVar(st, parList, t, Integer.parseInt(ind.image), baseType, parClass);
     } else {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case ID:{
         t = jj_consume_token(ID);
-try{
-                                        if (var_type == Symbol.Types.INT)
-                                                st.insertSymbol(new SymbolInt(t.image));
-                                        else if (var_type == Symbol.Types.BOOL)
-                                                st.insertSymbol(new SymbolBool(t.image));
-                                        else if (var_type == Symbol.Types.CHAR)
-                                                st.insertSymbol(new SymbolChar(t.image));
-                                        st.toString();
-                                } catch (AlreadyDefinedSymbolException e) {
-                                        System.err.println(t.image + " ya esta definido");
-                                }
+SemanticFunctions.CreateVar(st, parList, t, 0, baseType, parClass);
         break;
         }
       default:
@@ -318,6 +324,7 @@ try{
     jj_consume_token(BEGIN);
     instructions_list();
     jj_consume_token(END);
+st.removeBlock();
 }
 
 //-----------------------------------------------------------------------------
@@ -943,17 +950,17 @@ panicMode(e.currentToken.next);
     return false;
   }
 
-  static private boolean jj_3_1()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
   static private boolean jj_3_2()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_1()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 

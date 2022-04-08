@@ -81,6 +81,13 @@ public class SymbolTable {
         }
     }
 
+    public static void insertSymbol(ArrayList<Symbol> parList, Symbol s) throws AlreadyDefinedSymbolException {
+        if (parList.contains(s)) 
+            throw new AlreadyDefinedSymbolException();
+        else 
+			parList.add(s);
+    }
+
     //Si no está, excepción. Si está, devuelve su referencia
     public Symbol getSymbol (String name) throws SymbolNotFoundException {
     	Symbol result = findSymbol(name); 

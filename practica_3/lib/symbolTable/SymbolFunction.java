@@ -21,14 +21,15 @@ public class SymbolFunction extends Symbol implements Cloneable {
     public Types returnType; //tipo de la función
 
     public SymbolFunction(String _name, ArrayList<Symbol> _parList, 
-                          Types _returnType) {
-    	super(_name, Types.FUNCTION, ParameterClass.NONE);
+            Types _returnType, int _line, int _column) {
+    	super(_name, Types.FUNCTION, ParameterClass.NONE, _line, _column);
         parList = _parList;
         returnType = _returnType;
     }
 
     public String toString() {
-        return "(" + name + "," + type + "," + parList + "," + returnType + "," + parClass + "," + nivel + ")";
+        return "(" + name + "," + type + "," + parList + "," + returnType + "," 
+                + parClass + "," + nivel + "," + line + "," + column + ")";
     }
     
     public SymbolFunction clone () {

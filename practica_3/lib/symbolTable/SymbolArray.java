@@ -12,36 +12,36 @@ public class SymbolArray extends Symbol implements Cloneable {
     public int maxInd;
     public Types baseType;
 
-    public SymbolArray(String _name) {
-        super(_name, Types.ARRAY, ParameterClass.NONE); 
+    public SymbolArray(String _name, int _line, int _column) {
+        super(_name, Types.ARRAY, ParameterClass.NONE, _line, _column); 
     	minInd = -1;
         maxInd = -1;
         baseType = Types.UNDEFINED;
     }
 
-    public SymbolArray(String _name, int _minInd, int _maxInd, Types _baseType) {
-        super(_name, Types.ARRAY, ParameterClass.NONE);
+    public SymbolArray(String _name, int _minInd, int _maxInd, Types _baseType, int _line, int _column) {
+        super(_name, Types.ARRAY, ParameterClass.NONE, _line, _column);
         minInd = _minInd;
         maxInd = _maxInd;
         baseType = _baseType; 
     }
 
-    public SymbolArray(String _name, int _minInd, int _maxInd, Types _baseType, ParameterClass _class) {
-        super(_name, Types.ARRAY, _class); 
+    public SymbolArray(String _name, int _minInd, int _maxInd, Types _baseType, ParameterClass _class, int _line, int _column) {
+        super(_name, Types.ARRAY, _class, _line, _column); 
         minInd = _minInd;
         maxInd = _maxInd;
         baseType = _baseType;
     }
 
-    public SymbolArray(String _name, int _numComp, Types _baseType) {
-        super(_name, Types.ARRAY, ParameterClass.NONE);
+    public SymbolArray(String _name, int _numComp, Types _baseType, int _line, int _column) {
+        super(_name, Types.ARRAY, ParameterClass.NONE, _line, _column);
         minInd = 0;
         maxInd = _numComp - 1;
         baseType = _baseType; 
     }
 
-    public SymbolArray(String _name, int _numComp, Types _baseType, ParameterClass _class) {
-        super(_name, Types.ARRAY, _class); 
+    public SymbolArray(String _name, int _numComp, Types _baseType, ParameterClass _class, int _line, int _column) {
+        super(_name, Types.ARRAY, _class, _line, _column); 
         minInd = 0;
         maxInd = _numComp - 1;
         baseType = _baseType;
@@ -49,7 +49,8 @@ public class SymbolArray extends Symbol implements Cloneable {
 
     public String toString() {
         return "(" + name + "," + type +  "," +  minInd + "," + maxInd + "," + 
-                     baseType + "," + parClass + "," + nivel + ")";
+                baseType + "," + parClass + "," + nivel + "," + line + "," + 
+                column + ")";
     }
     
     public SymbolArray clone () {

@@ -23,45 +23,47 @@ public class SemanticFunctions {
 		errSem = new ErrorSemantico();
 	}
 
-	//COMPLETAR
+	//-- Procedimientos.
+	public static ArrayList<Symbol> CreateProcedure(SymbolTable st, Token t, 
+			Symbol.Types baseType, Symbol.Types returnType) {
 
-	public static void CreateClassVar(SymbolTable st, Token t, Symbol.Types var_type, Symbol.ParameterClass _class){
-		if (_class != Symbol.ParameterClass.NONE) {
-			if (var_type == Symbol.Types.INT) {
-				st.insertSymbol(new SymbolInt(t.image, _class));
-				System.err.println(new SymbolInt(t.image));
-			} 
-			else if (var_type == Symbol.Types.BOOL) {
-				st.insertSymbol(new SymbolBool(t.image, _class));
-				System.err.println(new SymbolBool(t.image));
-			}
-			else if (var_type == Symbol.Types.CHAR) {
-				st.insertSymbol(new SymbolChar(t.image, _class));
-				System.err.println(new SymbolChar(t.image));
-			}
-		} else {
-			if (var_type == Symbol.Types.INT) {
-				st.insertSymbol(new SymbolInt(t.image));
-				System.err.println(new SymbolInt(t.image));
-			} 
-			else if (var_type == Symbol.Types.BOOL) {
-				st.insertSymbol(new SymbolBool(t.image));
-				System.err.println(new SymbolBool(t.image));
-			}
-			else if (var_type == Symbol.Types.CHAR) {
-				st.insertSymbol(new SymbolChar(t.image));
-				System.err.println(new SymbolChar(t.image));
-			}
+		ArrayList<Symbol> parList = new ArrayList<>();
+		try {
+			if (baseType == Symbol.Types.FUNCTION)
+				st.insertSymbol(new SymbolFunction(t.image, parList, returnType, t.beginLine, t.beginColumn));
+			else 
+				st.insertSymbol(new SymbolProcedure(t.image, parList, t.beginLine, t.beginColumn));
+			st.insertBlock();
+			System.out.println(st.toString());
+			return parList;
+		} catch (AlreadyDefinedSymbolException e) {
+			// ErrorSemantico.deteccion(e, t);
+			System.err.println("Error - did you already define this " +
+				((baseType == Symbol.Types.FUNCTION) ? "function?" : "procedure?"));
+			return null;
 		}
 	}
 
-	public static void CreateClassVar(SymbolTable _st, String _name, int _nElem, Symbol.Types _baseType, Symbol.ParameterClass _class) {
-		if (_class != Symbol.ParameterClass.NONE) {
-			try {
-				_st.insertSymbol(new SymbolArray(_name, _nElem, _baseType, _class));
-			}
-		} else {
-			_st.insertSymbol(new SymbolArray(_name, _nElem, _baseType));
+	//-- Parametros.
+	public static void CreateVar(SymbolTable st, ArrayList<Symbol> parList, 
+			Token t, int nElem, Symbol.Types baseType, 
+			Symbol.ParameterClass parClass) {
+		
+		Symbol sym;
+		try {
+			if (nElem <= 0) {
+				if (baseType == Symbol.Types.INT) sym = new SymbolInt(t.image, parClass, t.beginLine, t.beginColumn);
+				else if (baseType == Symbol.Types.BOOL) sym = new SymbolBool(t.image, parClass, t.beginColumn, t.beginColumn);
+				else sym = new SymbolChar(t.image, parClass, t.beginColumn, t.beginColumn);
+			} else 
+				sym = new SymbolArray(t.image, nElem, baseType, parClass, t.beginLine, t.beginColumn);
+
+			if (parList == null) st.insertSymbol(sym);
+			else SymbolTable.insertSymbol(parList, sym);
+			System.out.println(st.toString());
+		} catch (AlreadyDefinedSymbolException e) {
+			System.err.println("Error -- Simbol \'" + 
+				t.image + "\' already defined...");
 		}
 	}
 }

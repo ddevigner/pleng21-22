@@ -10,23 +10,24 @@ package lib.symbolTable;
 public class SymbolBool extends Symbol implements Cloneable {
     public boolean value;
 
-    public SymbolBool(String _name) {
-        super(_name, Types.BOOL, ParameterClass.NONE ); 
+    public SymbolBool(String _name, int _line, int _column) {
+        super(_name, Types.BOOL, ParameterClass.NONE, _line, _column ); 
         value = false;
     }
 
-    public SymbolBool(String _name, ParameterClass _class) {
-        super(_name, Types.BOOL, _class); 
+    public SymbolBool(String _name, ParameterClass _class, int _line, int _column) {
+        super(_name, Types.BOOL, _class, _line, _column); 
         value = false;
     }
 
-    public SymbolBool(String _name, boolean _value, ParameterClass _class) {
-        super(_name, Types.BOOL, _class); 
+    public SymbolBool(String _name, boolean _value, ParameterClass _class, int _line, int _column) {
+        super(_name, Types.BOOL, _class, _line, _column); 
     	value = _value;
     }
 
     public String toString() {
-        return "(" + name + "," + type + "," + value + "," + parClass + "," + nivel + ")";
+        return "(" + name + "," + type + "," + value + "," + parClass + "," 
+                + nivel + "," + line + "," + column + ")";
     }
     
     public SymbolBool clone () {

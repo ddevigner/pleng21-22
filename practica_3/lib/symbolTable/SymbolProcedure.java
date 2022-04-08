@@ -18,13 +18,14 @@ public class SymbolProcedure extends Symbol implements Cloneable {
     //necesario mantener la información de los parámetros.
     public ArrayList<Symbol> parList;
 
-    public SymbolProcedure(String _name,ArrayList<Symbol> _parList) {
-    	super(_name, Types.PROCEDURE, ParameterClass.NONE);
+    public SymbolProcedure(String _name,ArrayList<Symbol> _parList, int _line, int _column) {
+    	super(_name, Types.PROCEDURE, ParameterClass.NONE, _line, _column);
         parList = _parList;
     }
 
     public String toString() {
-        return "(" + name + "," + type + "," + parList + "," + nivel + ")";
+        return "(" + name + "," + type + "," + parList + "," + nivel + "," 
+                + line + "," + column + ")";
     }
 
     public SymbolProcedure clone () {
@@ -32,5 +33,4 @@ public class SymbolProcedure extends Symbol implements Cloneable {
     	newSymbolProcedure.parList = new ArrayList<Symbol> (parList); 
     	return newSymbolProcedure;
     }
-    
 }
