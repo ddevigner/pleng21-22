@@ -25,11 +25,11 @@ end
 
 
 --------------------------------
-function character p3() is
+function character p3(ref character resul) is
     integer i;
 begin
     i := 1;
-    while (i mod 100) = 1 do
+    while (i mod 100) <> 0 do
         resul[i-1] := intToChar(i);
         i := i * 2;
     end
@@ -43,10 +43,11 @@ end
 
 
 begin
-    if p4(100*100) then
+    if p4(100,100) then
         put_line("No es un buen numero");
 
     else
+        p3(resul);
         num := p2(20,30);
         
     end 

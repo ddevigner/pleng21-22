@@ -13,7 +13,7 @@ begin
   put (int2char (n), int2char (n + 10));
 end
 -----------------------------------------------------------
-procedure dame_informacion (ref integer dato) is 
+procedure pedir_dato (ref integer dato) is 
 -----------------------------------------------------------
 begin
     dato := 0;

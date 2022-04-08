@@ -12,7 +12,7 @@ integer i,j;
 character IF, FOR_;
 
 
-procedure b_dec() is
+procedure b_dec(ref character mensaje) is
 begin
 	putline("Valor de la variable" , mensaje);
     mensaje := 'm';
@@ -25,15 +25,16 @@ function integer sum(val integer n;val integer b) is
 begin
   resul := 0;
 	while (resul < n) and (resul <> n) do
-    sum := sum + b;
+    resul := resul + b;
   end
+  return resul;
 end
 
 begin
   put_line ("");
   put_line ("Este programa muestra dos mensajes y acumula un numero");
   put_line ("");
-  b_dec();
+  b_dec(mensaje);
   i := sum(10,1);
   j := sum(10,2);
   put_line ("");

@@ -10,7 +10,7 @@ procedure test5 is
 integer piezas,nLadrillos;
 integer i;
 -------------------------------------------------------------------
-function ponerLadrillo(val integer nLadrillos; ref boolean puestos) is
+procedure ponerLadrillo(val integer nLadrillos; ref boolean puestos) is
 begin
 	i:= 0;
 	while (i < nLadrillos) do

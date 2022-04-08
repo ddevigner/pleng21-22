@@ -6,10 +6,10 @@
 procedure comprobar is
 ----------------------------
 character frase;
-character char1, char2;
+character char1,palabra1;
 ------------------------------------------------------------------
 
-function es_palabra(ref character palabra1; val integer b) is
+function es_palabra(ref character palabra1 ) is
 
 begin
 	if (palabra1 = 'c') then
@@ -21,10 +21,13 @@ end
 -------------------------------------------------------------------
 
 begin
+	char1 := 'c';
+	palabra1 := 'f';
 	while (char1 <> palabra1) do
 		put("Escribe una palabra");
 		get(char2);
-		if (char2 = int2char(char1)) then
+		es_palabra(palabra1);
+		if (char2 = palabra1) then
 		 put("Bien has acertado");
         end
 	end
