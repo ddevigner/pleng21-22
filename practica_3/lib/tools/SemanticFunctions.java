@@ -34,12 +34,12 @@ public class SemanticFunctions {
 			else 
 				st.insertSymbol(new SymbolProcedure(t.image, parList, t.beginLine, t.beginColumn));
 			st.insertBlock();
-			System.out.println(st.toString());
+			System.err.println(st.toString());
 			return parList;
 		} catch (AlreadyDefinedSymbolException e) {
 			// ErrorSemantico.deteccion(e, t);
-			System.err.println("Error - did you already define this " +
-				((baseType == Symbol.Types.FUNCTION) ? "function?" : "procedure?"));
+			System.err.println("Error - did you already define " + t.image 
+				+ " symbol?");
 			return null;
 		}
 	}
@@ -60,7 +60,7 @@ public class SemanticFunctions {
 
 			if (parList == null) st.insertSymbol(sym);
 			else SymbolTable.insertSymbol(parList, sym);
-			System.out.println(st.toString());
+			System.err.println(st.toString());
 		} catch (AlreadyDefinedSymbolException e) {
 			System.err.println("Error -- Simbol \'" + 
 				t.image + "\' already defined...");

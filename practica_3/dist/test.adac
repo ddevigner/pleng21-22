@@ -7,10 +7,6 @@ procedure hello is
         begin
             put_line("Tu vieja");
         end
-        function integer cum() is
-        begin
-            put_line("Tu vieja");
-        end
     begin
         put("Hello");
     end

@@ -365,7 +365,12 @@ void var(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol
 // Cuerpo de procedimiento/funcion.
 void proc_func_body():
 {} {
-	<BEGIN> instructions_list() <END> { st.removeBlock(); }
+	<BEGIN> 
+	instructions_list() 
+	<END> { 
+			System.err.println(st.toString());
+			st.removeBlock(); 
+		}
 }
 
 //-----------------------------------------------------------------------------

@@ -324,7 +324,8 @@ SemanticFunctions.CreateVar(st, parList, t, 0, baseType, parClass);
     jj_consume_token(BEGIN);
     instructions_list();
     jj_consume_token(END);
-st.removeBlock();
+System.err.println(st.toString());
+                        st.removeBlock();
 }
 
 //-----------------------------------------------------------------------------
@@ -929,6 +930,20 @@ panicMode(e.currentToken.next);
     finally { jj_save(4, xla); }
   }
 
+  static private boolean jj_3_2()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_1()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
   static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
@@ -944,20 +959,6 @@ panicMode(e.currentToken.next);
   }
 
   static private boolean jj_3_3()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
