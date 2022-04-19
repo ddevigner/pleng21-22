@@ -9,25 +9,34 @@
 
 package lib.attributes;
 import lib.symbolTable.*;
-import java.util.ArrayList;
-import java.util.AbstractMap.SimpleEntry;
+import lib.tools.SemanticFunctions;
+// import java.util.ArrayList;
+// import java.util.AbstractMap.SimpleEntry;
 
 public class Attributes implements Cloneable {
     public Symbol.Types type;
     public Symbol.ParameterClass parClass;
-    public ArrayList<Symbol> parList;
-    public Symbol.Types returnType;
+    public SemanticFunctions.Operator opType;
     public String name;
 
+    // Constants.
     public int valInt;
     public boolean valBool;
     public char valChar;
     public String valString;
-    //COMPLETAR
 
+    // Symbol information.
+    public int line;
+    public int column;
 
     public Attributes() {
         //COMPLETAR
+    }
+
+    public Attributes(SemanticFunctions.Operator opType, int line, int column) {
+        this.opType = opType;
+        this.line = line;
+        this.column = column;
     }
 
     public Attributes clone() {

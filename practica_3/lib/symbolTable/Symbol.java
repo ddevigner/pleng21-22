@@ -21,11 +21,11 @@ abstract public class Symbol implements Cloneable {
     }
 
     public String name;
-    //será NONE para no parámetros
+    // será NONE para no parámetros
     public ParameterClass parClass; 
-    //dirección en memoria. Para func/proc, dirección de la primera instrucción
+    // dirección en memoria. Para func/proc, dirección de la primera instrucción
     public long dir; 
-    //mi tipo
+    // mi tipo
     public Types type;
     // es constante (En adac, siempre será FALSE)  
     public boolean constant;

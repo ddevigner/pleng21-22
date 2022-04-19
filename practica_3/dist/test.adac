@@ -1,15 +1,11 @@
 procedure hello is
-    integer a[4];
-
-    function integer hola(val integer b[4]) is
-        character b, c, g[3];
-        procedure cum() is
-        begin
-            put_line("Tu vieja");
-        end
+    character c[5];
+    integer a;
+    function integer cum(ref integer a, b) is
     begin
-        put("Hello");
+        return a + 1;
     end
 begin
-    put_line ("Hello World!");
+    a := cum(a, a);
+    c[1] := 'a';
 end

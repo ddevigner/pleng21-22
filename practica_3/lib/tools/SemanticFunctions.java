@@ -13,15 +13,27 @@ import java.util.*;
 import traductor.Token;
 import lib.attributes.*;
 import lib.symbolTable.*;
+import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.exceptions.*;
 import lib.errores.*;
 
 public class SemanticFunctions {
 	private ErrorSemantico errSem; //clase común de errores semánticos
 
+	public static enum Operator { ADD, SUB, OR, MUL, MOD, DIV, AND };
+
 	public SemanticFunctions() {
 		errSem = new ErrorSemantico();
 	}
+
+
+	// --
+	public static boolean CheckParClass(Symbol.ParameterClass fst, 
+			Symbol.ParameterClass snd) {
+		return (fst == ParameterClass.VAL && snd == fst) || 
+				(fst == ParameterClass.REF && (snd != ParameterClass.VAL));
+	}
+
 
 	//-- Procedimientos.
 	public static ArrayList<Symbol> CreateProcedure(SymbolTable st, Token t, 
@@ -30,11 +42,13 @@ public class SemanticFunctions {
 		ArrayList<Symbol> parList = new ArrayList<>();
 		try {
 			if (baseType == Symbol.Types.FUNCTION)
-				st.insertSymbol(new SymbolFunction(t.image, parList, returnType, t.beginLine, t.beginColumn));
+				st.insertSymbol(new SymbolFunction(
+					t.image, parList, returnType, t.beginLine, t.beginColumn));
 			else 
-				st.insertSymbol(new SymbolProcedure(t.image, parList, t.beginLine, t.beginColumn));
+				st.insertSymbol(new SymbolProcedure(
+					t.image, parList, t.beginLine, t.beginColumn));
 			st.insertBlock();
-			System.err.println(st.toString());
+			//System.err.println(st.toString());
 			return parList;
 		} catch (AlreadyDefinedSymbolException e) {
 			// ErrorSemantico.deteccion(e, t);
@@ -52,15 +66,19 @@ public class SemanticFunctions {
 		Symbol sym;
 		try {
 			if (nElem <= 0) {
-				if (baseType == Symbol.Types.INT) sym = new SymbolInt(t.image, parClass, t.beginLine, t.beginColumn);
-				else if (baseType == Symbol.Types.BOOL) sym = new SymbolBool(t.image, parClass, t.beginColumn, t.beginColumn);
-				else sym = new SymbolChar(t.image, parClass, t.beginColumn, t.beginColumn);
+				if (baseType == Symbol.Types.INT) sym = new SymbolInt(
+					t.image, parClass, t.beginLine, t.beginColumn);
+				else if (baseType == Symbol.Types.BOOL) sym = new SymbolBool(
+					t.image, parClass, t.beginColumn, t.beginColumn);
+				else sym = new SymbolChar(
+					t.image, parClass, t.beginColumn, t.beginColumn);
 			} else 
-				sym = new SymbolArray(t.image, nElem, baseType, parClass, t.beginLine, t.beginColumn);
+				sym = new SymbolArray(t.image, nElem, baseType, parClass, 
+					t.beginLine, t.beginColumn);
 
-			if (parList == null) st.insertSymbol(sym);
-			else SymbolTable.insertSymbol(parList, sym);
-			System.err.println(st.toString());
+			if (parList != null) SymbolTable.insertSymbol(parList, sym);
+			st.insertSymbol(sym);
+			//System.err.println(st.toString());
 		} catch (AlreadyDefinedSymbolException e) {
 			System.err.println("Error -- Simbol \'" + 
 				t.image + "\' already defined...");

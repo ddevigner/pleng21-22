@@ -1,0 +1,5 @@
+procedure hello is
+    character c;
+begin
+    c := 1 + 1;
+end
