@@ -397,7 +397,11 @@ void instruction():
 	Symbol var;
 } {
 	try {
-		  <GET> <LPAREN> expression(at) (<COLON> expression(at))* <RPAREN> <SCOLON>
+		  <GET> <LPAREN> expression(at){
+			  if(){
+
+			  }
+		  } (<COLON> expression(at))* <RPAREN> <SCOLON>
 		| <PUT> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
 		| <PUTLINE> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
 		| <SKIPLINE> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
@@ -408,8 +412,18 @@ void instruction():
 						System.err.println("Error -- Mismatched types."); 
 				}
 			}
-		|	<WHILE> expression(at) <DO> instructions_list() <END>
-		| 	<IF> expression(at) <THEN> instructions_list() (<ELSE> instructions_list())? <END> 
+		|	<WHILE> expression(at) {if(at.type != Types.BOOL){
+											System.err.println("No poner guardas no booleanas en while");
+									}
+		
+			}
+					<DO> instructions_list() <END>
+		| 	<IF> expression(at) {if(at.type != Types.BOOL){
+											System.err.println("No poner guardas no booleanas en if");
+									}
+		
+			}
+			<THEN> instructions_list() (<ELSE> instructions_list())? <END> 
 		| 	<RETURN> expression(at) <SCOLON>
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next);

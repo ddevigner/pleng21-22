@@ -566,6 +566,9 @@ if (var != null) {
           case WHILE:{
             jj_consume_token(WHILE);
             expression(at);
+if(at.type != Types.BOOL){
+                                                                                        System.err.println("No poner guardas no booleanas en while");
+                                                                        }
             jj_consume_token(DO);
             instructions_list();
             jj_consume_token(END);
@@ -574,6 +577,9 @@ if (var != null) {
           case IF:{
             jj_consume_token(IF);
             expression(at);
+if(at.type != Types.BOOL){
+                                                                                        System.err.println("No poner guardas no booleanas en while");
+                                                                        }
             jj_consume_token(THEN);
             instructions_list();
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {

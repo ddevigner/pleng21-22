@@ -24,7 +24,7 @@ function integer sum(val integer n;val integer b) is
 	integer resul;
 begin
   resul := 0;
-	while (resul < n) and (resul <> n) do
+	while (resul < n) and (2 + 4) do
     resul := resul + b;
   end
   return resul;
