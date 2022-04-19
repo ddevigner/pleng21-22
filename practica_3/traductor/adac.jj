@@ -397,11 +397,20 @@ void instruction():
 	Symbol var;
 } {
 	try {
+<<<<<<< Updated upstream
 		  <GET> <LPAREN> expression(at){
 			  if(){
 
 			  }
 		  } (<COLON> expression(at))* <RPAREN> <SCOLON>
+=======
+		  	<GET> <LPAREN> expression(at) 
+				{ if(at.parClass == ParameterClass.VAL) System.err.println("Error -- solo asignables en get()"); }
+			(
+				<COLON> expression(at)
+					{ if(at.parClass == ParameterClass.VAL) System.err.println("Error -- solo asignables en get()"); }
+			)* <RPAREN> <SCOLON>
+>>>>>>> Stashed changes
 		| <PUT> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
 		| <PUTLINE> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
 		| <SKIPLINE> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
