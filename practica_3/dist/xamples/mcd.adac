@@ -1,0 +1,39 @@
+------------------------------------------------------
+procedure calcular_mcd is 
+
+integer i, j;
+------------------------------------------------------
+procedure dato (ref integer d) is
+begin
+	d:=0;
+	while d <= 0 do
+		put ("Escribe un numero (>0): ");
+		get (d);
+		if d <= 0 then
+			put_line("El numero debe ser > 0.");
+		end
+	end
+end
+
+------------------------------------------------------
+function integer mcd(val integer a, b) is
+integer i, j, k;
+begin
+	j := a;
+	k := b;
+	i := a mod b;
+	while i <> 0 do
+		j := k;
+		k := i;
+		i := j mod k;
+	end
+	return k;
+end
+------------------------------------------------------
+begin
+	put_line ("Este programa pide dos números positivos y calcula su máximo común divisor.");
+	dato (i);
+	dato (j);
+	put_line ("");
+	put_line ("mcd(", i, ",", j, ") = ", mcd (i,j));
+end

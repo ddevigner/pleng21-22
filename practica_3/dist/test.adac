@@ -1,11 +1,14 @@
 procedure hello is
     character c[5];
     integer a;
-    function integer cum(ref integer a, b) is
+    procedure hola(ref integer a) is
     begin
-        return a + 1;
+        put_line("hola");
     end
 begin
-    a := cum(a, a);
-    c[1] := 'a';
+    c[a] := 'a';
+    put(a);
+    put_line(a);
+    get(a, c[1]);
+    hola(a);
 end

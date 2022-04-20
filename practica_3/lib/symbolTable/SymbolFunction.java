@@ -28,9 +28,17 @@ public class SymbolFunction extends Symbol implements Cloneable {
     }
 
     public String toString() {
-        return "(" + name + "," + type + "," + parList + "," + returnType + "," 
-                + parClass + "," + nivel + "," + line + "," + column + ")";
+        String str = name + "(" ;
+        for (Symbol i : parList) {
+            str += " " + i.parClass + " ";
+            if (i.type == Types.ARRAY) str += ((SymbolArray) i).baseType;
+            else str += i.type;
+            str += " " + i.name; 
+        }
+        return (str + ") -> " + returnType);
     }
+
+
     
     public SymbolFunction clone () {
     	SymbolFunction newSymbolFunction = (SymbolFunction) super.clone();

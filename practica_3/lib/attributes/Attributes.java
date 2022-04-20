@@ -15,6 +15,8 @@ import lib.tools.SemanticFunctions;
 
 public class Attributes implements Cloneable {
     public Symbol.Types type;
+    public Symbol.Types returnType;
+    public boolean haveReturn;
     public Symbol.ParameterClass parClass;
     public SemanticFunctions.Operator opType;
     public String name;
@@ -31,6 +33,12 @@ public class Attributes implements Cloneable {
 
     public Attributes() {
         //COMPLETAR
+    }
+
+    public Attributes(Symbol.Types baseType, Symbol.Types _returnType) {
+        type = baseType;
+        returnType = _returnType;
+        haveReturn = false;
     }
 
     public Attributes(SemanticFunctions.Operator opType, int line, int column) {

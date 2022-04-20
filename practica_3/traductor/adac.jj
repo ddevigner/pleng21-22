@@ -230,19 +230,16 @@ SPECIAL_TOKEN: {
 // Declaracion del procedimiento principal del fichero.
 void main() :
 {
+	Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED);
 	Token t;
 } 
 {
-	<PROC>
-	t = <ID> 
-		{ 
-			SemanticFunctions.CreateProcedure(st, t,Types.PROCEDURE, 
-				Types.UNDEFINED); 
-		}
+	<PROC> 
+	t = <ID> { SemanticFunctions.CreateProcedure(st, t,Types.PROCEDURE, Types.UNDEFINED, true); }
 	<IS> 
 	vars_def() 
 	procs_funcs_decl() 
-	proc_func_body()
+	proc_func_body(at)
 }
 
 //-----------------------------------------------------------------------------
@@ -258,19 +255,20 @@ void proc_func_decl():
 {
 	Symbol.Types baseType;
 	Symbol.Types returnType;
+	Attributes at = new Attributes();
 	Token t;
 	ArrayList<Symbol> parList;
 } {
-	baseType = proc_or_func() 
-	returnType = func_return(baseType)
-	t = <ID> { parList = SemanticFunctions.CreateProcedure(st, t, baseType, returnType);}
+	baseType = proc_or_func() { at.type = baseType; }
+	returnType = func_return(baseType) { at.returnType = returnType; } 
+	t = <ID> { parList = SemanticFunctions.CreateProcedure(st, t, baseType, returnType, false);}
 	<LPAREN>
 	params_def(parList) 
 	<RPAREN> 
 	<IS> 
 	vars_def() 
 	procs_funcs_decl()
-	proc_func_body()
+	proc_func_body(at)
 }
 
 //-----------------------------------------------------------------------------
@@ -367,21 +365,24 @@ void var(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol
 
 //-----------------------------------------------------------------------------
 // Cuerpo de procedimiento/funcion.
-void proc_func_body():
+void proc_func_body(Attributes at):
 {} {
 	<BEGIN> 
-	instructions_list() 
-	<END> { 
-			//System.err.println(st.toString());
-			st.removeBlock(); 
-		}
+	instructions_list(at) 
+	<END> {
+		if (at.type == Types.PROCEDURE && at.haveReturn) 
+			System.err.println("Error -- return in procedure?");
+		else if (at.type == Types.FUNCTION && !at.haveReturn)
+			System.err.println("Error -- no return in function?");
+		st.removeBlock(); 
+	}
 }
 
 //-----------------------------------------------------------------------------
 // Conjunto de instrucciones.
-void instructions_list():
+void instructions_list(Attributes at):
 {} {
-	(instruction())*
+	(instruction(at))*
 }
 
 //-----------------------------------------------------------------------------
@@ -391,49 +392,154 @@ void instructions_list():
 //	- Asignacion.
 //	- While/If-Else.
 //	- Return.
-void instruction():
+void instruction(Attributes at):
 {
-	Attributes at = new Attributes();
+	Attributes fst = new Attributes(), snd = new Attributes();
+	int i = 0;
 	Symbol var;
+	SymbolProcedure s = null;
+	Token t;
 } {
 	try {
-<<<<<<< Updated upstream
-		  <GET> <LPAREN> expression(at){
-			  if(){
-
-			  }
-		  } (<COLON> expression(at))* <RPAREN> <SCOLON>
-=======
-		  	<GET> <LPAREN> expression(at) 
-				{ if(at.parClass == ParameterClass.VAL) System.err.println("Error -- solo asignables en get()"); }
+			// GET().
+		  	<GET> <LPAREN> var = assignable() {
+				//if(var != null) {
+				//	if (var.type == Types.ARRAY) {
+				//		if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
+				//			System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
+				//	}
+				//	else if (var.type == Types.CHAR && var.type != Types.INT)
+				//		System.err.println("Error -- Get(). Expected char or int, got " + var.type);
+				//}
+				SemanticFunctions.comprobarGet(var);
+			} 
 			(
-				<COLON> expression(at)
-					{ if(at.parClass == ParameterClass.VAL) System.err.println("Error -- solo asignables en get()"); }
+				<COLON> assignable() {
+					//if(var != null) {
+					//	if (var.type == Types.ARRAY) {
+					//		if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
+					//			System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
+					//	}
+					//	else if (var.type == Types.CHAR && var.type != Types.INT)
+					//		System.err.println("Error -- Get(). Expected char or int, got " + var.type);
+					//}
+					SemanticFunctions.comprobarAssignable(var);
+				}
 			)* <RPAREN> <SCOLON>
->>>>>>> Stashed changes
-		| <PUT> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
-		| <PUTLINE> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
-		| <SKIPLINE> <LPAREN> (expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
-		| LOOKAHEAD(2) <ID> <LPAREN> ( expression(at) (<COLON> expression(at))*)? <RPAREN> <SCOLON> 
-		| var = assignable() <ASS> expression(at) <SCOLON> {
+
+		// PROCEDIMIENTO PUT().
+		| <PUT> <LPAREN> expression(fst) {
+			if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
+				System.err.println("put necesita expresiones no nulas");
+			}
+		}
+		(
+			<COLON> expression(fst){
+				if(fst.type == Types.UNDEFINED) System.err.println("put necesita expresiones no nulas");
+			}
+		)* <RPAREN> <SCOLON> 
+
+		//PROCEDIMIENTO PUTLINE().
+		| <PUTLINE> <LPAREN> (expression(fst){
+			if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
+				System.err.println("put_line necesita expresiones no nulas");
+			}
+		} (<COLON> expression(fst){
+			if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
+				System.err.println("put_line necesita expresiones no nulas");
+			}
+		})*)? <RPAREN> <SCOLON> 
+
+		// PROCEDIMIENTO SKIPLINE.
+		| <SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
+
+		// PROCEDIMIENTOS.
+		| LOOKAHEAD(2) t = <ID> {	//Comprobar que es un procedimiento y que los parametros son correctos
+				try{
+					Symbol aux = st.getSymbol(t.image);
+					if(aux.type != Types.PROCEDURE) {
+						if(aux.type == Types.FUNCTION) System.err.println("Warn -- Se esta ignorando el valor devuelto");
+						else System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Se debe invocar un procedimiento");
+					} else {
+						s = (SymbolProcedure) aux;
+						if (s.main)
+							System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- You can not call the main procedure");
+					}
+				} catch (SymbolNotFoundException e) {
+					System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
+				}
+			} <LPAREN> 
+			(
+				expression(fst) {
+					if (s != null) {
+						try {
+							Symbol aux = s.parList.get(0);
+							if (!SemanticFunctions.CheckParClass(aux.parClass, fst.parClass)) {
+								System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+								System.err.println("\t" + aux.parClass + ", " + "got " + fst.parClass);
+							}
+							if (fst.type != aux.type) {
+								System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+								System.err.println("\t" + aux.type + ", got " + fst.type);
+							}
+							i++;
+						} catch (IndexOutOfBoundsException e) {
+							System.err.println("Error -- Expected \'" + s.name + "()\'");
+						}
+					}
+				}
+				(
+					<COLON> expression(snd) {
+						if (s != null) {
+							try {
+								Symbol aux = s.parList.get(i);
+								if (!SemanticFunctions.CheckParClass(aux.parClass, snd.parClass)) {
+									System.err.println("Error -- In function \'" + s.name +"\', expecting: ");
+									System.err.println("\t" + aux.parClass + ", " + "got " + snd.parClass);
+								}
+								if (snd.type != aux.type) {
+									System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+									System.err.println("\t" + aux.type + ", got " + snd.type);
+								} 
+								i++;
+							} catch (IndexOutOfBoundsException e) {
+								System.err.println("Error -- Expected \'" + s.name + "()\'");
+								s = null;
+							}
+						}
+					}
+				)*)? <RPAREN> <SCOLON> {
+					if (s != null && i != s.parList.size()) {
+						System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Bad number of parameters");
+					}
+				}
+		| 	var = assignable() <ASS> expression(fst) <SCOLON> {
 				if (var != null) {
-					if (var.type != at.type)
-						System.err.println("Error -- Mismatched types."); 
+					if (var.type == Types.ARRAY) {
+						if (((SymbolArray) var).baseType != fst.type)
+							System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + ((SymbolArray) var).baseType + ", got " + at.type);
+					}
+					else if (var.type != fst.type)
+						System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + var.type + ", got " + at.type);
 				}
 			}
-		|	<WHILE> expression(at) {if(at.type != Types.BOOL){
-											System.err.println("No poner guardas no booleanas en while");
-									}
-		
-			}
-					<DO> instructions_list() <END>
-		| 	<IF> expression(at) {if(at.type != Types.BOOL){
-											System.err.println("No poner guardas no booleanas en if");
-									}
-		
-			}
-			<THEN> instructions_list() (<ELSE> instructions_list())? <END> 
-		| 	<RETURN> expression(at) <SCOLON>
+
+		// WHILE.
+		|	<WHILE> expression(fst) {
+				if(fst.type != Types.BOOL)
+					System.err.println("No poner guardas no booleanas en while");
+			} <DO> instructions_list(at) <END>
+
+		// IF.
+		| 	<IF> expression(fst) {
+				if(fst.type != Types.BOOL)
+					System.err.println("No poner guardas no booleanas en if");
+			} <THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
+		| 	<RETURN> expression(fst) {
+				at.haveReturn = true;
+				if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
+					System.err.println("Error -- Expected " + at.returnType + " value, got " + fst.type);
+			} <SCOLON>
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next);
 	}
@@ -448,8 +554,24 @@ Symbol assignable():
 } 
 {
 	try {
-		(LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK> | t = <ID>)
-			{ return st.getSymbol(t.image); }
+		LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK> 
+			{ 
+				Symbol s = st.getSymbol(t.image);
+				if(s.type != Types.ARRAY) {
+					System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as an array?");
+					return null;
+				}
+				return st.getSymbol(t.image);
+			}
+		| t = <ID>
+			{ 
+				Symbol s = st.getSymbol(t.image);
+				if(s.type != Types.CHAR && s.type != Types.INT && s.type != Types.BOOL) {
+					System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as a simple var?");
+					return null;
+				}
+				return st.getSymbol(t.image);
+			}
 	} catch (SymbolNotFoundException e) {
 		System.err.println("Error -- symbol \'" + t.image + "\' in " + 
 			t.beginLine + "," + t.beginColumn + " not declared.");
@@ -560,7 +682,7 @@ void factor(Attributes at):
 {
 	Attributes fst = new Attributes();
 	Attributes snd = new Attributes();
-	int i = 1;
+	int i = 0;
 	SymbolFunction s = null;
 	Token t;
 } {
@@ -582,8 +704,7 @@ void factor(Attributes at):
 					at.parClass = ParameterClass.VAL;
 				}
 				else {
-					System.err.println("Error -- symbol \'" + t.image + 
-						"\' bad usage. Expected function, got " + s.type.name());
+					System.err.println("Error -- symbol \'" + t.image + "\' bad usage. Expected function, got " + aux.type.name());
 					at.type = Types.UNDEFINED;
 					at.parClass = ParameterClass.NONE;
 				}
@@ -611,6 +732,7 @@ void factor(Attributes at):
 							System.err.println("\t" + aux.type + ", got " + 
 								fst.type);
 						}
+					i++;
 					} catch (IndexOutOfBoundsException e) {
 						System.err.println("Error -- Expected \'" + s.name + "()\'");
 					}
@@ -621,16 +743,12 @@ void factor(Attributes at):
 					try {
 						Symbol aux = s.parList.get(i);
 						if (!SemanticFunctions.CheckParClass(aux.parClass, snd.parClass)) {
-							System.err.println("Error -- In function \'" + s.name +
-								"\', expecting: ");
-							System.err.println("\t" + aux.parClass + ", " + 
-								"got " + snd.parClass);
+							System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+							System.err.println("\t" + aux.parClass + ", " + "got " + snd.parClass);
 						}
 						if (snd.type != aux.type) {
-							System.err.println("Error -- In function \'" + s.name +
-								"\', expecting: ");
-							System.err.println("\t" + aux.type + ", got " + 
-								snd.type);
+							System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+							System.err.println("\t" + aux.type + ", got " + snd.type);
 						} 
 						i++;
 					} catch (IndexOutOfBoundsException e) {
@@ -640,7 +758,8 @@ void factor(Attributes at):
 				}
 			})*)? <RPAREN> {
 				if (s != null && i != s.parList.size()) {
-					System.err.println("Error -- Bad number of parameters");
+					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") " + s.toString());
+					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- Bad number of parameters");
 				}
 			}
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> {

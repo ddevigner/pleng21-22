@@ -14,6 +14,7 @@ import traductor.Token;
 import lib.attributes.*;
 import lib.symbolTable.*;
 import lib.symbolTable.Symbol.ParameterClass;
+import lib.symbolTable.Symbol.Types;
 import lib.symbolTable.exceptions.*;
 import lib.errores.*;
 
@@ -28,16 +29,14 @@ public class SemanticFunctions {
 
 
 	// --
-	public static boolean CheckParClass(Symbol.ParameterClass fst, 
-			Symbol.ParameterClass snd) {
-		return (fst == ParameterClass.VAL && snd == fst) || 
-				(fst == ParameterClass.REF && (snd != ParameterClass.VAL));
+	public static boolean CheckParClass(Symbol.ParameterClass fst, Symbol.ParameterClass snd) {
+		return (fst == ParameterClass.VAL || (fst == ParameterClass.REF && snd != ParameterClass.VAL));
 	}
 
 
 	//-- Procedimientos.
 	public static ArrayList<Symbol> CreateProcedure(SymbolTable st, Token t, 
-			Symbol.Types baseType, Symbol.Types returnType) {
+			Symbol.Types baseType, Symbol.Types returnType, boolean main) {
 
 		ArrayList<Symbol> parList = new ArrayList<>();
 		try {
@@ -46,7 +45,7 @@ public class SemanticFunctions {
 					t.image, parList, returnType, t.beginLine, t.beginColumn));
 			else 
 				st.insertSymbol(new SymbolProcedure(
-					t.image, parList, t.beginLine, t.beginColumn));
+					t.image, parList, t.beginLine, t.beginColumn, main));
 			st.insertBlock();
 			//System.err.println(st.toString());
 			return parList;
@@ -84,4 +83,28 @@ public class SemanticFunctions {
 				t.image + "\' already defined...");
 		}
 	}
+
+	public static void comprobarGet(Symbol var){
+		if(var != null) {
+			if (var.type == Types.ARRAY) {
+				if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
+					System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
+			}
+			else if (var.type == Types.CHAR && var.type != Types.INT)
+				System.err.println("Error -- Get(). Expected char or int, got " + var.type);
+		}
+	}
+
+	public static void comprobarAssignable(Symbol var){
+		if(var != null) {
+			if (var.type == Types.ARRAY) {
+				if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
+					System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
+			}
+			else if (var.type == Types.CHAR && var.type != Types.INT)
+				System.err.println("Error -- Get(). Expected char or int, got " + var.type);
+		}
+	}
+
+
 }
