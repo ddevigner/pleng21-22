@@ -403,35 +403,19 @@ void instruction(Attributes at):
 	try {
 			// GET().
 		  	<GET> <LPAREN> var = assignable() {
-				//if(var != null) {
-				//	if (var.type == Types.ARRAY) {
-				//		if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
-				//			System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
-				//	}
-				//	else if (var.type == Types.CHAR && var.type != Types.INT)
-				//		System.err.println("Error -- Get(). Expected char or int, got " + var.type);
-				//}
+				
 				SemanticFunctions.comprobarGet(var);
 			} 
 			(
 				<COLON> assignable() {
-					//if(var != null) {
-					//	if (var.type == Types.ARRAY) {
-					//		if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
-					//			System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
-					//	}
-					//	else if (var.type == Types.CHAR && var.type != Types.INT)
-					//		System.err.println("Error -- Get(). Expected char or int, got " + var.type);
-					//}
+					
 					SemanticFunctions.comprobarAssignableGet(var);
 				}
 			)* <RPAREN> <SCOLON>
 
 		// PROCEDIMIENTO PUT().
 		| <PUT> <LPAREN> expression(fst) {
-			//if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
-			//	System.err.println("put necesita expresiones no nulas");
-			//}
+			
 			SemanticFunctions.comprobarPut(fst);
 		}
 		(
@@ -443,14 +427,10 @@ void instruction(Attributes at):
 
 		//PROCEDIMIENTO PUTLINE().
 		| <PUTLINE> <LPAREN> (expression(fst){
-			//if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
-			//	System.err.println("put_line necesita expresiones no nulas");
-			//}
+			
 			SemanticFunctions.comprobarPutLine(fst);
 		} (<COLON> expression(fst){
-			//if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
-			//	System.err.println("put_line necesita expresiones no nulas");
-			//}
+			
 			SemanticFunctions.comprobarPutLine(fst);
 
 		})*)? <RPAREN> <SCOLON> 
@@ -460,19 +440,7 @@ void instruction(Attributes at):
 
 		// PROCEDIMIENTOS.
 		| LOOKAHEAD(2) t = <ID> {	//Comprobar que es un procedimiento y que los parametros son correctos
-				//try{
-				//	Symbol aux = st.getSymbol(t.image);
-				//	if(aux.type != Types.PROCEDURE) {
-				//		if(aux.type == Types.FUNCTION) System.err.println("Warn -- Se esta ignorando el valor devuelto");
-				//		else System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Se debe invocar un procedimiento");
-				//	} else {
-				//		s = (SymbolProcedure) aux;
-				//		if (s.main)
-				//			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- You can not call the main procedure");
-				//	}
-				//} catch (SymbolNotFoundException e) {
-				//	System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
-				//}
+				
 				SemanticFunctions.comprobarProcedimiento(t,st,s);
 			} <LPAREN> 
 			(
@@ -515,41 +483,25 @@ void instruction(Attributes at):
 						}
 					}
 				)*)? <RPAREN> <SCOLON> {
-					//if (s != null && i != s.parList.size()) {
-					//	System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Bad number of parameters");
-					//}
+					
 					SemanticFunctions.comprobarNumArgumentos(t,s, i);
 				}
 		| 	var = assignable() <ASS> expression(fst) <SCOLON> {
-				//if (var != null) {
-				//	if (var.type == Types.ARRAY) {
-				//		if (((SymbolArray) var).baseType != fst.type)
-				//			System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + ((SymbolArray) var).baseType + ", got " + at.type);
-				//	}
-				//	else if (var.type != fst.type)
-				//		System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + var.type + ", got " + at.type);
-				//}
-				SemanticFunctions.comprobarAssignableInst(fst,var);
+				
+				SemanticFunctions.comprobarAssignableInst(fst,var,at);
 			}
 
 		// WHILE.
 		|	<WHILE> expression(fst) {
-				//if(fst.type != Types.BOOL)
-				//	System.err.println("Error -- No poner guardas no booleanas en while");
 				SemanticFunctions.comprobarWhile(fst);
 			} <DO> instructions_list(at) <END>
 
 		// IF.
 		| 	<IF> expression(fst) {
-				//if(fst.type != Types.BOOL)
-				//	System.err.println("Error -- No poner guardas no booleanas en if");
 				SemanticFunctions.comprobarIf(fst);
 
 			} <THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
 		| 	<RETURN> expression(fst) {
-				//at.haveReturn = true;
-				//if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
-				//	System.err.println("Error -- Expected " + at.returnType + " value, got " + fst.type);
 				SemanticFunctions.comprobarReturnIf(at,fst);
 			} <SCOLON>
 	} catch (ParseException e) {

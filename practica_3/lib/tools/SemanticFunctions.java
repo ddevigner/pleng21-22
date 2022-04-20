@@ -138,7 +138,7 @@ public class SemanticFunctions {
 		}
 	}
 
-	public static void comprobarAssignableInst(Attributes fst,Symbol var){
+	public static void comprobarAssignableInst(Attributes fst,Symbol var,Attributes at){
 		if (var != null) {
 			if (var.type == Types.ARRAY) {
 				if (((SymbolArray) var).baseType != fst.type)
