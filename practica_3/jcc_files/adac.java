@@ -381,14 +381,15 @@ if (at.type == Types.PROCEDURE && at.haveReturn)
         jj_consume_token(GET);
         jj_consume_token(LPAREN);
         var = assignable();
-if(var != null) {
-                                        if (var.type == Types.ARRAY) {
-                                                if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT)
-                                                        System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
-                                        }
-                                        else if (var.type == Types.CHAR && var.type != Types.INT)
-                                                System.err.println("Error -- Get(). Expected char or int, got " + var.type);
-                                }
+//if(var != null) {
+                                //	if (var.type == Types.ARRAY) {
+                                //		if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
+                                //			System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
+                                //	}
+                                //	else if (var.type == Types.CHAR && var.type != Types.INT)
+                                //		System.err.println("Error -- Get(). Expected char or int, got " + var.type);
+                                //}
+                                SemanticFunctions.comprobarGet(var);
         label_6:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -402,14 +403,15 @@ if(var != null) {
           }
           jj_consume_token(COLON);
           assignable();
-if(var != null) {
-                                                if (var.type == Types.ARRAY) {
-                                                        if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT)
-                                                                System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
-                                                }
-                                                else if (var.type == Types.CHAR && var.type != Types.INT)
-                                                        System.err.println("Error -- Get(). Expected char or int, got " + var.type);
-                                        }
+//if(var != null) {
+                                        //	if (var.type == Types.ARRAY) {
+                                        //		if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
+                                        //			System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
+                                        //	}
+                                        //	else if (var.type == Types.CHAR && var.type != Types.INT)
+                                        //		System.err.println("Error -- Get(). Expected char or int, got " + var.type);
+                                        //}
+                                        SemanticFunctions.comprobarAssignableGet(var);
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
@@ -419,9 +421,10 @@ if(var != null) {
         jj_consume_token(PUT);
         jj_consume_token(LPAREN);
         expression(fst);
-if(fst.type == Types.UNDEFINED){        //Se le pasa una expresion indefinida
-                                System.err.println("put necesita expresiones no nulas");
-                        }
+//if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
+                        //	System.err.println("put necesita expresiones no nulas");
+                        //}
+                        SemanticFunctions.comprobarPut(fst);
         label_7:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -435,7 +438,8 @@ if(fst.type == Types.UNDEFINED){        //Se le pasa una expresion indefinida
           }
           jj_consume_token(COLON);
           expression(fst);
-if(fst.type == Types.UNDEFINED) System.err.println("put necesita expresiones no nulas");
+//if(fst.type == Types.UNDEFINED) System.err.println("put necesita expresiones no nulas");
+                                SemanticFunctions.comprobarPut(fst);
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
@@ -457,9 +461,10 @@ if(fst.type == Types.UNDEFINED) System.err.println("put necesita expresiones no 
         case INT2CHAR:
         case ID:{
           expression(fst);
-if(fst.type == Types.UNDEFINED){        //Se le pasa una expresion indefinida
-                                System.err.println("put_line necesita expresiones no nulas");
-                        }
+//if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
+                        //	System.err.println("put_line necesita expresiones no nulas");
+                        //}
+                        SemanticFunctions.comprobarPutLine(fst);
           label_8:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -473,9 +478,10 @@ if(fst.type == Types.UNDEFINED){        //Se le pasa una expresion indefinida
             }
             jj_consume_token(COLON);
             expression(fst);
-if(fst.type == Types.UNDEFINED){        //Se le pasa una expresion indefinida
-                                System.err.println("put_line necesita expresiones no nulas");
-                        }
+//if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
+                        //	System.err.println("put_line necesita expresiones no nulas");
+                        //}
+                        SemanticFunctions.comprobarPutLine(fst);
           }
           break;
           }
@@ -499,19 +505,20 @@ if(fst.type == Types.UNDEFINED){        //Se le pasa una expresion indefinida
         if (jj_2_2(2)) {
           t = jj_consume_token(ID);
 //Comprobar que es un procedimiento y que los parametros son correctos
-                                try{
-                                        Symbol aux = st.getSymbol(t.image);
-                                        if(aux.type != Types.PROCEDURE) {
-                                                if(aux.type == Types.FUNCTION) System.err.println("Warn -- Se esta ignorando el valor devuelto");
-                                                else System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Se debe invocar un procedimiento");
-                                        } else {
-                                                s = (SymbolProcedure) aux;
-                                                if (s.main)
-                                                        System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- You can not call the main procedure");
-                                        }
-                                } catch (SymbolNotFoundException e) {
-                                        System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
-                                }
+                                //try{
+                                //	Symbol aux = st.getSymbol(t.image);
+                                //	if(aux.type != Types.PROCEDURE) {
+                                //		if(aux.type == Types.FUNCTION) System.err.println("Warn -- Se esta ignorando el valor devuelto");
+                                //		else System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Se debe invocar un procedimiento");
+                                //	} else {
+                                //		s = (SymbolProcedure) aux;
+                                //		if (s.main)
+                                //			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- You can not call the main procedure");
+                                //	}
+                                //} catch (SymbolNotFoundException e) {
+                                //	System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
+                                //}
+                                SemanticFunctions.comprobarProcedimiento(t,st,s);
           jj_consume_token(LPAREN);
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case LPAREN:
@@ -581,9 +588,10 @@ if (s != null) {
           }
           jj_consume_token(RPAREN);
           jj_consume_token(SCOLON);
-if (s != null && i != s.parList.size()) {
-                                                System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Bad number of parameters");
-                                        }
+//if (s != null && i != s.parList.size()) {
+                                        //	System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Bad number of parameters");
+                                        //}
+                                        SemanticFunctions.comprobarNumArgumentos(t,s, i);
         } else {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case ID:{
@@ -591,21 +599,23 @@ if (s != null && i != s.parList.size()) {
             jj_consume_token(ASS);
             expression(fst);
             jj_consume_token(SCOLON);
-if (var != null) {
-                                        if (var.type == Types.ARRAY) {
-                                                if (((SymbolArray) var).baseType != fst.type)
-                                                        System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + ((SymbolArray) var).baseType + ", got " + at.type);
-                                        }
-                                        else if (var.type != fst.type)
-                                                System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + var.type + ", got " + at.type);
-                                }
+//if (var != null) {
+                                //	if (var.type == Types.ARRAY) {
+                                //		if (((SymbolArray) var).baseType != fst.type)
+                                //			System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + ((SymbolArray) var).baseType + ", got " + at.type);
+                                //	}
+                                //	else if (var.type != fst.type)
+                                //		System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + var.type + ", got " + at.type);
+                                //}
+                                SemanticFunctions.comprobarAssignableInst(fst,var);
             break;
             }
           case WHILE:{
             jj_consume_token(WHILE);
             expression(fst);
-if(fst.type != Types.BOOL)
-                                        System.err.println("No poner guardas no booleanas en while");
+//if(fst.type != Types.BOOL)
+                                //	System.err.println("Error -- No poner guardas no booleanas en while");
+                                SemanticFunctions.comprobarWhile(fst);
             jj_consume_token(DO);
             instructions_list(at);
             jj_consume_token(END);
@@ -614,8 +624,9 @@ if(fst.type != Types.BOOL)
           case IF:{
             jj_consume_token(IF);
             expression(fst);
-if(fst.type != Types.BOOL)
-                                        System.err.println("No poner guardas no booleanas en if");
+//if(fst.type != Types.BOOL)
+                                //	System.err.println("Error -- No poner guardas no booleanas en if");
+                                SemanticFunctions.comprobarIf(fst);
             jj_consume_token(THEN);
             instructions_list(at);
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -634,9 +645,10 @@ if(fst.type != Types.BOOL)
           case RETURN:{
             jj_consume_token(RETURN);
             expression(fst);
-at.haveReturn = true;
-                                if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
-                                        System.err.println("Error -- Expected " + at.returnType + " value, got " + fst.type);
+//at.haveReturn = true;
+                                //if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
+                                //	System.err.println("Error -- Expected " + at.returnType + " value, got " + fst.type);
+                                SemanticFunctions.comprobarReturnIf(at,fst);
             jj_consume_token(SCOLON);
             break;
             }
@@ -1172,14 +1184,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_5()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_4()
+  static private boolean jj_3_2()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
@@ -1193,17 +1198,24 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
     return false;
   }
 
-  static private boolean jj_3_2()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_3()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_4()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

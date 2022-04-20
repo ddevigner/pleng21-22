@@ -95,16 +95,74 @@ public class SemanticFunctions {
 		}
 	}
 
-	public static void comprobarAssignable(Symbol var){
-		if(var != null) {
-			if (var.type == Types.ARRAY) {
-				if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
-					System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
-			}
-			else if (var.type == Types.CHAR && var.type != Types.INT)
-				System.err.println("Error -- Get(). Expected char or int, got " + var.type);
+	public static void comprobarAssignableGet(Symbol var){
+		if (var.type == Types.ARRAY) {
+			if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
+				System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
+		}
+		else if (var.type == Types.CHAR && var.type != Types.INT)
+			System.err.println("Error -- Get(). Expected char or int, got " + var.type);
+	}
+	
+	public static void comprobarPut(Attributes fst){
+		if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
+				System.err.println("put necesita expresiones no nulas");
 		}
 	}
 
+	public static void comprobarPutLine(Attributes fst){
+		if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
+				System.err.println("put_line necesita expresiones no nulas");
+		}
+	}
+
+	public static void comprobarProcedimiento(Token t,SymbolTable st,SymbolProcedure s){
+		try{
+			Symbol aux = st.getSymbol(t.image);
+			if(aux.type != Types.PROCEDURE) {
+				if(aux.type == Types.FUNCTION) System.err.println("Warn -- Se esta ignorando el valor devuelto");
+				else System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Se debe invocar un procedimiento");
+			} else {
+				s = (SymbolProcedure) aux;
+				if (s.main)
+					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- You can not call the main procedure");
+			}
+		} catch (SymbolNotFoundException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
+		}
+	}
+
+	public static void comprobarNumArgumentos(Token t,SymbolProcedure s,int i){
+		if (s != null && i != s.parList.size()) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Bad number of parameters");
+		}
+	}
+
+	public static void comprobarAssignableInst(Attributes fst,Symbol var){
+		if (var != null) {
+			if (var.type == Types.ARRAY) {
+				if (((SymbolArray) var).baseType != fst.type)
+					System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + ((SymbolArray) var).baseType + ", got " + at.type);
+			}
+			else if (var.type != fst.type)
+				System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + var.type + ", got " + at.type);
+		}
+	}
+	
+	public static void comprobarWhile(Attributes fst){
+		if(fst.type != Types.BOOL)
+			System.err.println("Error -- No poner guardas no booleanas en if");
+	}
+
+	public static void comprobarIf(Attributes fst){
+		if(fst.type != Types.BOOL)
+			System.err.println("Error -- No poner guardas no booleanas en if");
+	}
+
+	public static void comprobarReturnIf(Attributes at,Attributes fst){
+		at.haveReturn = true;
+				if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
+					System.err.println("Error -- Expected " + at.returnType + " value, got " + fst.type);
+	}
 
 }
