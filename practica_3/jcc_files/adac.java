@@ -8,6 +8,7 @@ import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
 import lib.tools.SemanticFunctions;
 import lib.tools.SemanticFunctions.Operator;
+import lib.tools.exceptions.*;
 import java.util.ArrayList;
 
 public class adac implements adacConstants {
@@ -381,7 +382,11 @@ if (at.type == Types.PROCEDURE && at.haveReturn)
         jj_consume_token(GET);
         jj_consume_token(LPAREN);
         var = assignable();
-SemanticFunctions.comprobarGet(var);
+try{
+                                        SemanticFunctions.comprobarGet(var);
+                                }catch(GetException e){
+
+                                }
         label_6:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -395,7 +400,11 @@ SemanticFunctions.comprobarGet(var);
           }
           jj_consume_token(COLON);
           assignable();
-SemanticFunctions.comprobarAssignableGet(var);
+try{
+                                                SemanticFunctions.comprobarAssignableGet(var);
+                                        }catch( AGetException e){
+
+                                        }
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
@@ -405,7 +414,11 @@ SemanticFunctions.comprobarAssignableGet(var);
         jj_consume_token(PUT);
         jj_consume_token(LPAREN);
         expression(fst);
-SemanticFunctions.comprobarPut(fst);
+try{
+                                SemanticFunctions.comprobarPut(fst);
+                        }catch(PutException e){
+
+                        }
         label_7:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -419,8 +432,11 @@ SemanticFunctions.comprobarPut(fst);
           }
           jj_consume_token(COLON);
           expression(fst);
-//if(fst.type == Types.UNDEFINED) System.err.println("put necesita expresiones no nulas");
-                                SemanticFunctions.comprobarPut(fst);
+try{
+                                        SemanticFunctions.comprobarPut(fst);
+                                }catch(PutException e){
+
+                                }
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
@@ -442,7 +458,11 @@ SemanticFunctions.comprobarPut(fst);
         case INT2CHAR:
         case ID:{
           expression(fst);
-SemanticFunctions.comprobarPutLine(fst);
+try{
+                                SemanticFunctions.comprobarPutLine(fst);
+                        }catch(PutLineException e){
+
+                        }
           label_8:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -456,7 +476,11 @@ SemanticFunctions.comprobarPutLine(fst);
             }
             jj_consume_token(COLON);
             expression(fst);
-SemanticFunctions.comprobarPutLine(fst);
+try{
+                                SemanticFunctions.comprobarPutLine(fst);
+                        }catch(PutLineException e){
+
+                        }
           }
           break;
           }
@@ -480,8 +504,7 @@ SemanticFunctions.comprobarPutLine(fst);
         if (jj_2_2(2)) {
           t = jj_consume_token(ID);
 //Comprobar que es un procedimiento y que los parametros son correctos
-
-                                SemanticFunctions.comprobarProcedimiento(t,st,s);
+                                        SemanticFunctions.comprobarProcedimiento(t,st,s);
           jj_consume_token(LPAREN);
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case LPAREN:
@@ -551,7 +574,11 @@ if (s != null) {
           }
           jj_consume_token(RPAREN);
           jj_consume_token(SCOLON);
-SemanticFunctions.comprobarNumArgumentos(t,s, i);
+try{
+                                                SemanticFunctions.comprobarNumArgumentos(t,s, i);
+                                        }catch(NArgsException e){
+
+                                        }
         } else {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case ID:{
@@ -559,13 +586,22 @@ SemanticFunctions.comprobarNumArgumentos(t,s, i);
             jj_consume_token(ASS);
             expression(fst);
             jj_consume_token(SCOLON);
-SemanticFunctions.comprobarAssignableInst(fst,var,at);
+try{
+                                        SemanticFunctions.comprobarAssignableInst(fst,var,at);
+
+                                }catch(AInstException e){
+
+                                }
             break;
             }
           case WHILE:{
             jj_consume_token(WHILE);
             expression(fst);
-SemanticFunctions.comprobarWhile(fst);
+try{
+                                        SemanticFunctions.comprobarWhile(fst);
+                                }catch(WhileBooleanException e){
+                                        //System.err.println("Whileeeeeeeeeeee");
+                                }
             jj_consume_token(DO);
             instructions_list(at);
             jj_consume_token(END);
@@ -574,7 +610,11 @@ SemanticFunctions.comprobarWhile(fst);
           case IF:{
             jj_consume_token(IF);
             expression(fst);
-SemanticFunctions.comprobarIf(fst);
+try{
+                                SemanticFunctions.comprobarIf(fst);
+                        }catch(IfException e){
+
+                        }
             jj_consume_token(THEN);
             instructions_list(at);
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -593,7 +633,11 @@ SemanticFunctions.comprobarIf(fst);
           case RETURN:{
             jj_consume_token(RETURN);
             expression(fst);
-SemanticFunctions.comprobarReturnIf(at,fst);
+try{
+                                        SemanticFunctions.comprobarReturnIf(at,fst);
+                                }catch(ReturnIfException e){
+
+                                }
             jj_consume_token(SCOLON);
             break;
             }
@@ -619,22 +663,20 @@ panicMode(e.currentToken.next);
         jj_consume_token(LBRACK);
         expression(at);
         jj_consume_token(RBRACK);
-Symbol s = st.getSymbol(t.image);
-                                if(s.type != Types.ARRAY) {
-                                        System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as an array?");
-                                        {if ("" != null) return null;}
+try{
+                                        {if ("" != null) return SemanticFunctions.comprobarAssignableVector(st,t);}
+                                }catch(AVectorException e){
+
                                 }
-                                {if ("" != null) return st.getSymbol(t.image);}
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
           t = jj_consume_token(ID);
-Symbol s = st.getSymbol(t.image);
-                                if(s.type != Types.CHAR && s.type != Types.INT && s.type != Types.BOOL) {
-                                        System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as a simple var?");
-                                        {if ("" != null) return null;}
+try{
+                                        {if ("" != null) return SemanticFunctions.comprobarAssignableNormal(st,t);}
+                                }catch(ANormalException e){
+
                                 }
-                                {if ("" != null) return st.getSymbol(t.image);}
           break;
           }
         default:
@@ -666,14 +708,10 @@ at.type = fst.type; at.parClass = fst.parClass;
     case GE:{
       relational_op();
       simple_expr(snd);
-if (fst.type == snd.type) {
-                                at.type = Types.BOOL;
-                                at.parClass = ParameterClass.VAL;
-                        }
-                        else {
-                                System.err.println("Error -- Mismatched types");
-                                at.type = Types.UNDEFINED;
-                                at.parClass = ParameterClass.NONE;
+try{
+                                SemanticFunctions.comprobarExpression(fst,snd,at);
+                        }catch(ExpressionException e){
+
                         }
       break;
       }
@@ -728,26 +766,10 @@ at.type = fst.type; at.parClass = fst.parClass;
       }
       additive_op(op);
       term(snd);
-if (op.opType == Operator.ADD || op.opType == Operator.SUB) {
-                                if (fst.type == Types.INT && snd.type == fst.type) {
-                                        at.type = fst.type;
-                                        at.parClass = ParameterClass.VAL;
-                                }
-                                else {
-                                        System.err.println("Error -- Mismatched types.");
-                                        at.type = Types.UNDEFINED;
-                                        at.parClass = ParameterClass.NONE;
-                                }
-                        } else {
-                                if (fst.type == Types.BOOL && snd.type == fst.type) {
-                                        at.type = fst.type;
-                                        at.parClass = ParameterClass.VAL;
-                                }
-                                else {
-                                        System.err.println("Error -- Mismatched types.");
-                                        at.type = Types.UNDEFINED;
-                                        at.parClass = ParameterClass.NONE;
-                                }
+try{
+                                SemanticFunctions.comprobarExpSimple(fst,snd,at,op);
+                        }catch(ExpSimpleException e){
+
                         }
     }
 }
@@ -775,26 +797,10 @@ at.type = fst.type; at.parClass = fst.parClass;
       }
       multiplicative_op(op);
       factor(snd);
-if (op.opType == Operator.MUL || op.opType == Operator.MOD || op.opType == Operator.DIV) {
-                                if (fst.type == Types.INT && snd.type == fst.type) {
-                                        at.type = fst.type;
-                                        at.parClass = ParameterClass.VAL;
-                                }
-                                else {
-                                        System.err.println("Error -- Mismatched types");
-                                        at.type = Types.UNDEFINED;
-                                        at.parClass = ParameterClass.NONE;
-                                }
-                        } else {
-                                if (fst.type == Types.BOOL && snd.type == fst.type) {
-                                        at.type = fst.type;
-                                        at.parClass = ParameterClass.VAL;
-                                }
-                                else {
-                                        System.err.println("Error -- Mismatched types");
-                                        at.type = Types.UNDEFINED;
-                                        at.parClass = ParameterClass.NONE;
-                                }
+try{
+                                SemanticFunctions.comprobarFactor( fst, snd, at,op);
+                        }catch(FactorException e){
+
                         }
     }
 }
@@ -838,23 +844,7 @@ if (at.type != Types.BOOL) {
       jj_la1[28] = jj_gen;
       if (jj_2_4(2)) {
         t = jj_consume_token(ID);
-try {
-                                Symbol aux = st.getSymbol(t.image);
-                                if (aux.type == Symbol.Types.FUNCTION) {
-                                        s = (SymbolFunction) aux;
-                                        at.type = ((SymbolFunction) s).returnType;
-                                        at.parClass = ParameterClass.VAL;
-                                }
-                                else {
-                                        System.err.println("Error -- symbol \'" + t.image + "\' bad usage. Expected function, got " + aux.type.name());
-                                        at.type = Types.UNDEFINED;
-                                        at.parClass = ParameterClass.NONE;
-                                }
-                        } catch (SymbolNotFoundException e) {
-                                System.err.println("Error -- symbol \'" + t.image + "\' not found");
-                                at.type = Types.UNDEFINED;
-                                at.parClass = ParameterClass.NONE;
-                        }
+SemanticFunctions.comprobarFactorID( t, st, s, at);
         jj_consume_token(LPAREN);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case LPAREN:
@@ -936,42 +926,12 @@ if (s != null && i != s.parList.size()) {
         jj_consume_token(LBRACK);
         expression(fst);
         jj_consume_token(RBRACK);
-try {
-                                Symbol aux = st.getSymbol(t.image);
-                                if (aux.type == Types.ARRAY) {
-                                        at.type = ((SymbolArray) aux).baseType;
-                                        at.parClass = aux.parClass;
-                                }
-                                else {
-                                        System.err.println("Error -- symbol \'" + t.image +
-                                                "\' bad usage. Expected array, got " + aux.type.name());
-                                        at.type = Types.UNDEFINED;
-                                        at.parClass = ParameterClass.NONE;
-                                }
-                                if (fst.type != Types.INT) {
-                                        System.err.println("Error -- are you trying to index " +
-                                                "into an array with a " + fst.type.name() + "?");
-                                        at.type = Types.UNDEFINED;
-                                        at.parClass = ParameterClass.NONE;
-                                }
-                        } catch (SymbolNotFoundException e) {
-                                System.err.println("Error -- symbol \'" + t.image + "\' not found");
-                                at.type = Types.UNDEFINED;
-                                at.parClass = ParameterClass.NONE;
-                        }
+SemanticFunctions.comprobarVector(t, at, st, fst);
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
           t = jj_consume_token(ID);
-try {
-                Symbol aux = st.getSymbol(t.image);
-                at.type = aux.type;
-                at.parClass = aux.parClass;
-            } catch (SymbolNotFoundException e) {
-                System.err.println("Error -- symbol \'" + t.image + "\' not found");
-                at.type = Types.UNDEFINED;
-                at.parClass = ParameterClass.NONE;
-                        }
+SemanticFunctions.AlgoID(t, at, st);
           break;
           }
         case INTVAL:{
@@ -1129,14 +1089,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_3()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2()
+  static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
@@ -1150,17 +1103,24 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
     return false;
   }
 
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_3()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_2()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

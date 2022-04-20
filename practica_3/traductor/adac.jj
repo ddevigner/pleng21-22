@@ -22,6 +22,7 @@ import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
 import lib.tools.SemanticFunctions;
 import lib.tools.SemanticFunctions.Operator;
+import lib.tools.exceptions.*;
 import java.util.ArrayList;
 
 public class adac {
@@ -403,36 +404,58 @@ void instruction(Attributes at):
 	try {
 			// GET().
 		  	<GET> <LPAREN> var = assignable() {
+				try{
+					SemanticFunctions.comprobarGet(var);
+				}catch(GetException e){
+
+				}
 				
-				SemanticFunctions.comprobarGet(var);
 			} 
 			(
 				<COLON> assignable() {
+					try{
+						SemanticFunctions.comprobarAssignableGet(var);
+					}catch( AGetException e){
+
+					}
 					
-					SemanticFunctions.comprobarAssignableGet(var);
 				}
 			)* <RPAREN> <SCOLON>
 
 		// PROCEDIMIENTO PUT().
 		| <PUT> <LPAREN> expression(fst) {
+			try{
+				SemanticFunctions.comprobarPut(fst);
+			}catch(PutException e){
+
+			}
 			
-			SemanticFunctions.comprobarPut(fst);
 		}
 		(
 			<COLON> expression(fst){
-				//if(fst.type == Types.UNDEFINED) System.err.println("put necesita expresiones no nulas");
-				SemanticFunctions.comprobarPut(fst);
+				try{
+					SemanticFunctions.comprobarPut(fst);
+				}catch(PutException e){
+
+				}
+				
 			}
 		)* <RPAREN> <SCOLON> 
 
 		//PROCEDIMIENTO PUTLINE().
 		| <PUTLINE> <LPAREN> (expression(fst){
-			
-			SemanticFunctions.comprobarPutLine(fst);
-		} (<COLON> expression(fst){
-			
-			SemanticFunctions.comprobarPutLine(fst);
+			try{
+				SemanticFunctions.comprobarPutLine(fst);
+			}catch(PutLineException e){
 
+			}
+			
+		} (<COLON> expression(fst){
+			try{
+				SemanticFunctions.comprobarPutLine(fst);
+			}catch(PutLineException e){
+
+			}
 		})*)? <RPAREN> <SCOLON> 
 
 		// PROCEDIMIENTO SKIPLINE.
@@ -440,8 +463,8 @@ void instruction(Attributes at):
 
 		// PROCEDIMIENTOS.
 		| LOOKAHEAD(2) t = <ID> {	//Comprobar que es un procedimiento y que los parametros son correctos
+					SemanticFunctions.comprobarProcedimiento(t,st,s);
 				
-				SemanticFunctions.comprobarProcedimiento(t,st,s);
 			} <LPAREN> 
 			(
 				expression(fst) {
@@ -483,26 +506,49 @@ void instruction(Attributes at):
 						}
 					}
 				)*)? <RPAREN> <SCOLON> {
+					try{
+						SemanticFunctions.comprobarNumArgumentos(t,s, i);
+					}catch(NArgsException e){
+
+					}
 					
-					SemanticFunctions.comprobarNumArgumentos(t,s, i);
 				}
 		| 	var = assignable() <ASS> expression(fst) <SCOLON> {
-				
-				SemanticFunctions.comprobarAssignableInst(fst,var,at);
+				try{
+					SemanticFunctions.comprobarAssignableInst(fst,var,at);
+
+				}catch(AInstException e){
+
+				}
 			}
 
 		// WHILE.
 		|	<WHILE> expression(fst) {
-				SemanticFunctions.comprobarWhile(fst);
+				try{
+					SemanticFunctions.comprobarWhile(fst);
+				}catch(WhileBooleanException e){
+					//System.err.println("Whileeeeeeeeeeee");
+				}
+				
 			} <DO> instructions_list(at) <END>
 
 		// IF.
 		| 	<IF> expression(fst) {
+			try{
 				SemanticFunctions.comprobarIf(fst);
+			}catch(IfException e){
+
+			}
+				
 
 			} <THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
 		| 	<RETURN> expression(fst) {
-				SemanticFunctions.comprobarReturnIf(at,fst);
+				try{
+					SemanticFunctions.comprobarReturnIf(at,fst);
+				}catch(ReturnIfException e){
+
+				}
+				
 			} <SCOLON>
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next);
@@ -520,21 +566,21 @@ Symbol assignable():
 	try {
 		LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK> 
 			{ 
-				Symbol s = st.getSymbol(t.image);
-				if(s.type != Types.ARRAY) {
-					System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as an array?");
-					return null;
+				try{
+					return SemanticFunctions.comprobarAssignableVector(st,t);
+				}catch(AVectorException e){
+
 				}
-				return st.getSymbol(t.image);
+				
 			}
 		| t = <ID>
 			{ 
-				Symbol s = st.getSymbol(t.image);
-				if(s.type != Types.CHAR && s.type != Types.INT && s.type != Types.BOOL) {
-					System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as a simple var?");
-					return null;
+				try{
+					return SemanticFunctions.comprobarAssignableNormal(st,t);
+				}catch(ANormalException e){
+
 				}
-				return st.getSymbol(t.image);
+				
 			}
 	} catch (SymbolNotFoundException e) {
 		System.err.println("Error -- symbol \'" + t.image + "\' in " + 
@@ -555,15 +601,12 @@ void expression(Attributes at):
 	simple_expr(fst) { at.type = fst.type; at.parClass = fst.parClass; }
 	(
 		relational_op() simple_expr(snd) {
-			if (fst.type == snd.type) {
-				at.type = Types.BOOL;
-				at.parClass = ParameterClass.VAL;
+			try{
+				SemanticFunctions.comprobarExpression(fst,snd,at);
+			}catch(ExpressionException e){
+
 			}
-			else {
-				System.err.println("Error -- Mismatched types");
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-			}
+			
 		}
 	)?
 }
@@ -580,27 +623,12 @@ void simple_expr(Attributes at):
 	( <ADD> | <SUB> )? term(fst) { at.type = fst.type; at.parClass = fst.parClass; }
 	( 
 		additive_op(op) term(snd) {
-			if (op.opType == Operator.ADD || op.opType == Operator.SUB) {
-				if (fst.type == Types.INT && snd.type == fst.type) {
-					at.type = fst.type;
-					at.parClass = ParameterClass.VAL;
-				}
-				else {
-					System.err.println("Error -- Mismatched types.");
-					at.type = Types.UNDEFINED;
-					at.parClass = ParameterClass.NONE;
-				}
-			} else {
-				if (fst.type == Types.BOOL && snd.type == fst.type) {
-					at.type = fst.type;
-					at.parClass = ParameterClass.VAL;
-				}
-				else {
-					System.err.println("Error -- Mismatched types.");
-					at.type = Types.UNDEFINED;
-					at.parClass = ParameterClass.NONE;
-				}
+			try{
+				SemanticFunctions.comprobarExpSimple(fst,snd,at,op);
+			}catch(ExpSimpleException e){
+
 			}
+			
 		}
 	)*
 } 
@@ -617,27 +645,12 @@ void term(Attributes at):
 	factor(fst) { at.type = fst.type; at.parClass = fst.parClass; }
 	( 	
 		multiplicative_op(op) factor(snd) {
-			if (op.opType == Operator.MUL || op.opType == Operator.MOD || op.opType == Operator.DIV) {
-				if (fst.type == Types.INT && snd.type == fst.type) {
-					at.type = fst.type;
-					at.parClass = ParameterClass.VAL;
-				}
-				else {
-					System.err.println("Error -- Mismatched types");
-					at.type = Types.UNDEFINED;
-					at.parClass = ParameterClass.NONE;
-				}
-			} else {
-				if (fst.type == Types.BOOL && snd.type == fst.type) {
-					at.type = fst.type;
-					at.parClass = ParameterClass.VAL;
-				}
-				else {
-					System.err.println("Error -- Mismatched types");
-					at.type = Types.UNDEFINED;
-					at.parClass = ParameterClass.NONE;
-				}
+			try{
+				SemanticFunctions.comprobarFactor( fst, snd, at,op);
+			}catch(FactorException e){
+				
 			}
+			
 		}
 	)*
 }
@@ -660,23 +673,8 @@ void factor(Attributes at):
 	| 	<INT2CHAR> <LPAREN> expression(at) <RPAREN> 
 	| 	<CHAR2INT> <LPAREN> expression(at) <RPAREN> 
 	| 	LOOKAHEAD(2) t = <ID> {
-			try {
-				Symbol aux = st.getSymbol(t.image);
-				if (aux.type == Symbol.Types.FUNCTION) {
-					s = (SymbolFunction) aux;
-					at.type = ((SymbolFunction) s).returnType;
-					at.parClass = ParameterClass.VAL;
-				}
-				else {
-					System.err.println("Error -- symbol \'" + t.image + "\' bad usage. Expected function, got " + aux.type.name());
-					at.type = Types.UNDEFINED;
-					at.parClass = ParameterClass.NONE;
-				}
-			} catch (SymbolNotFoundException e) {
-				System.err.println("Error -- symbol \'" + t.image + "\' not found");
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-			}
+			
+			SemanticFunctions.comprobarFactorID( t, st, s, at);
 		}
 		<LPAREN> 
 		(
@@ -701,6 +699,7 @@ void factor(Attributes at):
 						System.err.println("Error -- Expected \'" + s.name + "()\'");
 					}
 				}
+
 			} 
 			(<COLON> expression(snd) {
 				if (s != null) {
@@ -727,40 +726,10 @@ void factor(Attributes at):
 				}
 			}
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> {
-			try {
-				Symbol aux = st.getSymbol(t.image);
-				if (aux.type == Types.ARRAY) {
-					at.type = ((SymbolArray) aux).baseType;
-					at.parClass = aux.parClass;
-				}
-				else {
-					System.err.println("Error -- symbol \'" + t.image + 
-						"\' bad usage. Expected array, got " + aux.type.name());
-					at.type = Types.UNDEFINED;
-					at.parClass = ParameterClass.NONE;
-				}
-				if (fst.type != Types.INT) {
-					System.err.println("Error -- are you trying to index " +
-						"into an array with a " + fst.type.name() + "?");
-					at.type = Types.UNDEFINED;
-					at.parClass = ParameterClass.NONE;
-				}
-			} catch (SymbolNotFoundException e) {
-				System.err.println("Error -- symbol \'" + t.image + "\' not found");
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-			}
+			SemanticFunctions.comprobarVector(t, at, st, fst);
 		} 
 	| 	t = <ID> {
-            try {
-                Symbol aux = st.getSymbol(t.image);
-                at.type = aux.type;
-                at.parClass = aux.parClass;
-            } catch (SymbolNotFoundException e) {
-                System.err.println("Error -- symbol \'" + t.image + "\' not found");
-                at.type = Types.UNDEFINED;
-                at.parClass = ParameterClass.NONE;
-			}
+            SemanticFunctions.AlgoID(t, at, st);
 		}
 	| 	<INTVAL>  { at.type = Types.INT; at.parClass = ParameterClass.VAL; } 
 	| 	<CHARVAL> { at.type = Types.CHAR; at.parClass = ParameterClass.VAL; }

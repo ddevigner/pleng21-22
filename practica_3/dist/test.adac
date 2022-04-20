@@ -1,7 +1,7 @@
 procedure hello is
     character c[5];
     integer a;
-    procedure hola(ref integer a) is
+    function hola(ref integer a) is
     begin
         put_line("hola");
     end
@@ -11,4 +11,7 @@ begin
     put_line(a);
     get(a, c[1]);
     hola(a);
+    while(2+4) do
+        put_line(a);
+    end
 end
