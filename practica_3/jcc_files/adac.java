@@ -15,6 +15,7 @@ public class adac implements adacConstants {
 
         //Se declara la tabla de simbolos
         static SymbolTable st;
+        static SemanticFunctions sf;
 
         static int errors = 0;
 
@@ -51,6 +52,7 @@ public class adac implements adacConstants {
                         //Se iniciar y crea la tabla de simbolos pero esta vacia
                         st = new SymbolTable();
                 initSymbolTable();
+                        sf = new SemanticFunctions();
 
                         // Entrada desde stdin.
                 if(args.length == 0) {
@@ -77,11 +79,11 @@ public class adac implements adacConstants {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // Declaracion del procedimiento principal del fichero.
-  static final public void main() throws ParseException {Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED);
+  static final public void main() throws ParseException {Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
         Token t;
     jj_consume_token(PROC);
     t = jj_consume_token(ID);
-SemanticFunctions.CreateProcedure(st, t,Types.PROCEDURE, Types.UNDEFINED, true);
+sf.AddMethod(st, at, t);
     jj_consume_token(IS);
     vars_def();
     procs_funcs_decl();
@@ -113,15 +115,14 @@ SemanticFunctions.CreateProcedure(st, t,Types.PROCEDURE, Types.UNDEFINED, true);
         Symbol.Types returnType;
         Attributes at = new Attributes();
         Token t;
-        ArrayList<Symbol> parList;
     baseType = proc_or_func();
 at.type = baseType;
     returnType = func_return(baseType);
 at.returnType = returnType;
     t = jj_consume_token(ID);
-parList = SemanticFunctions.CreateProcedure(st, t, baseType, returnType, false);
+sf.AddMethod(st, at, t);
     jj_consume_token(LPAREN);
-    params_def(parList);
+    params_def(at);
     jj_consume_token(RPAREN);
     jj_consume_token(IS);
     vars_def();
@@ -176,12 +177,12 @@ if (procType == Symbol.Types.FUNCTION)
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
-  static final public void params_def(ArrayList<Symbol> parList) throws ParseException {Symbol.ParameterClass parClass;
+  static final public void params_def(Attributes at) throws ParseException {Symbol.ParameterClass parClass;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case VAL:
     case REF:{
       parClass = param_class();
-      vars_decl(parClass, parList);
+      vars_decl(parClass, at.params);
       label_2:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -195,7 +196,7 @@ if (procType == Symbol.Types.FUNCTION)
         }
         jj_consume_token(SCOLON);
         param_class();
-        vars_decl(parClass, parList);
+        vars_decl(parClass, at.params);
       }
       break;
       }
@@ -666,7 +667,7 @@ panicMode(e.currentToken.next);
 try{
                                         {if ("" != null) return SemanticFunctions.comprobarAssignableVector(st,t);}
                                 }catch(AVectorException e){
-
+                                        {if ("" != null) return null;}
                                 }
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -675,7 +676,7 @@ try{
 try{
                                         {if ("" != null) return SemanticFunctions.comprobarAssignableNormal(st,t);}
                                 }catch(ANormalException e){
-
+                                        {if ("" != null) return null;}
                                 }
           break;
           }
@@ -698,7 +699,7 @@ System.err.println("Error -- symbol \'" + t.image + "\' in " +
   static final public void expression(Attributes at) throws ParseException {Attributes fst = new Attributes();
         Attributes snd = new Attributes();
     simple_expr(fst);
-at.type = fst.type; at.parClass = fst.parClass;
+at.baseType = fst.baseType; at.parClass = fst.parClass;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case EQ:
     case NE:
@@ -706,13 +707,9 @@ at.type = fst.type; at.parClass = fst.parClass;
     case GT:
     case LE:
     case GE:{
-      relational_op();
+      relational_op(fst);
       simple_expr(snd);
-try{
-                                SemanticFunctions.comprobarExpression(fst,snd,at);
-                        }catch(ExpressionException e){
-
-                        }
+sf.CheckExpression(at, fst, snd);
       break;
       }
     default:
@@ -725,7 +722,6 @@ try{
 // Expresion aritmetica.
   static final public void simple_expr(Attributes at) throws ParseException {Attributes fst = new Attributes();
         Attributes snd = new Attributes();
-        Attributes op  = new Attributes();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case ADD:
     case SUB:{
@@ -750,7 +746,7 @@ try{
       ;
     }
     term(fst);
-at.type = fst.type; at.parClass = fst.parClass;
+at.baseType = fst.baseType; at.parClass = fst.parClass;
     label_10:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -764,13 +760,9 @@ at.type = fst.type; at.parClass = fst.parClass;
         jj_la1[24] = jj_gen;
         break label_10;
       }
-      additive_op(op);
+      additive_op(fst);
       term(snd);
-try{
-                                SemanticFunctions.comprobarExpSimple(fst,snd,at,op);
-                        }catch(ExpSimpleException e){
-
-                        }
+sf.CheckExpression(at, fst, snd);
     }
 }
 
@@ -778,9 +770,8 @@ try{
 // Expresion multiplicativa.
   static final public void term(Attributes at) throws ParseException {Attributes fst = new Attributes();
         Attributes snd = new Attributes();
-        Attributes op  = new Attributes();
     factor(fst);
-at.type = fst.type; at.parClass = fst.parClass;
+at.baseType = fst.baseType; at.parClass = fst.parClass;
     label_11:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -795,13 +786,9 @@ at.type = fst.type; at.parClass = fst.parClass;
         jj_la1[25] = jj_gen;
         break label_11;
       }
-      multiplicative_op(op);
+      multiplicative_op(fst);
       factor(snd);
-try{
-                                SemanticFunctions.comprobarFactor( fst, snd, at,op);
-                        }catch(FactorException e){
-
-                        }
+sf.CheckExpression(at, fst, snd);
     }
 }
 
@@ -935,23 +922,23 @@ SemanticFunctions.AlgoID(t, at, st);
           break;
           }
         case INTVAL:{
-          jj_consume_token(INTVAL);
-at.type = Types.INT; at.parClass = ParameterClass.VAL;
+          t = jj_consume_token(INTVAL);
+at.initInt(t.image);
           break;
           }
         case CHARVAL:{
-          jj_consume_token(CHARVAL);
-at.type = Types.CHAR; at.parClass = ParameterClass.VAL;
+          t = jj_consume_token(CHARVAL);
+at.initChar(t.image);
           break;
           }
         case BOOLVAL:{
-          jj_consume_token(BOOLVAL);
-at.type = Types.BOOL; at.parClass = ParameterClass.VAL;
+          t = jj_consume_token(BOOLVAL);
+at.initBool(t.image);
           break;
           }
         case STRING:{
-          jj_consume_token(STRING);
-at.type = Types.STRING; at.parClass = ParameterClass.VAL;
+          t = jj_consume_token(STRING);
+at.initString(t.image);
           break;
           }
         default:
@@ -963,7 +950,7 @@ at.type = Types.STRING; at.parClass = ParameterClass.VAL;
     }
 }
 
-  static final public void relational_op() throws ParseException {
+  static final public void relational_op(Attributes at) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case EQ:{
       jj_consume_token(EQ);
@@ -994,56 +981,75 @@ at.type = Types.STRING; at.parClass = ParameterClass.VAL;
       jj_consume_token(-1);
       throw new ParseException();
     }
+at.op = Operator.CMP_OP;
 }
 
-  static final public void additive_op(Attributes op) throws ParseException {Token t;
+  static final public void additive_op(Attributes at) throws ParseException {Token t;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case ADD:{
-      t = jj_consume_token(ADD);
-op.opType = Operator.ADD; op.line = t.beginLine; op.column = t.beginColumn;
-      break;
-      }
+    case ADD:
     case SUB:{
-      t = jj_consume_token(SUB);
-op.opType = Operator.SUB; op.line = t.beginLine; op.column = t.beginColumn;
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case ADD:{
+        jj_consume_token(ADD);
+        break;
+        }
+      case SUB:{
+        jj_consume_token(SUB);
+        break;
+        }
+      default:
+        jj_la1[31] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+at.op = Operator.INT_OP;
       break;
       }
     case OR:{
-      t = jj_consume_token(OR);
-op.opType = Operator.OR;  op.line = t.beginLine; op.column = t.beginColumn;
+      jj_consume_token(OR);
+at.op = Operator.BOOL_OP;
       break;
       }
     default:
-      jj_la1[31] = jj_gen;
+      jj_la1[32] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
 }
 
-  static final public void multiplicative_op(Attributes op) throws ParseException {Token t;
+  static final public void multiplicative_op(Attributes at) throws ParseException {Token t;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case MUL:{
-      t = jj_consume_token(MUL);
-op.opType = Operator.MUL; op.line = t.beginLine; op.column = t.beginColumn;
-      break;
-      }
+    case MUL:
+    case DIV:
     case MOD:{
-      t = jj_consume_token(MOD);
-op.opType = Operator.MOD; op.line = t.beginLine; op.column = t.beginColumn;
-      break;
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case MUL:{
+        jj_consume_token(MUL);
+        break;
+        }
+      case MOD:{
+        jj_consume_token(MOD);
+        break;
+        }
+      case DIV:{
+        jj_consume_token(DIV);
+        break;
+        }
+      default:
+        jj_la1[33] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
       }
-    case DIV:{
-      t = jj_consume_token(DIV);
-op.opType = Operator.DIV; op.line = t.beginLine; op.column = t.beginColumn;
+at.op = Operator.INT_OP;
       break;
       }
     case AND:{
-      t = jj_consume_token(AND);
-op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
+      jj_consume_token(AND);
+at.op = Operator.BOOL_OP;
       break;
       }
     default:
-      jj_la1[32] = jj_gen;
+      jj_la1[34] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1089,20 +1095,6 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
   static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
@@ -1110,7 +1102,21 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
     return false;
   }
 
+  static private boolean jj_3_4()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
   static private boolean jj_3_3()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
@@ -1136,7 +1142,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
   static private Token jj_scanpos, jj_lastpos;
   static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[33];
+  static final private int[] jj_la1 = new int[35];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1144,10 +1150,10 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
 	   jj_la1_init_1();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x0,0x0,0x38000,0x200,0x0,0x0,0x38000,0x400,0x38000,0x0,0x0,0x400,0x400,0x400,0x1bc0800,0x400,0x1bc0800,0x0,0x0,0x0,0x0,0xf0000000,0x1800000,0x1800000,0x1800000,0xe000000,0x400,0x1bc0800,0x800,0x3c0000,0xf0000000,0x1800000,0xe000000,};
+	   jj_la1_0 = new int[] {0x0,0x0,0x38000,0x200,0x0,0x0,0x38000,0x400,0x38000,0x0,0x0,0x400,0x400,0x400,0x1bc0800,0x400,0x1bc0800,0x0,0x0,0x0,0x0,0xf0000000,0x1800000,0x1800000,0x1800000,0xe000000,0x400,0x1bc0800,0x800,0x3c0000,0xf0000000,0x1800000,0x1800000,0xe000000,0xe000000,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x60,0x60,0x0,0x0,0x300,0x300,0x0,0x0,0x0,0x1000000,0x1139c00,0x0,0x0,0x0,0x1006010,0x0,0x1006010,0x80000,0x19800,0x1120400,0x1000000,0x3,0x0,0x0,0x8,0x4,0x0,0x1006010,0x6010,0x1000000,0x3,0x8,0x4,};
+	   jj_la1_1 = new int[] {0x60,0x60,0x0,0x0,0x300,0x300,0x0,0x0,0x0,0x1000000,0x1139c00,0x0,0x0,0x0,0x1006010,0x0,0x1006010,0x80000,0x19800,0x1120400,0x1000000,0x3,0x0,0x0,0x8,0x4,0x0,0x1006010,0x6010,0x1000000,0x3,0x0,0x8,0x0,0x4,};
 	}
   static final private JJCalls[] jj_2_rtns = new JJCalls[5];
   static private boolean jj_rescan = false;
@@ -1171,7 +1177,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 35; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1186,7 +1192,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 35; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1204,7 +1210,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 35; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1223,7 +1229,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 35; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1240,7 +1246,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 35; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1250,7 +1256,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 33; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 35; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1386,7 +1392,7 @@ op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn;
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 33; i++) {
+	 for (int i = 0; i < 35; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {

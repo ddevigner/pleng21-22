@@ -1,17 +1,15 @@
 procedure hello is
     character c[5];
     integer a;
-    function hola(ref integer a) is
+    function integer b() is
     begin
-        put_line("hola");
+        return 1;
+    end
+    function integer b() is
+    begin
+        return 1;
     end
 begin
     c[a] := 'a';
-    put(a);
-    put_line(a);
-    get(a, c[1]);
-    hola(a);
-    while(2+4) do
-        put_line(a);
     end
 end

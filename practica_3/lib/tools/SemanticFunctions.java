@@ -22,7 +22,7 @@ import lib.tools.exceptions.*;
 public class SemanticFunctions {
 	private ErrorSemantico errSem; //clase común de errores semánticos
 
-	public static enum Operator { ADD, SUB, OR, MUL, MOD, DIV, AND };
+	public static enum Operator { INT_OP, BOOL_OP, CMP_OP };
 
 	public SemanticFunctions() {
 		errSem = new ErrorSemantico();
@@ -32,30 +32,6 @@ public class SemanticFunctions {
 	// --
 	public static boolean CheckParClass(Symbol.ParameterClass fst, Symbol.ParameterClass snd) {
 		return (fst == ParameterClass.VAL || (fst == ParameterClass.REF && snd != ParameterClass.VAL));
-	}
-
-
-	//-- Procedimientos.
-	public static ArrayList<Symbol> CreateProcedure(SymbolTable st, Token t, 
-			Symbol.Types baseType, Symbol.Types returnType, boolean main) {
-
-		ArrayList<Symbol> parList = new ArrayList<>();
-		try {
-			if (baseType == Symbol.Types.FUNCTION)
-				st.insertSymbol(new SymbolFunction(
-					t.image, parList, returnType, t.beginLine, t.beginColumn));
-			else 
-				st.insertSymbol(new SymbolProcedure(
-					t.image, parList, t.beginLine, t.beginColumn, main));
-			st.insertBlock();
-			//System.err.println(st.toString());
-			return parList;
-		} catch (AlreadyDefinedSymbolException e) {
-			// ErrorSemantico.deteccion(e, t);
-			System.err.println("Error - did you already define " + t.image 
-				+ " symbol?");
-			return null;
-		}
 	}
 
 	//-- Parametros.
@@ -164,11 +140,11 @@ public class SemanticFunctions {
 	public static void comprobarAssignableInst(Attributes fst,Symbol var,Attributes at)throws AInstException{
 		if (var != null) {
 			if (var.type == Types.ARRAY) {
-				if (((SymbolArray) var).baseType != fst.type)
+				if (((SymbolArray) var).baseType != fst.baseType)
 					System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + ((SymbolArray) var).baseType + ", got " + at.type);
 					throw new AInstException();
 			}
-			else if (var.type != fst.type)
+			else if (var.type != fst.baseType)
 				System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + var.type + ", got " + at.type);
 				throw new AInstException();
 		}
@@ -207,12 +183,10 @@ public class SemanticFunctions {
 		Symbol s = st.getSymbol(t.image);
 				if(s.type != Types.ARRAY) {
 					System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as an array?");
-					
-					return null;
-					//throw new AVectorException();
+					//return null;
+					throw new AVectorException();
 				}
 				return st.getSymbol(t.image);
-
 	}
 
 
@@ -221,59 +195,14 @@ public class SemanticFunctions {
 		Symbol s = st.getSymbol(t.image);
 		if(s.type != Types.CHAR && s.type != Types.INT && s.type != Types.BOOL) {
 			System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as a simple var?");
-			return null;
-			//throw new ANormalException();
+			//return null;
+			throw new ANormalException();
 		}
 		return st.getSymbol(t.image);
 	}
 
-
-
-	public static void comprobarExpression(Attributes fst,Attributes snd,Attributes at)throws ExpressionException{
-		if (fst.type == snd.type) {
-			at.type = Types.BOOL;
-			at.parClass = ParameterClass.VAL;
-		}
-		else {
-			System.err.println("Error -- Mismatched types");
-			at.type = Types.UNDEFINED;
-			at.parClass = ParameterClass.NONE;
-			throw new ExpressionException();
-		}
-	}
-
-
-
-	public static void comprobarExpSimple(Attributes fst,Attributes snd,Attributes at,Attributes op)throws ExpSimpleException{
-		if (op.opType == Operator.ADD || op.opType == Operator.SUB) {
-			if (fst.type == Types.INT && snd.type == fst.type) {
-				at.type = fst.type;
-				at.parClass = ParameterClass.VAL;
-			}
-			else {
-				System.err.println("Error -- Mismatched types.");
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-				throw new ExpSimpleException();
-			}
-		} else {
-			if (fst.type == Types.BOOL && snd.type == fst.type) {
-				at.type = fst.type;
-				at.parClass = ParameterClass.VAL;
-			}
-			else {
-				System.err.println("Error -- Mismatched types.");
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-				throw new ExpSimpleException();
-			}
-		}
-	}
-
-
-
 	public static void comprobarFactor(Attributes fst,Attributes snd,Attributes at,Attributes op)throws FactorException{
-		if (op.opType == Operator.MUL || op.opType == Operator.MOD || op.opType == Operator.DIV) {
+		if (op.op == Operator.INT_OP) {
 			if (fst.type == Types.INT && snd.type == fst.type) {
 				at.type = fst.type;
 				at.parClass = ParameterClass.VAL;
@@ -362,4 +291,42 @@ public class SemanticFunctions {
 		}
 	}
 
+	/* --------------------------------------------------------------------- */
+	/* Añadir nuevo procedimiento o funcion.                                 */
+	/* --------------------------------------------------------------------- */
+	public void AddMethod(SymbolTable st, Attributes at, Token t) {
+		if (!at.main) at.params = new ArrayList<>();
+		try {
+			if (at.type == Types.PROCEDURE)
+				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main, t.beginLine, t.beginColumn));
+			else
+				st.insertSymbol(new SymbolFunction(t.image, at.params, at.baseType,  t.beginLine, t.beginColumn));
+		} catch (AlreadyDefinedSymbolException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn + 
+				") Error -- Simbolo \'" + t.image + "\' ya existente");
+			at.params = null;
+		}
+		//System.out.println(st.toString());
+		st.insertBlock();
+	}
+	/* --------------------------------------------------------------------- */
+
+	private void checkExpression(Types fst, Operator op, Types snd) throws MismatchedTypesException {
+		if (op == Operator.CMP_OP && fst != snd)
+			throw new MismatchedTypesException();
+		if (op == Operator.INT_OP && (fst != Types.INT || snd != Types.INT))
+			throw new MismatchedTypesException();
+		if (op == Operator.BOOL_OP && (fst != Types.BOOL || snd != Types.BOOL))
+			throw new MismatchedTypesException();
+	}
+
+	public void CheckExpression(Attributes at, Attributes fst, Attributes snd) {
+		try {
+			checkExpression(fst.baseType, fst.op, snd.baseType);
+			at.baseType = fst.baseType;
+			at.parClass = ParameterClass.VAL;
+		}catch(MismatchedTypesException e){
+			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
+		}
+	}
 }

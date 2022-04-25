@@ -29,6 +29,7 @@ public class adac {
 
 	//Se declara la tabla de simbolos
 	static SymbolTable st;
+	static SemanticFunctions sf;
 
 	static int errors = 0;
 
@@ -65,6 +66,7 @@ public class adac {
 			//Se iniciar y crea la tabla de simbolos pero esta vacia
 			st = new SymbolTable();
     		initSymbolTable();
+			sf = new SemanticFunctions();
 
 			// Entrada desde stdin.
 	    	if(args.length == 0) {
@@ -231,12 +233,12 @@ SPECIAL_TOKEN: {
 // Declaracion del procedimiento principal del fichero.
 void main() :
 {
-	Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED);
+	Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
 	Token t;
 } 
 {
 	<PROC> 
-	t = <ID> { SemanticFunctions.CreateProcedure(st, t,Types.PROCEDURE, Types.UNDEFINED, true); }
+	t = <ID> { sf.AddMethod(st, at, t); }
 	<IS> 
 	vars_def() 
 	procs_funcs_decl() 
@@ -258,13 +260,12 @@ void proc_func_decl():
 	Symbol.Types returnType;
 	Attributes at = new Attributes();
 	Token t;
-	ArrayList<Symbol> parList;
 } {
 	baseType = proc_or_func() { at.type = baseType; }
 	returnType = func_return(baseType) { at.returnType = returnType; } 
-	t = <ID> { parList = SemanticFunctions.CreateProcedure(st, t, baseType, returnType, false);}
+	t = <ID> { sf.AddMethod(st, at, t); }
 	<LPAREN>
-	params_def(parList) 
+	params_def(at) 
 	<RPAREN> 
 	<IS> 
 	vars_def() 
@@ -302,11 +303,11 @@ Symbol.Types func_return(Symbol.Types procType):
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
-void params_def(ArrayList<Symbol> parList):
+void params_def(Attributes at):
 {
 	Symbol.ParameterClass parClass;
 } {
-	(parClass = param_class() vars_decl(parClass, parList) (<SCOLON> param_class() vars_decl(parClass, parList))*)?
+	(parClass = param_class() vars_decl(parClass, at.params) (<SCOLON> param_class() vars_decl(parClass, at.params))*)?
 }
 
 //-----------------------------------------------------------------------------
@@ -569,16 +570,15 @@ Symbol assignable():
 				try{
 					return SemanticFunctions.comprobarAssignableVector(st,t);
 				}catch(AVectorException e){
-
+					return null;
 				}
-				
 			}
 		| t = <ID>
 			{ 
 				try{
 					return SemanticFunctions.comprobarAssignableNormal(st,t);
 				}catch(ANormalException e){
-
+					return null;
 				}
 				
 			}
@@ -598,17 +598,8 @@ void expression(Attributes at):
 	Attributes snd = new Attributes();
 }
 {
-	simple_expr(fst) { at.type = fst.type; at.parClass = fst.parClass; }
-	(
-		relational_op() simple_expr(snd) {
-			try{
-				SemanticFunctions.comprobarExpression(fst,snd,at);
-			}catch(ExpressionException e){
-
-			}
-			
-		}
-	)?
+	simple_expr(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
+	(relational_op(fst) simple_expr(snd) { sf.CheckExpression(at, fst, snd); } )?
 }
 
 //-----------------------------------------------------------------------------
@@ -617,20 +608,10 @@ void simple_expr(Attributes at):
 {
 	Attributes fst = new Attributes();
 	Attributes snd = new Attributes();
-	Attributes op  = new Attributes();
 } 
 {
-	( <ADD> | <SUB> )? term(fst) { at.type = fst.type; at.parClass = fst.parClass; }
-	( 
-		additive_op(op) term(snd) {
-			try{
-				SemanticFunctions.comprobarExpSimple(fst,snd,at,op);
-			}catch(ExpSimpleException e){
-
-			}
-			
-		}
-	)*
+	( <ADD> | <SUB> )? term(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
+	( additive_op(fst) term(snd) { sf.CheckExpression(at, fst, snd); })*
 } 
 
 //-----------------------------------------------------------------------------
@@ -639,20 +620,10 @@ void term(Attributes at):
 {
 	Attributes fst = new Attributes();
 	Attributes snd = new Attributes();
-	Attributes op  = new Attributes();
 }
 {
-	factor(fst) { at.type = fst.type; at.parClass = fst.parClass; }
-	( 	
-		multiplicative_op(op) factor(snd) {
-			try{
-				SemanticFunctions.comprobarFactor( fst, snd, at,op);
-			}catch(FactorException e){
-				
-			}
-			
-		}
-	)*
+	factor(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
+	(multiplicative_op(fst) factor(snd) { sf.CheckExpression(at, fst, snd); })*
 }
 
 void factor(Attributes at):
@@ -725,38 +696,31 @@ void factor(Attributes at):
 					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- Bad number of parameters");
 				}
 			}
-	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> {
-			SemanticFunctions.comprobarVector(t, at, st, fst);
-		} 
-	| 	t = <ID> {
-            SemanticFunctions.AlgoID(t, at, st);
-		}
-	| 	<INTVAL>  { at.type = Types.INT; at.parClass = ParameterClass.VAL; } 
-	| 	<CHARVAL> { at.type = Types.CHAR; at.parClass = ParameterClass.VAL; }
-	| 	<BOOLVAL> { at.type = Types.BOOL; at.parClass = ParameterClass.VAL; }
-	| 	<STRING>  { at.type = Types.STRING; at.parClass = ParameterClass.VAL; }
+	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> { SemanticFunctions.comprobarVector(t, at, st, fst); } 
+	| 	t = <ID> 	  { SemanticFunctions.AlgoID(t, at, st); }
+	| 	t = <INTVAL>  { at.initInt(t.image);    } 
+	| 	t = <CHARVAL> { at.initChar(t.image);   }
+	| 	t = <BOOLVAL> { at.initBool(t.image);   }
+	| 	t = <STRING>  { at.initString(t.image); }
 }
 
-void relational_op():
+void relational_op(Attributes at):
 {} {
-	<EQ> | <LT> | <GT> | <LE> | <GE> | <NE>
+	(<EQ> | <LT> | <GT> | <LE> | <GE> | <NE> ) { at.op = Operator.CMP_OP; }
 }
 
-void additive_op(Attributes op):
+void additive_op(Attributes at):
 {
 	Token t;
 } {
-		t = <ADD> { op.opType = Operator.ADD; op.line = t.beginLine; op.column = t.beginColumn; }
-	| 	t = <SUB> { op.opType = Operator.SUB; op.line = t.beginLine; op.column = t.beginColumn; }
-	| 	t = <OR>  { op.opType = Operator.OR;  op.line = t.beginLine; op.column = t.beginColumn; }
+		(<ADD> | <SUB>) { at.op = Operator.INT_OP; }
+	| 	<OR>  { at.op = Operator.BOOL_OP;  }
 }
 
-void multiplicative_op(Attributes op):
+void multiplicative_op(Attributes at):
 {
 	Token t;
 } {
-		t = <MUL> { op.opType = Operator.MUL; op.line = t.beginLine; op.column = t.beginColumn; }
-	| 	t = <MOD> { op.opType = Operator.MOD; op.line = t.beginLine; op.column = t.beginColumn; }
-	| 	t = <DIV> { op.opType = Operator.DIV; op.line = t.beginLine; op.column = t.beginColumn; }
-	|	t = <AND> { op.opType = Operator.AND; op.line = t.beginLine; op.column = t.beginColumn; }
+	  	(<MUL> | <MOD> | <DIV>) { at.op = Operator.INT_OP; }
+	|	<AND> { at.op = Operator.BOOL_OP; }
 }

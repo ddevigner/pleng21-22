@@ -7,9 +7,9 @@
 
 package lib.symbolTable;
 import java.util.*;
-import java.util.AbstractMap.SimpleEntry;
+//import java.util.AbstractMap.SimpleEntry;
 
-public class SymbolProcedure extends Symbol implements Cloneable {
+public class SymbolProcedure extends Symbol {
 
     //cada parámetro es un par <id,símbolo> donde "símbolo" es una copia del valor
     //introducido en la tabla de símbolos. Esta duplicación de la información es necesaria
@@ -19,21 +19,20 @@ public class SymbolProcedure extends Symbol implements Cloneable {
     public ArrayList<Symbol> parList;
     public boolean main;
 
-    public SymbolProcedure(String _name,ArrayList<Symbol> _parList, int _line, int _column, boolean _main) {
-    	super(_name, Types.PROCEDURE, ParameterClass.NONE, _line, _column);
-        parList = _parList;
-        main = _main;
+    public SymbolProcedure(String name, ArrayList<Symbol> parList, boolean main, int line, int column) {
+    	super(name, Types.PROCEDURE, ParameterClass.NONE, line, column);
+        this.parList = parList;
+        this.main    = main;
     }
 
     public String toString() {
         return "(" + name + "," + type + "," + parList + "," + nivel + "," 
-                + line + "," + column + ")";
-        
+            + line + "," + column + ")";
     }
 
     public SymbolProcedure clone () {
-    	SymbolProcedure newSymbolProcedure = (SymbolProcedure) super.clone();
-    	newSymbolProcedure.parList = new ArrayList<Symbol> (parList); 
-    	return newSymbolProcedure;
+    	SymbolProcedure clone = (SymbolProcedure) super.clone();
+    	clone.parList = new ArrayList<Symbol> (parList); 
+    	return clone;
     }
 }
