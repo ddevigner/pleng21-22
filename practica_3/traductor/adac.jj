@@ -240,7 +240,7 @@ void main() :
 	<PROC> 
 	t = <ID> { sf.AddMethod(st, at, t); }
 	<IS> 
-	vars_def() 
+	vars_def(at) 
 	procs_funcs_decl() 
 	proc_func_body(at)
 }
@@ -256,113 +256,96 @@ void procs_funcs_decl ():
 // Declaracion de procedimiento/funcion
 void proc_func_decl():
 {
-	Symbol.Types baseType;
-	Symbol.Types returnType;
 	Attributes at = new Attributes();
 	Token t;
 } {
-	baseType = proc_or_func() { at.type = baseType; }
-	returnType = func_return(baseType) { at.returnType = returnType; } 
+	proc_or_func(at)
+	func_return(at)
 	t = <ID> { sf.AddMethod(st, at, t); }
 	<LPAREN>
-	params_def(at) 
+	params_def(at) { at.params = null; }
 	<RPAREN> 
 	<IS>
-	vars_def() 
+	vars_def(at) 
 	procs_funcs_decl()
 	proc_func_body(at)
 }
 
 //-----------------------------------------------------------------------------
 // Declaracion de si es procedimiento o funcion.
-Symbol.Types proc_or_func():
+void proc_or_func(Attributes at):
 {} {
-		<PROC> { return Symbol.Types.PROCEDURE; } 
-	| 	<FUNC> { return Symbol.Types.FUNCTION;  }
+		<PROC> { at.type = Types.PROCEDURE; } 
+	| 	<FUNC> { at.type = Types.FUNCTION;  }
 }
 
 //-----------------------------------------------------------------------------
 // Tipo de dato que devuelve la funcion.
-Symbol.Types func_return(Symbol.Types procType):
-{
-	Symbol.Types returnType;
-} {
-	returnType = vars_type() 
-		{ 
-			if (procType == Symbol.Types.PROCEDURE)
-				System.err.println("Error - did you define a return data type in your procedure?");
-			return returnType;
-		}
-	| 	{}
-		{
-			if (procType == Symbol.Types.FUNCTION)
-				System.err.println("Error -- did you forget about the return data type in your function?");
-			return Symbol.Types.UNDEFINED;
-		}
+void func_return(Attributes at):
+{} {
+		vars_type(at) { sf.EvaluateDefinedReturnType(at, Types.FUNCTION); }
+	| 	{} { sf.EvaluateDefinedReturnType(at, Types.PROCEDURE); }
 }
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
 void params_def(Attributes at):
-{
-	Symbol.ParameterClass parClass;
-} {
-	(parClass = param_class() vars_decl(parClass, at.params) (<SCOLON> param_class() vars_decl(parClass, at.params))*)?
+{} {
+	(param_class(at) vars_decl(at) (<SCOLON> param_class(at) vars_decl(at))*)?
 }
 
 //-----------------------------------------------------------------------------
 // Clase del parametro: por valor o por referencia.
-Symbol.ParameterClass param_class():
+void param_class(Attributes at):
 {} {
-		<VAL> { return Symbol.ParameterClass.VAL; }
-	| 	<REF> { return Symbol.ParameterClass.REF; }
+		<VAL> { at.parClass = ParameterClass.VAL; }
+	| 	<REF> { at.parClass = ParameterClass.REF; }
 }
 
 //-----------------------------------------------------------------------------
 // Variables de procedimiento/funcion.
-void vars_def():
+void vars_def(Attributes at):
 {} {
-	( vars_decl(Symbol.ParameterClass.NONE, null) <SCOLON> )*
+	{ at.parClass = ParameterClass.NONE; }
+	( vars_decl(at) <SCOLON> )*
 }
 
 //-----------------------------------------------------------------------------
 // Tipos de variable y variables asociadas.
-void vars_decl(Symbol.ParameterClass parClass, ArrayList<Symbol> parList):
-{
-	Symbol.Types baseType;
+void vars_decl(Attributes at):
+{} {
+	vars_type(at) vars_list(at)
 }
-{
-	baseType = vars_type() vars_list(baseType, parClass, parList)
+
+
+//-----------------------------------------------------------------------------
+// Tipos de una variable.
+void vars_type(Attributes at):
+{} {
+		<INT>  { at.baseType = Types.INT;  }
+	| 	<BOOL> { at.baseType = Types.BOOL; }
+	| 	<CHAR> { at.baseType = Types.CHAR; }
 }
 
 //-----------------------------------------------------------------------------
 // Variables del mismo tipo.
-void vars_list(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol> parList):
+void vars_list(Attributes at):
 {}
 {
-	var(baseType, parClass, parList) ( <COLON> var(baseType, parClass, parList))*
-}
-
-//-----------------------------------------------------------------------------
-// Tipos de una variable.
-Symbol.Types vars_type():
-{} {
-		<INT>  { return Symbol.Types.INT;  }
-	| 	<BOOL> { return Symbol.Types.BOOL; }
-	| 	<CHAR> { return Symbol.Types.CHAR; }
+	var(at) ( <COLON> var(at))*
 }
 
 //-----------------------------------------------------------------------------
 // Nombre de la variable.
-void var(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol> parList):
+void var(Attributes at):
 {
 	Token t, ind;
 } 
 {
 	LOOKAHEAD(2) t = <ID> <LBRACK> ind = <INTVAL> <RBRACK> 
-		{ sf.CreateVar(st, parList, t, Integer.parseInt(ind.image), baseType, parClass); }
+		{ sf.AddVar(st, at, t, Types.ARRAY, Integer.parseInt(ind.image)); }
 	| 	t = <ID> 
-		{ sf.CreateVar(st, parList, t, 0, baseType, parClass); }
+		{ sf.AddVar(st, at, t, Types.UNDEFINED, 0); }
 }
 
 //-----------------------------------------------------------------------------

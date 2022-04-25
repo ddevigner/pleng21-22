@@ -8,6 +8,6 @@ procedure hello is
         a := a + 1;
     end
 begin
-    c[a] := b;
+    c[c] := c;
     end
 end

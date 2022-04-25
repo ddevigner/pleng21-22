@@ -81,7 +81,7 @@ public class SymbolTable {
         }
     }
 
-    public static void insertSymbol(ArrayList<Symbol> parList, Symbol s) throws AlreadyDefinedSymbolException {
+    public void insertSymbol(ArrayList<Symbol> parList, Symbol s) throws AlreadyDefinedSymbolException {
         if (parList.contains(s)) 
             throw new AlreadyDefinedSymbolException();
         else 
