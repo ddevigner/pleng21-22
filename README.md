@@ -46,6 +46,6 @@
     ```
 
 ## 2. Practicas
-- [Practica 1](https://github.com/ddevigner/pleng21-22/tree/main/practica_1): implementacion del analizador lexico de lenguaje ADAC.
-- [Practica 2](https://github.com/ddevigner/pleng21-22/tree/main/practica_2): implementacion del analizador sintactico de lenguaje ADAC.
-
+- [Practica 1](https://github.com/ddevigner/pleng21-22/tree/main/practica_1): implementacion del analizador lexico del lenguaje ADAC.
+- [Practica 2](https://github.com/ddevigner/pleng21-22/tree/main/practica_2): implementacion del analizador sintactico del lenguaje ADAC.
+- [Practica 3](https://github.com/ddevigner/pleng21-22/tree/main/practica_2): implementacion del analizador semantico del lenguaje ADAC.
