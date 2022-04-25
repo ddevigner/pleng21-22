@@ -301,12 +301,14 @@ at.baseType = Types.CHAR;
       jj_consume_token(LBRACK);
       ind = jj_consume_token(INTVAL);
       jj_consume_token(RBRACK);
-sf.AddVar(st, at, t, Types.ARRAY, Integer.parseInt(ind.image));
+at.type = Types.ARRAY;
+                        sf.AddVar(st, at, t, Integer.parseInt(ind.image));
     } else {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case ID:{
         t = jj_consume_token(ID);
-sf.AddVar(st, at, t, Types.UNDEFINED, 0);
+at.type = Types.UNDEFINED;
+                        sf.AddVar(st, at, t , 0);
         break;
         }
       default:
@@ -840,7 +842,7 @@ if (s != null && i != s.parList.size()) {
         jj_consume_token(LBRACK);
         expression(fst);
         jj_consume_token(RBRACK);
-SemanticFunctions.comprobarVector(t, at, st, fst);
+sf.CheckExpression(st, at, t, Types.ARRAY);
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
@@ -1022,6 +1024,13 @@ at.op = Operator.BOOL_OP;
     finally { jj_save(4, xla); }
   }
 
+  static private boolean jj_3_2()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
   static private boolean jj_3_3()
  {
     if (jj_scan_token(ID)) return true;
@@ -1036,21 +1045,14 @@ at.op = Operator.BOOL_OP;
     return false;
   }
 
-  static private boolean jj_3_5()
+  static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 
-  static private boolean jj_3_2()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1()
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;

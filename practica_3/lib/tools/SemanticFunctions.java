@@ -73,10 +73,10 @@ public class SemanticFunctions {
 		if (n == 0) throw new ZeroSizeArrayException();
 	}
 
-	public void AddVar(SymbolTable st, Attributes at, Token t, Types type, int n) {
+	public void AddVar(SymbolTable st, Attributes at, Token t, int n) {
 		Symbol s;
 		try {
-			if (type == Types.ARRAY) {
+			if (at.type == Types.ARRAY) {
 				checkArrayIndexDefinition(n);
 				s = new SymbolArray(t.image, n, at.baseType, at.parClass, t.beginLine, t.beginColumn);
 			} else if (at.baseType == Types.INT) 
@@ -96,13 +96,11 @@ public class SemanticFunctions {
 	}
 
 	/* --------------------------------------------------------------------- */
+	
 	public void AddMethod(SymbolTable st, Attributes at, Token t) {
+		Symbol s;
 		if (!at.main) at.params = new ArrayList<>();
 		try {
-			/*if (at.type == Types.ARRAY) {
-				checkArrayIndexDefinition(n);
-				s = new SymbolArray(t.image, n, at.baseType, at.parClass);
-			}*/
 			if (at.type == Types.PROCEDURE)
 				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main, t.beginLine, t.beginColumn));
 			else

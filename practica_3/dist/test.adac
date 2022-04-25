@@ -2,12 +2,12 @@ procedure hello is
     character c[5];
     character b;
     integer a;
-    procedure hola(ref integer b) is
+    procedure hola(ref integer b, c) is
         integer a;
     begin
         a := a + 1;
     end
 begin
-    c[c] := c;
+    c[0] := c[0];
     end
 end
