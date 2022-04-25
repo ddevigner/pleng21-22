@@ -92,11 +92,11 @@ public class SemanticFunctions {
 		} catch (AlreadyDefinedSymbolException e) {
 			System.err.println("ERROR VARIABLE YA DEFINIDA AL AGREGAR UNA NUEVA.");
 		}
-		System.out.println(st.toString());
+		//System.out.println(st.toString());
 	}
 
 	/* --------------------------------------------------------------------- */
-	
+
 	public void AddMethod(SymbolTable st, Attributes at, Token t) {
 		Symbol s;
 		if (!at.main) at.params = new ArrayList<>();
@@ -110,7 +110,7 @@ public class SemanticFunctions {
 				") Error -- Simbolo \'" + t.image + "\' ya existente");
 			at.params = null;
 		}
-		System.out.println(st.toString());
+		//System.out.println(st.toString());
 		st.insertBlock();
 	}
 	/* --------------------------------------------------------------------- */
@@ -152,14 +152,23 @@ public class SemanticFunctions {
 	/* Evalua una expresion.                                                 */
 	/* --------------------------------------------------------------------- */
 	private void evaluateExpression(Types fst, Operator op, Types snd) throws MismatchedTypesException {
-		if (op == Operator.CMP_OP && fst != snd)
-			throw new MismatchedTypesException();
-		if (op == Operator.INT_OP && (fst != Types.INT || snd != Types.INT))
-			throw new MismatchedTypesException();
-		if (op == Operator.BOOL_OP && (fst != Types.BOOL || snd != Types.BOOL))
-			throw new MismatchedTypesException();
-		if (fst != snd) 
-			throw new MismatchedTypesException();
+		if (fst != null) {
+			if (op == Operator.CMP_OP && fst != snd)
+				throw new MismatchedTypesException();
+			if (op == Operator.INT_OP && (fst != Types.INT || snd != Types.INT))
+				throw new MismatchedTypesException();
+			if (op == Operator.BOOL_OP && (fst != Types.BOOL || snd != Types.BOOL))
+				throw new MismatchedTypesException();
+			if (fst != snd) 
+				throw new MismatchedTypesException();
+		} else {
+			if (op == Operator.BOOL_OP && snd != Types.BOOL)
+				throw new MismatchedTypesException();
+		}
+	}
+
+	private void evaluateExpression(Types fst, Types snd) throws MismatchedTypesException {
+		if (fst != snd) throw new MismatchedTypesException();
 	}
 
 	public void EvaluateExpression(Attributes at, Attributes fst, Attributes snd) {
@@ -169,6 +178,23 @@ public class SemanticFunctions {
 			at.parClass = ParameterClass.VAL;
 		}catch(MismatchedTypesException e){
 			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
+		}
+	}
+
+	public void EvaluateExpression(Attributes at, Operator op) {
+		try {
+			evaluateExpression(null, op, at.baseType);
+		} catch (MismatchedTypesException e) {
+			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
+			at.baseType = Types.UNDEFINED;
+		}
+	}
+
+	public void EvaluateExpression(Attributes at, Types type, int kind) {
+		try {
+			evaluateExpression(at.type, type);
+		} catch (MismatchedTypesException e) {
+			System.err.println("ERROR SE ESPERABA BOOL EN WHILE OR IF");
 		}
 	}
 	/* --------------------------------------------------------------------- */
@@ -214,6 +240,7 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 	/* --------------------------------------------------------------------- */
 
+	// MEMORABLE.
 	public static void AlgoID(SymbolTable st, Attributes at, Token t){
 		try {
 			Symbol aux = st.getSymbol(t.image);
@@ -230,26 +257,7 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// --
+	// LIMPIAR
 	public static boolean CheckParClass(Symbol.ParameterClass fst, Symbol.ParameterClass snd) {
 		return (fst == ParameterClass.VAL || (fst == ParameterClass.REF && snd != ParameterClass.VAL));
 	}
@@ -274,17 +282,6 @@ public class SemanticFunctions {
 		}catch(GetException e){
 			
 		}
-	}
-
-	public static void comprobarAssignableGetEX(Symbol var)throws AGetException{
-		if (var.type == Types.ARRAY) {
-			if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
-				System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
-				throw new AGetException();
-		}
-		else if (var.type == Types.CHAR && var.type != Types.INT)
-			System.err.println("Error -- Get(). Expected char or int, got " + var.type);
-			throw new AGetException();
 	}
 	
 	public static void comprobarAssignableGet(Symbol var){
@@ -356,38 +353,6 @@ public class SemanticFunctions {
 		}
 	}
 
-	public static void comprobarWhileEX(Attributes fst)throws WhileBooleanException{
-		// if(fst.type != Types.BOOL)
-		// 	System.err.println("Error -- No poner guardas no booleanas en if");
-		if(fst.type != Types.BOOL){
-			System.err.println("Error -- No poner guardas no booleanas en while");
-			throw new WhileBooleanException();
-		}
-		
-	}
-
-	public static void comprobarWhile(Attributes fst){
-		try{
-			comprobarWhileEX( fst);
-		}catch(WhileBooleanException e){
-			
-		}
-	}
-
-	public static void comprobarIfEX(Attributes fst)throws IfException{
-		if(fst.type != Types.BOOL)
-			System.err.println("Error -- No poner guardas no booleanas en if");
-			throw new IfException();
-	}
-
-	public static void comprobarIf(Attributes fst){
-		try{
-			comprobarIfEX( fst);
-		}catch(IfException e){
-			
-		}
-	}
-
 	public static void comprobarReturnIfEX(Attributes at,Attributes fst)throws ReturnIfException{
 		at.haveReturn = true;
 				if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
@@ -402,85 +367,4 @@ public class SemanticFunctions {
 			
 		}
 	}
-
-	public static void comprobarFactorEX(Attributes fst,Attributes snd,Attributes at,Attributes op)throws FactorException{
-		if (op.op == Operator.INT_OP) {
-			if (fst.type == Types.INT && snd.type == fst.type) {
-				at.type = fst.type;
-				at.parClass = ParameterClass.VAL;
-			}
-			else {
-				System.err.println("Error -- Mismatched types");
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-				throw new FactorException();
-			}
-		} else {
-			if (fst.type == Types.BOOL && snd.type == fst.type) {
-				at.type = fst.type;
-				at.parClass = ParameterClass.VAL;
-			}
-			else {
-				System.err.println("Error -- Mismatched types");
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-				throw new FactorException();
-			}
-		}
-	}
-
-	public static void comprobarFactor(Attributes fst,Attributes snd,Attributes at,Attributes op){
-		try{
-			comprobarFactorEX(fst,snd,at,op);
-		}catch(FactorException e){
-			
-		}
-	}
-
-	public static void comprobarFactorID(Token t,SymbolTable st,SymbolFunction s,Attributes at){
-		try {
-			Symbol aux = st.getSymbol(t.image);
-			if (aux.type == Symbol.Types.FUNCTION) {
-				s = (SymbolFunction) aux;
-				at.type = ((SymbolFunction) s).returnType;
-				at.parClass = ParameterClass.VAL;
-			}
-			else {
-				System.err.println("Error -- symbol \'" + t.image + "\' bad usage. Expected function, got " + aux.type.name());
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-			}
-		} catch (SymbolNotFoundException e) {
-			System.err.println("Error -- symbol \'" + t.image + "\' not found");
-			at.type = Types.UNDEFINED;
-			at.parClass = ParameterClass.NONE;
-		}
-	}
-
-	public static void comprobarVector(Token t, Attributes at,SymbolTable st,Attributes fst){
-		try {
-			Symbol aux = st.getSymbol(t.image);
-			if (aux.type == Types.ARRAY) {
-				at.type = ((SymbolArray) aux).baseType;
-				at.parClass = aux.parClass;
-			}
-			else {
-				System.err.println("Error -- symbol \'" + t.image + 
-					"\' bad usage. Expected array, got " + aux.type.name());
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-			}
-			if (fst.type != Types.INT) {
-				System.err.println("Error -- are you trying to index " +
-					"into an array with a " + fst.type.name() + "?");
-				at.type = Types.UNDEFINED;
-				at.parClass = ParameterClass.NONE;
-			}
-		} catch (SymbolNotFoundException e) {
-			System.err.println("Error -- symbol \'" + t.image + "\' not found");
-			at.type = Types.UNDEFINED;
-			at.parClass = ParameterClass.NONE;
-		}
-	}
-
 }

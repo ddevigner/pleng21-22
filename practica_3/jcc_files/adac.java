@@ -730,10 +730,7 @@ sf.EvaluateExpression(at, fst, snd);
     case NOT:{
       jj_consume_token(NOT);
       factor(at);
-if (at.type != Types.BOOL) {
-                                        System.err.println("Error -- Mismatched types.");
-                                        at.type = Types.UNDEFINED;
-                                }
+sf.EvaluateExpression(at, Operator.BOOL_OP);
       break;
       }
     case LPAREN:{
@@ -760,7 +757,7 @@ if (at.type != Types.BOOL) {
       jj_la1[28] = jj_gen;
       if (jj_2_4(2)) {
         t = jj_consume_token(ID);
-SemanticFunctions.comprobarFactorID( t, st, s, at);
+sf.CheckExpression(st, at, t, Types.FUNCTION);
         jj_consume_token(LPAREN);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case LPAREN:
@@ -1024,6 +1021,13 @@ at.op = Operator.BOOL_OP;
     finally { jj_save(4, xla); }
   }
 
+  static private boolean jj_3_4()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
   static private boolean jj_3_2()
  {
     if (jj_scan_token(ID)) return true;
@@ -1038,21 +1042,14 @@ at.op = Operator.BOOL_OP;
     return false;
   }
 
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1()
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 
-  static private boolean jj_3_5()
+  static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;

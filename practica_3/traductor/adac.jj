@@ -440,9 +440,9 @@ void instruction(Attributes at):
 					}
 				)*)? <RPAREN> <SCOLON> { SemanticFunctions.comprobarNumArgumentos(t,s, i); }
 		| 	assignable(fst) <ASS> expression(snd) <SCOLON> { sf.EvaluateExpression(fst,fst,snd); }
-		|	<WHILE> expression(fst) { SemanticFunctions.comprobarWhile(fst); }
+		|	<WHILE> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 0); }
 			<DO> instructions_list(at) <END>
-		| 	<IF> expression(fst) { SemanticFunctions.comprobarIf(fst); } 
+		| 	<IF> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 1); }
 			<THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
 		| 	<RETURN> expression(fst) <SCOLON> { SemanticFunctions.comprobarReturnIf(at,fst);}
 	} catch (ParseException e) {
@@ -512,19 +512,11 @@ void factor(Attributes at):
 	SymbolFunction s = null;
 	Token t;
 } {
-	  	<NOT> factor(at) {
-				if (at.type != Types.BOOL) {
-					System.err.println("Error -- Mismatched types.");
-					at.type = Types.UNDEFINED;
-				}
-			}
+	  	<NOT> factor(at) { sf.EvaluateExpression(at, Operator.BOOL_OP); }
 	| 	<LPAREN> expression(at) <RPAREN> 
-	| 	<INT2CHAR> <LPAREN> expression(at) <RPAREN> 
-	| 	<CHAR2INT> <LPAREN> expression(at) <RPAREN> 
-	| 	LOOKAHEAD(2) t = <ID> {
-			
-			SemanticFunctions.comprobarFactorID( t, st, s, at);
-		}
+	| 	<INT2CHAR> <LPAREN> expression(at) <RPAREN> // ((!!!!!!!!!!!!!!!!))
+	| 	<CHAR2INT> <LPAREN> expression(at) <RPAREN> // ((!!!!!!!!!!!!!!!!))
+	| 	LOOKAHEAD(2) t = <ID> { sf.CheckExpression(st, at, t, Types.FUNCTION); }
 		<LPAREN> 
 		(
 			expression(fst) {
