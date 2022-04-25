@@ -311,12 +311,12 @@ if (procType == Symbol.Types.FUNCTION)
       jj_consume_token(LBRACK);
       ind = jj_consume_token(INTVAL);
       jj_consume_token(RBRACK);
-SemanticFunctions.CreateVar(st, parList, t, Integer.parseInt(ind.image), baseType, parClass);
+sf.CreateVar(st, parList, t, Integer.parseInt(ind.image), baseType, parClass);
     } else {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case ID:{
         t = jj_consume_token(ID);
-SemanticFunctions.CreateVar(st, parList, t, 0, baseType, parClass);
+sf.CreateVar(st, parList, t, 0, baseType, parClass);
         break;
         }
       default:
@@ -382,12 +382,7 @@ if (at.type == Types.PROCEDURE && at.haveReturn)
       case GET:{
         jj_consume_token(GET);
         jj_consume_token(LPAREN);
-        var = assignable();
-try{
-                                        SemanticFunctions.comprobarGet(var);
-                                }catch(GetException e){
-
-                                }
+        assignable(fst);
         label_6:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -400,12 +395,7 @@ try{
             break label_6;
           }
           jj_consume_token(COLON);
-          assignable();
-try{
-                                                SemanticFunctions.comprobarAssignableGet(var);
-                                        }catch( AGetException e){
-
-                                        }
+          assignable(fst);
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
@@ -415,11 +405,7 @@ try{
         jj_consume_token(PUT);
         jj_consume_token(LPAREN);
         expression(fst);
-try{
-                                SemanticFunctions.comprobarPut(fst);
-                        }catch(PutException e){
-
-                        }
+SemanticFunctions.comprobarPut(fst);
         label_7:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -433,11 +419,7 @@ try{
           }
           jj_consume_token(COLON);
           expression(fst);
-try{
-                                        SemanticFunctions.comprobarPut(fst);
-                                }catch(PutException e){
-
-                                }
+SemanticFunctions.comprobarPut(fst);
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
@@ -459,11 +441,7 @@ try{
         case INT2CHAR:
         case ID:{
           expression(fst);
-try{
-                                SemanticFunctions.comprobarPutLine(fst);
-                        }catch(PutLineException e){
-
-                        }
+SemanticFunctions.comprobarPutLine(fst);
           label_8:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -477,11 +455,7 @@ try{
             }
             jj_consume_token(COLON);
             expression(fst);
-try{
-                                SemanticFunctions.comprobarPutLine(fst);
-                        }catch(PutLineException e){
-
-                        }
+SemanticFunctions.comprobarPutLine(fst);
           }
           break;
           }
@@ -504,8 +478,7 @@ try{
         jj_la1[18] = jj_gen;
         if (jj_2_2(2)) {
           t = jj_consume_token(ID);
-//Comprobar que es un procedimiento y que los parametros son correctos
-                                        SemanticFunctions.comprobarProcedimiento(t,st,s);
+SemanticFunctions.comprobarProcedimiento(t,st,s);
           jj_consume_token(LPAREN);
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case LPAREN:
@@ -575,34 +548,21 @@ if (s != null) {
           }
           jj_consume_token(RPAREN);
           jj_consume_token(SCOLON);
-try{
-                                                SemanticFunctions.comprobarNumArgumentos(t,s, i);
-                                        }catch(NArgsException e){
-
-                                        }
+SemanticFunctions.comprobarNumArgumentos(t,s, i);
         } else {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case ID:{
-            var = assignable();
+            assignable(fst);
             jj_consume_token(ASS);
-            expression(fst);
+            expression(snd);
             jj_consume_token(SCOLON);
-try{
-                                        SemanticFunctions.comprobarAssignableInst(fst,var,at);
-
-                                }catch(AInstException e){
-
-                                }
+sf.EvaluateExpression(fst,fst,snd);
             break;
             }
           case WHILE:{
             jj_consume_token(WHILE);
             expression(fst);
-try{
-                                        SemanticFunctions.comprobarWhile(fst);
-                                }catch(WhileBooleanException e){
-                                        //System.err.println("Whileeeeeeeeeeee");
-                                }
+SemanticFunctions.comprobarWhile(fst);
             jj_consume_token(DO);
             instructions_list(at);
             jj_consume_token(END);
@@ -611,11 +571,7 @@ try{
           case IF:{
             jj_consume_token(IF);
             expression(fst);
-try{
-                                SemanticFunctions.comprobarIf(fst);
-                        }catch(IfException e){
-
-                        }
+SemanticFunctions.comprobarIf(fst);
             jj_consume_token(THEN);
             instructions_list(at);
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -634,12 +590,8 @@ try{
           case RETURN:{
             jj_consume_token(RETURN);
             expression(fst);
-try{
-                                        SemanticFunctions.comprobarReturnIf(at,fst);
-                                }catch(ReturnIfException e){
-
-                                }
             jj_consume_token(SCOLON);
+SemanticFunctions.comprobarReturnIf(at,fst);
             break;
             }
           default:
@@ -656,42 +608,27 @@ panicMode(e.currentToken.next);
 
 //-----------------------------------------------------------------------------
 // Elementos asignables.
-  static final public Symbol assignable() throws ParseException {Attributes at = new Attributes();
-        Token t = null;
-    try {
-      if (jj_2_3(2)) {
+  static final public void assignable(Attributes at) throws ParseException {Token t;
+    if (jj_2_3(2)) {
+      t = jj_consume_token(ID);
+      jj_consume_token(LBRACK);
+      expression(at);
+      jj_consume_token(RBRACK);
+sf.CheckIntegerIndexing(at.baseType);
+                                sf.CheckAssignable(st, at, t, Types.ARRAY);
+    } else {
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case ID:{
         t = jj_consume_token(ID);
-        jj_consume_token(LBRACK);
-        expression(at);
-        jj_consume_token(RBRACK);
-try{
-                                        {if ("" != null) return SemanticFunctions.comprobarAssignableVector(st,t);}
-                                }catch(AVectorException e){
-                                        {if ("" != null) return null;}
-                                }
-      } else {
-        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-        case ID:{
-          t = jj_consume_token(ID);
-try{
-                                        {if ("" != null) return SemanticFunctions.comprobarAssignableNormal(st,t);}
-                                }catch(ANormalException e){
-                                        {if ("" != null) return null;}
-                                }
-          break;
-          }
-        default:
-          jj_la1[20] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
+sf.CheckAssignable(st, at, t, Types.UNDEFINED);
+        break;
         }
+      default:
+        jj_la1[20] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
       }
-    } catch (SymbolNotFoundException e) {
-System.err.println("Error -- symbol \'" + t.image + "\' in " +
-                        t.beginLine + "," + t.beginColumn + " not declared.");
-                        {if ("" != null) return null;}
     }
-    throw new Error("Missing return statement in function");
 }
 
 //-----------------------------------------------------------------------------
@@ -709,7 +646,7 @@ at.baseType = fst.baseType; at.parClass = fst.parClass;
     case GE:{
       relational_op(fst);
       simple_expr(snd);
-sf.CheckExpression(at, fst, snd);
+sf.EvaluateExpression(at, fst, snd);
       break;
       }
     default:
@@ -762,7 +699,7 @@ at.baseType = fst.baseType; at.parClass = fst.parClass;
       }
       additive_op(fst);
       term(snd);
-sf.CheckExpression(at, fst, snd);
+sf.EvaluateExpression(at, fst, snd);
     }
 }
 
@@ -788,7 +725,7 @@ at.baseType = fst.baseType; at.parClass = fst.parClass;
       }
       multiplicative_op(fst);
       factor(snd);
-sf.CheckExpression(at, fst, snd);
+sf.EvaluateExpression(at, fst, snd);
     }
 }
 
@@ -918,7 +855,7 @@ SemanticFunctions.comprobarVector(t, at, st, fst);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
           t = jj_consume_token(ID);
-SemanticFunctions.AlgoID(t, at, st);
+sf.CheckExpression(st, at, t, Types.UNDEFINED);
           break;
           }
         case INTVAL:{
@@ -1095,7 +1032,21 @@ at.op = Operator.BOOL_OP;
     finally { jj_save(4, xla); }
   }
 
+  static private boolean jj_3_2()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
   static private boolean jj_3_1()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_3()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
@@ -1109,24 +1060,10 @@ at.op = Operator.BOOL_OP;
     return false;
   }
 
-  static private boolean jj_3_3()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
   static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

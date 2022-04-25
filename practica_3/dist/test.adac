@@ -1,15 +1,8 @@
 procedure hello is
     character c[5];
+    character b;
     integer a;
-    function integer b() is
-    begin
-        return 1;
-    end
-    function integer b() is
-    begin
-        return 1;
-    end
 begin
-    c[a] := 'a';
+    c[a] := b;
     end
 end

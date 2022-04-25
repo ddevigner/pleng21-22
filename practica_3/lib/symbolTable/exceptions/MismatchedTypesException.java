@@ -14,4 +14,8 @@ public class MismatchedTypesException extends Error {
 
 	public MismatchedTypesException() {}
 
+	@Override
+    public String toString() {
+        return "MENSAJE DE MismatchedTypesException NO IMPLEMENTADO.";
+    }
 }

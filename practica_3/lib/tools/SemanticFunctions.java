@@ -22,7 +22,7 @@ import lib.tools.exceptions.*;
 public class SemanticFunctions {
 	private ErrorSemantico errSem; //clase común de errores semánticos
 
-	public static enum Operator { INT_OP, BOOL_OP, CMP_OP };
+	public static enum Operator { NOP, INT_OP, BOOL_OP, CMP_OP };
 
 	public SemanticFunctions() {
 		errSem = new ErrorSemantico();
@@ -34,36 +34,7 @@ public class SemanticFunctions {
 		return (fst == ParameterClass.VAL || (fst == ParameterClass.REF && snd != ParameterClass.VAL));
 	}
 
-	//-- Parametros.
-	public static void CreateVar(SymbolTable st, ArrayList<Symbol> parList, 
-			Token t, int nElem, Symbol.Types baseType, 
-			Symbol.ParameterClass parClass) {
-		
-		Symbol sym;
-		try {
-			if (nElem <= 0) {
-				if (baseType == Symbol.Types.INT) sym = new SymbolInt(
-					t.image, parClass, t.beginLine, t.beginColumn);
-				else if (baseType == Symbol.Types.BOOL) sym = new SymbolBool(
-					t.image, parClass, t.beginColumn, t.beginColumn);
-				else sym = new SymbolChar(
-					t.image, parClass, t.beginColumn, t.beginColumn);
-			} else 
-				sym = new SymbolArray(t.image, nElem, baseType, parClass, 
-					t.beginLine, t.beginColumn);
-
-			if (parList != null) SymbolTable.insertSymbol(parList, sym);
-			st.insertSymbol(sym);
-			//System.err.println(st.toString());
-		} catch (AlreadyDefinedSymbolException e) {
-			System.err.println("Error -- Simbol \'" + 
-				t.image + "\' already defined...");
-		}
-	}
-
-
-
-	public static void comprobarGet(Symbol var)throws GetException{
+	public static void comprobarGetEX(Symbol var)throws GetException{
 		if(var != null) {
 			if (var.type == Types.ARRAY) {
 				if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT){ 
@@ -77,9 +48,15 @@ public class SemanticFunctions {
 		}
 	}
 
+	public static void comprobarGet(Symbol var){
+		try{
+			comprobarGetEX( var);
+		}catch(GetException e){
+			
+		}
+	}
 
-
-	public static void comprobarAssignableGet(Symbol var)throws AGetException{
+	public static void comprobarAssignableGetEX(Symbol var)throws AGetException{
 		if (var.type == Types.ARRAY) {
 			if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT) 
 				System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
@@ -90,25 +67,45 @@ public class SemanticFunctions {
 			throw new AGetException();
 	}
 	
+	public static void comprobarAssignableGet(Symbol var){
+		try{
+			comprobarAssignableGetEX(var);
+		}catch(AGetException e){
+
+		}
+	}
 
 
-	public static void comprobarPut(Attributes fst)throws PutException{
+	public static void comprobarPutEX(Attributes fst)throws PutException{
 		if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
 				System.err.println("put necesita expresiones no nulas");
 				throw new PutException();
 		}
 	}
 
+	public static void comprobarPut(Attributes fst){
+		try{
+			comprobarPutEX( fst);
+		}catch(PutException e){
+
+		}
+	}
 
 
-	public static void comprobarPutLine(Attributes fst)throws PutLineException{
+	public static void comprobarPutLineEX(Attributes fst)throws PutLineException{
 		if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
 				System.err.println("put_line necesita expresiones no nulas");
 				throw new PutLineException();
 		}
 	}
 
+	public static void comprobarPutLine(Attributes fst){
+		try{
+			comprobarPutLineEX( fst);
+		}catch(PutLineException e){
 
+		}
+	}
 
 	public static void comprobarProcedimiento(Token t,SymbolTable st,SymbolProcedure s){
 		try{
@@ -128,31 +125,22 @@ public class SemanticFunctions {
 
 
 
-	public static void comprobarNumArgumentos(Token t,SymbolProcedure s,int i)throws NArgsException{
+	public static void comprobarNumArgumentosEX(Token t,SymbolProcedure s,int i)throws NArgsException{
 		if (s != null && i != s.parList.size()) {
 			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Bad number of parameters");
 			throw new NArgsException();
 		}
 	}
 
-
-
-	public static void comprobarAssignableInst(Attributes fst,Symbol var,Attributes at)throws AInstException{
-		if (var != null) {
-			if (var.type == Types.ARRAY) {
-				if (((SymbolArray) var).baseType != fst.baseType)
-					System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + ((SymbolArray) var).baseType + ", got " + at.type);
-					throw new AInstException();
-			}
-			else if (var.type != fst.baseType)
-				System.err.println("(" + var.line + "," + var.column + ") Error -- Assign. Mismatched types. Expected " + var.type + ", got " + at.type);
-				throw new AInstException();
+	public static void comprobarNumArgumentos(Token t,SymbolProcedure s,int i){
+		try{
+			comprobarNumArgumentosEX( t, s, i);
+		}catch(NArgsException e){
+			
 		}
 	}
-	
 
-
-	public static void comprobarWhile(Attributes fst)throws WhileBooleanException{
+	public static void comprobarWhileEX(Attributes fst)throws WhileBooleanException{
 		// if(fst.type != Types.BOOL)
 		// 	System.err.println("Error -- No poner guardas no booleanas en if");
 		if(fst.type != Types.BOOL){
@@ -162,46 +150,44 @@ public class SemanticFunctions {
 		
 	}
 
+	public static void comprobarWhile(Attributes fst){
+		try{
+			comprobarWhileEX( fst);
+		}catch(WhileBooleanException e){
+			
+		}
+	}
 
-
-	public static void comprobarIf(Attributes fst)throws IfException{
+	public static void comprobarIfEX(Attributes fst)throws IfException{
 		if(fst.type != Types.BOOL)
 			System.err.println("Error -- No poner guardas no booleanas en if");
 			throw new IfException();
 	}
 
-	public static void comprobarReturnIf(Attributes at,Attributes fst)throws ReturnIfException{
+	public static void comprobarIf(Attributes fst){
+		try{
+			comprobarIfEX( fst);
+		}catch(IfException e){
+			
+		}
+	}
+
+	public static void comprobarReturnIfEX(Attributes at,Attributes fst)throws ReturnIfException{
 		at.haveReturn = true;
 				if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
 					System.err.println("Error -- Expected " + at.returnType + " value, got " + fst.type);
 					throw new ReturnIfException();
 	}
 
-
-
-	public static Symbol comprobarAssignableVector(SymbolTable st,Token t)throws AVectorException{
-		Symbol s = st.getSymbol(t.image);
-				if(s.type != Types.ARRAY) {
-					System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as an array?");
-					//return null;
-					throw new AVectorException();
-				}
-				return st.getSymbol(t.image);
-	}
-
-
-
-	public static Symbol comprobarAssignableNormal(SymbolTable st,Token t)throws ANormalException{
-		Symbol s = st.getSymbol(t.image);
-		if(s.type != Types.CHAR && s.type != Types.INT && s.type != Types.BOOL) {
-			System.err.println("Error -- Assignable. Trying to use a(n) " + s.type + " as a simple var?");
-			//return null;
-			throw new ANormalException();
+	public static void comprobarReturnIf(Attributes at,Attributes fst){
+		try{
+			comprobarReturnIfEX( at, fst);
+		}catch(ReturnIfException e){
+			
 		}
-		return st.getSymbol(t.image);
 	}
 
-	public static void comprobarFactor(Attributes fst,Attributes snd,Attributes at,Attributes op)throws FactorException{
+	public static void comprobarFactorEX(Attributes fst,Attributes snd,Attributes at,Attributes op)throws FactorException{
 		if (op.op == Operator.INT_OP) {
 			if (fst.type == Types.INT && snd.type == fst.type) {
 				at.type = fst.type;
@@ -224,6 +210,14 @@ public class SemanticFunctions {
 				at.parClass = ParameterClass.NONE;
 				throw new FactorException();
 			}
+		}
+	}
+
+	public static void comprobarFactor(Attributes fst,Attributes snd,Attributes at,Attributes op){
+		try{
+			comprobarFactorEX(fst,snd,at,op);
+		}catch(FactorException e){
+			
 		}
 	}
 
@@ -277,23 +271,77 @@ public class SemanticFunctions {
 		}
 	}
 
+	/* --------------------------------------------------------------------- */
+	/* Verifica si el acceso al array es mediante un indice entero.          */
+	/* --------------------------------------------------------------------- */
+	private void checkIntegerIndexing(Types type) throws IndexNotIntegerException {
+		if (type != Types.INT) throw new IndexNotIntegerException();
+	}
 
-
-	public static void AlgoID(Token t,Attributes at,SymbolTable st){
+	public void CheckIntegerIndexing(Types type) {
 		try {
-			Symbol aux = st.getSymbol(t.image);
-			at.type = aux.type;
-			at.parClass = aux.parClass;
-		} catch (SymbolNotFoundException e) {
-			System.err.println("Error -- symbol \'" + t.image + "\' not found");
-			at.type = Types.UNDEFINED;
-			at.parClass = ParameterClass.NONE;
+			checkIntegerIndexing(type);
+		} catch (IndexNotIntegerException e) {
+			System.err.println("ERROR -- Index expression is not integer");
+		}
+	}
+	/* --------------------------------------------------------------------- */
+
+
+	/* --------------------------------------------------------------------- */
+	/* Añadir nuevo procedimiento o funcion, o variable.                     */
+	/* --------------------------------------------------------------------- */
+	public void CreateVar(SymbolTable st, ArrayList<Symbol> parList, 
+		Token t, int nElem, Symbol.Types baseType, Symbol.ParameterClass parClass) {
+
+		Symbol sym;
+		try {
+			if (nElem <= 0) {
+				if (baseType == Symbol.Types.INT) sym = new SymbolInt(
+					t.image, parClass, t.beginLine, t.beginColumn);
+				else if (baseType == Symbol.Types.BOOL) sym = new SymbolBool(
+					t.image, parClass, t.beginColumn, t.beginColumn);
+				else sym = new SymbolChar(
+					t.image, parClass, t.beginColumn, t.beginColumn);
+			} else 
+				sym = new SymbolArray(t.image, nElem, baseType, parClass, 
+					t.beginLine, t.beginColumn);
+		
+			if (parList != null) SymbolTable.insertSymbol(parList, sym);
+			st.insertSymbol(sym);
+			//System.err.println(st.toString());
+		} catch (AlreadyDefinedSymbolException e) {
+			System.err.println("Error -- Simbol \'" + 
+				t.image + "\' already defined...");
 		}
 	}
 
 	/* --------------------------------------------------------------------- */
-	/* Añadir nuevo procedimiento o funcion.                                 */
+	/* Añadir nueva variable.                                                */
 	/* --------------------------------------------------------------------- */
+	/*public void AddVar(SymbolTable st, Attributes at, Token t, Types type, int n) {
+		Symbol s;
+		try {
+			if (type == Types.ARRAY) {
+				checkArrayIndexDefinition(n);
+				s = new SymbolArray(t.image, n, at.baseType, at.paramClass);
+			} else if (at.baseType == Types.INT) 
+				s = new SymbolInt(t.image, at.paramClass);
+			else if (at.baseType == Types.CHAR)
+				s = new SymbolChar(t.image, at.paramClass);
+			else
+				s = new SymbolBool(t.image, at.paramClass);
+			if (at.params != null) st.insertSymbol(at.params, s);
+			st.insertSymbol(s);
+		} catch (ArrayBadIndexDefinedException e) {
+			System.err.println("ERROR AL USAR INDICE MENOR O IGUAL QUE 0 PARA ARRAY.");
+		} catch (AlreadyDefinedSymbolException e) {
+			System.err.println("ERROR VARIABLE YA DEFINIDA AL AGREGAR UNA NUEVA.");
+		}
+		//System.out.println(st.toString());
+	}*/
+	/* --------------------------------------------------------------------- */
+
 	public void AddMethod(SymbolTable st, Attributes at, Token t) {
 		if (!at.main) at.params = new ArrayList<>();
 		try {
@@ -311,22 +359,118 @@ public class SemanticFunctions {
 	}
 	/* --------------------------------------------------------------------- */
 
-	private void checkExpression(Types fst, Operator op, Types snd) throws MismatchedTypesException {
+	
+	/* --------------------------------------------------------------------- */
+	/* Verifica si las variables recuperadas son asignables.                 */
+	/* --------------------------------------------------------------------- */
+	public void checkAssignable(Attributes at, Symbol s, Types type) throws SymbolNotAssignableException {
+		if (type == Types.ARRAY) {
+			if (s.type != type)
+				throw new SymbolNotAssignableException();
+			else 
+				at.baseType = ((SymbolArray) s).baseType;
+		} else if(type == Types.UNDEFINED) {
+			if (s.type != Types.INT &&  s.type != Types.CHAR && s.type != Types.BOOL)
+				throw new SymbolNotAssignableException();
+			else
+				at.baseType = s.type;
+		}
+	}
+
+	public void CheckAssignable(SymbolTable st, Attributes at, Token t, Types type) {
+		Symbol s;
+		try {
+			at.baseType = Types.UNDEFINED;
+			s = st.getSymbol(t.image);
+			checkAssignable(at, s, type);
+		} catch (SymbolNotFoundException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- \'" + t.image + "\' not defined.");
+		} catch (SymbolNotAssignableException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- Expected " + type + " got " + e.toString());
+		}
+	}
+	/* --------------------------------------------------------------------- */
+
+
+	/* --------------------------------------------------------------------- */
+	/* Evalua la expresion.                                                  */
+	/* --------------------------------------------------------------------- */
+	private void evaluateExpression(Types fst, Operator op, Types snd) throws MismatchedTypesException {
 		if (op == Operator.CMP_OP && fst != snd)
 			throw new MismatchedTypesException();
 		if (op == Operator.INT_OP && (fst != Types.INT || snd != Types.INT))
 			throw new MismatchedTypesException();
 		if (op == Operator.BOOL_OP && (fst != Types.BOOL || snd != Types.BOOL))
 			throw new MismatchedTypesException();
+		if (fst != snd) 
+			throw new MismatchedTypesException();
 	}
 
-	public void CheckExpression(Attributes at, Attributes fst, Attributes snd) {
+	public void EvaluateExpression(Attributes at, Attributes fst, Attributes snd) {
 		try {
-			checkExpression(fst.baseType, fst.op, snd.baseType);
+			evaluateExpression(fst.baseType, fst.op, snd.baseType);
 			at.baseType = fst.baseType;
 			at.parClass = ParameterClass.VAL;
 		}catch(MismatchedTypesException e){
 			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
 		}
 	}
+	/* --------------------------------------------------------------------- */
+	
+	
+	/* --------------------------------------------------------------------- */
+	/* Verifica si el simbolo es una expresion con tipo asignable.           */
+	/* --------------------------------------------------------------------- */
+	private void checkExpression(Attributes at, Symbol s, Types t) throws MismatchedSymbolTypeException {
+		if (t == Types.UNDEFINED) {
+			if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL) 
+				throw new MismatchedSymbolTypeException();
+			else 
+				at.baseType = s.type;
+		} else if (t == Types.ARRAY) {
+			if (s.type != t) 
+				throw new MismatchedSymbolTypeException();
+			else 
+				at.baseType = ((SymbolArray) s).baseType;
+		} else if (t == Types.FUNCTION) {
+			if (s.type != t)
+				throw new MismatchedSymbolTypeException();
+			else 
+				at.baseType = ((SymbolFunction) s).returnType;
+		}
+	}
+
+	public void CheckExpression(SymbolTable st, Attributes at, Token t, Types type) {
+		Symbol s;
+		try {
+			at.baseType = Types.UNDEFINED;
+			s = st.getSymbol(t.image);
+			checkExpression(at, s, type);
+		} catch (SymbolNotFoundException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- \'" + t.image + "\' not defined.");
+		} catch (MismatchedSymbolTypeException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- Expected " + type + " got " + e.toString());
+		}
+	}
+	/* --------------------------------------------------------------------- */
+
+	
+	/* --------------------------------------------------------------------- */
+	/* --------------------------------------------------------------------- */
+
+	public static void AlgoID(SymbolTable st, Attributes at, Token t){
+		try {
+			Symbol aux = st.getSymbol(t.image);
+			at.type = aux.type;
+			at.parClass = aux.parClass;
+		} catch (SymbolNotFoundException e) {
+			System.err.println("Error -- symbol \'" + t.image + "\' not found");
+			at.type = Types.UNDEFINED;
+			at.parClass = ParameterClass.NONE;
+		}
+	}
+
+	/* --------------------------------------------------------------------- */
+	/* --------------------------------------------------------------------- */
+
 }

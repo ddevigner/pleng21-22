@@ -12,8 +12,11 @@ package lib.symbolTable.exceptions;
 
 public class SymbolNotFoundException extends Error {
 
-	public SymbolNotFoundException() {
+	public SymbolNotFoundException() {}
 
-	}
+	@Override
+    public String toString() {
+        return "MENSAJE DE SymbolNotFoundException NO IMPLEMENTADO.";
+    }
 
 }

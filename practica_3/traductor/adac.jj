@@ -360,9 +360,9 @@ void var(Symbol.Types baseType, Symbol.ParameterClass parClass, ArrayList<Symbol
 } 
 {
 	LOOKAHEAD(2) t = <ID> <LBRACK> ind = <INTVAL> <RBRACK> 
-		{ SemanticFunctions.CreateVar(st, parList, t, Integer.parseInt(ind.image), baseType, parClass); }
+		{ sf.CreateVar(st, parList, t, Integer.parseInt(ind.image), baseType, parClass); }
 	| 	t = <ID> 
-		{ SemanticFunctions.CreateVar(st, parList, t, 0, baseType, parClass); }
+		{ sf.CreateVar(st, parList, t, 0, baseType, parClass); }
 }
 
 //-----------------------------------------------------------------------------
@@ -403,70 +403,13 @@ void instruction(Attributes at):
 	Token t;
 } {
 	try {
-			// GET().
-		  	<GET> <LPAREN> var = assignable() {
-				try{
-					SemanticFunctions.comprobarGet(var);
-				}catch(GetException e){
-
-				}
-				
-			} 
-			(
-				<COLON> assignable() {
-					try{
-						SemanticFunctions.comprobarAssignableGet(var);
-					}catch( AGetException e){
-
-					}
-					
-				}
-			)* <RPAREN> <SCOLON>
-
-		// PROCEDIMIENTO PUT().
-		| <PUT> <LPAREN> expression(fst) {
-			try{
-				SemanticFunctions.comprobarPut(fst);
-			}catch(PutException e){
-
-			}
-			
-		}
-		(
-			<COLON> expression(fst){
-				try{
-					SemanticFunctions.comprobarPut(fst);
-				}catch(PutException e){
-
-				}
-				
-			}
-		)* <RPAREN> <SCOLON> 
-
-		//PROCEDIMIENTO PUTLINE().
-		| <PUTLINE> <LPAREN> (expression(fst){
-			try{
-				SemanticFunctions.comprobarPutLine(fst);
-			}catch(PutLineException e){
-
-			}
-			
-		} (<COLON> expression(fst){
-			try{
-				SemanticFunctions.comprobarPutLine(fst);
-			}catch(PutLineException e){
-
-			}
-		})*)? <RPAREN> <SCOLON> 
-
-		// PROCEDIMIENTO SKIPLINE.
-		| <SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
-
-		// PROCEDIMIENTOS.
-		| LOOKAHEAD(2) t = <ID> {	//Comprobar que es un procedimiento y que los parametros son correctos
-					SemanticFunctions.comprobarProcedimiento(t,st,s);
-				
-			} <LPAREN> 
+		  	<GET> <LPAREN> assignable(fst) (<COLON> assignable(fst))* <RPAREN> <SCOLON>
+		| 	<PUT> <LPAREN> expression(fst) { SemanticFunctions.comprobarPut(fst);}
+			(<COLON> expression(fst){ SemanticFunctions.comprobarPut(fst); } )* <RPAREN> <SCOLON> 
+		| 	<PUTLINE> <LPAREN> (expression(fst){ SemanticFunctions.comprobarPutLine(fst); }
+			(<COLON> expression(fst){ SemanticFunctions.comprobarPutLine(fst); })*)? <RPAREN> <SCOLON> 
+		| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
+		| 	LOOKAHEAD(2) t = <ID> { SemanticFunctions.comprobarProcedimiento(t,st,s); } <LPAREN> 
 			(
 				expression(fst) {
 					if (s != null) {
@@ -506,51 +449,13 @@ void instruction(Attributes at):
 							}
 						}
 					}
-				)*)? <RPAREN> <SCOLON> {
-					try{
-						SemanticFunctions.comprobarNumArgumentos(t,s, i);
-					}catch(NArgsException e){
-
-					}
-					
-				}
-		| 	var = assignable() <ASS> expression(fst) <SCOLON> {
-				try{
-					SemanticFunctions.comprobarAssignableInst(fst,var,at);
-
-				}catch(AInstException e){
-
-				}
-			}
-
-		// WHILE.
-		|	<WHILE> expression(fst) {
-				try{
-					SemanticFunctions.comprobarWhile(fst);
-				}catch(WhileBooleanException e){
-					//System.err.println("Whileeeeeeeeeeee");
-				}
-				
-			} <DO> instructions_list(at) <END>
-
-		// IF.
-		| 	<IF> expression(fst) {
-			try{
-				SemanticFunctions.comprobarIf(fst);
-			}catch(IfException e){
-
-			}
-				
-
-			} <THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
-		| 	<RETURN> expression(fst) {
-				try{
-					SemanticFunctions.comprobarReturnIf(at,fst);
-				}catch(ReturnIfException e){
-
-				}
-				
-			} <SCOLON>
+				)*)? <RPAREN> <SCOLON> { SemanticFunctions.comprobarNumArgumentos(t,s, i); }
+		| 	assignable(fst) <ASS> expression(snd) <SCOLON> { sf.EvaluateExpression(fst,fst,snd); }
+		|	<WHILE> expression(fst) { SemanticFunctions.comprobarWhile(fst); }
+			<DO> instructions_list(at) <END>
+		| 	<IF> expression(fst) { SemanticFunctions.comprobarIf(fst); } 
+			<THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
+		| 	<RETURN> expression(fst) <SCOLON> { SemanticFunctions.comprobarReturnIf(at,fst);}
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next);
 	}
@@ -558,35 +463,19 @@ void instruction(Attributes at):
 
 //-----------------------------------------------------------------------------
 // Elementos asignables.
-Symbol assignable():
+void assignable(Attributes at):
 {
-	Attributes at = new Attributes();
-	Token t = null;
-} 
+	Token t;
+}
 {
-	try {
 		LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK> 
-			{ 
-				try{
-					return SemanticFunctions.comprobarAssignableVector(st,t);
-				}catch(AVectorException e){
-					return null;
-				}
+			{
+				sf.CheckIntegerIndexing(at.baseType);
+				sf.CheckAssignable(st, at, t, Types.ARRAY);
 			}
-		| t = <ID>
-			{ 
-				try{
-					return SemanticFunctions.comprobarAssignableNormal(st,t);
-				}catch(ANormalException e){
-					return null;
-				}
-				
-			}
-	} catch (SymbolNotFoundException e) {
-		System.err.println("Error -- symbol \'" + t.image + "\' in " + 
-			t.beginLine + "," + t.beginColumn + " not declared.");
-			return null;
-	}
+	| 	t = <ID> 
+			{ 	sf.CheckAssignable(st, at, t, Types.UNDEFINED); }
+
 }
 
 
@@ -599,7 +488,7 @@ void expression(Attributes at):
 }
 {
 	simple_expr(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
-	(relational_op(fst) simple_expr(snd) { sf.CheckExpression(at, fst, snd); } )?
+	(relational_op(fst) simple_expr(snd) { sf.EvaluateExpression(at, fst, snd); } )?
 }
 
 //-----------------------------------------------------------------------------
@@ -611,7 +500,7 @@ void simple_expr(Attributes at):
 } 
 {
 	( <ADD> | <SUB> )? term(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
-	( additive_op(fst) term(snd) { sf.CheckExpression(at, fst, snd); })*
+	( additive_op(fst) term(snd) { sf.EvaluateExpression(at, fst, snd); })*
 } 
 
 //-----------------------------------------------------------------------------
@@ -623,7 +512,7 @@ void term(Attributes at):
 }
 {
 	factor(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
-	(multiplicative_op(fst) factor(snd) { sf.CheckExpression(at, fst, snd); })*
+	(multiplicative_op(fst) factor(snd) { sf.EvaluateExpression(at, fst, snd); })*
 }
 
 void factor(Attributes at):
@@ -697,7 +586,7 @@ void factor(Attributes at):
 				}
 			}
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> { SemanticFunctions.comprobarVector(t, at, st, fst); } 
-	| 	t = <ID> 	  { SemanticFunctions.AlgoID(t, at, st); }
+	| 	t = <ID> 	  { sf.CheckExpression(st, at, t, Types.UNDEFINED); }
 	| 	t = <INTVAL>  { at.initInt(t.image);    } 
 	| 	t = <CHARVAL> { at.initChar(t.image);   }
 	| 	t = <BOOLVAL> { at.initBool(t.image);   }

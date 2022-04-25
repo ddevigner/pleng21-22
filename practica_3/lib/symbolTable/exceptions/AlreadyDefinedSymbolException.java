@@ -12,7 +12,10 @@ package lib.symbolTable.exceptions;
 
 public class AlreadyDefinedSymbolException extends Exception {
 
-	public AlreadyDefinedSymbolException() {
+	public AlreadyDefinedSymbolException() {}
 
-	}
+	@Override
+    public String toString() {
+        return "MENSAJE DE AlreadyDefinedSymbolException NO IMPLEMENTADO.";
+    }
 }
