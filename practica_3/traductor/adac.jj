@@ -267,7 +267,7 @@ void proc_func_decl():
 	<LPAREN>
 	params_def(at) 
 	<RPAREN> 
-	<IS> 
+	<IS>
 	vars_def() 
 	procs_funcs_decl()
 	proc_func_body(at)

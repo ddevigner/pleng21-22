@@ -309,16 +309,20 @@ public class SemanticFunctions {
 		
 			if (parList != null) SymbolTable.insertSymbol(parList, sym);
 			st.insertSymbol(sym);
-			//System.err.println(st.toString());
 		} catch (AlreadyDefinedSymbolException e) {
 			System.err.println("Error -- Simbol \'" + 
 				t.image + "\' already defined...");
 		}
+		System.err.println(st.toString());
 	}
 
 	/* --------------------------------------------------------------------- */
 	/* Añadir nueva variable.                                                */
 	/* --------------------------------------------------------------------- */
+	private void checkArrayIndexDefinition(int n) throws ZeroSizeArrayException {
+		if (n == 0) throw new ZeroSizeArrayException();
+	}
+
 	/*public void AddVar(SymbolTable st, Attributes at, Token t, Types type, int n) {
 		Symbol s;
 		try {
@@ -345,6 +349,10 @@ public class SemanticFunctions {
 	public void AddMethod(SymbolTable st, Attributes at, Token t) {
 		if (!at.main) at.params = new ArrayList<>();
 		try {
+			/*if (at.type == Types.ARRAY) {
+				checkArrayIndexDefinition(n);
+				s = new SymbolArray(t.image, n, at.baseType, at.parClass);
+			}*/
 			if (at.type == Types.PROCEDURE)
 				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main, t.beginLine, t.beginColumn));
 			else
@@ -354,7 +362,7 @@ public class SemanticFunctions {
 				") Error -- Simbolo \'" + t.image + "\' ya existente");
 			at.params = null;
 		}
-		//System.out.println(st.toString());
+		System.out.println(st.toString());
 		st.insertBlock();
 	}
 	/* --------------------------------------------------------------------- */

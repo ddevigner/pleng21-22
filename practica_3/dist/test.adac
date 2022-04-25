@@ -2,6 +2,11 @@ procedure hello is
     character c[5];
     character b;
     integer a;
+    procedure hola(ref integer b) is
+        integer a;
+    begin
+        a := a + 1;
+    end
 begin
     c[a] := b;
     end
