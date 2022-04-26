@@ -151,48 +151,56 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 	/* Evalua una expresion.                                                 */
 	/* --------------------------------------------------------------------- */
-	private void evaluateExpression(Types fst, Operator op, Types snd) throws MismatchedTypesException {
-		if (fst != null) {
-			if (op == Operator.CMP_OP && fst != snd)
-				throw new MismatchedTypesException();
-			if (op == Operator.INT_OP && (fst != Types.INT || snd != Types.INT))
-				throw new MismatchedTypesException();
-			if (op == Operator.BOOL_OP && (fst != Types.BOOL || snd != Types.BOOL))
-				throw new MismatchedTypesException();
-			if (fst != snd) 
-				throw new MismatchedTypesException();
-		} else {
-			if (op == Operator.BOOL_OP && snd != Types.BOOL)
-				throw new MismatchedTypesException();
-		}
+	private void evaluateExpression(Types fst) throws MismatchedTypesException {
+		if (fst != Types.BOOL) throw new MismatchedTypesException();
 	}
-
+	
 	private void evaluateExpression(Types fst, Types snd) throws MismatchedTypesException {
-		if (fst != snd) throw new MismatchedTypesException();
+		if (fst != snd) throw new MismatchedTypesException(); 
 	}
 
-	public void EvaluateExpression(Attributes at, Attributes fst, Attributes snd) {
-		try {
-			evaluateExpression(fst.baseType, fst.op, snd.baseType);
-			at.baseType = fst.baseType;
-			at.parClass = ParameterClass.VAL;
-		}catch(MismatchedTypesException e){
-			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
+	private void evaluateExpression(Attributes at, Types fst, Operator op, Types snd) throws MismatchedTypesException {
+		if (op == Operator.CMP_OP) {
+			if (fst == snd) at.baseType = Types.BOOL;
+			else throw new MismatchedTypesException();
+		} else if (op == Operator.INT_OP || op == Operator.BOOL_OP) {
+			if ((fst == Types.INT &&  snd == Types.INT) || (fst == Types.BOOL && snd == Types.BOOL) ) 
+				at.baseType = fst;
+			else throw new MismatchedTypesException();
 		}
 	}
 
-	public void EvaluateExpression(Attributes at, Operator op) {
+	public void EvaluateExpression(Attributes at) {
 		try {
-			evaluateExpression(null, op, at.baseType);
+			evaluateExpression(at.baseType);
 		} catch (MismatchedTypesException e) {
 			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
 			at.baseType = Types.UNDEFINED;
 		}
 	}
 
+	public void EvaluateExpression(Attributes fst, Attributes snd) {
+		try {
+			evaluateExpression(fst.baseType, snd.baseType);
+		} catch(MismatchedTypesException e){
+			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
+		}
+	}
+
+
+	public void EvaluateExpression(Attributes at, Attributes fst, Attributes snd) {
+		try {
+			System.out.println("Tipo: " + at.baseType + "," + fst.baseType + "," + snd.baseType);
+			evaluateExpression(at, fst.baseType, fst.op, snd.baseType);
+		} catch(MismatchedTypesException e){
+			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
+		}
+	}
+
 	public void EvaluateExpression(Attributes at, Types type, int kind) {
 		try {
-			evaluateExpression(at.type, type);
+			System.out.println("Tipo: " + at.baseType + "," + type);
+			evaluateExpression(at.baseType, type);
 		} catch (MismatchedTypesException e) {
 			System.err.println("ERROR SE ESPERABA BOOL EN WHILE OR IF");
 		}
@@ -208,6 +216,7 @@ public class SemanticFunctions {
 			if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL) 
 				throw new MismatchedSymbolTypeException();
 			else 
+
 				at.baseType = s.type;
 		} else if (t == Types.ARRAY) {
 			if (s.type != t) 
@@ -228,6 +237,7 @@ public class SemanticFunctions {
 			at.baseType = Types.UNDEFINED;
 			s = st.getSymbol(t.image);
 			checkExpression(at, s, type);
+			at.name = s.name;
 		} catch (SymbolNotFoundException e) {
 			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- \'" + t.image + "\' not defined.");
 		} catch (MismatchedSymbolTypeException e) {
@@ -281,14 +291,6 @@ public class SemanticFunctions {
 			comprobarGetEX( var);
 		}catch(GetException e){
 			
-		}
-	}
-	
-	public static void comprobarAssignableGet(Symbol var){
-		try{
-			comprobarAssignableGetEX(var);
-		}catch(AGetException e){
-
 		}
 	}
 

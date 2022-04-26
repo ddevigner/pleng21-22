@@ -9,7 +9,9 @@ procedure hello is
         a := a + 1;
     end
 begin
-    g := true;
+    if g then
+        g := false;
+    end
     g := not false;
     c[0] := c[0];
     end

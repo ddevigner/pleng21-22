@@ -554,7 +554,7 @@ sf.EvaluateExpression(fst,fst,snd);
           case WHILE:{
             jj_consume_token(WHILE);
             expression(fst);
-SemanticFunctions.comprobarWhile(fst);
+sf.EvaluateExpression(fst, Types.BOOL, 0);
             jj_consume_token(DO);
             instructions_list(at);
             jj_consume_token(END);
@@ -563,7 +563,8 @@ SemanticFunctions.comprobarWhile(fst);
           case IF:{
             jj_consume_token(IF);
             expression(fst);
-SemanticFunctions.comprobarIf(fst);
+System.out.println("Symbol: " + fst.name + ", type: " + fst.baseType);
+                        sf.EvaluateExpression(fst, Types.BOOL, 1);
             jj_consume_token(THEN);
             instructions_list(at);
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -628,7 +629,7 @@ sf.CheckAssignable(st, at, t, Types.UNDEFINED);
   static final public void expression(Attributes at) throws ParseException {Attributes fst = new Attributes();
         Attributes snd = new Attributes();
     simple_expr(fst);
-at.baseType = fst.baseType; at.parClass = fst.parClass;
+at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case EQ:
     case NE:
@@ -645,6 +646,7 @@ sf.EvaluateExpression(at, fst, snd);
       jj_la1[21] = jj_gen;
       ;
     }
+System.out.println("Symbol: " + fst.name + ", type: " + fst.baseType);
 }
 
 //-----------------------------------------------------------------------------
@@ -675,7 +677,7 @@ sf.EvaluateExpression(at, fst, snd);
       ;
     }
     term(fst);
-at.baseType = fst.baseType; at.parClass = fst.parClass;
+at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass;
     label_10:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -700,7 +702,7 @@ sf.EvaluateExpression(at, fst, snd);
   static final public void term(Attributes at) throws ParseException {Attributes fst = new Attributes();
         Attributes snd = new Attributes();
     factor(fst);
-at.baseType = fst.baseType; at.parClass = fst.parClass;
+at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass;
     label_11:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -730,7 +732,7 @@ sf.EvaluateExpression(at, fst, snd);
     case NOT:{
       jj_consume_token(NOT);
       factor(at);
-sf.EvaluateExpression(at, Operator.BOOL_OP);
+sf.EvaluateExpression(at);
       break;
       }
     case LPAREN:{
@@ -1021,24 +1023,10 @@ at.op = Operator.BOOL_OP;
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_2()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_3()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 
@@ -1049,10 +1037,24 @@ at.op = Operator.BOOL_OP;
     return false;
   }
 
+  static private boolean jj_3_3()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
   static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_4()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

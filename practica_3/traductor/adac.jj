@@ -476,7 +476,7 @@ void expression(Attributes at):
 	Attributes snd = new Attributes();
 }
 {
-	simple_expr(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
+	simple_expr(fst) { at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
 	(relational_op(fst) simple_expr(snd) { sf.EvaluateExpression(at, fst, snd); } )?
 }
 
@@ -488,8 +488,9 @@ void simple_expr(Attributes at):
 	Attributes snd = new Attributes();
 } 
 {
-	( <ADD> | <SUB> )? term(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
+	( <ADD> | <SUB> )? term(fst) { at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
 	( additive_op(fst) term(snd) { sf.EvaluateExpression(at, fst, snd); })*
+	
 } 
 
 //-----------------------------------------------------------------------------
@@ -500,7 +501,7 @@ void term(Attributes at):
 	Attributes snd = new Attributes();
 }
 {
-	factor(fst) { at.baseType = fst.baseType; at.parClass = fst.parClass; }
+	factor(fst) { at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
 	(multiplicative_op(fst) factor(snd) { sf.EvaluateExpression(at, fst, snd); })*
 }
 
@@ -512,7 +513,7 @@ void factor(Attributes at):
 	SymbolFunction s = null;
 	Token t;
 } {
-	  	<NOT> factor(at) { sf.EvaluateExpression(at, Operator.BOOL_OP); }
+	  	<NOT> factor(at) { sf.EvaluateExpression(at); }
 	| 	<LPAREN> expression(at) <RPAREN> 
 	| 	<INT2CHAR> <LPAREN> expression(at) <RPAREN> // ((!!!!!!!!!!!!!!!!))
 	| 	<CHAR2INT> <LPAREN> expression(at) <RPAREN> // ((!!!!!!!!!!!!!!!!))
