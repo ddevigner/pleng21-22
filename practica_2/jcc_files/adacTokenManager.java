@@ -4,6 +4,10 @@ package traductor;
 
 /** Token Manager. */
 public class adacTokenManager implements adacConstants {
+        static void CommonTokenAction(Token t){
+                System.out.println("(" + t.beginLine + "," + t.beginColumn + "): "
+                        + adacConstants.tokenImage[t.kind] + " \"" + t + "\"");
+        }
 
   /** Debug output. */
   public static  java.io.PrintStream debugStream = System.out;
@@ -990,6 +994,7 @@ public static Token getNextToken()
       jjmatchedPos = -1;
       matchedToken = jjFillToken();
       matchedToken.specialToken = specialToken;
+      CommonTokenAction(matchedToken);
       return matchedToken;
    }
    image = jjimage;
@@ -1016,6 +1021,7 @@ public static Token getNextToken()
       {
          matchedToken = jjFillToken();
          matchedToken.specialToken = specialToken;
+         CommonTokenAction(matchedToken);
          return matchedToken;
       }
       else

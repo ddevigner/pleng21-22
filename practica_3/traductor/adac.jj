@@ -43,17 +43,25 @@ public class adac {
 		st.insertReservedWords(palsRes);
 	}
 
-	public static void panicMode(Token err /*, Set<Integer> sync_set*/) {
+	public static void panicMode(Token err, int type) {
 		errors++;
 		System.err.println("ERROR SINTACTICO: (" + err.beginLine + "," 
 			+ err.beginColumn + "): " + err);
 		System.err.println("----> Iniciando recuperacion en modo panico..."
 			+ "\n----> Saltando todo hasta token de conjunto de sincronizacion");
 		Token t = getNextToken();
-		while(/*!sync_set.contains(t.kind) &&*/ t.kind != SCOLON && t.kind != END && t.kind != EOF) {
-			System.err.println("Descartando token ("
+		if (type == 0) {
+			while(t.kind != EOF) {
+				System.err.println("Descartando token ("
 					+ adacConstants.tokenImage[t.kind] + "," + t.image + ")");
-			t = getNextToken();
+				t = getNextToken();
+			}
+		} else {
+			while(t.kind != SCOLON && t.kind != END && t.kind != EOF) {
+				System.err.println("Descartando token ("
+					+ adacConstants.tokenImage[t.kind] + "," + t.image + ")");
+				t = getNextToken();
+			}
 		}
 	}
 
@@ -236,13 +244,18 @@ void main() :
 	Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
 	Token t;
 } 
-{
-	<PROC> 
-	t = <ID> { sf.AddMethod(st, at, t); }
-	<IS> 
-	vars_def(at) 
-	procs_funcs_decl() 
-	proc_func_body(at)
+{	
+	try {
+		<PROC> 
+		t = <ID> { sf.AddMethod(st, at, t); }
+		<IS> 
+		vars_def(at) 
+		procs_funcs_decl() 
+		proc_func_body(at)
+	} catch (ParseException e) {
+		panicMode(e.currentToken.next, 0);
+	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -439,7 +452,7 @@ void instruction(Attributes at):
 						}
 					}
 				)*)? <RPAREN> <SCOLON> { SemanticFunctions.comprobarNumArgumentos(t,s, i); }
-		| 	assignable(fst) <ASS> expression(snd) <SCOLON> { sf.EvaluateExpression(fst,fst,snd); }
+		| 	assignable(fst) <ASS> expression(snd) <SCOLON> { sf.EvaluateExpression(fst,snd); }
 		|	<WHILE> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 0); }
 			<DO> instructions_list(at) <END>
 		| 	<IF> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 1); }
@@ -515,8 +528,21 @@ void factor(Attributes at):
 } {
 	  	<NOT> factor(at) { sf.EvaluateExpression(at); }
 	| 	<LPAREN> expression(at) <RPAREN> 
-	| 	<INT2CHAR> <LPAREN> expression(at) <RPAREN> // ((!!!!!!!!!!!!!!!!))
-	| 	<CHAR2INT> <LPAREN> expression(at) <RPAREN> // ((!!!!!!!!!!!!!!!!))
+	| 	<INT2CHAR> <LPAREN> expression(fst){
+			if(fst.baseType != Types.INT){
+				System.err.println("Error -- int2char debe recibir como parametro un integer");
+			} else {
+				at.baseType = Types.CHAR;
+			}
+		} <RPAREN>  // ((!!!!!!!!!!!!!!!!))
+	| 	<CHAR2INT> <LPAREN> expression(fst){
+			//Comprobar que at sea char
+			if(fst.baseType != Types.CHAR){
+				System.err.println("Error -- char2int debe recibir como parametro un character");
+			}else{
+				at.baseType = Types.INT;
+			}
+		} <RPAREN> // ((!!!!!!!!!!!!!!!!))
 	| 	LOOKAHEAD(2) t = <ID> { sf.CheckExpression(st, at, t, Types.FUNCTION); }
 		<LPAREN> 
 		(

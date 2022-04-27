@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 options {
-   //COMMON_TOKEN_ACTION = true;
+   COMMON_TOKEN_ACTION = true;
 }
 
 PARSER_BEGIN(adac)
@@ -20,17 +20,25 @@ public class adac {
 
 	static int errors = 0;
 
-	public static void panicMode(Token err /*, Set<Integer> sync_set*/) {
+	public static void panicMode(Token err, int type) {
 		errors++;
 		System.err.println("ERROR SINTACTICO: (" + err.beginLine + "," 
 			+ err.beginColumn + "): " + err);
 		System.err.println("----> Iniciando recuperacion en modo panico..."
 			+ "\n----> Saltando todo hasta token de conjunto de sincronizacion");
 		Token t = getNextToken();
-		while(/*!sync_set.contains(t.kind) &&*/ t.kind != SCOLON && t.kind != END && t.kind != EOF) {
-			System.err.println("Descartando token ("
+		if (type == 0) {
+			while(t.kind != EOF) {
+				System.err.println("Descartando token ("
 					+ adacConstants.tokenImage[t.kind] + "," + t.image + ")");
-			t = getNextToken();
+				t = getNextToken();
+			}
+		} else {
+			while(t.kind != SCOLON && t.kind != END && t.kind != EOF) {
+				System.err.println("Descartando token ("
+					+ adacConstants.tokenImage[t.kind] + "," + t.image + ")");
+				t = getNextToken();
+			}
 		}
 	}
 
@@ -205,7 +213,11 @@ SPECIAL_TOKEN: {
 // Declaracion del procedimiento principal del fichero.
 void main() :
 {} {
-	<PROC> <ID> <IS> vars_def() procs_funcs_decl() proc_func_body()
+	try {
+		<PROC> <ID> <IS> vars_def() procs_funcs_decl() proc_func_body() <EOF>
+	} catch (ParseException e) {
+		panicMode(e.currentToken.next, 0);
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -292,7 +304,11 @@ void var():
 // Cuerpo de procedimiento/funcion.
 void proc_func_body():
 {} {
-	<BEGIN> instructions_list() <END>
+	try {
+		<BEGIN> instructions_list() <END>
+	} catch (ParseException e) {
+		panicMode(e.currentToken.next, 1);
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -311,19 +327,15 @@ void instructions_list():
 //	- Return.
 void instruction():
 {} {
-	try {
-		  <GET> <LPAREN> expression() (<COLON> expression())* <RPAREN> <SCOLON>
-		| <PUT> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
-		| <PUTLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
-		| <SKIPLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
-		| LOOKAHEAD(2) <ID> <LPAREN> ( expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
-		| assignable() <ASS> expression() <SCOLON> 
-		| <WHILE> expression() <DO> instructions_list() <END> 
-		| <IF> expression() <THEN> instructions_list() (<ELSE> instructions_list())? <END> 
-		| <RETURN> expression() <SCOLON>
-	} catch (ParseException e) {
-		panicMode(e.currentToken.next);
-	}
+	  <GET> <LPAREN> expression() (<COLON> expression())* <RPAREN> <SCOLON>
+	| <PUT> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+	| <PUTLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+	| <SKIPLINE> <LPAREN> (expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+	| LOOKAHEAD(2) <ID> <LPAREN> ( expression() (<COLON> expression())*)? <RPAREN> <SCOLON> 
+	| assignable() <ASS> expression() <SCOLON> 
+	| <WHILE> expression() <DO> instructions_list() <END>
+	| <IF> expression() <THEN> instructions_list() (<ELSE> instructions_list())? <END>
+	| <RETURN> expression() <SCOLON>
 }
 
 //-----------------------------------------------------------------------------

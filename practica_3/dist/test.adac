@@ -12,7 +12,10 @@ begin
     if g then
         g := false;
     end
+    get(b,a,g);
     g := not false;
     c[0] := c[0];
+    a := char2int(b);
+    b := int2char(a);
     end
 end

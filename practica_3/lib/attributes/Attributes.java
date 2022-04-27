@@ -58,6 +58,7 @@ public class Attributes implements Cloneable {
         type = baseType = Types.UNDEFINED;
         main = false;
         params = null;
+        given = null;
         haveReturn = false;
         parClass = ParameterClass.NONE;
     }

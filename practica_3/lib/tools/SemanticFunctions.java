@@ -20,13 +20,15 @@ import lib.errores.*;
 import lib.tools.exceptions.*;
 
 public class SemanticFunctions {
-	private ErrorSemantico errSem; //clase común de errores semánticos
+	private ErrorSemantico se; //clase común de errores semánticos
 
 	public static enum Operator { NOP, INT_OP, BOOL_OP, CMP_OP };
 
 	public SemanticFunctions() {
-		errSem = new ErrorSemantico();
+		se = new ErrorSemantico();
 	}
+
+
 
 	/* --------------------------------------------------------------------- */
 	/* Verifica si el acceso al array es mediante un indice entero.          */
@@ -43,28 +45,6 @@ public class SemanticFunctions {
 		}
 	}
 	/* --------------------------------------------------------------------- */
-
-
-	/* --------------------------------------------------------------------- */
-	/* Añadir nuevo procedimiento o funcion, o variable.                     */
-	/* --------------------------------------------------------------------- */
-	private void evaluateDefinedReturnType(Attributes at, Types type) throws DefinedReturnTypeException {
-		if (at.type == Types.PROCEDURE && at.type != type)
-			throw new DefinedReturnTypeException(true);
-		if (at.type == Types.FUNCTION  && at.type != type)
-			throw new DefinedReturnTypeException(false);
-	}
-
-	public void EvaluateDefinedReturnType(Attributes at, Types type) {
-		try {
-			evaluateDefinedReturnType(at, type);
-		} catch (DefinedReturnTypeException e) {
-			System.err.println(e.toString());
-			at.baseType = Types.UNDEFINED;
-		}
-	}
-	/* --------------------------------------------------------------------- */
-
 
 	/* --------------------------------------------------------------------- */
 	/* Añadir nuevo procedimiento o funcion, o variable.                     */
@@ -95,8 +75,6 @@ public class SemanticFunctions {
 		//System.out.println(st.toString());
 	}
 
-	/* --------------------------------------------------------------------- */
-
 	public void AddMethod(SymbolTable st, Attributes at, Token t) {
 		Symbol s;
 		if (!at.main) at.params = new ArrayList<>();
@@ -114,10 +92,42 @@ public class SemanticFunctions {
 		st.insertBlock();
 	}
 	/* --------------------------------------------------------------------- */
+	/* --------------------------------------------------------------------- */
+	/* Procedimientos y funciones.                                           */
+	/* --------------------------------------------------------------------- */
+	/* Verifica el tipo de retorno de procedimiento o funcion.               */
+	/* --------------------------------------------------------------------- */
+	private void evaluateDefinedReturnType(Attributes at, Types type) throws DefinedReturnTypeException {
+		if (at.type == Types.PROCEDURE && at.type != type)
+			throw new DefinedReturnTypeException(true);
+		if (at.type == Types.FUNCTION  && at.type != type)
+			throw new DefinedReturnTypeException(false);
+	}
+
+	public void EvaluateDefinedReturnType(Attributes at, Types type) {
+		try {
+			evaluateDefinedReturnType(at, type);
+		} catch (DefinedReturnTypeException e) {
+			System.err.println(e.toString());
+			at.baseType = Types.UNDEFINED;
+		}
+	}
+
+	private void evaluateGet(Types type) throws ProcedureNotFoundException {
+		if (type == Types.UNDEFINED) throw new ProcedureNotFoundException(1,0);
+		if (type != Types.INT && type != Types.CHAR) throw new ProcedureNotFoundException(1,1);
+	}
+	public void EvaluateGet(Attributes at) {
+		try {
+			evaluateGet(at.baseType);
+		} catch (ProcedureNotFoundException e) {
+			System.err.println("Get incorrecto.");
+		}
+	}
 
 	
 	/* --------------------------------------------------------------------- */
-	/* Verifica si las variables recuperadas son asignables.                 */
+	/* Verifica si una variable es asignable.                                */
 	/* --------------------------------------------------------------------- */
 	public void checkAssignable(Attributes at, Symbol s, Types type) throws SymbolNotAssignableException {
 		if (type == Types.ARRAY) {
@@ -147,7 +157,7 @@ public class SemanticFunctions {
 	}
 	/* --------------------------------------------------------------------- */
 
-
+	
 	/* --------------------------------------------------------------------- */
 	/* Evalua una expresion.                                                 */
 	/* --------------------------------------------------------------------- */
@@ -187,10 +197,8 @@ public class SemanticFunctions {
 		}
 	}
 
-
 	public void EvaluateExpression(Attributes at, Attributes fst, Attributes snd) {
 		try {
-			System.out.println("Tipo: " + at.baseType + "," + fst.baseType + "," + snd.baseType);
 			evaluateExpression(at, fst.baseType, fst.op, snd.baseType);
 		} catch(MismatchedTypesException e){
 			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
@@ -199,7 +207,6 @@ public class SemanticFunctions {
 
 	public void EvaluateExpression(Attributes at, Types type, int kind) {
 		try {
-			System.out.println("Tipo: " + at.baseType + "," + type);
 			evaluateExpression(at.baseType, type);
 		} catch (MismatchedTypesException e) {
 			System.err.println("ERROR SE ESPERABA BOOL EN WHILE OR IF");
@@ -209,7 +216,7 @@ public class SemanticFunctions {
 	
 	
 	/* --------------------------------------------------------------------- */
-	/* Verifica si el simbolo es una expresion con tipo asignable.           */
+	/* Verifica si el simbolo es una expresion variable.                     */
 	/* --------------------------------------------------------------------- */
 	private void checkExpression(Attributes at, Symbol s, Types t) throws MismatchedSymbolTypeException {
 		if (t == Types.UNDEFINED) {
@@ -248,9 +255,9 @@ public class SemanticFunctions {
 
 	
 	/* --------------------------------------------------------------------- */
+	/* MEMORABLE                                                             */
 	/* --------------------------------------------------------------------- */
 
-	// MEMORABLE.
 	public static void AlgoID(SymbolTable st, Attributes at, Token t){
 		try {
 			Symbol aux = st.getSymbol(t.image);

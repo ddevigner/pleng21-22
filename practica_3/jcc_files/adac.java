@@ -548,7 +548,7 @@ SemanticFunctions.comprobarNumArgumentos(t,s, i);
             jj_consume_token(ASS);
             expression(snd);
             jj_consume_token(SCOLON);
-sf.EvaluateExpression(fst,fst,snd);
+sf.EvaluateExpression(fst,snd);
             break;
             }
           case WHILE:{
@@ -563,8 +563,7 @@ sf.EvaluateExpression(fst, Types.BOOL, 0);
           case IF:{
             jj_consume_token(IF);
             expression(fst);
-System.out.println("Symbol: " + fst.name + ", type: " + fst.baseType);
-                        sf.EvaluateExpression(fst, Types.BOOL, 1);
+sf.EvaluateExpression(fst, Types.BOOL, 1);
             jj_consume_token(THEN);
             instructions_list(at);
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -646,7 +645,6 @@ sf.EvaluateExpression(at, fst, snd);
       jj_la1[21] = jj_gen;
       ;
     }
-System.out.println("Symbol: " + fst.name + ", type: " + fst.baseType);
 }
 
 //-----------------------------------------------------------------------------
@@ -744,14 +742,25 @@ sf.EvaluateExpression(at);
     case INT2CHAR:{
       jj_consume_token(INT2CHAR);
       jj_consume_token(LPAREN);
-      expression(at);
+      expression(fst);
+if(fst.baseType != Types.INT){
+                                System.err.println("Error -- int2char debe recibir como parametro un integer");
+                        } else {
+                                at.baseType = Types.CHAR;
+                        }
       jj_consume_token(RPAREN);
       break;
       }
     case CHAR2INT:{
       jj_consume_token(CHAR2INT);
       jj_consume_token(LPAREN);
-      expression(at);
+      expression(fst);
+//Comprobar que at sea char
+                        if(fst.baseType != Types.CHAR){
+                                System.err.println("Error -- char2int debe recibir como parametro un character");
+                        }else{
+                                at.baseType = Types.INT;
+                        }
       jj_consume_token(RPAREN);
       break;
       }
