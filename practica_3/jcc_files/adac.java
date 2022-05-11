@@ -29,17 +29,25 @@ public class adac implements adacConstants {
                 st.insertReservedWords(palsRes);
         }
 
-        public static void panicMode(Token err /*, Set<Integer> sync_set*/) {
+        public static void panicMode(Token err, int type) {
                 errors++;
                 System.err.println("ERROR SINTACTICO: (" + err.beginLine + ","
                         + err.beginColumn + "): " + err);
                 System.err.println("----> Iniciando recuperacion en modo panico..."
                         + "\n----> Saltando todo hasta token de conjunto de sincronizacion");
                 Token t = getNextToken();
-                while(/*!sync_set.contains(t.kind) &&*/ t.kind != SCOLON && t.kind != END && t.kind != EOF) {
-                        System.err.println("Descartando token ("
+                if (type == 0) {
+                        while(t.kind != EOF) {
+                                System.err.println("Descartando token ("
                                         + adacConstants.tokenImage[t.kind] + "," + t.image + ")");
-                        t = getNextToken();
+                                t = getNextToken();
+                        }
+                } else {
+                        while(t.kind != SCOLON && t.kind != END && t.kind != EOF) {
+                                System.err.println("Descartando token ("
+                                        + adacConstants.tokenImage[t.kind] + "," + t.image + ")");
+                                t = getNextToken();
+                        }
                 }
         }
 
@@ -81,13 +89,18 @@ public class adac implements adacConstants {
 // Declaracion del procedimiento principal del fichero.
   static final public void main() throws ParseException {Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
         Token t;
-    jj_consume_token(PROC);
-    t = jj_consume_token(ID);
+    try {
+      jj_consume_token(PROC);
+      t = jj_consume_token(ID);
 sf.AddMethod(st, at, t);
-    jj_consume_token(IS);
-    vars_def(at);
-    procs_funcs_decl();
-    proc_func_body(at);
+      jj_consume_token(IS);
+      vars_def(at);
+      procs_funcs_decl();
+      proc_func_body(at);
+      jj_consume_token(0);
+    } catch (ParseException e) {
+panicMode(e.currentToken.next, 0);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -322,14 +335,18 @@ at.type = Types.UNDEFINED;
 //-----------------------------------------------------------------------------
 // Cuerpo de procedimiento/funcion.
   static final public void proc_func_body(Attributes at) throws ParseException {
-    jj_consume_token(BEGIN);
-    instructions_list(at);
-    jj_consume_token(END);
+    try {
+      jj_consume_token(BEGIN);
+      instructions_list(at);
+      jj_consume_token(END);
 if (at.type == Types.PROCEDURE && at.haveReturn)
-                        System.err.println("Error -- return in procedure?");
-                else if (at.type == Types.FUNCTION && !at.haveReturn)
-                        System.err.println("Error -- no return in function?");
-                st.removeBlock();
+                                System.err.println("Error -- return in procedure?");
+                        else if (at.type == Types.FUNCTION && !at.haveReturn)
+                                System.err.println("Error -- no return in function?");
+                        st.removeBlock();
+    } catch (ParseException e) {
+panicMode(e.currentToken.next, 1);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -369,36 +386,78 @@ if (at.type == Types.PROCEDURE && at.haveReturn)
         Symbol var;
         SymbolProcedure s = null;
         Token t;
-    try {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case GET:{
-        jj_consume_token(GET);
-        jj_consume_token(LPAREN);
-        assignable(fst);
-        label_6:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case COLON:{
-            ;
-            break;
-            }
-          default:
-            jj_la1[11] = jj_gen;
-            break label_6;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case GET:{
+      jj_consume_token(GET);
+      jj_consume_token(LPAREN);
+      assignable(fst);
+//Comprobar que que el asignable no es booleano
+                                if(fst.baseType != Types.INT && fst.baseType != Types.CHAR){
+                                        System.err.println("Error -- Get solo recibe variables INT o CHAR");
+                                }
+      label_6:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case COLON:{
+          ;
+          break;
           }
-          jj_consume_token(COLON);
-          assignable(fst);
+        default:
+          jj_la1[11] = jj_gen;
+          break label_6;
         }
-        jj_consume_token(RPAREN);
-        jj_consume_token(SCOLON);
-        break;
+        jj_consume_token(COLON);
+        assignable(fst);
+if(fst.baseType != Types.INT && fst.baseType != Types.CHAR){
+                                        System.err.println("Error -- Get solo recibe variables INT o CHAR");
+                        }
+      }
+      jj_consume_token(RPAREN);
+      jj_consume_token(SCOLON);
+      break;
+      }
+    case PUT:{
+      jj_consume_token(PUT);
+      jj_consume_token(LPAREN);
+      expression(fst);
+sf.CheckPut(fst);
+      label_7:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case COLON:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[12] = jj_gen;
+          break label_7;
         }
-      case PUT:{
-        jj_consume_token(PUT);
-        jj_consume_token(LPAREN);
+        jj_consume_token(COLON);
         expression(fst);
-SemanticFunctions.comprobarPut(fst);
-        label_7:
+sf.CheckPut(fst);
+      }
+      jj_consume_token(RPAREN);
+      jj_consume_token(SCOLON);
+      break;
+      }
+    case PUTLINE:{
+      jj_consume_token(PUTLINE);
+      jj_consume_token(LPAREN);
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case LPAREN:
+      case INTVAL:
+      case CHARVAL:
+      case BOOLVAL:
+      case STRING:
+      case ADD:
+      case SUB:
+      case NOT:
+      case CHAR2INT:
+      case INT2CHAR:
+      case ID:{
+        expression(fst);
+sf.CheckPutline(fst);
+        label_8:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case COLON:{
@@ -406,19 +465,35 @@ SemanticFunctions.comprobarPut(fst);
             break;
             }
           default:
-            jj_la1[12] = jj_gen;
-            break label_7;
+            jj_la1[13] = jj_gen;
+            break label_8;
           }
           jj_consume_token(COLON);
           expression(fst);
-SemanticFunctions.comprobarPut(fst);
+sf.CheckPutline(fst);
         }
-        jj_consume_token(RPAREN);
-        jj_consume_token(SCOLON);
         break;
         }
-      case PUTLINE:{
-        jj_consume_token(PUTLINE);
+      default:
+        jj_la1[14] = jj_gen;
+        ;
+      }
+      jj_consume_token(RPAREN);
+      jj_consume_token(SCOLON);
+      break;
+      }
+    case SKIPLINE:{
+      jj_consume_token(SKIPLINE);
+      jj_consume_token(LPAREN);
+      jj_consume_token(RPAREN);
+      jj_consume_token(SCOLON);
+      break;
+      }
+    default:
+      jj_la1[18] = jj_gen;
+      if (jj_2_2(2)) {
+        t = jj_consume_token(ID);
+SemanticFunctions.comprobarProcedimiento(t,st,s);
         jj_consume_token(LPAREN);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case LPAREN:
@@ -433,8 +508,23 @@ SemanticFunctions.comprobarPut(fst);
         case INT2CHAR:
         case ID:{
           expression(fst);
-SemanticFunctions.comprobarPutLine(fst);
-          label_8:
+if (s != null) {
+                                        try {
+                                                Symbol aux = s.parList.get(0);
+                                                if (!SemanticFunctions.CheckParClass(aux.parClass, fst.parClass)) {
+                                                        System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+                                                        System.err.println("\t" + aux.parClass + ", " + "got " + fst.parClass);
+                                                }
+                                                if (fst.type != aux.type) {
+                                                        System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+                                                        System.err.println("\t" + aux.type + ", got " + fst.type);
+                                                }
+                                                i++;
+                                        } catch (IndexOutOfBoundsException e) {
+                                                System.err.println("Error -- Expected \'" + s.name + "()\'");
+                                        }
+                                }
+          label_9:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
             case COLON:{
@@ -442,159 +532,89 @@ SemanticFunctions.comprobarPutLine(fst);
               break;
               }
             default:
-              jj_la1[13] = jj_gen;
-              break label_8;
+              jj_la1[15] = jj_gen;
+              break label_9;
             }
             jj_consume_token(COLON);
-            expression(fst);
-SemanticFunctions.comprobarPutLine(fst);
-          }
-          break;
-          }
-        default:
-          jj_la1[14] = jj_gen;
-          ;
-        }
-        jj_consume_token(RPAREN);
-        jj_consume_token(SCOLON);
-        break;
-        }
-      case SKIPLINE:{
-        jj_consume_token(SKIPLINE);
-        jj_consume_token(LPAREN);
-        jj_consume_token(RPAREN);
-        jj_consume_token(SCOLON);
-        break;
-        }
-      default:
-        jj_la1[18] = jj_gen;
-        if (jj_2_2(2)) {
-          t = jj_consume_token(ID);
-SemanticFunctions.comprobarProcedimiento(t,st,s);
-          jj_consume_token(LPAREN);
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case LPAREN:
-          case INTVAL:
-          case CHARVAL:
-          case BOOLVAL:
-          case STRING:
-          case ADD:
-          case SUB:
-          case NOT:
-          case CHAR2INT:
-          case INT2CHAR:
-          case ID:{
-            expression(fst);
+            expression(snd);
 if (s != null) {
                                                 try {
-                                                        Symbol aux = s.parList.get(0);
-                                                        if (!SemanticFunctions.CheckParClass(aux.parClass, fst.parClass)) {
-                                                                System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-                                                                System.err.println("\t" + aux.parClass + ", " + "got " + fst.parClass);
+                                                        Symbol aux = s.parList.get(i);
+                                                        if (!SemanticFunctions.CheckParClass(aux.parClass, snd.parClass)) {
+                                                                System.err.println("Error -- In function \'" + s.name +"\', expecting: ");
+                                                                System.err.println("\t" + aux.parClass + ", " + "got " + snd.parClass);
                                                         }
-                                                        if (fst.type != aux.type) {
+                                                        if (snd.type != aux.type) {
                                                                 System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-                                                                System.err.println("\t" + aux.type + ", got " + fst.type);
+                                                                System.err.println("\t" + aux.type + ", got " + snd.type);
                                                         }
                                                         i++;
                                                 } catch (IndexOutOfBoundsException e) {
                                                         System.err.println("Error -- Expected \'" + s.name + "()\'");
+                                                        s = null;
                                                 }
                                         }
-            label_9:
-            while (true) {
-              switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-              case COLON:{
-                ;
-                break;
-                }
-              default:
-                jj_la1[15] = jj_gen;
-                break label_9;
-              }
-              jj_consume_token(COLON);
-              expression(snd);
-if (s != null) {
-                                                        try {
-                                                                Symbol aux = s.parList.get(i);
-                                                                if (!SemanticFunctions.CheckParClass(aux.parClass, snd.parClass)) {
-                                                                        System.err.println("Error -- In function \'" + s.name +"\', expecting: ");
-                                                                        System.err.println("\t" + aux.parClass + ", " + "got " + snd.parClass);
-                                                                }
-                                                                if (snd.type != aux.type) {
-                                                                        System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-                                                                        System.err.println("\t" + aux.type + ", got " + snd.type);
-                                                                }
-                                                                i++;
-                                                        } catch (IndexOutOfBoundsException e) {
-                                                                System.err.println("Error -- Expected \'" + s.name + "()\'");
-                                                                s = null;
-                                                        }
-                                                }
-            }
+          }
+          break;
+          }
+        default:
+          jj_la1[16] = jj_gen;
+          ;
+        }
+        jj_consume_token(RPAREN);
+        jj_consume_token(SCOLON);
+SemanticFunctions.comprobarNumArgumentos(t,s, i);
+      } else {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case ID:{
+          assignable(fst);
+          jj_consume_token(ASS);
+          expression(snd);
+          jj_consume_token(SCOLON);
+sf.EvaluateExpression(fst,snd);
+          break;
+          }
+        case WHILE:{
+          jj_consume_token(WHILE);
+          expression(fst);
+sf.EvaluateExpression(fst, Types.BOOL, 0);
+          jj_consume_token(DO);
+          instructions_list(at);
+          jj_consume_token(END);
+          break;
+          }
+        case IF:{
+          jj_consume_token(IF);
+          expression(fst);
+sf.EvaluateExpression(fst, Types.BOOL, 1);
+          jj_consume_token(THEN);
+          instructions_list(at);
+          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+          case ELSE:{
+            jj_consume_token(ELSE);
+            instructions_list(at);
             break;
             }
           default:
-            jj_la1[16] = jj_gen;
+            jj_la1[17] = jj_gen;
             ;
           }
-          jj_consume_token(RPAREN);
-          jj_consume_token(SCOLON);
-SemanticFunctions.comprobarNumArgumentos(t,s, i);
-        } else {
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case ID:{
-            assignable(fst);
-            jj_consume_token(ASS);
-            expression(snd);
-            jj_consume_token(SCOLON);
-sf.EvaluateExpression(fst,snd);
-            break;
-            }
-          case WHILE:{
-            jj_consume_token(WHILE);
-            expression(fst);
-sf.EvaluateExpression(fst, Types.BOOL, 0);
-            jj_consume_token(DO);
-            instructions_list(at);
-            jj_consume_token(END);
-            break;
-            }
-          case IF:{
-            jj_consume_token(IF);
-            expression(fst);
-sf.EvaluateExpression(fst, Types.BOOL, 1);
-            jj_consume_token(THEN);
-            instructions_list(at);
-            switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-            case ELSE:{
-              jj_consume_token(ELSE);
-              instructions_list(at);
-              break;
-              }
-            default:
-              jj_la1[17] = jj_gen;
-              ;
-            }
-            jj_consume_token(END);
-            break;
-            }
-          case RETURN:{
-            jj_consume_token(RETURN);
-            expression(fst);
-            jj_consume_token(SCOLON);
-SemanticFunctions.comprobarReturnIf(at,fst);
-            break;
-            }
-          default:
-            jj_la1[19] = jj_gen;
-            jj_consume_token(-1);
-            throw new ParseException();
+          jj_consume_token(END);
+          break;
           }
+        case RETURN:{
+          jj_consume_token(RETURN);
+          expression(fst);
+          jj_consume_token(SCOLON);
+SemanticFunctions.comprobarReturnIf(at,fst);
+          break;
+          }
+        default:
+          jj_la1[19] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
         }
       }
-    } catch (ParseException e) {
-panicMode(e.currentToken.next);
     }
 }
 
@@ -743,11 +763,7 @@ sf.EvaluateExpression(at);
       jj_consume_token(INT2CHAR);
       jj_consume_token(LPAREN);
       expression(fst);
-if(fst.baseType != Types.INT){
-                                System.err.println("Error -- int2char debe recibir como parametro un integer");
-                        } else {
-                                at.baseType = Types.CHAR;
-                        }
+sf.CheckInt2Char(at, fst);
       jj_consume_token(RPAREN);
       break;
       }
@@ -755,12 +771,7 @@ if(fst.baseType != Types.INT){
       jj_consume_token(CHAR2INT);
       jj_consume_token(LPAREN);
       expression(fst);
-//Comprobar que at sea char
-                        if(fst.baseType != Types.CHAR){
-                                System.err.println("Error -- char2int debe recibir como parametro un character");
-                        }else{
-                                at.baseType = Types.INT;
-                        }
+sf.CheckChar2Int(at, fst);
       jj_consume_token(RPAREN);
       break;
       }
@@ -1032,13 +1043,6 @@ at.op = Operator.BOOL_OP;
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_2()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
@@ -1050,6 +1054,13 @@ at.op = Operator.BOOL_OP;
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_2()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

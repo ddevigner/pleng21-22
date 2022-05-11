@@ -17,15 +17,19 @@ import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
 import lib.symbolTable.exceptions.*;
 import lib.errores.*;
-import lib.tools.exceptions.*;
 
 public class SemanticFunctions {
 	private ErrorSemantico se; //clase común de errores semánticos
-
+	
 	public static enum Operator { NOP, INT_OP, BOOL_OP, CMP_OP };
 
 	public SemanticFunctions() {
 		se = new ErrorSemantico();
+		
+	}
+
+	public ErrorSemantico getErrorSemantico(){
+		return se;
 	}
 
 
@@ -47,7 +51,7 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 
 	/* --------------------------------------------------------------------- */
-	/* Añadir nuevo procedimiento o funcion, o variable.                     */
+	/* Anyadir nuevo procedimiento o funcion, o variable.                     */
 	/* --------------------------------------------------------------------- */
 	private void checkArrayIndexDefinition(int n) throws ZeroSizeArrayException {
 		if (n == 0) throw new ZeroSizeArrayException();
@@ -114,16 +118,114 @@ public class SemanticFunctions {
 	}
 
 	private void evaluateGet(Types type) throws ProcedureNotFoundException {
-		if (type == Types.UNDEFINED) throw new ProcedureNotFoundException(1,0);
 		if (type != Types.INT && type != Types.CHAR) throw new ProcedureNotFoundException(1,1);
 	}
+
 	public void EvaluateGet(Attributes at) {
 		try {
 			evaluateGet(at.baseType);
 		} catch (ProcedureNotFoundException e) {
-			System.err.println("Get incorrecto.");
+			System.err.println("Error -- Get solo recibe variables INT o CHAR");
 		}
 	}
+
+	private void evaluatePut(Types type) throws PutException {
+		if(type == Types.UNDEFINED) throw new PutException();
+	}
+
+	public void EvaluatePut(Attributes at){
+		try{
+			evaluatePut(at.baseType);
+		}catch (PutException e){
+			System.err.println("put necesita expresiones no nulas");
+		}
+	}
+
+	private void evaluatePutline(Types type) throws PutlineException {
+		if (type == Types.UNDEFINED) throw new PutlineException();
+	}
+
+	public void EvaluatePutline(Attributes at) {
+		try {
+			evaluatePutline(at.baseType);
+		} catch (PutlineException e) {
+			System.err.println("Mensaje de error de que putline esta mal.");
+		}
+	}
+
+	
+	
+	public static void comprobarProcedimiento(Token t,SymbolTable st,SymbolProcedure s){
+		try{
+			Symbol aux = st.getSymbol(t.image);
+			if(aux.type != Types.PROCEDURE) {
+				if(aux.type == Types.FUNCTION) System.err.println("Warn -- Se esta ignorando el valor devuelto");
+				else {System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Se debe invocar un procedimiento");}
+			} else {
+				s = (SymbolProcedure) aux;
+				if (s.main)
+					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- You can not call the main procedure");
+			}
+		} catch (SymbolNotFoundException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
+		}
+	}
+
+	private boolean evaluateParClass(ParameterClass a, ParameterClass b) {
+		if (a == ParameterClass.REF && b != ParameterClass.VAL) return true;
+		if (a == ParameterClass.VAL && b != ParameterClass.REF) return true;
+		return false;
+	}
+
+	private void evaluateProcedure(Symbol s, Attributes at) throws MismatchedSymbolTypeException, MainProcedureCallException, ProcedureNotFoundException {
+		if (s.type != Types.PROCEDURE) throw new MismatchedSymbolTypeException();
+		SymbolProcedure p = (SymbolProcedure s);
+		if (p.main) throw new MainProcedureCallException();
+		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException();
+		for (int i = 0; i < p.parList.size(); i++) {
+			if (p.parList[i].baseType != at.given[0].baseType || !evaluateParClass(p.parList[i].parClass, at.given[i].parClass))
+				throw new ProcedureNotFoundException();
+		}
+	}
+	
+	public void EvaluateProcedure(SymbolTable st, Attributes at) {
+		try {
+			Symbol s = st.getSmybol(at.name); 
+			evaluateProcedure(s, at);
+		} catch (SymbolNotFoundException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
+		} catch (ProcedureNotFoundException e) {
+			System.err.println("Procedimiento no encontrao.");
+		} catch (MainProcedureCallException e) {
+			System.err.println("Procedimiento main? Que coño haces?");
+		} catch (MismatchedSymbolTypeException e) {
+			System.err.println("Inutil, utilizas un simbolo que no es procedimiento como procedimiento.");
+		}
+	}
+
+	private void evaluateFunction(Symbol s, Attributes at) throws MismatchedSymbolTypeException, FunctionNotFoundException {
+		if (s.type != Types.FUNCTION) throw new MismatchedSymbolTypeException();
+		SymbolFunction f = (SymbolFunction s);
+		if (p.parList.size() != at.given.size()) throw new FunctionNotFoundException();
+		for (int i = 0; i < p.parList.size(); i++) {
+			if (p.parList[i].baseType != at.given[0].baseType || !evaluateParClass(p.parList[i].parClass, at.given[i].parClass))
+				throw new FunctionNotFoundException();
+		}
+	}
+	
+	public void EvaluateFunction(SymbolTable st, Attributes at) {
+		try {
+			Symbol s = st.getSmybol(at.name); 
+			evaluateFunction(s, at);
+		} catch (SymbolNotFoundException e) {
+			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
+		} catch (FunctionNotFoundException e) {
+			System.err.println("Funcion no encontraa.");
+		} catch (MismatchedSymbolTypeException e) {
+			System.err.println("Inutil, utilizas un simbolo que no es procedimiento como procedimiento.");
+		}
+	}
+
 
 	
 	/* --------------------------------------------------------------------- */
@@ -174,7 +276,7 @@ public class SemanticFunctions {
 			if (fst == snd) at.baseType = Types.BOOL;
 			else throw new MismatchedTypesException();
 		} else if (op == Operator.INT_OP || op == Operator.BOOL_OP) {
-			if ((fst == Types.INT &&  snd == Types.INT) || (fst == Types.BOOL && snd == Types.BOOL) ) 
+			if ((fst == Types.INT && snd == Types.INT) || (fst == Types.BOOL && snd == Types.BOOL) ) 
 				at.baseType = fst;
 			else throw new MismatchedTypesException();
 		}
@@ -202,6 +304,7 @@ public class SemanticFunctions {
 			evaluateExpression(at, fst.baseType, fst.op, snd.baseType);
 		} catch(MismatchedTypesException e){
 			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
+			fst.baseType = at.baseType = Types.UNDEFINED;
 		}
 	}
 
@@ -252,7 +355,31 @@ public class SemanticFunctions {
 		}
 	}
 	/* --------------------------------------------------------------------- */
+	private void checkInt2Char(Attributes at, Attributes fst) throws MismatchedTypesException {
+		if(fst.baseType != Types.INT) throw new MismatchedTypesException();
+		else at.baseType = Types.CHAR;
+	}
 
+	public void CheckInt2Char(Attributes at, Attributes fst) {
+		try {
+			checkInt2Char(at, fst);
+		} catch (MismatchedTypesException e) {
+			System.err.println("Error -- int2char debe recibir como parametro un integer");
+		}
+	}
+
+	private void checkChar2Int(Attributes at, Attributes fst) throws MismatchedTypesException {
+		if(fst.baseType != Types.CHAR) throw new MismatchedTypesException();
+		else at.baseType = Types.INT;
+	}
+
+	public void CheckChar2Int(Attributes at, Attributes fst) {
+		try {
+			checkChar2Int(at, fst);
+		} catch (MismatchedTypesException e) {
+			System.err.println("Error -- char2int debe recibir como parametro un character");
+		}
+	}
 	
 	/* --------------------------------------------------------------------- */
 	/* MEMORABLE                                                             */
@@ -272,96 +399,6 @@ public class SemanticFunctions {
 
 	/* --------------------------------------------------------------------- */
 	/* --------------------------------------------------------------------- */
-
-
-	// LIMPIAR
-	public static boolean CheckParClass(Symbol.ParameterClass fst, Symbol.ParameterClass snd) {
-		return (fst == ParameterClass.VAL || (fst == ParameterClass.REF && snd != ParameterClass.VAL));
-	}
-
-	public static void comprobarGetEX(Symbol var)throws GetException{
-		if(var != null) {
-			if (var.type == Types.ARRAY) {
-				if(((SymbolArray) var).baseType != Types.CHAR && ((SymbolArray) var).baseType != Types.INT){ 
-					System.err.println("Error -- Get(). Expected char or int, got " + ((SymbolArray) var).baseType);
-					throw new GetException();
-					}
-			}
-			else if (var.type == Types.CHAR && var.type != Types.INT)
-				System.err.println("Error -- Get(). Expected char or int, got " + var.type);
-				throw new GetException();
-		}
-	}
-
-	public static void comprobarGet(Symbol var){
-		try{
-			comprobarGetEX( var);
-		}catch(GetException e){
-			
-		}
-	}
-
-	public static void comprobarPutEX(Attributes fst)throws PutException{
-		if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
-				System.err.println("put necesita expresiones no nulas");
-				throw new PutException();
-		}
-	}
-
-	public static void comprobarPut(Attributes fst){
-		try{
-			comprobarPutEX( fst);
-		}catch(PutException e){
-
-		}
-	}
-
-	public static void comprobarPutLineEX(Attributes fst)throws PutLineException{
-		if(fst.type == Types.UNDEFINED){	//Se le pasa una expresion indefinida
-				System.err.println("put_line necesita expresiones no nulas");
-				throw new PutLineException();
-		}
-	}
-
-	public static void comprobarPutLine(Attributes fst){
-		try{
-			comprobarPutLineEX( fst);
-		}catch(PutLineException e){
-
-		}
-	}
-
-	public static void comprobarProcedimiento(Token t,SymbolTable st,SymbolProcedure s){
-		try{
-			Symbol aux = st.getSymbol(t.image);
-			if(aux.type != Types.PROCEDURE) {
-				if(aux.type == Types.FUNCTION) System.err.println("Warn -- Se esta ignorando el valor devuelto");
-				else {System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Se debe invocar un procedimiento");}
-			} else {
-				s = (SymbolProcedure) aux;
-				if (s.main)
-					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- You can not call the main procedure");
-			}
-		} catch (SymbolNotFoundException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
-		}
-	}
-
-	public static void comprobarNumArgumentosEX(Token t,SymbolProcedure s,int i)throws NArgsException{
-		if (s != null && i != s.parList.size()) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Bad number of parameters");
-			throw new NArgsException();
-		}
-	}
-
-	public static void comprobarNumArgumentos(Token t,SymbolProcedure s,int i){
-		try{
-			comprobarNumArgumentosEX( t, s, i);
-		}catch(NArgsException e){
-			
-		}
-	}
-
 	public static void comprobarReturnIfEX(Attributes at,Attributes fst)throws ReturnIfException{
 		at.haveReturn = true;
 				if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
@@ -377,3 +414,50 @@ public class SemanticFunctions {
 		}
 	}
 }
+
+
+
+// Cositas. NO BORRAR.
+/*
+{
+	if (s != null) {
+		try {
+			Symbol aux = s.parList.get(i);
+			if (!SemanticFunctions.CheckParClass(aux.parClass, snd.parClass)) {
+				System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+				System.err.println("\t" + aux.parClass + ", " + "got " + snd.parClass);
+			}
+			if (snd.type != aux.type) {
+				System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
+				System.err.println("\t" + aux.type + ", got " + snd.type);
+			} 
+			i++;
+		} catch (IndexOutOfBoundsException e) {
+			System.err.println("Error -- Expected \'" + s.name + "()\'");
+			s = null;
+		}
+	}
+}
+{
+	if (s != null) {
+		try {
+			Symbol aux = s.parList.get(0);
+			if (!SemanticFunctions.CheckParClass(aux.parClass, fst.parClass)) {
+				System.err.println("Error -- In function \'" + s.name +
+					"\', expecting: ");
+				System.err.println("\t" + aux.parClass + ", " + 
+					"got " + fst.parClass);
+			}
+			if (fst.type != aux.type) {
+				System.err.println("Error -- In function \'" + s.name +
+					"\', expecting: ");
+				System.err.println("\t" + aux.type + ", got " + 
+					fst.type);
+			}
+		i++;
+		} catch (IndexOutOfBoundsException e) {
+			System.err.println("Error -- Expected \'" + s.name + "()\'");
+		}
+	}
+} 
+*/

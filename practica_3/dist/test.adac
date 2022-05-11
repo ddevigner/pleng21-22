@@ -8,14 +8,30 @@ procedure hello is
     begin
         a := a + 1;
     end
+
+    function integer comprobar(val integer a,b) is
+    begin
+        return a + b;
+    end
+
 begin
     if g then
         g := false;
     end
+    c[0] := 'c';
     get(b,a,g);
     g := not false;
     c[0] := c[0];
-    a := char2int(b);
-    b := int2char(a);
-    end
+    --b := char2int(b);
+    --a := int2char(a);
+    get(b);
+    get(a);
+    get(g);
+    --get(c);
+    get(c[1]);
+    a = comprobar(a,a);
+    a = comprobar(b,b);
+    b = comprobar(b,b);
+    b = comprobar(a,a);
+    b = comprobar(b,b,b);
 end

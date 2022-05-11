@@ -86,7 +86,7 @@ public class adac {
 			}
 			// Invoca símbolo inicial de la gramática.
 			parser.main();
-			if (errors == 0) System.out.println("Compilacion con exito.");
+			if (errors == 0 && sf.getErrorSemantico().getContadorErrores() == 0) System.out.println("Compilacion con exito.");
 			else System.out.println("Compilacion con errores.");
 		} catch (java.io.FileNotFoundException e) {
 			System.err.println ("Fichero " + args[0] + " no encontrado.");
@@ -252,6 +252,7 @@ void main() :
 		vars_def(at) 
 		procs_funcs_decl() 
 		proc_func_body(at)
+		<EOF>
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next, 0);
 	}
@@ -371,15 +372,20 @@ void var(Attributes at):
 // Cuerpo de procedimiento/funcion.
 void proc_func_body(Attributes at):
 {} {
-	<BEGIN> 
-	instructions_list(at) 
-	<END> {
-		if (at.type == Types.PROCEDURE && at.haveReturn) 
-			System.err.println("Error -- return in procedure?");
-		else if (at.type == Types.FUNCTION && !at.haveReturn)
-			System.err.println("Error -- no return in function?");
-		st.removeBlock(); 
+	try {
+		<BEGIN> 
+		instructions_list(at) 
+		<END> {
+			if (at.type == Types.PROCEDURE && at.haveReturn) 
+				System.err.println("Error -- return in procedure?");
+			else if (at.type == Types.FUNCTION && !at.haveReturn)
+				System.err.println("Error -- no return in function?");
+			st.removeBlock(); 
+		}
+	} catch (ParseException e) {
+		panicMode(e.currentToken.next, 1);
 	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -399,68 +405,26 @@ void instructions_list(Attributes at):
 void instruction(Attributes at):
 {
 	Attributes fst = new Attributes(), snd = new Attributes();
-	int i = 0;
-	Symbol var;
-	SymbolProcedure s = null;
 	Token t;
 } {
-	try {
-		  	<GET> <LPAREN> assignable(fst) (<COLON> assignable(fst))* <RPAREN> <SCOLON>
-		| 	<PUT> <LPAREN> expression(fst) { SemanticFunctions.comprobarPut(fst);}
-			(<COLON> expression(fst){ SemanticFunctions.comprobarPut(fst); } )* <RPAREN> <SCOLON> 
-		| 	<PUTLINE> <LPAREN> (expression(fst){ SemanticFunctions.comprobarPutLine(fst); }
-			(<COLON> expression(fst){ SemanticFunctions.comprobarPutLine(fst); })*)? <RPAREN> <SCOLON> 
-		| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
-		| 	LOOKAHEAD(2) t = <ID> { SemanticFunctions.comprobarProcedimiento(t,st,s); } <LPAREN> 
-			(
-				expression(fst) {
-					if (s != null) {
-						try {
-							Symbol aux = s.parList.get(0);
-							if (!SemanticFunctions.CheckParClass(aux.parClass, fst.parClass)) {
-								System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-								System.err.println("\t" + aux.parClass + ", " + "got " + fst.parClass);
-							}
-							if (fst.type != aux.type) {
-								System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-								System.err.println("\t" + aux.type + ", got " + fst.type);
-							}
-							i++;
-						} catch (IndexOutOfBoundsException e) {
-							System.err.println("Error -- Expected \'" + s.name + "()\'");
-						}
-					}
-				}
-				(
-					<COLON> expression(snd) {
-						if (s != null) {
-							try {
-								Symbol aux = s.parList.get(i);
-								if (!SemanticFunctions.CheckParClass(aux.parClass, snd.parClass)) {
-									System.err.println("Error -- In function \'" + s.name +"\', expecting: ");
-									System.err.println("\t" + aux.parClass + ", " + "got " + snd.parClass);
-								}
-								if (snd.type != aux.type) {
-									System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-									System.err.println("\t" + aux.type + ", got " + snd.type);
-								} 
-								i++;
-							} catch (IndexOutOfBoundsException e) {
-								System.err.println("Error -- Expected \'" + s.name + "()\'");
-								s = null;
-							}
-						}
-					}
-				)*)? <RPAREN> <SCOLON> { SemanticFunctions.comprobarNumArgumentos(t,s, i); }
-		| 	assignable(fst) <ASS> expression(snd) <SCOLON> { sf.EvaluateExpression(fst,snd); }
-		|	<WHILE> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 0); }
-			<DO> instructions_list(at) <END>
-		| 	<IF> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 1); }
-			<THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
-		| 	<RETURN> expression(fst) <SCOLON> { SemanticFunctions.comprobarReturnIf(at,fst);}
-	} catch (ParseException e) {
-		panicMode(e.currentToken.next);
-	}
+	  	<GET> <LPAREN> assignable(fst) { sf.EvaluateGet(fst); }
+		(<COLON> assignable(fst) { sf.EvaluateGet(fst); } )* <RPAREN> <SCOLON>
+	| 	<PUT> <LPAREN> expression(fst) { sf.EvaluatePut(fst);}
+		(<COLON> expression(fst){ sf.EvaluatePut(fst); } )* <RPAREN> <SCOLON> 
+	| 	<PUTLINE> <LPAREN> (expression(fst){ sf.EvaluatePutline(fst); }
+		(<COLON> expression(fst){ sf.EvaluatePutline(fst); })*)? <RPAREN> <SCOLON> 
+	| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
+	| 	LOOKAHEAD(2) t = <ID> { fst.name = t.image; } 
+		<LPAREN> (
+			expression(snd) { fst.given.add(snd); } 
+			(<COLON> {snd = new Attributes(); } expression(snd) {fst.given.add(snd); })*
+		)? <RPAREN> <SCOLON> { sf.EvaluateProcedure(st, fst); }
+	| 	assignable(fst) <ASS> expression(snd) <SCOLON> { sf.EvaluateExpression(fst,snd); }
+	|	<WHILE> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 0); }
+		<DO> instructions_list(at) <END>
+	| 	<IF> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 1); }
+		<THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
+	| 	<RETURN> expression(fst) <SCOLON> { SemanticFunctions.comprobarReturnIf(at,fst);}
 }
 
 //-----------------------------------------------------------------------------
@@ -470,13 +434,11 @@ void assignable(Attributes at):
 	Token t;
 }
 {
-		LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK> 
-			{
-				sf.CheckIntegerIndexing(at.baseType);
-				sf.CheckAssignable(st, at, t, Types.ARRAY);
-			}
-	| 	t = <ID> 
-			{ 	sf.CheckAssignable(st, at, t, Types.UNDEFINED); }
+		LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK> {
+			sf.CheckIntegerIndexing(at.baseType);
+			sf.CheckAssignable(st, at, t, Types.ARRAY);
+		}
+	| 	t = <ID> { sf.CheckAssignable(st, at, t, Types.UNDEFINED); }
 
 }
 
@@ -528,73 +490,14 @@ void factor(Attributes at):
 } {
 	  	<NOT> factor(at) { sf.EvaluateExpression(at); }
 	| 	<LPAREN> expression(at) <RPAREN> 
-	| 	<INT2CHAR> <LPAREN> expression(fst){
-			if(fst.baseType != Types.INT){
-				System.err.println("Error -- int2char debe recibir como parametro un integer");
-			} else {
-				at.baseType = Types.CHAR;
-			}
-		} <RPAREN>  // ((!!!!!!!!!!!!!!!!))
-	| 	<CHAR2INT> <LPAREN> expression(fst){
-			//Comprobar que at sea char
-			if(fst.baseType != Types.CHAR){
-				System.err.println("Error -- char2int debe recibir como parametro un character");
-			}else{
-				at.baseType = Types.INT;
-			}
-		} <RPAREN> // ((!!!!!!!!!!!!!!!!))
-	| 	LOOKAHEAD(2) t = <ID> { sf.CheckExpression(st, at, t, Types.FUNCTION); }
-		<LPAREN> 
-		(
-			expression(fst) {
-				if (s != null) {
-					try {
-						Symbol aux = s.parList.get(0);
-						if (!SemanticFunctions.CheckParClass(aux.parClass, fst.parClass)) {
-							System.err.println("Error -- In function \'" + s.name +
-								"\', expecting: ");
-							System.err.println("\t" + aux.parClass + ", " + 
-								"got " + fst.parClass);
-						}
-						if (fst.type != aux.type) {
-							System.err.println("Error -- In function \'" + s.name +
-								"\', expecting: ");
-							System.err.println("\t" + aux.type + ", got " + 
-								fst.type);
-						}
-					i++;
-					} catch (IndexOutOfBoundsException e) {
-						System.err.println("Error -- Expected \'" + s.name + "()\'");
-					}
-				}
-
-			} 
-			(<COLON> expression(snd) {
-				if (s != null) {
-					try {
-						Symbol aux = s.parList.get(i);
-						if (!SemanticFunctions.CheckParClass(aux.parClass, snd.parClass)) {
-							System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-							System.err.println("\t" + aux.parClass + ", " + "got " + snd.parClass);
-						}
-						if (snd.type != aux.type) {
-							System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-							System.err.println("\t" + aux.type + ", got " + snd.type);
-						} 
-						i++;
-					} catch (IndexOutOfBoundsException e) {
-						System.err.println("Error -- Expected \'" + s.name + "()\'");
-						s = null;
-					}
-				}
-			})*)? <RPAREN> {
-				if (s != null && i != s.parList.size()) {
-					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") " + s.toString());
-					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- Bad number of parameters");
-				}
-			}
-	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK>
-			{ sf.CheckExpression(st, at, t, Types.ARRAY); } 
+	| 	<INT2CHAR> <LPAREN> expression(fst) { sf.CheckInt2Char(at, fst); } <RPAREN>
+	| 	<CHAR2INT> <LPAREN> expression(fst) { sf.CheckChar2Int(at, fst); } <RPAREN>
+	| 	LOOKAHEAD(2) t = <ID> { fst.name = t.image; ); }
+		<LPAREN> (
+			expression(snd) { fst.given.add(snd);}
+			(<COLON> {snd = new Attributes(); } expression(snd) { fst.given.add(snd); })*
+		)? <RPAREN> { sf.EvaluateFunction(st, fst); }
+	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> { sf.CheckExpression(st, at, t, Types.ARRAY); } 
 	| 	t = <ID> 	  { sf.CheckExpression(st, at, t, Types.UNDEFINED); }
 	| 	t = <INTVAL>  { at.initInt(t.image);    } 
 	| 	t = <CHARVAL> { at.initChar(t.image);   }

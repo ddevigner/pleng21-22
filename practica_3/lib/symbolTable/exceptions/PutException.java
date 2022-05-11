@@ -8,11 +8,11 @@
  * Asignatura: Procesadores de Lenguajes, curso 2021-2022, basado en código del 19-20
  **********************************************************************************/
 
-package lib.tools.exceptions;
+package lib.symbolTable.exceptions;
 
-public class AGetException extends Exception {
+public class PutException extends Exception {
 
-	public AGetException() {
+	public PutException() {
 
 	}
 }

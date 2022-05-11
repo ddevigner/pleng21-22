@@ -8,11 +8,11 @@
  * Asignatura: Procesadores de Lenguajes, curso 2021-2022, basado en código del 19-20
  **********************************************************************************/
 
-package lib.tools.exceptions;
+package lib.symbolTable.exceptions;
 
-public class WhileBooleanException extends Exception {
+public class PutlineException extends Exception {
 
-	public WhileBooleanException() {
+	public PutlineException() {
 
 	}
 }
