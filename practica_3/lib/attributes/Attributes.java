@@ -36,8 +36,7 @@ public class Attributes implements Cloneable {
     // Methods Attributes.
     public boolean main;
     public ArrayList<Symbol> params;
-    public ArrayList<Attributes> given; 
-    public Symbol.Types returnType;
+    public ArrayList<Attributes> given;
     public boolean haveReturn;
 
     // Variables Attributes.
@@ -58,9 +57,14 @@ public class Attributes implements Cloneable {
         type = baseType = Types.UNDEFINED;
         main = false;
         params = null;
-        given = null;
+        given = new ArrayList<>();
         haveReturn = false;
         parClass = ParameterClass.NONE;
+    }
+
+       // Method attributes.
+       public Attributes(ArrayList<Symbol> params) {
+        this.params = params;
     }
 
     // Method attributes.
@@ -77,12 +81,6 @@ public class Attributes implements Cloneable {
         this.baseType = returnType;
         this.main = main;
         this.params = params;
-        haveReturn = false;
-    }
-
-    public Attributes(Symbol.Types baseType, Symbol.Types _returnType) {
-        type = baseType;
-        returnType = _returnType;
         haveReturn = false;
     }
 

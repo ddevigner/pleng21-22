@@ -87,6 +87,7 @@ public class SemanticFunctions {
 				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main, t.beginLine, t.beginColumn));
 			else
 				st.insertSymbol(new SymbolFunction(t.image, at.params, at.baseType,  t.beginLine, t.beginColumn));
+			at.name = t.image;
 		} catch (AlreadyDefinedSymbolException e) {
 			System.err.println("(" + t.beginLine + "," + t.beginColumn + 
 				") Error -- Simbolo \'" + t.image + "\' ya existente");
@@ -179,21 +180,21 @@ public class SemanticFunctions {
 
 	private void evaluateProcedure(Symbol s, Attributes at) throws MismatchedSymbolTypeException, MainProcedureCallException, ProcedureNotFoundException {
 		if (s.type != Types.PROCEDURE) throw new MismatchedSymbolTypeException();
-		SymbolProcedure p = (SymbolProcedure s);
+		SymbolProcedure p = (SymbolProcedure) s;
 		if (p.main) throw new MainProcedureCallException();
 		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException();
 		for (int i = 0; i < p.parList.size(); i++) {
-			if (p.parList[i].baseType != at.given[0].baseType || !evaluateParClass(p.parList[i].parClass, at.given[i].parClass))
+			if (p.parList.get(i).type != at.given.get(0).baseType || !evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
 				throw new ProcedureNotFoundException();
 		}
 	}
 	
 	public void EvaluateProcedure(SymbolTable st, Attributes at) {
 		try {
-			Symbol s = st.getSmybol(at.name); 
+			Symbol s = st.getSymbol(at.name); 
 			evaluateProcedure(s, at);
 		} catch (SymbolNotFoundException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
+			System.err.println(" Error -- symbol not declared.");
 		} catch (ProcedureNotFoundException e) {
 			System.err.println("Procedimiento no encontrao.");
 		} catch (MainProcedureCallException e) {
@@ -203,24 +204,26 @@ public class SemanticFunctions {
 		}
 	}
 
-	private void evaluateFunction(Symbol s, Attributes at) throws MismatchedSymbolTypeException, FunctionNotFoundException {
+	private void evaluateFunction(Symbol s, Attributes at, Attributes fst) throws MismatchedSymbolTypeException, FunctionNotFoundException {
 		if (s.type != Types.FUNCTION) throw new MismatchedSymbolTypeException();
-		SymbolFunction f = (SymbolFunction s);
-		if (p.parList.size() != at.given.size()) throw new FunctionNotFoundException();
-		for (int i = 0; i < p.parList.size(); i++) {
-			if (p.parList[i].baseType != at.given[0].baseType || !evaluateParClass(p.parList[i].parClass, at.given[i].parClass))
+		SymbolFunction f = (SymbolFunction) s;
+		at.baseType = f.returnType;
+		if (f.parList.size() != fst.given.size()) throw new FunctionNotFoundException();
+		for (int i = 0; i < f.parList.size(); i++) {
+			if (f.parList.get(i).type != fst.given.get(0).baseType || !evaluateParClass(f.parList.get(i).parClass, fst.given.get(i).parClass))
 				throw new FunctionNotFoundException();
 		}
 	}
 	
-	public void EvaluateFunction(SymbolTable st, Attributes at) {
+	public void EvaluateFunction(SymbolTable st, Attributes at, Attributes fst) {
 		try {
-			Symbol s = st.getSmybol(at.name); 
-			evaluateFunction(s, at);
+			Symbol s = st.getSymbol(fst.name); 
+			evaluateFunction(s, at, fst);
 		} catch (SymbolNotFoundException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
+			System.err.println("Error -- symbol not declared.");
 		} catch (FunctionNotFoundException e) {
-			System.err.println("Funcion no encontraa.");
+			System.err.println("Funcion no encontrada.");
+			at.baseType = Types.UNDEFINED;
 		} catch (MismatchedSymbolTypeException e) {
 			System.err.println("Inutil, utilizas un simbolo que no es procedimiento como procedimiento.");
 		}
@@ -399,14 +402,14 @@ public class SemanticFunctions {
 
 	/* --------------------------------------------------------------------- */
 	/* --------------------------------------------------------------------- */
-	public static void comprobarReturnIfEX(Attributes at,Attributes fst)throws ReturnIfException{
+	private void comprobarReturnIfEX(Attributes at,Attributes fst)throws ReturnIfException{
 		at.haveReturn = true;
-				if(at.returnType != fst.type && at.returnType != Types.UNDEFINED)
-					System.err.println("Error -- Expected " + at.returnType + " value, got " + fst.type);
+				if(at.baseType != fst.baseType && at.baseType != Types.UNDEFINED)
+					System.err.println("Error -- Expected " + at.baseType + " value, got " + fst.baseType);
 					throw new ReturnIfException();
 	}
 
-	public static void comprobarReturnIf(Attributes at,Attributes fst){
+	public void comprobarReturnIf(Attributes at,Attributes fst){
 		try{
 			comprobarReturnIfEX( at, fst);
 		}catch(ReturnIfException e){

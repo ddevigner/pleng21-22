@@ -277,10 +277,10 @@ void proc_func_decl():
 	func_return(at)
 	t = <ID> { sf.AddMethod(st, at, t); }
 	<LPAREN>
-	params_def(at) { at.params = null; }
+	params_def(new Attributes(at.params)) { at.params = null; }
 	<RPAREN> 
 	<IS>
-	vars_def(at) 
+	vars_def(new Attributes()) 
 	procs_funcs_decl()
 	proc_func_body(at)
 }
@@ -424,7 +424,8 @@ void instruction(Attributes at):
 		<DO> instructions_list(at) <END>
 	| 	<IF> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 1); }
 		<THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
-	| 	<RETURN> expression(fst) <SCOLON> { SemanticFunctions.comprobarReturnIf(at,fst);}
+	| 	<RETURN> expression(fst) { sf.comprobarReturnIf(at,fst); } <SCOLON> 
+	
 }
 
 //-----------------------------------------------------------------------------
@@ -492,11 +493,11 @@ void factor(Attributes at):
 	| 	<LPAREN> expression(at) <RPAREN> 
 	| 	<INT2CHAR> <LPAREN> expression(fst) { sf.CheckInt2Char(at, fst); } <RPAREN>
 	| 	<CHAR2INT> <LPAREN> expression(fst) { sf.CheckChar2Int(at, fst); } <RPAREN>
-	| 	LOOKAHEAD(2) t = <ID> { fst.name = t.image; ); }
+	| 	LOOKAHEAD(2) t = <ID> { fst.name = t.image; }
 		<LPAREN> (
 			expression(snd) { fst.given.add(snd);}
 			(<COLON> {snd = new Attributes(); } expression(snd) { fst.given.add(snd); })*
-		)? <RPAREN> { sf.EvaluateFunction(st, fst); }
+		)? <RPAREN> { sf.EvaluateFunction(st, at, fst);}
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> { sf.CheckExpression(st, at, t, Types.ARRAY); } 
 	| 	t = <ID> 	  { sf.CheckExpression(st, at, t, Types.UNDEFINED); }
 	| 	t = <INTVAL>  { at.initInt(t.image);    } 

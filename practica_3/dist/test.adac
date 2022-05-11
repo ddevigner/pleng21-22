@@ -10,8 +10,9 @@ procedure hello is
     end
 
     function integer comprobar(val integer a,b) is
+        character f;
     begin
-        return a + b;
+        return a+b;
     end
 
 begin
@@ -29,9 +30,10 @@ begin
     get(g);
     --get(c);
     get(c[1]);
-    a = comprobar(a,a);
-    a = comprobar(b,b);
-    b = comprobar(b,b);
-    b = comprobar(a,a);
-    b = comprobar(b,b,b);
+    a := comprobar(a,a);
+    a := comprobar(a,a);
+    --a := comprobar(b,b);
+    --b := comprobar(b,b);
+    --b := comprobar(a,a);
+    --b := comprobar(b,b,b);
 end
