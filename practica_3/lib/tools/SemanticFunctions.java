@@ -179,12 +179,15 @@ public class SemanticFunctions {
 	}
 
 	private void evaluateProcedure(Symbol s, Attributes at) throws MismatchedSymbolTypeException, MainProcedureCallException, ProcedureNotFoundException {
-		if (s.type != Types.PROCEDURE) throw new MismatchedSymbolTypeException();
+		if (s.type != Types.PROCEDURE) {
+			throw new MismatchedSymbolTypeException();
+		}
 		SymbolProcedure p = (SymbolProcedure) s;
 		if (p.main) throw new MainProcedureCallException();
 		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException();
 		for (int i = 0; i < p.parList.size(); i++) {
-			if (p.parList.get(i).type != at.given.get(0).baseType || !evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
+			//if (p.parList.get(i).type != at.given.get(0).baseType || !evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
+			if (p.parList.get(i).type != at.given.get(i).baseType || !evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
 				throw new ProcedureNotFoundException();
 		}
 	}
@@ -205,13 +208,21 @@ public class SemanticFunctions {
 	}
 
 	private void evaluateFunction(Symbol s, Attributes at, Attributes fst) throws MismatchedSymbolTypeException, FunctionNotFoundException {
-		if (s.type != Types.FUNCTION) throw new MismatchedSymbolTypeException();
+		if (s.type != Types.FUNCTION) {
+			
+			throw new MismatchedSymbolTypeException();
+		}
 		SymbolFunction f = (SymbolFunction) s;
 		at.baseType = f.returnType;
-		if (f.parList.size() != fst.given.size()) throw new FunctionNotFoundException();
+		//at.type = f.returnType;
+		if (f.parList.size() != fst.given.size()) {
+			throw new FunctionNotFoundException();
+		}
+		
 		for (int i = 0; i < f.parList.size(); i++) {
-			if (f.parList.get(i).type != fst.given.get(0).baseType || !evaluateParClass(f.parList.get(i).parClass, fst.given.get(i).parClass))
-				throw new FunctionNotFoundException();
+				if (f.parList.get(i).type != fst.given.get(i).baseType || !evaluateParClass(f.parList.get(i).parClass, fst.given.get(i).parClass)){
+					throw new FunctionNotFoundException();
+			}
 		}
 	}
 	
@@ -271,7 +282,11 @@ public class SemanticFunctions {
 	}
 	
 	private void evaluateExpression(Types fst, Types snd) throws MismatchedTypesException {
-		if (fst != snd) throw new MismatchedTypesException(); 
+		
+		if (fst != snd) {
+			System.err.println("fst es " + fst);
+			System.err.println("snd es " + snd);
+			throw new MismatchedTypesException();} 
 	}
 
 	private void evaluateExpression(Attributes at, Types fst, Operator op, Types snd) throws MismatchedTypesException {
@@ -296,8 +311,11 @@ public class SemanticFunctions {
 
 	public void EvaluateExpression(Attributes fst, Attributes snd) {
 		try {
+			//System.err.println("fst.name es " + fst.name);
+			//System.err.println("snd.name es " + snd.name);
 			evaluateExpression(fst.baseType, snd.baseType);
 		} catch(MismatchedTypesException e){
+			//System.err.println("Entra aqui");
 			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
 		}
 	}
@@ -326,19 +344,23 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 	private void checkExpression(Attributes at, Symbol s, Types t) throws MismatchedSymbolTypeException {
 		if (t == Types.UNDEFINED) {
-			if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL) 
+			if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL && s.type != Types.ARRAY){ 
+			//if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL){ 
 				throw new MismatchedSymbolTypeException();
+			}
 			else 
 
 				at.baseType = s.type;
 		} else if (t == Types.ARRAY) {
-			if (s.type != t) 
+			if (s.type != t) {
 				throw new MismatchedSymbolTypeException();
+			}
 			else 
 				at.baseType = ((SymbolArray) s).baseType;
 		} else if (t == Types.FUNCTION) {
-			if (s.type != t)
+			if (s.type != t){
 				throw new MismatchedSymbolTypeException();
+			}
 			else 
 				at.baseType = ((SymbolFunction) s).returnType;
 		}

@@ -532,8 +532,8 @@ sf.EvaluateProcedure(st, fst);
           assignable(fst);
           jj_consume_token(ASS);
           expression(snd);
-          jj_consume_token(SCOLON);
 sf.EvaluateExpression(fst,snd);
+          jj_consume_token(SCOLON);
           break;
           }
         case WHILE:{
@@ -787,11 +787,18 @@ sf.EvaluateFunction(st, at, fst);
         expression(fst);
         jj_consume_token(RBRACK);
 sf.CheckExpression(st, at, t, Types.ARRAY);
+                        //System.err.println("El token se llama " + t.image);
+                        //System.err.println("Me llega el atributte at " + at.name);
+                        //System.err.println("Me llega el atributte fst " + fst.name);
+
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
           t = jj_consume_token(ID);
 sf.CheckExpression(st, at, t, Types.UNDEFINED);
+                                                //System.err.println("Me llega el token " + t.image);
+                                                //System.err.println("Me llega el at " + at.name);
+
           break;
           }
         case INTVAL:{
@@ -968,10 +975,17 @@ at.op = Operator.BOOL_OP;
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_4()
+  static private boolean jj_3_3()
  {
     if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 
@@ -989,17 +1003,10 @@ at.op = Operator.BOOL_OP;
     return false;
   }
 
-  static private boolean jj_3_3()
+  static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

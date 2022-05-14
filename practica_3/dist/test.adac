@@ -1,5 +1,9 @@
 procedure hello is
     character c[5];
+    character vec1[20];
+    character vec2[20];
+    integer vec3[20];
+    integer vec4[20]; 
     character b;
     integer a;
     boolean g;
@@ -13,6 +17,11 @@ procedure hello is
         character f;
     begin
         return a+b;
+    end
+
+    procedure comprobar2() is
+    begin
+        
     end
 
 begin
@@ -30,10 +39,16 @@ begin
     get(g);
     --get(c);
     get(c[1]);
-    a := comprobar(a,a);
-    a := comprobar(a,a);
+    --a := comprobar(a,a);
+    --a := comprobar(a,a);
     --a := comprobar(b,b);
     --b := comprobar(b,b);
     --b := comprobar(a,a);
     --b := comprobar(b,b,b);
+    --comprobar2();
+    --a := comprobar2();
+    --if(vec1 = vec2) then
+    --end
+    a := comprobar(vec3,vec4);
+    
 end

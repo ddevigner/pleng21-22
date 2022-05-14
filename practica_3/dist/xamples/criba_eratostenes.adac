@@ -87,7 +87,7 @@ procedure procesar (ref boolean v[101]) is
 ------------------------------------------------------------------------
 
 begin
-        inicializar (v);
+        inicializar(v);
         eliminar_no_primos (v);
         escrib_vect (v);
 end

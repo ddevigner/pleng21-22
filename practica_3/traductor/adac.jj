@@ -419,7 +419,13 @@ void instruction(Attributes at):
 			expression(snd) { fst.given.add(snd); } 
 			(<COLON> {snd = new Attributes(); } expression(snd) {fst.given.add(snd); })*
 		)? <RPAREN> <SCOLON> { sf.EvaluateProcedure(st, fst); }
-	| 	assignable(fst) <ASS> expression(snd) <SCOLON> { sf.EvaluateExpression(fst,snd); }
+	| 	assignable(fst) <ASS> expression(snd) { 
+			
+
+
+			
+			sf.EvaluateExpression(fst,snd);} 
+			<SCOLON> 
 	|	<WHILE> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 0); }
 		<DO> instructions_list(at) <END>
 	| 	<IF> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 1); }
@@ -452,8 +458,8 @@ void expression(Attributes at):
 	Attributes snd = new Attributes();
 }
 {
-	simple_expr(fst) { at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
-	(relational_op(fst) simple_expr(snd) { sf.EvaluateExpression(at, fst, snd); } )?
+	simple_expr(fst) {at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
+	(relational_op(fst) simple_expr(snd) {sf.EvaluateExpression(at, fst, snd); } )?
 }
 
 //-----------------------------------------------------------------------------
@@ -465,7 +471,7 @@ void simple_expr(Attributes at):
 } 
 {
 	( <ADD> | <SUB> )? term(fst) { at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
-	( additive_op(fst) term(snd) { sf.EvaluateExpression(at, fst, snd); })*
+	( additive_op(fst) term(snd) {  sf.EvaluateExpression(at, fst, snd); })*
 	
 } 
 
@@ -477,7 +483,7 @@ void term(Attributes at):
 	Attributes snd = new Attributes();
 }
 {
-	factor(fst) { at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
+	factor(fst) {at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
 	(multiplicative_op(fst) factor(snd) { sf.EvaluateExpression(at, fst, snd); })*
 }
 
@@ -493,13 +499,22 @@ void factor(Attributes at):
 	| 	<LPAREN> expression(at) <RPAREN> 
 	| 	<INT2CHAR> <LPAREN> expression(fst) { sf.CheckInt2Char(at, fst); } <RPAREN>
 	| 	<CHAR2INT> <LPAREN> expression(fst) { sf.CheckChar2Int(at, fst); } <RPAREN>
-	| 	LOOKAHEAD(2) t = <ID> { fst.name = t.image; }
+	| 	LOOKAHEAD(2) t = <ID> { 
+				fst.name = t.image; }	//Aqui se esta llamando a una funcion
 		<LPAREN> (
 			expression(snd) { fst.given.add(snd);}
 			(<COLON> {snd = new Attributes(); } expression(snd) { fst.given.add(snd); })*
 		)? <RPAREN> { sf.EvaluateFunction(st, at, fst);}
-	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> { sf.CheckExpression(st, at, t, Types.ARRAY); } 
-	| 	t = <ID> 	  { sf.CheckExpression(st, at, t, Types.UNDEFINED); }
+	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> { 
+			sf.CheckExpression(st, at, t, Types.ARRAY); 
+			//System.err.println("El token se llama " + t.image);
+			//System.err.println("Me llega el atributte at " + at.name);
+			//System.err.println("Me llega el atributte fst " + fst.name);
+		} 
+	| 	t = <ID> 	  { sf.CheckExpression(st, at, t, Types.UNDEFINED);
+						//System.err.println("Me llega el token " + t.image);
+						//System.err.println("Me llega el at " + at.name);
+						 }
 	| 	t = <INTVAL>  { at.initInt(t.image);    } 
 	| 	t = <CHARVAL> { at.initChar(t.image);   }
 	| 	t = <BOOLVAL> { at.initBool(t.image);   }
