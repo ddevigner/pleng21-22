@@ -187,8 +187,11 @@ public class SemanticFunctions {
 		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException();
 		for (int i = 0; i < p.parList.size(); i++) {
 			//if (p.parList.get(i).type != at.given.get(0).baseType || !evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
-			if (p.parList.get(i).type != at.given.get(i).baseType || !evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
+			if ((p.parList.get(i).type != at.given.get(i).baseType && p.parList.get(i).type!=Types.ARRAY) 
+				|| (!evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
+				|| (p.parList.get(i).type==Types.ARRAY && ((SymbolArray)p.parList.get(i)).baseType != at.given.get(i).baseType)){
 				throw new ProcedureNotFoundException();
+			}
 		}
 	}
 	
@@ -220,7 +223,9 @@ public class SemanticFunctions {
 		}
 		
 		for (int i = 0; i < f.parList.size(); i++) {
-				if (f.parList.get(i).type != fst.given.get(i).baseType || !evaluateParClass(f.parList.get(i).parClass, fst.given.get(i).parClass)){
+				if ((f.parList.get(i).type != fst.given.get(i).baseType && f.parList.get(i).type!=Types.ARRAY) 
+				|| (!evaluateParClass(f.parList.get(i).parClass, fst.given.get(i).parClass))
+				|| (f.parList.get(i).type==Types.ARRAY && ((SymbolArray)f.parList.get(i)).baseType != fst.given.get(i).baseType)){
 					throw new FunctionNotFoundException();
 			}
 		}
@@ -343,14 +348,23 @@ public class SemanticFunctions {
 	/* Verifica si el simbolo es una expresion variable.                     */
 	/* --------------------------------------------------------------------- */
 	private void checkExpression(Attributes at, Symbol s, Types t) throws MismatchedSymbolTypeException {
+		//Habra que comprobar el tipo del vector
 		if (t == Types.UNDEFINED) {
+			//System.err.println("Llega una variable a la expression y necesitamos guardar sus cosas en unos attributes");
 			if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL && s.type != Types.ARRAY){ 
 			//if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL){ 
 				throw new MismatchedSymbolTypeException();
 			}
 			else 
-
 				at.baseType = s.type;
+				//System.err.println("El baseType del at resultante es " + at.baseType);
+				if(s.type == Types.ARRAY){	//Es de tipo array asi que hay que guardar que es array y el tipo de array
+					at.type = s.type;
+					//System.err.println("El baseType del array es " + ((SymbolArray)s).baseType);
+					at.baseType = ((SymbolArray)s).baseType;	
+				}else{
+					at.baseType = s.type;
+				}
 		} else if (t == Types.ARRAY) {
 			if (s.type != t) {
 				throw new MismatchedSymbolTypeException();
@@ -370,7 +384,7 @@ public class SemanticFunctions {
 		Symbol s;
 		try {
 			at.baseType = Types.UNDEFINED;
-			s = st.getSymbol(t.image);
+			s = st.getSymbol(t.image);	//Se obtiene la variable
 			checkExpression(at, s, type);
 			at.name = s.name;
 		} catch (SymbolNotFoundException e) {

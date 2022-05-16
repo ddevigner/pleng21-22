@@ -19,6 +19,14 @@ procedure hello is
         return a+b;
     end
 
+    function integer comprobarVec(val integer a[100],b[100]) is
+        character f;
+        integer p;
+    begin
+        --p := a+b;
+        return a[0]+b[0];
+    end
+
     procedure comprobar2() is
     begin
         
@@ -49,6 +57,13 @@ begin
     --a := comprobar2();
     --if(vec1 = vec2) then
     --end
-    a := comprobar(vec3,vec4);
+    --a := comprobar(vec3,vec4);
+    a := comprobarVec(vec3,vec4);
+    --a := comprobarVec(vec1,vec2);
+
+
     
 end
+
+
+--vec + vec da error (eso esta bien)

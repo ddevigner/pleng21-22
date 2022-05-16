@@ -414,7 +414,7 @@ void instruction(Attributes at):
 	| 	<PUTLINE> <LPAREN> (expression(fst){ sf.EvaluatePutline(fst); }
 		(<COLON> expression(fst){ sf.EvaluatePutline(fst); })*)? <RPAREN> <SCOLON> 
 	| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
-	| 	LOOKAHEAD(2) t = <ID> { fst.name = t.image; } 
+	| 	LOOKAHEAD(2) t = <ID> { fst.name = t.image; } 	//Aqui es donde se llama a la funcion
 		<LPAREN> (
 			expression(snd) { fst.given.add(snd); } 
 			(<COLON> {snd = new Attributes(); } expression(snd) {fst.given.add(snd); })*
@@ -511,9 +511,9 @@ void factor(Attributes at):
 			//System.err.println("Me llega el atributte at " + at.name);
 			//System.err.println("Me llega el atributte fst " + fst.name);
 		} 
-	| 	t = <ID> 	  { sf.CheckExpression(st, at, t, Types.UNDEFINED);
-						//System.err.println("Me llega el token " + t.image);
+	| 	t = <ID> 	  { //System.err.println("Me llega el token " + t.image);
 						//System.err.println("Me llega el at " + at.name);
+						sf.CheckExpression(st, at, t, Types.UNDEFINED);
 						 }
 	| 	t = <INTVAL>  { at.initInt(t.image);    } 
 	| 	t = <CHARVAL> { at.initChar(t.image);   }

@@ -98,6 +98,6 @@ begin
         put_line ("https://es.wikipedia.org/wiki/Criba_de_Erat%C3%B3stenes");
         put_line();
 
-        n := pedir_entero ();
-        procesar (criba);
+        --n := pedir_entero ();
+        --procesar (criba);
 end

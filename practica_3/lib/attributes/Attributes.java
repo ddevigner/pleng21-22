@@ -22,6 +22,7 @@ public class Attributes implements Cloneable {
     public String name;
     public Types type;
     public Types baseType;
+    public Types vectorBaseType;
 
     // Constants.
     public int valInt;
@@ -54,7 +55,7 @@ public class Attributes implements Cloneable {
     // Empty Attributes.
     public Attributes() {
         name = "";
-        type = baseType = Types.UNDEFINED;
+        type = baseType = vectorBaseType = Types.UNDEFINED;
         main = false;
         params = null;
         given = new ArrayList<>();

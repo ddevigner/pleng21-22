@@ -795,10 +795,9 @@ sf.CheckExpression(st, at, t, Types.ARRAY);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
           t = jj_consume_token(ID);
-sf.CheckExpression(st, at, t, Types.UNDEFINED);
-                                                //System.err.println("Me llega el token " + t.image);
+//System.err.println("Me llega el token " + t.image);
                                                 //System.err.println("Me llega el at " + at.name);
-
+                                                sf.CheckExpression(st, at, t, Types.UNDEFINED);
           break;
           }
         case INTVAL:{
