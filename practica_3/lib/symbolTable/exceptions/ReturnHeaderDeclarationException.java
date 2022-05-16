@@ -9,17 +9,12 @@
  **********************************************************************************/
 package lib.symbolTable.exceptions;
 
-public class DefinedReturnTypeException extends Error {
+public class ReturnHeaderDeclarationException extends Error {
 
-    boolean isProc;
+    public boolean is_procedure;
 
-	public DefinedReturnTypeException(boolean isProc) {
-        this.isProc = isProc;
-    }
-
-    @Override
-    public String toString() {
-        return (isProc) ? "Error -- Defining a return type in a procedure?" :
-           "Error -- Forgetting something maybe? What about a return type?";
+	public ReturnHeaderDeclarationException(boolean is_procedure) 
+    {
+        this.is_procedure = is_procedure;
     }
 }

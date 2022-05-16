@@ -8,6 +8,7 @@ import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
 import lib.tools.SemanticFunctions;
 import lib.tools.SemanticFunctions.Operator;
+import lib.tools.SemanticFunctions.Procedure;
 import lib.tools.exceptions.*;
 import java.util.ArrayList;
 
@@ -53,14 +54,15 @@ public class adac implements adacConstants {
 
 
     public static void main(String[] args) throws java.io.FileNotFoundException,
-                        ParseException {
+                        ParseException
+        {
         adac parser;
 
         try {
                         //Se iniciar y crea la tabla de simbolos pero esta vacia
                         st = new SymbolTable();
                 initSymbolTable();
-                        sf = new SemanticFunctions();
+                        sf = new SemanticFunctions(st);
 
                         // Entrada desde stdin.
                 if(args.length == 0) {
@@ -72,7 +74,7 @@ public class adac implements adacConstants {
                         }
                         // Invoca símbolo inicial de la gramática.
                         parser.main();
-                        if (errors == 0 && sf.getErrorSemantico().getContadorErrores() == 0) System.out.println("Compilacion con exito.");
+                        if (errors == 0 && sf.getErrorSemantico().getErrors() == 0) System.out.println("Compilacion con exito.");
                         else System.out.println("Compilacion con errores.");
                 } catch (java.io.FileNotFoundException e) {
                         System.err.println ("Fichero " + args[0] + " no encontrado.");
@@ -87,16 +89,16 @@ public class adac implements adacConstants {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // Declaracion del procedimiento principal del fichero.
-  static final public void main() throws ParseException {Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
+  static final public void main() throws ParseException {Attributes main = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
         Token t;
     try {
       jj_consume_token(PROC);
       t = jj_consume_token(ID);
-sf.AddMethod(st, at, t);
+sf.AddMethod(main, t);
       jj_consume_token(IS);
-      vars_def(at);
+      vars_def();
       procs_funcs_decl();
-      proc_func_body(at);
+      proc_func_body(main);
       jj_consume_token(0);
     } catch (ParseException e) {
 panicMode(e.currentToken.next, 0);
@@ -124,34 +126,33 @@ panicMode(e.currentToken.next, 0);
 
 //-----------------------------------------------------------------------------
 // Declaracion de procedimiento/funcion
-  static final public void proc_func_decl() throws ParseException {Attributes at = new Attributes();
+  static final public void proc_func_decl() throws ParseException {Attributes method = new Attributes();
         Token t;
-    proc_or_func(at);
-    func_return(at);
+    proc_or_func(method);
+    func_return(method);
     t = jj_consume_token(ID);
-sf.AddMethod(st, at, t);
+sf.AddMethod(method, t);
     jj_consume_token(LPAREN);
-    params_def(new Attributes(at.params));
-at.params = null;
+    params_def(method.params);
     jj_consume_token(RPAREN);
     jj_consume_token(IS);
-    vars_def(new Attributes());
+    vars_def();
     procs_funcs_decl();
-    proc_func_body(at);
+    proc_func_body(method);
 }
 
 //-----------------------------------------------------------------------------
 // Declaracion de si es procedimiento o funcion.
-  static final public void proc_or_func(Attributes at) throws ParseException {
+  static final public void proc_or_func(Attributes method) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case PROC:{
       jj_consume_token(PROC);
-at.type = Types.PROCEDURE;
+method.type = Types.PROCEDURE;
       break;
       }
     case FUNC:{
       jj_consume_token(FUNC);
-at.type = Types.FUNCTION;
+method.type = Types.FUNCTION;
       break;
       }
     default:
@@ -163,30 +164,30 @@ at.type = Types.FUNCTION;
 
 //-----------------------------------------------------------------------------
 // Tipo de dato que devuelve la funcion.
-  static final public void func_return(Attributes at) throws ParseException {
+  static final public void func_return(Attributes method) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:
     case BOOL:
     case CHAR:{
-      vars_type(at);
-sf.EvaluateDefinedReturnType(at, Types.FUNCTION);
+      vars_type(method);
+sf.EvaluateReturnHeader(method, Types.FUNCTION);
       break;
       }
     default:
       jj_la1[2] = jj_gen;
 
-sf.EvaluateDefinedReturnType(at, Types.PROCEDURE);
+sf.EvaluateReturnHeader(method, Types.PROCEDURE);
     }
 }
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
-  static final public void params_def(Attributes at) throws ParseException {
+  static final public void params_def(ArrayList<Symbol> params) throws ParseException {Attributes par = new Attributes(params);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case VAL:
     case REF:{
-      param_class(at);
-      vars_decl(at);
+      param_class(par);
+      vars_decl(par);
       label_2:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -199,8 +200,8 @@ sf.EvaluateDefinedReturnType(at, Types.PROCEDURE);
           break label_2;
         }
         jj_consume_token(SCOLON);
-        param_class(at);
-        vars_decl(at);
+        param_class(par);
+        vars_decl(par);
       }
       break;
       }
@@ -212,16 +213,16 @@ sf.EvaluateDefinedReturnType(at, Types.PROCEDURE);
 
 //-----------------------------------------------------------------------------
 // Clase del parametro: por valor o por referencia.
-  static final public void param_class(Attributes at) throws ParseException {
+  static final public void param_class(Attributes par) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case VAL:{
       jj_consume_token(VAL);
-at.parClass = ParameterClass.VAL;
+par.parClass = ParameterClass.VAL;
       break;
       }
     case REF:{
       jj_consume_token(REF);
-at.parClass = ParameterClass.REF;
+par.parClass = ParameterClass.REF;
       break;
       }
     default:
@@ -233,8 +234,7 @@ at.parClass = ParameterClass.REF;
 
 //-----------------------------------------------------------------------------
 // Variables de procedimiento/funcion.
-  static final public void vars_def(Attributes at) throws ParseException {
-at.parClass = ParameterClass.NONE;
+  static final public void vars_def() throws ParseException {Attributes var = new Attributes(ParameterClass.NONE);
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -248,35 +248,35 @@ at.parClass = ParameterClass.NONE;
         jj_la1[6] = jj_gen;
         break label_3;
       }
-      vars_decl(at);
+      vars_decl(var);
       jj_consume_token(SCOLON);
     }
 }
 
 //-----------------------------------------------------------------------------
 // Tipos de variable y variables asociadas.
-  static final public void vars_decl(Attributes at) throws ParseException {
-    vars_type(at);
-    vars_list(at);
+  static final public void vars_decl(Attributes var) throws ParseException {
+    vars_type(var);
+    vars_list(var);
 }
 
 //-----------------------------------------------------------------------------
 // Tipos de una variable.
-  static final public void vars_type(Attributes at) throws ParseException {
+  static final public void vars_type(Attributes var) throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:{
       jj_consume_token(INT);
-at.baseType = Types.INT;
+var.baseType = Types.INT;
       break;
       }
     case BOOL:{
       jj_consume_token(BOOL);
-at.baseType = Types.BOOL;
+var.baseType = Types.BOOL;
       break;
       }
     case CHAR:{
       jj_consume_token(CHAR);
-at.baseType = Types.CHAR;
+var.baseType = Types.CHAR;
       break;
       }
     default:
@@ -288,8 +288,8 @@ at.baseType = Types.CHAR;
 
 //-----------------------------------------------------------------------------
 // Variables del mismo tipo.
-  static final public void vars_list(Attributes at) throws ParseException {
-    var(at);
+  static final public void vars_list(Attributes var) throws ParseException {
+    var(var);
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -302,26 +302,24 @@ at.baseType = Types.CHAR;
         break label_4;
       }
       jj_consume_token(COLON);
-      var(at);
+      var(var);
     }
 }
 
 //-----------------------------------------------------------------------------
 // Nombre de la variable.
-  static final public void var(Attributes at) throws ParseException {Token t, ind;
+  static final public void var(Attributes var) throws ParseException {Token t, ind;
     if (jj_2_1(2)) {
       t = jj_consume_token(ID);
       jj_consume_token(LBRACK);
       ind = jj_consume_token(INTVAL);
       jj_consume_token(RBRACK);
-at.type = Types.ARRAY;
-                        sf.AddVar(st, at, t, Integer.parseInt(ind.image));
+sf.AddVar(var, t, ind, Types.ARRAY);
     } else {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case ID:{
         t = jj_consume_token(ID);
-at.type = Types.UNDEFINED;
-                        sf.AddVar(st, at, t , 0);
+sf.AddVar(var, t, null, Types.UNDEFINED);
         break;
         }
       default:
@@ -334,16 +332,12 @@ at.type = Types.UNDEFINED;
 
 //-----------------------------------------------------------------------------
 // Cuerpo de procedimiento/funcion.
-  static final public void proc_func_body(Attributes at) throws ParseException {
+  static final public void proc_func_body(Attributes header) throws ParseException {
     try {
       jj_consume_token(BEGIN);
-      instructions_list(at);
+      instructions_list(header);
       jj_consume_token(END);
-if (at.type == Types.PROCEDURE && at.haveReturn)
-                                System.err.println("Error -- return in procedure?");
-                        else if (at.type == Types.FUNCTION && !at.haveReturn)
-                                System.err.println("Error -- no return in function?");
-                        st.removeBlock();
+
     } catch (ParseException e) {
 panicMode(e.currentToken.next, 1);
     }
@@ -385,10 +379,10 @@ panicMode(e.currentToken.next, 1);
         Token t;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case GET:{
-      jj_consume_token(GET);
+      t = jj_consume_token(GET);
       jj_consume_token(LPAREN);
       assignable(fst);
-sf.EvaluateGet(fst);
+sf.EvaluateGet(t, fst.baseType);
       label_6:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -402,17 +396,17 @@ sf.EvaluateGet(fst);
         }
         jj_consume_token(COLON);
         assignable(fst);
-sf.EvaluateGet(fst);
+sf.EvaluateGet(t, fst.baseType);
       }
       jj_consume_token(RPAREN);
       jj_consume_token(SCOLON);
       break;
       }
     case PUT:{
-      jj_consume_token(PUT);
+      t = jj_consume_token(PUT);
       jj_consume_token(LPAREN);
       expression(fst);
-sf.EvaluatePut(fst);
+sf.EvaluatePut(t, fst.baseType);
       label_7:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -426,7 +420,7 @@ sf.EvaluatePut(fst);
         }
         jj_consume_token(COLON);
         expression(fst);
-sf.EvaluatePut(fst);
+sf.EvaluatePut(t, fst.baseType);
       }
       jj_consume_token(RPAREN);
       jj_consume_token(SCOLON);
@@ -448,7 +442,7 @@ sf.EvaluatePut(fst);
       case INT2CHAR:
       case ID:{
         expression(fst);
-sf.EvaluatePutline(fst);
+sf.EvaluatePutline(t, fst.baseType);
         label_8:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -462,7 +456,7 @@ sf.EvaluatePutline(fst);
           }
           jj_consume_token(COLON);
           expression(fst);
-sf.EvaluatePutline(fst);
+sf.EvaluatePutline(t, fst.baseType);
         }
         break;
         }
@@ -525,7 +519,7 @@ fst.given.add(snd);
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
-sf.EvaluateProcedure(st, fst);
+sf.EvaluateProcedure(fst, t);
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
@@ -588,13 +582,12 @@ sf.comprobarReturnIf(at,fst);
       jj_consume_token(LBRACK);
       expression(at);
       jj_consume_token(RBRACK);
-sf.CheckIntegerIndexing(at.baseType);
-                        sf.CheckAssignable(st, at, t, Types.ARRAY);
+sf.EvaluateAssignable(at, t, Types.ARRAY);
     } else {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case ID:{
         t = jj_consume_token(ID);
-sf.CheckAssignable(st, at, t, Types.UNDEFINED);
+sf.EvaluateAssignable(at, t, Types.UNDEFINED);
         break;
         }
       default:
@@ -974,14 +967,14 @@ at.op = Operator.BOOL_OP;
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_3()
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 
-  static private boolean jj_3_5()
+  static private boolean jj_3_3()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
@@ -995,17 +988,17 @@ at.op = Operator.BOOL_OP;
     return false;
   }
 
-  static private boolean jj_3_1()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
   static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_1()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 

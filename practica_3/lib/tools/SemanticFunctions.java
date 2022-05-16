@@ -19,77 +19,66 @@ import lib.symbolTable.exceptions.*;
 import lib.errores.*;
 
 public class SemanticFunctions {
-	private ErrorSemantico se; //clase común de errores semánticos
+	private SemanticError se; //clase común de errores semánticos
+
+	private SymbolTable st;
 	
 	public static enum Operator { NOP, INT_OP, BOOL_OP, CMP_OP };
+	public static enum Procedure { GET, PUT, PUTLINE, CUSTOM };
 
-	public SemanticFunctions() {
-		se = new ErrorSemantico();
-		
+	public SemanticFunctions(SymbolTable st) {
+		this.st = st;
+		se = new SemanticError();
 	}
 
-	public ErrorSemantico getErrorSemantico(){
+	public SemanticError getErrorSemantico(){
 		return se;
 	}
 
-
-
 	/* --------------------------------------------------------------------- */
-	/* Verifica si el acceso al array es mediante un indice entero.          */
-	/* --------------------------------------------------------------------- */
-	private void checkIntegerIndexing(Types type) throws IndexNotIntegerException {
-		if (type != Types.INT) throw new IndexNotIntegerException();
-	}
-
-	public void CheckIntegerIndexing(Types type) {
-		try {
-			checkIntegerIndexing(type);
-		} catch (IndexNotIntegerException e) {
-			System.err.println("ERROR -- Index expression is not integer");
-		}
-	}
-	/* --------------------------------------------------------------------- */
-
-	/* --------------------------------------------------------------------- */
-	/* Anyadir nuevo procedimiento o funcion, o variable.                     */
+	/* Insertar nuevo procedimiento o funcion, o variable.                   */
 	/* --------------------------------------------------------------------- */
 	private void checkArrayIndexDefinition(int n) throws ZeroSizeArrayException {
 		if (n == 0) throw new ZeroSizeArrayException();
 	}
 
-	public void AddVar(SymbolTable st, Attributes at, Token t, int n) {
-		Symbol s;
+	public void AddVar(Attributes var, Token t, Token i, Types type) {
 		try {
-			if (at.type == Types.ARRAY) {
+			Symbol s;
+			if (type == Types.ARRAY) {
+				int n = Integer.parseInt(i.image);
 				checkArrayIndexDefinition(n);
-				s = new SymbolArray(t.image, n, at.baseType, at.parClass, t.beginLine, t.beginColumn);
-			} else if (at.baseType == Types.INT) 
-				s = new SymbolInt(t.image, at.parClass, t.beginLine, t.beginColumn);
-			else if (at.baseType == Types.CHAR)
-				s = new SymbolChar(t.image, at.parClass, t.beginLine, t.beginColumn);
-			else
-				s = new SymbolBool(t.image, at.parClass, t.beginLine, t.beginColumn);
-			if (at.params != null) st.insertSymbol(at.params, s);
+				s = new SymbolArray(t.image, n, var.baseType, var.parClass, t.beginLine, t.beginColumn);
+			} else if (var.baseType == Types.INT) {
+				s = new SymbolInt(t.image, var.parClass, t.beginLine,  t.beginColumn);
+			} else if (var.baseType == Types.CHAR) {
+				s = new SymbolChar(t.image, var.parClass, t.beginLine, t.beginColumn);
+			} else {
+				s = new SymbolBool(t.image, var.parClass, t.beginLine, t.beginColumn);
+			}
 			st.insertSymbol(s);
+			if (var.params != null) st.insertSymbol(var.params, s);
 		} catch (ZeroSizeArrayException e) {
-			System.err.println("ERROR AL USAR INDICE MENOR O IGUAL QUE 0 PARA ARRAY.");
+			se.detection(e, t, i);
 		} catch (AlreadyDefinedSymbolException e) {
-			System.err.println("ERROR VARIABLE YA DEFINIDA AL AGREGAR UNA NUEVA.");
+			se.detection(e, t);
 		}
 	}
 
-	public void AddMethod(SymbolTable st, Attributes at, Token t) {
-		Symbol s;
-		if (!at.main) at.params = new ArrayList<>();
+	public void AddMethod(Attributes at, Token t) {
 		try {
-			if (at.type == Types.PROCEDURE)
-				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main, t.beginLine, t.beginColumn));
-			else
-				st.insertSymbol(new SymbolFunction(t.image, at.params, at.baseType,  t.beginLine, t.beginColumn));
+			if (!at.main) at.params = new ArrayList<>();
+			if (at.type == Types.PROCEDURE) 
+				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main, 
+					t.beginLine, t.beginColumn));
+			else 
+				st.insertSymbol(new SymbolFunction(t.image, at.params, at.baseType,
+					t.beginLine, t.beginColumn));
 			at.name = t.image;
+			at.line = t.beginLine;
+			at.column = t.beginColumn;
 		} catch (AlreadyDefinedSymbolException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn + 
-				") Error -- Simbolo \'" + t.image + "\' ya existente");
+			se.detection(e, t);
 			at.params = null;
 		}
 		st.insertBlock();
@@ -100,48 +89,24 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 	/* Verifica el tipo de retorno de procedimiento o funcion.               */
 	/* --------------------------------------------------------------------- */
-	private void evaluateDefinedReturnType(Attributes at, Types type) throws DefinedReturnTypeException {
-		if (at.type == Types.PROCEDURE && at.type != type)
-			throw new DefinedReturnTypeException(true);
-		if (at.type == Types.FUNCTION  && at.type != type)
-			throw new DefinedReturnTypeException(false);
+	private void evaluateReturnHeader(Types def, Types type) throws ReturnHeaderDeclarationException {
+		if (def == Types.PROCEDURE && def != type)
+			throw new ReturnHeaderDeclarationException(true);
+		if (def == Types.FUNCTION  && def != type)
+			throw new ReturnHeaderDeclarationException(false);
 	}
 
-	public void EvaluateDefinedReturnType(Attributes at, Types type) {
+	public void EvaluateReturnHeader(Attributes at, Types type) {
 		try {
-			evaluateDefinedReturnType(at, type);
-		} catch (DefinedReturnTypeException e) {
-			System.err.println(e.toString());
+			evaluateReturnHeader(at.type, type);
+		} catch (ReturnHeaderDeclarationException e) {
+			se.detection(e, at.line, at.column, at.name);
 			at.baseType = Types.UNDEFINED;
 		}
 	}
 
-	private void evaluateGet(Types type) throws ProcedureNotFoundException {
-		if (type != Types.INT && type != Types.CHAR) throw new ProcedureNotFoundException(1,1);
-	}
-
-	public void EvaluateGet(Attributes at) {
-		try {
-			evaluateGet(at.baseType);
-		} catch (ProcedureNotFoundException e) {
-			System.err.println("Error -- Get solo recibe variables INT o CHAR");
-		}
-	}
-
-	private void evaluatePut(Types type) throws PutException {
-		if(type == Types.UNDEFINED) throw new PutException();
-	}
-
-	public void EvaluatePut(Attributes at){
-		try{
-			evaluatePut(at.baseType);
-		}catch (PutException e){
-			System.err.println("put necesita expresiones no nulas");
-		}
-	}
-
 	private void evaluatePutline(Types type) throws PutlineException {
-		if (type == Types.UNDEFINED) throw new PutlineException();
+		
 	}
 
 	public void EvaluatePutline(Attributes at) {
@@ -152,7 +117,6 @@ public class SemanticFunctions {
 		}
 	}
 
-	
 	
 	public static void comprobarProcedimiento(Token t,SymbolTable st,SymbolProcedure s){
 		try{
@@ -176,10 +140,63 @@ public class SemanticFunctions {
 		return false;
 	}
 
-	private void evaluateProcedure(Symbol s, Attributes at) throws MismatchedSymbolTypeException, MainProcedureCallException, ProcedureNotFoundException {
-		if (s.type != Types.PROCEDURE) {
-			throw new MismatchedSymbolTypeException();
+	private void evaluateProcedure(Types type) throws ProcedureNotFoundException {
+		if (p == Procedure.GET && type != Types.INT && type != Types.CHAR)
+			throw new ProcedureNotFoundException(p, type); 
+		if((p == Procedure.PUT || p == Procedure.PUTLINE) && type == Types.UNDEFINED)
+			throw new ProcedureNotFoundException(p, type); 
+	}
+
+	/******************************** GET ************************************/
+	public void evaluateGet(Types type) throws GetException {
+		if (type != Types.INT && type != Types.CHAR) throw new GetException(type);
+	}
+
+	public void EvaluateGet(Token t, Types type) {
+		try {
+			evaluateGet(type);
+		} catch (GetException e) {
+			se.detection(e, t);
 		}
+	}
+
+	/******************************** PUT ************************************/
+	private void evaluatePut(Types type) throws PutException {
+		if (type == Types.UNDEFINED) throw new PutException(); 
+	}
+
+	public void EvaluatePut(Token t, Types type){
+		try{
+			evaluateProcedure(Procedure.PUT, at.baseType);
+		}catch (PutException e){
+			se.detection(e, t);
+		}
+	}
+
+	/****************************** PUTLINE **********************************/
+	private void evaluatePutline(Types type) throws 
+		PutlineException
+	{
+		if (type == Types.UNDEFINED) throw new PutlineException(); 
+	}
+
+	public void EvaluatePutline(Token t, Types type) {
+		try {
+			evaluateGet(Procedure.PUTLINE, type);
+		} catch (PutlineException e) {
+			se.detection(e, t);
+		}
+	}
+
+	/****************************** PROCEDURE ********************************/
+	private void evaluateProcedure(Symbol s, Attributes at) throws 
+		MismatchedSymbolTypeException, 
+		MainProcedureCallException, 
+		ProcedureNotFoundException
+	{
+		if (s.type != Types.PROCEDURE) 
+			throw new MismatchedSymbolTypeException(s.type, Types.PROCEDURE);
+		
 		SymbolProcedure p = (SymbolProcedure) s;
 		if (p.main) throw new MainProcedureCallException();
 		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException();
@@ -192,30 +209,33 @@ public class SemanticFunctions {
 			}
 		}
 	}
-	
-	public void EvaluateProcedure(SymbolTable st, Attributes at) {
+
+	public void EvaluateProcedure(Attributes at, Token t) {
 		try {
-			Symbol s = st.getSymbol(at.name); 
+			Symbol s = st.getSymbol(t.image); 
 			evaluateProcedure(s, at);
 		} catch (SymbolNotFoundException e) {
-			System.err.println(" Error -- symbol not declared.");
+			se.detection(e, t);
 		} catch (ProcedureNotFoundException e) {
-			System.err.println("Procedimiento no encontrao.");
+			se.detection(e, t);
 		} catch (MainProcedureCallException e) {
-			System.err.println("Procedimiento main? Que coño haces?");
+			se.detection(e);
 		} catch (MismatchedSymbolTypeException e) {
-			System.err.println("Inutil, utilizas un simbolo que no es procedimiento como procedimiento.");
+			se.detection(e, t);
 		}
 	}
 
-	private void evaluateFunction(Symbol s, Attributes at, Attributes fst) throws MismatchedSymbolTypeException, FunctionNotFoundException {
+
+	private void evaluateFunction(Symbol s, Attributes at, Attributes fst) throws 
+		MismatchedSymbolTypeException, 
+		FunctionNotFoundException
+	{
 		if (s.type != Types.FUNCTION) {
 			
 			throw new MismatchedSymbolTypeException();
 		}
 		SymbolFunction f = (SymbolFunction) s;
 		at.baseType = f.returnType;
-		//at.type = f.returnType;
 		if (f.parList.size() != fst.given.size()) {
 			throw new FunctionNotFoundException();
 		}
@@ -248,30 +268,32 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 	/* Verifica si una variable es asignable.                                */
 	/* --------------------------------------------------------------------- */
-	public void checkAssignable(Attributes at, Symbol s, Types type) throws SymbolNotAssignableException {
-		if (type == Types.ARRAY) {
-			if (s.type != type)
-				throw new SymbolNotAssignableException();
-			else 
-				at.baseType = ((SymbolArray) s).baseType;
-		} else if(type == Types.UNDEFINED) {
+	public Types evaluateAssignable(Symbol s, Types index_type, Types match_type) throws MismatchedSymbolTypeException, IndexNotIntegerException {
+		if (match_type == Types.ARRAY) {
+			if (index_type != Types.INT) throw new IndexNotIntegerException(index_type);
+			if (match_type != s.type) throw new MismatchedSymbolTypeException(match_type, s.type);
+			else return ((SymbolArray) s).baseType;
+		} else {
 			if (s.type != Types.INT &&  s.type != Types.CHAR && s.type != Types.BOOL)
-				throw new SymbolNotAssignableException();
+				throw new MismatchedSymbolTypeException(match_type, s.type);
 			else
-				at.baseType = s.type;
+				return s.type;
 		}
 	}
 
-	public void CheckAssignable(SymbolTable st, Attributes at, Token t, Types type) {
-		Symbol s;
+	public void EvaluateAssignable(Attributes at, Token t, Types match_type) {
 		try {
-			at.baseType = Types.UNDEFINED;
-			s = st.getSymbol(t.image);
-			checkAssignable(at, s, type);
+			Symbol s = st.getSymbol(t.image);
+			at.baseType = evaluateAssignable(s, at.baseType, match_type);
 		} catch (SymbolNotFoundException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- \'" + t.image + "\' not defined.");
-		} catch (SymbolNotAssignableException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- Expected " + type + " got " + e.toString());
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
+		} catch (IndexNotIntegerException e) {
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
+		} catch (MismatchedSymbolTypeException e) {
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
 		}
 	}
 	/* --------------------------------------------------------------------- */
@@ -334,7 +356,33 @@ public class SemanticFunctions {
 			System.err.println("ERROR SE ESPERABA BOOL EN WHILE OR IF");
 		}
 	}
-	/* --------------------------------------------------------------------- */
+
+	/** EVALUATE IF */
+	public void evaluateIf(Attributes at) throws MismatchedIfConditionType {
+		if (type != Types.BOOL) throw new MismatchedIfConditionType(type);
+	}
+
+	public void EvaluateIf(Attributes at) {
+		try {
+			evaluateIf(at.baseType);
+		} catch (MismatchedIfConditionType e) {
+			se.detection(e, at.line, at.column);
+		}
+	}
+
+	/** EVALUATE WHILE */
+	private void evaluateWhile(Types type) throws MismatchedWhileConditionType {
+		if (type != Types.BOOL) throw new MismatchedWhileConditionType(type);
+	}
+
+	public void EvaluateWhile(Attributes at) {
+		try {
+			evaluateWhile(at.baseType);
+		} catch (MimstachedWhileConditionType e) {
+			se.detection(e, at.line, at.column);
+		}
+	}
+
 	
 	
 	/* --------------------------------------------------------------------- */

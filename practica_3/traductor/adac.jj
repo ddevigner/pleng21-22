@@ -22,6 +22,7 @@ import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
 import lib.tools.SemanticFunctions;
 import lib.tools.SemanticFunctions.Operator;
+import lib.tools.SemanticFunctions.Procedure;
 import lib.tools.exceptions.*;
 import java.util.ArrayList;
 
@@ -67,14 +68,15 @@ public class adac {
 
 
     public static void main(String[] args) throws java.io.FileNotFoundException, 
-			ParseException {
+			ParseException 
+	{
     	adac parser;
 
     	try {
 			//Se iniciar y crea la tabla de simbolos pero esta vacia
 			st = new SymbolTable();
     		initSymbolTable();
-			sf = new SemanticFunctions();
+			sf = new SemanticFunctions(st);
 
 			// Entrada desde stdin.
 	    	if(args.length == 0) {
@@ -86,7 +88,7 @@ public class adac {
 			}
 			// Invoca símbolo inicial de la gramática.
 			parser.main();
-			if (errors == 0 && sf.getErrorSemantico().getContadorErrores() == 0) System.out.println("Compilacion con exito.");
+			if (errors == 0 && sf.getErrorSemantico().getErrors() == 0) System.out.println("Compilacion con exito.");
 			else System.out.println("Compilacion con errores.");
 		} catch (java.io.FileNotFoundException e) {
 			System.err.println ("Fichero " + args[0] + " no encontrado.");
@@ -241,17 +243,17 @@ SPECIAL_TOKEN: {
 // Declaracion del procedimiento principal del fichero.
 void main() :
 {
-	Attributes at = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
+	Attributes main = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
 	Token t;
 } 
 {	
 	try {
-		<PROC> 
-		t = <ID> { sf.AddMethod(st, at, t); }
-		<IS> 
-		vars_def(at) 
-		procs_funcs_decl() 
-		proc_func_body(at)
+		<PROC>
+		t = <ID> { sf.AddMethod(main, t); }
+		<IS>
+		vars_def()
+		procs_funcs_decl()
+		proc_func_body(main)
 		<EOF>
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next, 0);
@@ -270,117 +272,116 @@ void procs_funcs_decl ():
 // Declaracion de procedimiento/funcion
 void proc_func_decl():
 {
-	Attributes at = new Attributes();
+	Attributes method = new Attributes();
 	Token t;
 } {
-	proc_or_func(at)
-	func_return(at)
-	t = <ID> { sf.AddMethod(st, at, t); }
+	proc_or_func(method)
+	func_return(method)
+	t = <ID> { sf.AddMethod(method, t); }
 	<LPAREN>
-	params_def(new Attributes(at.params)) { at.params = null; }
-	<RPAREN> 
+	params_def(method.params)
+	<RPAREN>
 	<IS>
-	vars_def(new Attributes()) 
+	vars_def()
 	procs_funcs_decl()
-	proc_func_body(at)
+	proc_func_body(method)
 }
 
 //-----------------------------------------------------------------------------
 // Declaracion de si es procedimiento o funcion.
-void proc_or_func(Attributes at):
+void proc_or_func(Attributes method):
 {} {
-		<PROC> { at.type = Types.PROCEDURE; } 
-	| 	<FUNC> { at.type = Types.FUNCTION;  }
+		<PROC> { method.type = Types.PROCEDURE; } 
+	| 	<FUNC> { method.type = Types.FUNCTION;  }
 }
 
 //-----------------------------------------------------------------------------
 // Tipo de dato que devuelve la funcion.
-void func_return(Attributes at):
+void func_return(Attributes method):
 {} {
-		vars_type(at) { sf.EvaluateDefinedReturnType(at, Types.FUNCTION); }
-	| 	{} { sf.EvaluateDefinedReturnType(at, Types.PROCEDURE); }
+	vars_type(method) 
+		{ sf.EvaluateReturnHeader(method, Types.FUNCTION);  }
+	| {}
+		{ sf.EvaluateReturnHeader(method, Types.PROCEDURE); }
 }
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
-void params_def(Attributes at):
-{} {
-	(param_class(at) vars_decl(at) (<SCOLON> param_class(at) vars_decl(at))*)?
+void params_def(ArrayList<Symbol> params):
+{
+	Attributes par = new Attributes(params);
+} {
+	(param_class(par) vars_decl(par) (<SCOLON> param_class(par) vars_decl(par))*)?
 }
 
 //-----------------------------------------------------------------------------
 // Clase del parametro: por valor o por referencia.
-void param_class(Attributes at):
+void param_class(Attributes par):
 {} {
-		<VAL> { at.parClass = ParameterClass.VAL; }
-	| 	<REF> { at.parClass = ParameterClass.REF; }
+		<VAL> { par.parClass = ParameterClass.VAL; }
+	| 	<REF> { par.parClass = ParameterClass.REF; }
 }
 
 //-----------------------------------------------------------------------------
 // Variables de procedimiento/funcion.
-void vars_def(Attributes at):
-{} {
-	{ at.parClass = ParameterClass.NONE; }
-	( vars_decl(at) <SCOLON> )*
+void vars_def():
+{
+	Attributes var = new Attributes(ParameterClass.NONE);
+} {
+	( vars_decl(var) <SCOLON> )*
 }
 
 //-----------------------------------------------------------------------------
 // Tipos de variable y variables asociadas.
-void vars_decl(Attributes at):
+void vars_decl(Attributes var):
 {} {
-	vars_type(at) vars_list(at)
+	vars_type(var) vars_list(var)
 }
 
 
 //-----------------------------------------------------------------------------
 // Tipos de una variable.
-void vars_type(Attributes at):
+void vars_type(Attributes var):
 {} {
-		<INT>  { at.baseType = Types.INT;  }
-	| 	<BOOL> { at.baseType = Types.BOOL; }
-	| 	<CHAR> { at.baseType = Types.CHAR; }
+		<INT>  { var.baseType = Types.INT;  }
+	| 	<BOOL> { var.baseType = Types.BOOL; }
+	| 	<CHAR> { var.baseType = Types.CHAR; }
 }
 
 //-----------------------------------------------------------------------------
 // Variables del mismo tipo.
-void vars_list(Attributes at):
+void vars_list(Attributes var):
 {}
 {
-	var(at) ( <COLON> var(at))*
+	var(var) (<COLON> var(var))*
 }
 
 //-----------------------------------------------------------------------------
 // Nombre de la variable.
-void var(Attributes at):
+void var(Attributes var):
 {
 	Token t, ind;
 } 
 {
 	LOOKAHEAD(2) t = <ID> <LBRACK> ind = <INTVAL> <RBRACK> 
-		{ 	
-			at.type = Types.ARRAY;
-			sf.AddVar(st, at, t, Integer.parseInt(ind.image));
-		}
-	| 	t = <ID> 
-		{
-			at.type = Types.UNDEFINED;
-			sf.AddVar(st, at, t , 0);
-		}
+		{ sf.AddVar(var, t, ind, Types.ARRAY); }
+	| t = <ID>
+		{ sf.AddVar(var, t, null, Types.UNDEFINED); }
 }
 
 //-----------------------------------------------------------------------------
 // Cuerpo de procedimiento/funcion.
-void proc_func_body(Attributes at):
+void proc_func_body(Attributes header):
 {} {
 	try {
 		<BEGIN> 
-		instructions_list(at) 
-		<END> {
+		instructions_list(header) 
+		<END> {/*
 			if (at.type == Types.PROCEDURE && at.haveReturn) 
 				System.err.println("Error -- return in procedure?");
 			else if (at.type == Types.FUNCTION && !at.haveReturn)
 				System.err.println("Error -- no return in function?");
-			st.removeBlock(); 
+			st.removeBlock(); */
 		}
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next, 1);
@@ -407,31 +408,24 @@ void instruction(Attributes at):
 	Attributes fst = new Attributes(), snd = new Attributes();
 	Token t;
 } {
-	  	<GET> <LPAREN> assignable(fst) { sf.EvaluateGet(fst); }
-		(<COLON> assignable(fst) { sf.EvaluateGet(fst); } )* <RPAREN> <SCOLON>
-	| 	<PUT> <LPAREN> expression(fst) { sf.EvaluatePut(fst);}
-		(<COLON> expression(fst){ sf.EvaluatePut(fst); } )* <RPAREN> <SCOLON> 
-	| 	<PUTLINE> <LPAREN> (expression(fst){ sf.EvaluatePutline(fst); }
-		(<COLON> expression(fst){ sf.EvaluatePutline(fst); })*)? <RPAREN> <SCOLON> 
+		t = <GET> <LPAREN> assignable(fst) { sf.EvaluateGet(t, fst.baseType); } (<COLON> assignable(fst) { sf.EvaluateGet(t, fst.baseType); })* <RPAREN> <SCOLON>
+	| 	t = <PUT> <LPAREN> expression(fst) { sf.EvaluatePut(t, fst.baseType); } (<COLON> expression(fst) { sf.EvaluatePut(t, fst.baseType); })* <RPAREN> <SCOLON> 
+	| 	<PUTLINE> <LPAREN> (expression(fst) { sf.EvaluatePutline(t, fst.baseType); } (<COLON> expression(fst) { sf.EvaluatePutline(t, fst.baseType); })*)? <RPAREN> <SCOLON> 
 	| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
-	| 	LOOKAHEAD(2) t = <ID> { fst.name = t.image; } 	//Aqui es donde se llama a la funcion
+	| 	LOOKAHEAD(2) t = <ID> 
 		<LPAREN> (
 			expression(snd) { fst.given.add(snd); } 
 			(<COLON> {snd = new Attributes(); } expression(snd) {fst.given.add(snd); })*
-		)? <RPAREN> <SCOLON> { sf.EvaluateProcedure(st, fst); }
-	| 	assignable(fst) <ASS> expression(snd) { 
-			
-
-
-			
-			sf.EvaluateExpression(fst,snd);} 
-			<SCOLON> 
-	|	<WHILE> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 0); }
-		<DO> instructions_list(at) <END>
-	| 	<IF> expression(fst) { sf.EvaluateExpression(fst, Types.BOOL, 1); }
-		<THEN> instructions_list(at) (<ELSE> instructions_list(at))? <END> 
-	| 	<RETURN> expression(fst) { sf.comprobarReturnIf(at,fst); } <SCOLON> 
+		)? <RPAREN> <SCOLON> { sf.EvaluateProcedure(fst, t); }
+	| 	assignable(fst) <ASS> expression(snd) { sf.EvaluateExpression(fst,snd); } <SCOLON> 
 	
+	|	<WHILE> expression(fst) { sf.EvaluateWhile(fst); }
+		<DO> instructions_list(at) <END>
+
+	| 	<IF> expression(fst) { sf.EvaluateIf(fst); } <THEN> instructions_list(at) 
+		(<ELSE> instructions_list(at))? <END> 
+
+	| 	<RETURN> expression(fst) { sf.comprobarReturnIf(at,fst); } <SCOLON> 
 }
 
 //-----------------------------------------------------------------------------
@@ -441,12 +435,10 @@ void assignable(Attributes at):
 	Token t;
 }
 {
-		LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK> {
-			sf.CheckIntegerIndexing(at.baseType);
-			sf.CheckAssignable(st, at, t, Types.ARRAY);
-		}
-	| 	t = <ID> { sf.CheckAssignable(st, at, t, Types.UNDEFINED); }
-
+	LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK>
+		{ sf.EvaluateAssignable(at, t, Types.ARRAY); }
+	| t = <ID>
+		{ sf.EvaluateAssignable(at, t, Types.UNDEFINED); }
 }
 
 

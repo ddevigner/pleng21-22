@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Ant-Version: Apache Ant 1.10.7
-Created-By: 11.0.15+10-Ubuntu-0ubuntu0.20.04.1 (Private Build)
+Ant-Version: Apache Ant 1.9.16
+Created-By: 17+35-LTS-2724 (Oracle Corporation)
 Main-Class: traductor/adac
 Class-Path: traductor/adac.jar
 

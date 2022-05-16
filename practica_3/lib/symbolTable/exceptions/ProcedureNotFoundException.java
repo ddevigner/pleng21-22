@@ -1,18 +1,14 @@
 package lib.symbolTable.exceptions;
+import lib.tools.SemanticFunctions.Procedure;
+import lib.Symbol.Types;
 
 public class ProcedureNotFoundException extends Error {
 
-    int procedure, kind;
+    Types type;
 
     public ProcedureNotFoundException() {}
 
-	public ProcedureNotFoundException(int procedure, int kind) {
-        this.procedure = procedure;
-        this.kind = kind;
-    }
-
-    @Override
-    public String toString() {
-        return "ProcedureNotFoundException message not defined yet.";
+	public ProcedureNotFoundException(Types type) {
+        this.type = type;
     }
 }

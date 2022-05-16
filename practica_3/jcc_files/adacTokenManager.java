@@ -8,6 +8,7 @@ import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
 import lib.tools.SemanticFunctions;
 import lib.tools.SemanticFunctions.Operator;
+import lib.tools.SemanticFunctions.Procedure;
 import lib.tools.exceptions.*;
 import java.util.ArrayList;
 

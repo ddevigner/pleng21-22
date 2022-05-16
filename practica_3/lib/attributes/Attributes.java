@@ -63,12 +63,11 @@ public class Attributes implements Cloneable {
         parClass = ParameterClass.NONE;
     }
 
-       // Method attributes.
-       public Attributes(ArrayList<Symbol> params) {
+    // Method attributes.
+    public Attributes(ArrayList<Symbol> params) {
         this.params = params;
     }
 
-    // Method attributes.
     public Attributes(Types methodType, Types returnType, ArrayList<Symbol> params) {
         this.type = methodType;
         this.baseType = returnType;
@@ -83,6 +82,11 @@ public class Attributes implements Cloneable {
         this.main = main;
         this.params = params;
         haveReturn = false;
+    }
+
+    // Variable attributes.
+    public Attributes(ParameterClass parClass) {
+        this.parClass = parClass;
     }
 
     /** METODOS **************************************************************/

@@ -1,11 +1,12 @@
 package lib.symbolTable.exceptions;
+import lib.symbolTable.Symbol.Types;
 
 public class IndexNotIntegerException extends Error {
 
-	public IndexNotIntegerException() {}
+    public Types index_type;
 
-    @Override
-    public String toString() {
-        return "IndexNotIntegerException message not implemented yet.";
+	public IndexNotIntegerException(Types index_type) {
+        this.index_type = index_type;
     }
+
 }
