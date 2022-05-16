@@ -76,7 +76,6 @@ public class SemanticFunctions {
 		} catch (AlreadyDefinedSymbolException e) {
 			System.err.println("ERROR VARIABLE YA DEFINIDA AL AGREGAR UNA NUEVA.");
 		}
-		//System.out.println(st.toString());
 	}
 
 	public void AddMethod(SymbolTable st, Attributes at, Token t) {
@@ -93,7 +92,6 @@ public class SemanticFunctions {
 				") Error -- Simbolo \'" + t.image + "\' ya existente");
 			at.params = null;
 		}
-		//System.out.println(st.toString());
 		st.insertBlock();
 	}
 	/* --------------------------------------------------------------------- */
@@ -314,11 +312,8 @@ public class SemanticFunctions {
 
 	public void EvaluateExpression(Attributes fst, Attributes snd) {
 		try {
-			//System.err.println("fst.name es " + fst.name);
-			//System.err.println("snd.name es " + snd.name);
 			evaluateExpression(fst.baseType, snd.baseType);
 		} catch(MismatchedTypesException e){
-			//System.err.println("Entra aqui");
 			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
 		}
 	}
@@ -348,17 +343,13 @@ public class SemanticFunctions {
 	private void checkExpression(Attributes at, Symbol s, Types t) throws MismatchedSymbolTypeException {
 		//Habra que comprobar el tipo del vector
 		if (t == Types.UNDEFINED) {
-			//System.err.println("Llega una variable a la expression y necesitamos guardar sus cosas en unos attributes");
 			if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL && s.type != Types.ARRAY){ 
-			//if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL){ 
 				throw new MismatchedSymbolTypeException();
 			}
 			else 
 				at.baseType = s.type;
-				//System.err.println("El baseType del at resultante es " + at.baseType);
 				if(s.type == Types.ARRAY){	//Es de tipo array asi que hay que guardar que es array y el tipo de array
 					at.type = s.type;
-					//System.err.println("El baseType del array es " + ((SymbolArray)s).baseType);
 					at.baseType = ((SymbolArray)s).baseType;	
 				}else{
 					at.baseType = s.type;
