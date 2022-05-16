@@ -289,8 +289,6 @@ public class SemanticFunctions {
 	private void evaluateExpression(Types fst, Types snd) throws MismatchedTypesException {
 		
 		if (fst != snd) {
-			System.err.println("fst es " + fst);
-			System.err.println("snd es " + snd);
 			throw new MismatchedTypesException();} 
 	}
 
