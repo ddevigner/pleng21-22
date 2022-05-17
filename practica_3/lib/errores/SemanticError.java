@@ -117,6 +117,7 @@ public class SemanticError {
 			System.err.println(error_header(line, column) + "invalid expression" 
 				+ ", can not evaluate get.");
 		}
+		System.err.println("--> get usage: get(INT or CHAR [, ... ]);");
 		System.err.println(sep);
 	}
 

@@ -42,10 +42,10 @@ public class MismatchedTypesException extends Exception {
 				this.error += "same type operators but got " + f_got + " and " 
 					+ s_got + ".";
 			} else if (expected == Types.INT) {
-				this.error += "integer operators, got " + f_got 
+				this.error += "integer operators but got " + f_got 
 					+ " and " + s_got + ".";
 			} else if (expected == Types.BOOL) {
-				this.error += "boolean operators, got " + f_got 
+				this.error += "boolean operators but got " + f_got 
 					+ " and " + s_got;
 			}
 		}
