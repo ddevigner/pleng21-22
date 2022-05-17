@@ -29,23 +29,25 @@ public class MismatchedTypesException extends Exception {
 		else this.error = "expression of type " + fst + " with sign.";
 	}
 
-	public MismatchedTypesException(Types expected, Types f_got, Types s_got)
+	public MismatchedTypesException(String op_name, Types expected, Types f_got, 
+		Types s_got)
 	{
-		if (expected == Types.UNDEFINED ) 
-			if (f_got == Types.UNDEFINED || s_got == Types.UNDEFINED)
-				this.error = "could not evaluate conditional expression.";
-			else 
-				this.error = "expected same type operators, got" + f_got + " and " + s_got;
-		else if (expected == Types.INT) {
-			if (f_got == Types.UNDEFINED || s_got == Types.UNDEFINED) 
-				this.error = "could not evaluate additive expression.";
-			else 
-				this.error = "expected integer operators, got " + f_got + " and " + s_got;
-		} else if (expected == Types.BOOL) {
-			if (f_got == Types.UNDEFINED || s_got == Types.UNDEFINED) 
-			this.error = "could not evaluate multiplicative expression.";
-		else 
-			this.error = "expected boolean operators, got " + f_got + " and " + s_got;
+		if (f_got == Types.UNDEFINED || s_got == Types.UNDEFINED) {
+			this.error = "could not evaluate binary operator '" + op_name + "''.";
+		}
+		else {
+			this.error = "bad operand types for binary operator '" + op_name 
+				+ "', expected ";
+			if (expected == Types.UNDEFINED ) {
+				this.error += "same type operators but got " + f_got + " and " 
+					+ s_got + ".";
+			} else if (expected == Types.INT) {
+				this.error += "integer operators, got " + f_got 
+					+ " and " + s_got + ".";
+			} else if (expected == Types.BOOL) {
+				this.error += "boolean operators, got " + f_got 
+					+ " and " + s_got;
+			}
 		}
 	}
 }

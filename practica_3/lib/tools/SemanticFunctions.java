@@ -227,7 +227,7 @@ public class SemanticFunctions {
 		} catch (ProcedureNotFoundException e) {
 			se.detection(e, t);
 		} catch (MainProcedureCallException e) {
-			se.detection(e);
+			se.detection(e, t);
 		} catch (MismatchedSymbolTypeException e) {
 			se.detection(e, t);
 		}
@@ -284,18 +284,24 @@ public class SemanticFunctions {
 	//-----------------------------------------------------------------------
 	// Evaluar operacion.
 	//-----------------------------------------------------------------------
-	private Types evaluateOperation(Types fst, Operator op, Types snd) throws MismatchedTypesException {
-		if (op == Operator.CMP_OP) {
-			if (fst != snd) throw new MismatchedTypesException(Types.UNDEFINED, fst, snd);
-			else return Types.BOOL;
-		} else if (op == Operator.INT_OP) {
-			if (fst != Types.INT || snd != Types.INT)
-				throw new MismatchedTypesException(Types.INT, fst, snd);
-		} else if (op == Operator.BOOL_OP) {
-			if (fst != Types.BOOL || snd != Types.BOOL)
-				throw new MismatchedTypesException(Types.BOOL, fst, snd);
+	private void evaluateOperation(Attributes fst, Attributes snd) throws MismatchedTypesException {
+		if (snd.op == Operator.CMP_OP) {
+			if (fst.baseType != snd.baseType) { 
+				throw new MismatchedTypesException(snd.op_name, Types.UNDEFINED, 
+					fst.baseType, snd.baseType);
+			}
+			else fst.baseType = Types.BOOL;
+		} else if (snd.op == Operator.INT_OP) {
+			if (fst.baseType != Types.INT || snd.baseType != Types.INT) {
+				throw new MismatchedTypesException(snd.op_name, Types.INT, 
+					fst.baseType, snd.baseType);
+			}
+		} else if (snd.op == Operator.BOOL_OP) {
+			if (fst.baseType != Types.BOOL || snd.baseType != Types.BOOL) {
+				throw new MismatchedTypesException(snd.op_name, Types.BOOL, 
+					fst.baseType, snd.baseType);
+			}
 		}
-		return fst;
 	}
 
 	private void evaluateOperation(Operator op, Types fst) throws MismatchedTypesException {
@@ -304,7 +310,7 @@ public class SemanticFunctions {
 
 	public void EvaluateOperation(Attributes fst, Attributes snd) {
 		try {
-			fst.baseType = evaluateOperation(fst.baseType, snd.op, snd.baseType);
+			evaluateOperation(fst, snd);
 			fst.parClass = ParameterClass.VAL;
 		} catch (MismatchedTypesException e) {
 			se.detection(e, snd.line, snd.column);
@@ -610,16 +616,14 @@ public class SemanticFunctions {
 	//-----------------------------------------------------------------------
 	public void EvaluateOperator(Attributes at, Token t, Operator op) {
 		at.op = op;
-		at.name = t.image;
+		at.op_name = t.image;
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
 	}
 	
-
 	/* --------------------------------------------------------------------- */
-	/* MEMORABLE                                                             */
+	/* PORQUE MOLA                                                           */
 	/* --------------------------------------------------------------------- */
-
 	public void AlgoID(SymbolTable st, Attributes at, Token t){
 		try {
 			Symbol aux = st.getSymbol(t.image);
@@ -633,52 +637,3 @@ public class SemanticFunctions {
 	}
 
 }
-
-
-
-
-
-// Cositas. NO BORRAR.
-/*
-{
-	if (s != null) {
-		try {
-			Symbol aux = s.parList.get(i);
-			if (!SemanticFunctions.CheckParClass(aux.parClass, snd.parClass)) {
-				System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-				System.err.println("\t" + aux.parClass + ", " + "got " + snd.parClass);
-			}
-			if (snd.type != aux.type) {
-				System.err.println("Error -- In function \'" + s.name + "\', expecting: ");
-				System.err.println("\t" + aux.type + ", got " + snd.type);
-			} 
-			i++;
-		} catch (IndexOutOfBoundsException e) {
-			System.err.println("Error -- Expected \'" + s.name + "()\'");
-			s = null;
-		}
-	}
-}
-{
-	if (s != null) {
-		try {
-			Symbol aux = s.parList.get(0);
-			if (!SemanticFunctions.CheckParClass(aux.parClass, fst.parClass)) {
-				System.err.println("Error -- In function \'" + s.name +
-					"\', expecting: ");
-				System.err.println("\t" + aux.parClass + ", " + 
-					"got " + fst.parClass);
-			}
-			if (fst.type != aux.type) {
-				System.err.println("Error -- In function \'" + s.name +
-					"\', expecting: ");
-				System.err.println("\t" + aux.type + ", got " + 
-					fst.type);
-			}
-		i++;
-		} catch (IndexOutOfBoundsException e) {
-			System.err.println("Error -- Expected \'" + s.name + "()\'");
-		}
-	}
-} 
-*/

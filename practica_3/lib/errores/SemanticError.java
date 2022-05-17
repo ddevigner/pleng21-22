@@ -52,8 +52,8 @@ public class SemanticError {
 	public static void detection(AlreadyDefinedSymbolException e, Token t) {
 		errors++;
 		System.err.println(sep);
-		System.err.println("ERROR SEMANTICO (" + t.beginLine + "," + t.beginColumn + "): " +
-				"Símbolo: '" + t.image + "'. No se puede redefinir el símbolo");
+		System.err.println(error_header(t) + "symbol '" + t.image + "' already"
+			+ "exists.");
 		System.err.println(sep);
 	}
 
@@ -70,8 +70,8 @@ public class SemanticError {
 	public static void detection(ZeroSizeArrayException e, Token t, Token i) {
 		errors++;
 		System.err.println(sep);
-		System.err.println("SEMANTIC ERROR (" + i.beginLine + "," + i.beginColumn + "): " + 
-				"Array '" + t.image + "' has been declared with index zero.");
+		System.err.println(error_header(t) + "array '" + t.image + "' has " 
+			+ "been declared with index zero.");
 		System.err.println(sep);
 	}
 
@@ -86,11 +86,11 @@ public class SemanticError {
 	}
 
 	// -- MainProcedureCallException.
-	public static void detection(MainProcedureCallException e) 
+	public static void detection(MainProcedureCallException e, Token t) 
 	{
 		errors++;
 		System.err.println(sep);
-		System.err.println(e.toString());
+		System.err.println(error_header(t) + e.error);
 		System.err.println(sep);
 	}
 
@@ -100,8 +100,8 @@ public class SemanticError {
 		errors++;
 		System.err.println(sep);
 		System.err.println(error_header(t) + e.info);
-		System.err.println("--> procedure    '" + e.got + "' not found.");
-		System.err.println("--> did you mean '" + e.expected + "' ?");
+		System.err.println("--> procedure used '" + e.got + "'.");
+		System.err.println("--> did you mean   '" + e.expected + "' ?");
 		System.err.println(sep);
 	}
 
@@ -173,8 +173,8 @@ public class SemanticError {
 		errors++;
 		System.err.println(sep);
 		System.err.println(error_header(t) + e.info);
-		System.err.println("--> function     '" + e.got + "' not found.");
-		System.err.println("--> did you mean '" + e.expected + "' ?");
+		System.err.println("--> function used '" + e.got + "' not found.");
+		System.err.println("--> did you mean  '" + e.expected + "' ?");
 		System.err.println(sep);
 	}
 

@@ -75,7 +75,7 @@ public class adac implements adacConstants {
                         parser.main();
                         if ((synt_errors + sf.getErrors()) == 0) System.out.println("Compilation succeded.");
                         else {
-                                System.out.println("\nCompilacion failed due to errors: "
+                                System.out.println("\nCompilation failed due to errors: "
                                         + synt_errors + " syntatic error(s), "
                                         + sf.getWarnings() + " warning(s), "
                                         + sf.getErrors() + " error(s).");

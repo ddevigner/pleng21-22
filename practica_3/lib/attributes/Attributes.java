@@ -51,6 +51,7 @@ public class Attributes implements Cloneable {
 
     // Expressions Attributes.
     public Operator op;
+    public String op_name;
 
 
     /** CONSTRUCTORES ********************************************************/
