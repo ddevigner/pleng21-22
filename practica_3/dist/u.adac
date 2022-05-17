@@ -7,7 +7,7 @@ procedure hello is
         put(b);
     end
 begin
-    b := hello(a);
+    b := hello(a+a+a);
     b := not b;
 end
 

@@ -413,7 +413,7 @@ void instruction(Attributes at):
 	| 	LOOKAHEAD(2) t = <ID> { snd.method = true; }
 			<LPAREN> (expression(snd) { fst.given.add(snd); } 
 			(<COLON> {snd = new Attributes(true); } expression(snd) {fst.given.add(snd); })*
-		)? <RPAREN> <SCOLON> { sf.EvaluateProcedure(fst, t); }
+			)? <RPAREN> <SCOLON> { sf.EvaluateProcedure(fst, t); }
 	| 	assignable(fst) <ASS> expression(snd) { sf.EvaluateAssignation(fst, snd); } <SCOLON> 
 	|	<WHILE> expression(fst) { sf.EvaluateCondition(fst); }
 			<DO> instructions_list(at) <END>
@@ -450,9 +450,11 @@ void expression(Attributes at):
 void simple_expr(Attributes at): 
 {
 	Attributes aux = new Attributes();
+	Token t = null;
 } 
 {
-	(<ADD> | <SUB>)? term(at) (additive_op(aux) term(aux) { sf.EvaluateOperation(at, aux); })*
+	((t = <ADD> | t = <SUB>) { at.op = Operator.INT_OP; })? term(at) { sf.EvaluateOperation(at, t); }
+	(additive_op(aux) term(aux) { sf.EvaluateOperation(at, aux); })*
 }
 
 //-----------------------------------------------------------------------------

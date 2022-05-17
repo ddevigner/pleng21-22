@@ -161,30 +161,59 @@ public class SemanticFunctions {
 	}
 
 
-	private void evaluateProcedure(Symbol s, Attributes at) throws
+	private void evaluateProcedure(Symbol s, Attributes at, Token t) throws
 		MismatchedSymbolTypeException, 
 		MainProcedureCallException, 
 		ProcedureNotFoundException
 	{
+		String info;
 		if (s.type != Types.PROCEDURE) 
 			throw new MismatchedSymbolTypeException(s.type, Types.PROCEDURE);
 
 		SymbolProcedure p = (SymbolProcedure) s;
 		if (p.main) throw new MainProcedureCallException(p.name);
-		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched parameters length");
+		if (p.parList.size() != at.given.size()) {
+			throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), 
+				p.parList.size(), at.given.size());
+		}
 		for (int i = 0; i < p.parList.size(); i++) {
-			if (p.parList.get(i).type == Types.ARRAY) {
-				if (((SymbolArray) p.parList.get(i)).baseType != at.given.get(i).baseType) 
-					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched base type in parameter " + (i+1));
-				if (!evaluateParameterClass(((SymbolArray) p.parList.get(i)).parClass, at.given.get(i).parClass))
-					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched paramter type in parameter " + (i+1));
-				if (((SymbolArray) p.parList.get(i)).maxInd != at.given.get(i).maxInd)
-					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched array size in parameter " + (i+1));
-			} else {
-				if (p.parList.get(i).type != at.given.get(i).baseType)
-					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched base type in parameter " + (i+1));
-				if (!evaluateParameterClass(p.parList.get(i).parClass, at.given.get(i).parClass))
-					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched parameter class in parameter " + (i+1));
+			try {
+				Attributes  g = at.given.get(i);
+				if (p.parList.get(i).type == Types.ARRAY) {
+					SymbolArray e = ((SymbolArray) p.parList.get(i));
+					if (g.type != Types.ARRAY) {
+						throw new ProcedureNotFoundException(p.toString(),
+							at.toProcedure(), i+1, false);
+					}
+					if (e.baseType != g.baseType) {
+						throw new ProcedureNotFoundException(p.toString(), 
+							at.toProcedure(), e.baseType, g.baseType, i+1);
+					}
+					if (!evaluateParameterClass(e.parClass, g.parClass)) {
+						throw new ProcedureNotFoundException(p.toString(), 
+							at.toProcedure(), e.parClass, g.parClass, i+1);
+					}
+					if (e.maxInd != g.maxInd) {
+						throw new ProcedureNotFoundException(p.toString(), 
+							at.toProcedure(), e.maxInd, g.maxInd, i+1);
+					}
+				} else {
+					Symbol e = p.parList.get(i);
+					if (g.type == Types.ARRAY) {
+						throw new ProcedureNotFoundException(p.toString(),
+							at.toProcedure(), i+1, true);
+					}
+					if (e.type != g.baseType) {
+						throw new ProcedureNotFoundException(p.toString(), 
+							at.toProcedure(), e.type, g.baseType, i+1);
+					}
+					if (!evaluateParameterClass(e.parClass, g.parClass)) {
+						throw new ProcedureNotFoundException(p.toString(), 
+							at.toProcedure(), e.parClass, g.parClass, i+1);
+					}
+				}
+			} catch (ProcedureNotFoundException e) {
+				se.detection(e, t);
 			}
 		}
 		
@@ -192,7 +221,7 @@ public class SemanticFunctions {
 	public void EvaluateProcedure(Attributes at, Token t) {
 		try {
 			Symbol s = st.getSymbol(t.image); 
-			evaluateProcedure(s, at);
+			evaluateProcedure(s, at, t);
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
 		} catch (ProcedureNotFoundException e) {
@@ -256,38 +285,48 @@ public class SemanticFunctions {
 	//-----------------------------------------------------------------------
 	// Evaluar operacion.
 	//-----------------------------------------------------------------------
-	private Types evaluateOperation(Types fst, Operator op, Types snd) throws 
-		MismtachedCompareTypesException,
-		MismtachedAddTypesException,
-		MismtachedProductTypesException 
-	{
+	private Types evaluateOperation(Types fst, Operator op, Types snd) throws MismatchedTypesException {
 		if (op == Operator.CMP_OP) {
-			if (fst != snd) throw new MismtachedCompareTypesException(fst, snd);
+			if (fst != snd) throw new MismatchedTypesException(Types.UNDEFINED, fst, snd);
 			else return Types.BOOL;
 		} else if (op == Operator.INT_OP) {
 			if (fst != Types.INT || snd != Types.INT)
-				throw new MismtachedAddTypesException(fst, snd);
+				throw new MismatchedTypesException(Types.INT, fst, snd);
 		} else if (op == Operator.BOOL_OP) {
 			if (fst != Types.BOOL || snd != Types.BOOL)
-				throw new MismtachedProductTypesException(fst, snd);
+				throw new MismatchedTypesException(Types.BOOL, fst, snd);
 		}
 		return fst;
+	}
+
+	private void evaluateOperation(Operator op, Types fst) throws MismatchedTypesException {
+		if (fst != Types.INT) throw new MismatchedTypesException(fst);
 	}
 
 	public void EvaluateOperation(Attributes fst, Attributes snd) {
 		try {
 			fst.baseType = evaluateOperation(fst.baseType, snd.op, snd.baseType);
 			fst.parClass = ParameterClass.VAL;
-		} catch (MismtachedCompareTypesException e) {
+		} catch (MismatchedTypesException e) {
 			se.detection(e, snd.line, snd.column);
 			fst.baseType = Types.UNDEFINED;
-		} catch (MismtachedAddTypesException e) {
-			se.detection(e, snd.line, snd.column);
+			fst.parClass = ParameterClass.NONE;
+		} 
+	}
+
+	public void EvaluateOperation(Attributes fst, Token t) {
+		try {
+			if (t != null) {
+				evaluateOperation(fst.op, fst.baseType);
+				fst.parClass = ParameterClass.VAL;
+				fst.line = t.beginLine;
+				fst.column = t.beginColumn;
+			}
+		} catch (MismatchedTypesException e) {
+			se.detection(e, fst.line, fst.column);
 			fst.baseType = Types.UNDEFINED;
-		} catch (MismtachedProductTypesException e) {
-			se.detection(e, snd.line, snd.column);
-			fst.baseType = Types.UNDEFINED;
-		}
+			fst.parClass = ParameterClass.NONE;
+		} 
 	}
 
 	//-----------------------------------------------------------------------
@@ -358,25 +397,57 @@ public class SemanticFunctions {
 	//-----------------------------------------------------------------------
 	// Evaluar Funcion.
 	//-----------------------------------------------------------------------
-	private void evaluateFunction(Symbol s, Attributes at) throws MismatchedSymbolTypeException, FunctionNotFoundException {
+	private void evaluateFunction(Symbol s, Attributes at, Token t) throws 
+		MismatchedSymbolTypeException, 
+		FunctionNotFoundException
+	{
 		if (s.type != Types.FUNCTION) throw new MismatchedSymbolTypeException(Types.FUNCTION, s.type);
 		SymbolFunction f = (SymbolFunction) s;
 		at.name = f.name;
 		at.baseType = f.returnType;
-		if (f.parList.size() != at.given.size()) throw new FunctionNotFoundException(f.toString(), at.toFunction());
+		if (f.parList.size() != at.given.size()) {
+			throw new FunctionNotFoundException(f.toString(), at.toFunction(),
+				f.parList.size(), at.given.size());
+		}
 		for (int i = 0; i < f.parList.size(); i++) {
-			if (f.parList.get(i).type == Types.ARRAY) {
-				if (((SymbolArray) f.parList.get(i)).baseType != at.given.get(i).baseType) 
-					throw new FunctionNotFoundException(f.toString(), at.toFunction());
-				if (!evaluateParameterClass(((SymbolArray) f.parList.get(i)).parClass, at.given.get(i).parClass))
-					throw new FunctionNotFoundException(f.toString(), at.toFunction());
-				if (((SymbolArray) f.parList.get(i)).maxInd != at.given.get(i).maxInd)
-					throw new FunctionNotFoundException(f.toString(), at.toFunction());
-			} else {
-				if (f.parList.get(i).type != at.given.get(i).baseType)
-					throw new FunctionNotFoundException(f.toString(), at.toFunction());
-				if (!evaluateParameterClass(f.parList.get(i).parClass, at.given.get(i).parClass))
-					throw new FunctionNotFoundException(f.toString(), at.toFunction());
+			try {
+				Attributes g = at.given.get(i);
+				if (f.parList.get(i).type == Types.ARRAY) {
+					SymbolArray e = (SymbolArray) f.parList.get(i);
+					if (g.type != Types.ARRAY) {
+						throw new FunctionNotFoundException(f.toString(),
+							at.toFunction(), i+1, false);
+					}
+					if (e.baseType != g.baseType) {
+						throw new FunctionNotFoundException(f.toString(), 
+							at.toFunction(), e.baseType, g.baseType, i+1);
+					}
+					if (!evaluateParameterClass(e.parClass, g.parClass)) {
+						throw new FunctionNotFoundException(f.toString(), 
+							at.toFunction(), e.parClass, g.parClass, i+1);
+					}
+					if (e.maxInd != g.maxInd) {
+						throw new FunctionNotFoundException(f.toString(), 
+							at.toFunction(), e.maxInd, g.maxInd, i+1);
+					}
+				} else {
+					Symbol e = f.parList.get(i);
+					if (g.type == Types.ARRAY) {
+						throw new FunctionNotFoundException(f.toString(),
+							at.toFunction(), i+1, true);
+					}
+					if (e.type != g.baseType) {
+						throw new FunctionNotFoundException(f.toString(), 
+							at.toFunction(), e.type, g.baseType, i+1);
+					}
+					if (!evaluateParameterClass(e.parClass, g.parClass)) {
+						throw new FunctionNotFoundException(f.toString(), 
+							at.toFunction(), e.parClass, g.parClass, i+1);
+					}
+				}
+			} catch (FunctionNotFoundException e) {
+				se.detection(e,t);
+				at.baseType = Types.UNDEFINED;
 			}
 		}
 	}
@@ -384,7 +455,7 @@ public class SemanticFunctions {
 	public void EvaluateFunction(Attributes at, Token t) {
 		try {
 			Symbol s = st.getSymbol(t.image); 
-			evaluateFunction(s, at);
+			evaluateFunction(s, at, t);
 		} catch (SymbolNotFoundException e) {
 			se.detection(e,t);
 			at.baseType = Types.UNDEFINED;

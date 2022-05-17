@@ -10,15 +10,42 @@
 
 package lib.symbolTable.exceptions;
 import lib.symbolTable.Symbol.Types;
+import lib.tools.SemanticFunctions.Operator;
+
 
 public class MismatchedTypesException extends Exception {
 
-	public Types expected;
-	public Types got;
-
+	public String error;
 
 	public MismatchedTypesException(Types expected, Types got) {
-		this.expected = expected;
-		this.got = got;
+		if (expected == Types.UNDEFINED || got == Types.UNDEFINED)
+			this.error = "could not evaluate expression."; 
+		else
+			this.error = "expected " + expected + " got " + got;
+	}
+
+	public MismatchedTypesException(Types fst) {
+		if (fst == Types.UNDEFINED) this.error = "could not evaluate sign expression.";
+		else this.error = "expression of type " + fst + " with sign.";
+	}
+
+	public MismatchedTypesException(Types expected, Types f_got, Types s_got)
+	{
+		if (expected == Types.UNDEFINED ) 
+			if (f_got == Types.UNDEFINED || s_got == Types.UNDEFINED)
+				this.error = "could not evaluate conditionl expression.";
+			else 
+				this.error = "expected same type operators, got" + f_got + " and " + s_got;
+		else if (expected == Types.INT) {
+			if (f_got == Types.UNDEFINED || s_got == Types.UNDEFINED) 
+				this.error = "could not evaluate additive expression.";
+			else 
+				this.error = "expected integer operators, got " + f_got + " and " + s_got;
+		} else if (expected == Types.BOOL) {
+			if (f_got == Types.UNDEFINED || s_got == Types.UNDEFINED) 
+			this.error = "could not evaluate multiplicative expression.";
+		else 
+			this.error = "expected boolean operators, got " + f_got + " and " + s_got;
+		}
 	}
 }

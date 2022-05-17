@@ -622,16 +622,17 @@ sf.EvaluateOperation(at, aux);
 //-----------------------------------------------------------------------------
 // Expresion aritmetica.
   static final public void simple_expr(Attributes at) throws ParseException {Attributes aux = new Attributes();
+        Token t = null;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case ADD:
     case SUB:{
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case ADD:{
-        jj_consume_token(ADD);
+        t = jj_consume_token(ADD);
         break;
         }
       case SUB:{
-        jj_consume_token(SUB);
+        t = jj_consume_token(SUB);
         break;
         }
       default:
@@ -639,6 +640,7 @@ sf.EvaluateOperation(at, aux);
         jj_consume_token(-1);
         throw new ParseException();
       }
+at.op = Operator.INT_OP;
       break;
       }
     default:
@@ -646,6 +648,7 @@ sf.EvaluateOperation(at, aux);
       ;
     }
     term(at);
+sf.EvaluateOperation(at, t);
     label_10:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -951,13 +954,6 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
@@ -969,6 +965,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_4()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

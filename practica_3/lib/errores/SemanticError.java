@@ -89,11 +89,11 @@ public class SemanticError {
 	// CAMBIAR.
 	public static void detection(ProcedureNotFoundException e, Token t)
 	{
-		int pad = padding(error_header(t) + "procedure", "--> did you mean");
 		errors++;
 		System.err.println(sep);
-		System.err.println(error_header(t) + "procedure '" + e.got + "' not found, " + e.info);
-		System.err.printf("%"+pad+"s%s\n", "", "--> did you mean '" + e.expected + "' ?");
+		System.err.println(error_header(t) + e.info);
+		System.err.println("--> procedure    '" + e.got + "' not found.");
+		System.err.println("--> did you mean '" + e.expected + "' ?");
 		System.err.println(sep);
 	}
 
@@ -109,7 +109,6 @@ public class SemanticError {
 			System.err.println(error_header(line, column) + "invalid expression" 
 				+ ", can not evaluate get.");
 		}
-
 		System.err.println(sep);
 	}
 
@@ -138,13 +137,7 @@ public class SemanticError {
 	{
 		errors++;
 		System.err.println(sep);
-		if (e.expected != Types.UNDEFINED && e.got != Types.UNDEFINED) {
-			System.err.println(error_header(t) + "expected " + e.expected 
-				+ ", got " + e.got + "."); 
-		} else {
-			System.err.println(error_header(t) + "invalid expression, could " + 
-				"not be evaluated.");
-		}
+		System.err.println(error_header(t) + e.error);
 		System.err.println(sep);
 	}
 
@@ -152,42 +145,10 @@ public class SemanticError {
 	{
 		errors++;
 		System.err.println(sep);
-		if (e.expected != Types.UNDEFINED && e.got != Types.UNDEFINED) {
-			System.err.println(error_header(line, column) + "expected " + e.expected 
-				+ ", got " + e.got + "."); 
-		} else {
-			System.err.println(error_header(line, column) + "invalid expression"
-				+ ", could not be evaluated.");
-		}
+		System.err.println(error_header(line, column) + e.error);
 		System.err.println(sep);
 	}
 
-	public static void detection(MismtachedCompareTypesException e, int line, int column)
-	{
-		errors++;
-		System.err.println(sep);
-		System.err.println(error_header(line, column) + "expected same type " 
-			+ "operators, got" + e.fst + " and " + e.snd);
-		System.err.println(sep);
-	}
-
-	public static void detection(MismtachedAddTypesException e, int line, int column)
-	{
-		errors++;
-		System.err.println(sep);
-		System.err.println(error_header(line, column) + "expected integer "
-			+ "operators, got " + e.fst + " and " + e.snd);
-		System.err.println(sep);
-	}
-
-	public static void detection(MismtachedProductTypesException e, int line, int column)
-	{
-		errors++;
-		System.err.println(sep);
-		System.err.println(error_header(line, column) + "expected boolean "
-			+ "operators, got " + e.fst + " and " + e.snd);
-		System.err.println(sep);
-	}
 
 	// -- MISMATCHED SYMBOL TYPE DETECTION.
 	public static void detection(MismatchedSymbolTypeException e, Token t)
@@ -207,11 +168,11 @@ public class SemanticError {
 
 	public static void detection(FunctionNotFoundException e, Token t)
 	{
-		int pad = padding(error_header(t) + "function", "--> did you mean");
 		errors++;
 		System.err.println(sep);
-		System.err.println(error_header(t) + "function '" + e.got + "' not found.");
-		System.err.printf("%"+pad+"s%s\n", "", "--> did you mean '" + e.expected + "' ?");
+		System.err.println(error_header(t) + e.info);
+		System.err.println("--> function     '" + e.got + "' not found.");
+		System.err.println("--> did you mean '" + e.expected + "' ?");
 		System.err.println(sep);
 	}
 
