@@ -46,7 +46,8 @@ begin
     g := not false;
     c[0] := c[0];
     a := char2int(vec6[0]);
-    b := int2char(a);
+    a := int2char(b);
+    a := char2int(g);
     get(b);
     get(a);
     --get(g);
