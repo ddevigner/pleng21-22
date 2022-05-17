@@ -156,7 +156,7 @@ public class SemanticFunctions {
 	// Evaluar procedimiento.
 	//-----------------------------------------------------------------------
 	private boolean evaluateParameterClass(ParameterClass a, ParameterClass b) {
-		if (a == ParameterClass.REF && b != ParameterClass.REF) return false;
+		if (a == ParameterClass.REF && b == ParameterClass.VAL) return false;
 		else return true;
 	}
 
@@ -171,20 +171,20 @@ public class SemanticFunctions {
 
 		SymbolProcedure p = (SymbolProcedure) s;
 		if (p.main) throw new MainProcedureCallException(p.name);
-		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException();
+		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched parameters length");
 		for (int i = 0; i < p.parList.size(); i++) {
 			if (p.parList.get(i).type == Types.ARRAY) {
 				if (((SymbolArray) p.parList.get(i)).baseType != at.given.get(i).baseType) 
-					throw new ProcedureNotFoundException();
-				if (evaluateParameterClass(((SymbolArray) p.parList.get(i)).parClass, at.given.get(i).parClass))
-					throw new ProcedureNotFoundException();
+					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched base type in parameter " + (i+1));
+				if (!evaluateParameterClass(((SymbolArray) p.parList.get(i)).parClass, at.given.get(i).parClass))
+					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched paramter type in parameter " + (i+1));
 				if (((SymbolArray) p.parList.get(i)).maxInd != at.given.get(i).maxInd)
-					throw new ProcedureNotFoundException();
+					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched array size in parameter " + (i+1));
 			} else {
 				if (p.parList.get(i).type != at.given.get(i).baseType)
-					throw new ProcedureNotFoundException();
+					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched base type in parameter " + (i+1));
 				if (!evaluateParameterClass(p.parList.get(i).parClass, at.given.get(i).parClass))
-					throw new ProcedureNotFoundException();
+					throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), "mismatched parameter class in parameter " + (i+1));
 			}
 		}
 		

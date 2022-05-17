@@ -26,6 +26,16 @@ public class SymbolProcedure extends Symbol {
     }
 
     public String toString() {
+        String p_str = name + "(";
+        for (Symbol i : parList) {
+            p_str += i.parClass + " ";
+            p_str += (i.type == Types.ARRAY ? ((SymbolArray) i).toString() : i.type + " " + i.name);
+            p_str += ", "; 
+        }
+        return (p_str.substring(0, p_str.length()-2) + ")");
+    }
+
+    public String Debug() {
         return "(" + name + "," + type + "," + parList + "," + nivel + ")";
     }
 

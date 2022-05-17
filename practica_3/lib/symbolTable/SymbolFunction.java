@@ -32,9 +32,9 @@ public class SymbolFunction extends Symbol implements Cloneable {
         for (Symbol i : parList) {
             f_str += i.parClass + " ";
             f_str += (i.type == Types.ARRAY ? ((SymbolArray) i).toString() : i.type + " " + i.name);
-            f_str += ","; 
+            f_str += ", "; 
         }
-        return (f_str.substring(0, f_str.length()-1) + ") -> " + returnType);
+        return (f_str.substring(0, f_str.length()-2) + ") -> " + returnType);
     }
 
     public SymbolFunction clone () {

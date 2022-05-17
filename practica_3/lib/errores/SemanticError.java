@@ -67,23 +67,6 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// -- INVALID RETURN HEADER DECLARATION.
-	public static void detection(ReturnHeaderDeclarationException e, int line, 
-		int column, String name)
-	{
-		System.err.println(sep);
-		if (!e.is_procedure) {
-			errors++;
-			System.err.println("warning: (" + line + "," + column + "): " + "'" 
-				+ name + "' function declaration needs a return type.");
-		} else {
-			warnings++;
-			System.err.println("semantic error: (" + line + "," + column + "): " 
-			+ "'" + name + "' procedure has a return type when is not needed.");
-		}
-		System.err.println(sep);
-	}
-
 	// -- INDEX NOT INTEGER TYPE.
 	public static void detection(IndexNotIntegerException e, int line, int column)
 	{
@@ -106,9 +89,11 @@ public class SemanticError {
 	// CAMBIAR.
 	public static void detection(ProcedureNotFoundException e, Token t)
 	{
+		int pad = padding(error_header(t) + "procedure", "--> did you mean");
 		errors++;
 		System.err.println(sep);
-		System.err.println(error_header(t) + "error de procedure.");
+		System.err.println(error_header(t) + "procedure '" + e.got + "' not found, " + e.info);
+		System.err.printf("%"+pad+"s%s\n", "", "--> did you mean '" + e.expected + "' ?");
 		System.err.println(sep);
 	}
 

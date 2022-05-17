@@ -125,8 +125,18 @@ public class Attributes implements Cloneable {
         for (Attributes i : given) {
             f_str += i.parClass + " ";
             f_str += (i.type == Types.ARRAY ? i.toArray() : i.baseType + " " + i.name);
-            f_str += ","; 
+            f_str += ", "; 
         }
-        return (f_str.substring(0, f_str.length()-1) + ") -> " + baseType);
+        return (f_str.substring(0, f_str.length()-2) + ") -> " + baseType);
+    }
+
+    public String toProcedure() {
+        String p_str = name + "(";
+        for (Attributes i : given) {
+            p_str += i.parClass + " ";
+            p_str += (i.type == Types.ARRAY ? i.toArray() : i.baseType + " " + i.name);
+            p_str += ", "; 
+        }
+        return (p_str.substring(0, p_str.length()-2) + ")");
     }
 }
