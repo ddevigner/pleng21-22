@@ -1,7 +1,6 @@
 //*****************************************************************
-// Tratamiento de errores sintácticos
-//
-// Fichero:    ErrorSintactico.java
+// Descripcion: Tratamiento de errores sintácticos
+// Fichero:    ErrorSemantico.java
 // Fecha:      03/03/2022
 // Versión:    v1.0
 // Asignatura: Procesadores de Lenguajes, curso 2021-2022
@@ -15,7 +14,7 @@ import lib.symbolTable.exceptions.*;
 import lib.tools.exceptions.*;
 import lib.symbolTable.Symbol.Types;
 
-public class SemanticError {
+public class ErrorSemantico {
 	final static String sep = "*************************************************************************";
 
 	private static int errors = 0;

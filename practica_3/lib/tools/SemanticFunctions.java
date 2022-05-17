@@ -1,6 +1,5 @@
 //*****************************************************************
-// Tratamiento de errores sintácticos
-//
+// Descripcion: Tratamiento de errores sintácticos.
 // Fichero:    SemanticFunctions.java
 // Fecha:      03/03/2022
 // Versión:    v1.0
@@ -20,7 +19,7 @@ import lib.tools.exceptions.*;
 import lib.errores.*;
 
 public class SemanticFunctions {
-	private SemanticError se; //clase común de errores semánticos
+	private ErrorSemantico se; //clase común de errores semánticos
 
 	private SymbolTable st;
 	
@@ -28,7 +27,7 @@ public class SemanticFunctions {
 
 	public SemanticFunctions(SymbolTable st) {
 		this.st = st;
-		se = new SemanticError();
+		se = new ErrorSemantico();
 	}
 
 	public int getErrors(){
