@@ -48,5 +48,5 @@
 ### Proyectos de ejemplo:
 - [Calculadora de enteros](https://github.com/ddevigner/pleng21-22/tree/main/material/calc_enteros): diferentes fases de una calculadora de enteros implementada con JavaCC.
 - [Comando wc](https://github.com/ddevigner/pleng21-22/tree/main/material/wc): comando wc completamente implementado en JavaCC.
-- [JavaCC first proyect](https://github.com/ddevigner/pleng21-22/blob/main/doc/javacc_xamples.zip): un primer proyecto de contacto implementado y compilado en JavaCC.
-- [JavaCC syntax files](https://github.com/ddevigner/pleng21-22/blob/main/doc/calc_enteros_sint.zip): archivos de ejemplo que muestran la implementacion de un fichero JavaCC y su sintaxis.
+- [JavaCC first proyect](https://github.com/ddevigner/pleng21-22/tree/main/material/javacc_first_contact): un primer proyecto de contacto implementado y compilado en JavaCC.
+- [JavaCC syntax files](https://github.com/ddevigner/pleng21-22/tree/main/material/javacc_syntax_examples): archivos de ejemplo que muestran la implementacion de un fichero JavaCC y su sintaxis.
