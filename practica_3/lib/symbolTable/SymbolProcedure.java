@@ -19,15 +19,14 @@ public class SymbolProcedure extends Symbol {
     public ArrayList<Symbol> parList;
     public boolean main;
 
-    public SymbolProcedure(String name, ArrayList<Symbol> parList, boolean main, int line, int column) {
-    	super(name, Types.PROCEDURE, ParameterClass.NONE, line, column);
+    public SymbolProcedure(String name, ArrayList<Symbol> parList, boolean main) {
+    	super(name, Types.PROCEDURE, ParameterClass.NONE);
         this.parList = parList;
         this.main    = main;
     }
 
     public String toString() {
-        return "(" + name + "," + type + "," + parList + "," + nivel + "," 
-            + line + "," + column + ")";
+        return "(" + name + "," + type + "," + parList + "," + nivel + ")";
     }
 
     public SymbolProcedure clone () {

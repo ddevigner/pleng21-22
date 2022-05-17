@@ -31,25 +31,21 @@ abstract public class Symbol implements Cloneable {
     public boolean constant;
     
     public int nivel; //nivel dentro de la TS
-    public int line;
-    public int column;
 
-    public Symbol (String _name, Types _type, int _line, int _column) {
-    	this (_name, -1, _type, ParameterClass.NONE, false, _line, _column); 
+    public Symbol (String _name, Types _type) {
+    	this (_name, -1, _type, ParameterClass.NONE, false); 
     }
   
-    public Symbol (String _name, Types _type, ParameterClass _parClass, int _line, int _column) {
-    	this (_name, -1, _type, _parClass, false, _line, _column); 
+    public Symbol (String _name, Types _type, ParameterClass _parClass) {
+    	this (_name, -1, _type, _parClass, false); 
     }
    
-    public Symbol (String _name, long _dir, Types _type, ParameterClass _parClass, boolean _constant, int _line, int _column) {
+    public Symbol (String _name, long _dir, Types _type, ParameterClass _parClass, boolean _constant) {
     	name = _name;
     	dir = _dir; 
     	type = _type; 
     	parClass = _parClass; 
     	constant = _constant; 
-        line = _line;
-        column = _column;
     }
     
     public Symbol clone() {

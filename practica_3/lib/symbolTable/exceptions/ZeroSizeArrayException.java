@@ -1,6 +1,6 @@
 package lib.symbolTable.exceptions;
 
-public class ZeroSizeArrayException extends Error {
+public class ZeroSizeArrayException extends Exception {
 
 	public ZeroSizeArrayException() {}
 

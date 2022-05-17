@@ -10,9 +10,21 @@
 
 package lib.symbolTable.exceptions;
 
-public class ReturnIfException extends Exception {
+import lib.symbolTable.Symbol.Types;
 
-	public ReturnIfException() {
+public class FunctionReturnException extends Exception {
 
+	public boolean hasReturn;
+	public Types expected;
+	public Types got;
+
+	public FunctionReturnException() {
+		hasReturn = false;
+	}
+
+	public FunctionReturnException(Types expected, Types got) {
+		hasReturn = true;
+		this.expected = expected;
+		this.got = got;
 	}
 }

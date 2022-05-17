@@ -36,11 +36,13 @@ public class Attributes implements Cloneable {
 
     // Methods Attributes.
     public boolean main;
+    public boolean method;
     public ArrayList<Symbol> params;
     public ArrayList<Attributes> given;
-    public boolean haveReturn;
+    public boolean hasReturn;
 
     // Variables Attributes.
+    public int maxInd;
     public ParameterClass parClass;
     public int intVal;
     public boolean boolVal;
@@ -59,11 +61,15 @@ public class Attributes implements Cloneable {
         main = false;
         params = null;
         given = new ArrayList<>();
-        haveReturn = false;
+        hasReturn = false;
         parClass = ParameterClass.NONE;
     }
 
     // Method attributes.
+    public Attributes(boolean method) {
+        this.method = method;
+    }
+
     public Attributes(ArrayList<Symbol> params) {
         this.params = params;
     }
@@ -73,7 +79,7 @@ public class Attributes implements Cloneable {
         this.baseType = returnType;
         this.main = false;
         this.params = params;
-        haveReturn = false;
+        hasReturn = false;
     }
 
     public Attributes(Types methodType, Types returnType, ArrayList<Symbol> params, boolean main) {
@@ -81,7 +87,7 @@ public class Attributes implements Cloneable {
         this.baseType = returnType;
         this.main = main;
         this.params = params;
-        haveReturn = false;
+        hasReturn = false;
     }
 
     // Variable attributes.
@@ -96,30 +102,6 @@ public class Attributes implements Cloneable {
     	catch (CloneNotSupportedException e) { return null; }
     }
 
-    public void initInt(String value) {
-        baseType = Types.INT;
-        parClass = ParameterClass.VAL;
-        intVal = Integer.parseInt(value);
-    }
-
-    public void initChar(String value) {
-        baseType = Types.CHAR;
-        parClass = ParameterClass.VAL;
-        charVal = value.charAt(0);
-    }
-
-    public void initBool(String value) {
-        baseType = Types.BOOL;
-        parClass = ParameterClass.VAL;
-        boolVal = value.equals("true") ? true : false;
-    }
-
-    public void initString(String value) {
-        baseType = Types.STRING;
-        parClass = ParameterClass.VAL;
-        stringVal = value;
-    }
-
     // Attributes to string.
     public String toString(String n) {
         return "ATTRIBUTES " + n + ":\n" +
@@ -127,10 +109,24 @@ public class Attributes implements Cloneable {
             "\tTYPE: " + type + "\n" +
             "\tBASETYPE: " + baseType + "\n" +
             "\tPARAMS: " + params + "\n" +
-            "\tHAVERETURN: " + haveReturn + "\n" +
+            "\tHASRETURN: " + hasReturn + "\n" +
             "\tintVal: " + intVal + "\n" +
             "\tboolVal: " + boolVal + "\n" +
             "\tcharVal: " + charVal + "\n" +
             "\tstringVal: " + stringVal + "\n";
+    }
+
+    public String toArray() {
+        return baseType + " " + name + "[0.." + maxInd + "]"; 
+    }
+
+    public String toFunction() {
+        String f_str = name + "(";
+        for (Attributes i : given) {
+            f_str += i.parClass + " ";
+            f_str += (i.type == Types.ARRAY ? i.toArray() : i.baseType + " " + i.name);
+            f_str += ","; 
+        }
+        return (f_str.substring(0, f_str.length()-1) + ") -> " + baseType);
     }
 }

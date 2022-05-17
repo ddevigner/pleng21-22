@@ -24,7 +24,6 @@ public class SemanticFunctions {
 	private SymbolTable st;
 	
 	public static enum Operator { NOP, INT_OP, BOOL_OP, CMP_OP };
-	public static enum Procedure { GET, PUT, PUTLINE, CUSTOM };
 
 	public SemanticFunctions(SymbolTable st) {
 		this.st = st;
@@ -48,13 +47,13 @@ public class SemanticFunctions {
 			if (type == Types.ARRAY) {
 				int n = Integer.parseInt(i.image);
 				checkArrayIndexDefinition(n);
-				s = new SymbolArray(t.image, n, var.baseType, var.parClass, t.beginLine, t.beginColumn);
+				s = new SymbolArray(t.image, n, var.baseType, var.parClass);
 			} else if (var.baseType == Types.INT) {
-				s = new SymbolInt(t.image, var.parClass, t.beginLine,  t.beginColumn);
+				s = new SymbolInt(t.image, var.parClass);
 			} else if (var.baseType == Types.CHAR) {
-				s = new SymbolChar(t.image, var.parClass, t.beginLine, t.beginColumn);
+				s = new SymbolChar(t.image, var.parClass);
 			} else {
-				s = new SymbolBool(t.image, var.parClass, t.beginLine, t.beginColumn);
+				s = new SymbolBool(t.image, var.parClass);
 			}
 			st.insertSymbol(s);
 			if (var.params != null) st.insertSymbol(var.params, s);
@@ -67,21 +66,19 @@ public class SemanticFunctions {
 
 	public void AddMethod(Attributes at, Token t) {
 		try {
+			at.name = t.image;
 			if (!at.main) at.params = new ArrayList<>();
 			if (at.type == Types.PROCEDURE) 
-				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main, 
-					t.beginLine, t.beginColumn));
+				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main));
 			else 
-				st.insertSymbol(new SymbolFunction(t.image, at.params, at.baseType,
-					t.beginLine, t.beginColumn));
-			at.name = t.image;
-			at.line = t.beginLine;
-			at.column = t.beginColumn;
+				st.insertSymbol(new SymbolFunction(t.image, at.params, at.baseType));
 		} catch (AlreadyDefinedSymbolException e) {
 			se.detection(e, t);
 			at.params = null;
 		}
 		st.insertBlock();
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
 	}
 	/* --------------------------------------------------------------------- */
 	/* --------------------------------------------------------------------- */
@@ -89,127 +86,103 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 	/* Verifica el tipo de retorno de procedimiento o funcion.               */
 	/* --------------------------------------------------------------------- */
-	private void evaluateReturnHeader(Types def, Types type) throws ReturnHeaderDeclarationException {
-		if (def == Types.PROCEDURE && def != type)
-			throw new ReturnHeaderDeclarationException(true);
-		if (def == Types.FUNCTION  && def != type)
-			throw new ReturnHeaderDeclarationException(false);
+	private void evaluateReturnTypeDef(Types type, Types baseType) throws 
+		ProcedureReturnTypeException,
+		FunctionReturnTypeException
+	{
+		if (type == Types.PROCEDURE && baseType != Types.UNDEFINED)
+			throw new ProcedureReturnTypeException();
+		if (type == Types.FUNCTION  && baseType == Types.UNDEFINED)
+			throw new FunctionReturnTypeException();
 	}
 
-	public void EvaluateReturnHeader(Attributes at, Types type) {
+	public void EvaluateReturnTypeDef(Attributes at, Token t) {
 		try {
-			evaluateReturnHeader(at.type, type);
-		} catch (ReturnHeaderDeclarationException e) {
-			se.detection(e, at.line, at.column, at.name);
+			evaluateReturnTypeDef(at.type, at.baseType);
+		} catch (ProcedureReturnTypeException e) {
+			se.detection(e, at.line, at.column);
 			at.baseType = Types.UNDEFINED;
+		} catch (FunctionReturnTypeException e) {
+			se.detection(e, t);
 		}
 	}
 
+	//-----------------------------------------------------------------------
+	// Evaluar get.
+	//-----------------------------------------------------------------------
+	private void evaluateGet(Types type) throws GetException {
+		if (type != Types.INT && type != Types.CHAR) throw new GetException(type);
+	}
+
+	public void EvaluateGet(Attributes at) {
+		try {
+			evaluateGet(at.baseType);
+		} catch (GetException e) {
+			se.detection(e, at.line, at.column);
+		}
+	}
+
+	//-----------------------------------------------------------------------
+	// Evaluar put.
+	//-----------------------------------------------------------------------
+	private void evaluatePut(Types type) throws PutException{
+		if (type == Types.UNDEFINED) throw new PutException();
+	}
+
+	public void EvaluatePut(Attributes at) {
+		try{
+			evaluatePut(at.baseType);
+		}catch (PutException e){
+			se.detection(e, at.line, at.column);
+		}
+	}
+
+	//-----------------------------------------------------------------------
+	// Evaluar putline.
+	//-----------------------------------------------------------------------
 	private void evaluatePutline(Types type) throws PutlineException {
-		
+		if (type == Types.UNDEFINED) throw new PutlineException();
 	}
 
 	public void EvaluatePutline(Attributes at) {
 		try {
 			evaluatePutline(at.baseType);
 		} catch (PutlineException e) {
-			System.err.println("Mensaje de error de que putline esta mal.");
+			se.detection(e, at.line, at.column);
 		}
 	}
 
-	
-	public static void comprobarProcedimiento(Token t,SymbolTable st,SymbolProcedure s){
-		try{
-			Symbol aux = st.getSymbol(t.image);
-			if(aux.type != Types.PROCEDURE) {
-				if(aux.type == Types.FUNCTION) System.err.println("Warn -- Se esta ignorando el valor devuelto");
-				else {System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- Se debe invocar un procedimiento");}
-			} else {
-				s = (SymbolProcedure) aux;
-				if (s.main)
-					System.err.println("(" + t.beginLine + "," + t.beginColumn + ") Error -- You can not call the main procedure");
-			}
-		} catch (SymbolNotFoundException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn+ ") Error -- symbol \'" + t.image + "\' not declared.");
-		}
-	}
-
-	private boolean evaluateParClass(ParameterClass a, ParameterClass b) {
-		if (a == ParameterClass.REF && b != ParameterClass.VAL) return true;
-		if (a == ParameterClass.VAL && b != ParameterClass.REF) return true;
-		return false;
-	}
-
-	private void evaluateProcedure(Types type) throws ProcedureNotFoundException {
-		if (p == Procedure.GET && type != Types.INT && type != Types.CHAR)
-			throw new ProcedureNotFoundException(p, type); 
-		if((p == Procedure.PUT || p == Procedure.PUTLINE) && type == Types.UNDEFINED)
-			throw new ProcedureNotFoundException(p, type); 
-	}
-
-	/******************************** GET ************************************/
-	public void evaluateGet(Types type) throws GetException {
-		if (type != Types.INT && type != Types.CHAR) throw new GetException(type);
-	}
-
-	public void EvaluateGet(Token t, Types type) {
-		try {
-			evaluateGet(type);
-		} catch (GetException e) {
-			se.detection(e, t);
-		}
-	}
-
-	/******************************** PUT ************************************/
-	private void evaluatePut(Types type) throws PutException {
-		if (type == Types.UNDEFINED) throw new PutException(); 
-	}
-
-	public void EvaluatePut(Token t, Types type){
-		try{
-			evaluateProcedure(Procedure.PUT, at.baseType);
-		}catch (PutException e){
-			se.detection(e, t);
-		}
-	}
-
-	/****************************** PUTLINE **********************************/
-	private void evaluatePutline(Types type) throws 
-		PutlineException
-	{
-		if (type == Types.UNDEFINED) throw new PutlineException(); 
-	}
-
-	public void EvaluatePutline(Token t, Types type) {
-		try {
-			evaluateGet(Procedure.PUTLINE, type);
-		} catch (PutlineException e) {
-			se.detection(e, t);
-		}
-	}
-
-	/****************************** PROCEDURE ********************************/
-	private void evaluateProcedure(Symbol s, Attributes at) throws 
+	//-----------------------------------------------------------------------
+	// Evaluar procedimiento.
+	//-----------------------------------------------------------------------
+	private void evaluateProcedure(Symbol s, Attributes at) throws
 		MismatchedSymbolTypeException, 
 		MainProcedureCallException, 
 		ProcedureNotFoundException
 	{
 		if (s.type != Types.PROCEDURE) 
 			throw new MismatchedSymbolTypeException(s.type, Types.PROCEDURE);
-		
+
 		SymbolProcedure p = (SymbolProcedure) s;
-		if (p.main) throw new MainProcedureCallException();
+		if (p.main) throw new MainProcedureCallException(p.name);
 		if (p.parList.size() != at.given.size()) throw new ProcedureNotFoundException();
 		for (int i = 0; i < p.parList.size(); i++) {
-			//if (p.parList.get(i).type != at.given.get(0).baseType || !evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
-			if ((p.parList.get(i).type != at.given.get(i).baseType && p.parList.get(i).type!=Types.ARRAY) 
-				|| (!evaluateParClass(p.parList.get(i).parClass, at.given.get(i).parClass))
-				|| (p.parList.get(i).type==Types.ARRAY && ((SymbolArray)p.parList.get(i)).baseType != at.given.get(i).baseType)){
-				throw new ProcedureNotFoundException();
+			if (p.parList.get(i).type == Types.ARRAY) {
+				if (((SymbolArray) p.parList.get(i)).baseType != at.given.get(i).baseType) 
+					throw new ProcedureNotFoundException();
+				if (((SymbolArray) p.parList.get(i)).parClass != at.given.get(i).parClass)
+					throw new ProcedureNotFoundException();
+				if (((SymbolArray) p.parList.get(i)).maxInd != at.given.get(i).maxInd)
+					throw new ProcedureNotFoundException();
+			} else {
+				if (p.parList.get(i).type != at.given.get(i).baseType)
+					throw new ProcedureNotFoundException();
+				if (p.parList.get(i).parClass != at.given.get(i).parClass) 
+					throw new ProcedureNotFoundException();
 			}
 		}
+		
 	}
-
 	public void EvaluateProcedure(Attributes at, Token t) {
 		try {
 			Symbol s = st.getSymbol(t.image); 
@@ -225,271 +198,367 @@ public class SemanticFunctions {
 		}
 	}
 
+	//-----------------------------------------------------------------------
+	// Evaluar asignacion.
+	//-----------------------------------------------------------------------
+	private void evaluateAssignation(Types a, Types exp) throws MismatchedTypesException {
+		if (a != exp) throw new MismatchedTypesException(a, exp);
+	}
 
-	private void evaluateFunction(Symbol s, Attributes at, Attributes fst) throws 
-		MismatchedSymbolTypeException, 
-		FunctionNotFoundException
+	public void EvaluateAssignation(Attributes a, Attributes exp) {
+		try {
+			evaluateAssignation(a.baseType, exp.baseType);
+		} catch (MismatchedTypesException e) {
+			se.detection(e, exp.line, exp.column);
+		}
+	}
+
+	//-----------------------------------------------------------------------
+	// Evaluar declaracion del return.
+	//-----------------------------------------------------------------------
+	private void evaluateReturn(Types type, Types base, Types got) throws 
+		ProcedureReturnException,
+		FunctionReturnException
 	{
-		if (s.type != Types.FUNCTION) {
-			
-			throw new MismatchedSymbolTypeException();
+		if(type == Types.PROCEDURE) throw new ProcedureReturnException();
+		else if (base != got) throw new FunctionReturnException(base, got);
+	}
+
+	public void hasReturn(boolean hasReturn) throws FunctionReturnException {
+		if (!hasReturn) throw new FunctionReturnException();
+	}
+
+	public void EvaluateReturn(Attributes at, Attributes exp, Token t){
+		try{
+			evaluateReturn(at.type, at.baseType, exp.baseType);
+			at.hasReturn = true;
+		} catch(ProcedureReturnException e) {
+			se.detection(e, t);
+		} catch (FunctionReturnException e) {
+			se.detection(e, exp.line, exp.column);
 		}
+	}
+
+	public void EvaluateReturn(Attributes at, Token t) {
+		try {
+			if (at.type == Types.FUNCTION) hasReturn(at.hasReturn);
+		} catch (FunctionReturnException e) {
+			se.detection(e, t.beginLine, t.beginColumn);
+		}
+	} 
+
+	//-----------------------------------------------------------------------
+	// Evaluar operacion.
+	//-----------------------------------------------------------------------
+	private Types evaluateOperation(Types fst, Operator op, Types snd) throws 
+		MismtachedCompareTypesException,
+		MismtachedAddTypesException,
+		MismtachedProductTypesException 
+	{
+		if (op == Operator.CMP_OP) {
+			if (fst != snd) throw new MismtachedCompareTypesException(fst, snd);
+			else return Types.BOOL;
+		} else if (op == Operator.INT_OP) {
+			if (fst != Types.INT || snd != Types.INT)
+				throw new MismtachedAddTypesException(fst, snd);
+		} else if (op == Operator.BOOL_OP) {
+			if (fst != Types.BOOL || snd != Types.BOOL)
+				throw new MismtachedProductTypesException(fst, snd);
+		}
+		return fst;
+	}
+
+	public void EvaluateOperation(Attributes fst, Attributes snd) {
+		try {
+			fst.baseType = evaluateOperation(fst.baseType, snd.op, snd.baseType);
+			fst.parClass = ParameterClass.VAL;
+		} catch (MismtachedCompareTypesException e) {
+			se.detection(e, snd.line, snd.column);
+			fst.baseType = Types.UNDEFINED;
+		} catch (MismtachedAddTypesException e) {
+			se.detection(e, snd.line, snd.column);
+			fst.baseType = Types.UNDEFINED;
+		} catch (MismtachedProductTypesException e) {
+			se.detection(e, snd.line, snd.column);
+			fst.baseType = Types.UNDEFINED;
+		}
+	}
+
+	//-----------------------------------------------------------------------
+	// Evaluar condicion.
+	//-----------------------------------------------------------------------
+	private void evaluateCondition(Types type) throws MismatchedTypesException {
+		if(type != Types.BOOL) throw new MismatchedTypesException(Types.BOOL, type);
+	}
+
+	public void EvaluateCondition(Attributes at){
+		try {
+			evaluateCondition(at.baseType);
+		} catch (MismatchedTypesException e) {
+			se.detection(e, at.line, at.column);
+			at.baseType = Types.UNDEFINED;
+		}
+	}
+
+	public void EvaluateCondition(Attributes at, Token t){
+		try {
+			evaluateCondition(at.baseType);
+		} catch (MismatchedTypesException e) {
+			se.detection(e, at.line, at.column);
+			at.baseType = Types.UNDEFINED;
+		}
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
+	}
+
+	//-----------------------------------------------------------------------
+	// Evaluar Int2Char.
+	//-----------------------------------------------------------------------
+	private Types evaluateInt2Char(Types type) throws MismatchedTypesException {
+		if(type != Types.INT) throw new MismatchedTypesException(Types.INT, type);
+		else return Types.CHAR;
+	}
+
+	public void EvaluateInt2Char(Attributes at, Attributes exp, Token t) {
+		try {
+			at.baseType = evaluateInt2Char(exp.baseType);
+		} catch (MismatchedTypesException e) {
+			se.detection(e, exp.line, exp.column);
+			at.baseType = Types.UNDEFINED;
+		}
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
+	}
+
+	//-----------------------------------------------------------------------
+	// Evaluar Char2Int.
+	//-----------------------------------------------------------------------
+	private Types evaluateChar2Int(Types type) throws MismatchedTypesException{
+		if(type != Types.CHAR) throw new MismatchedTypesException(Types.CHAR, type);
+		else return Types.INT;
+	}
+
+	public void EvaluateChar2Int(Attributes at, Attributes exp, Token t) {
+		try {
+			at.baseType = evaluateChar2Int(exp.baseType);
+		} catch (MismatchedTypesException e) {
+			se.detection(e, exp.line, exp.column);
+			at.baseType = Types.UNDEFINED;
+		}
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
+	}
+
+	//-----------------------------------------------------------------------
+	// Evaluar Funcion.
+	//-----------------------------------------------------------------------
+	private void evaluateFunction(Symbol s, Attributes at) throws MismatchedSymbolTypeException, FunctionNotFoundException {
+		if (s.type != Types.FUNCTION) throw new MismatchedSymbolTypeException(Types.FUNCTION, s.type);
 		SymbolFunction f = (SymbolFunction) s;
+		at.name = f.name;
 		at.baseType = f.returnType;
-		if (f.parList.size() != fst.given.size()) {
-			throw new FunctionNotFoundException();
-		}
-		
+		if (f.parList.size() != at.given.size()) throw new FunctionNotFoundException(f.toString(), at.toFunction());
 		for (int i = 0; i < f.parList.size(); i++) {
-				if ((f.parList.get(i).type != fst.given.get(i).baseType && f.parList.get(i).type!=Types.ARRAY) 
-				|| (!evaluateParClass(f.parList.get(i).parClass, fst.given.get(i).parClass))
-				|| (f.parList.get(i).type==Types.ARRAY && ((SymbolArray)f.parList.get(i)).baseType != fst.given.get(i).baseType)){
-					throw new FunctionNotFoundException();
+			if (f.parList.get(i).type == Types.ARRAY) {
+				if (((SymbolArray) f.parList.get(i)).baseType != at.given.get(i).baseType) 
+					throw new FunctionNotFoundException(f.toString(), at.toFunction());
+				if (((SymbolArray) f.parList.get(i)).parClass != at.given.get(i).parClass)
+					throw new FunctionNotFoundException(f.toString(), at.toFunction());
+				if (((SymbolArray) f.parList.get(i)).maxInd != at.given.get(i).maxInd)
+					throw new FunctionNotFoundException(f.toString(), at.toFunction());
+			} else {
+				if (f.parList.get(i).type != at.given.get(i).baseType)
+					throw new FunctionNotFoundException(f.toString(), at.toFunction());
+				if (f.parList.get(i).parClass != at.given.get(i).parClass)
+					throw new FunctionNotFoundException(f.toString(), at.toFunction());
 			}
 		}
 	}
-	
-	public void EvaluateFunction(SymbolTable st, Attributes at, Attributes fst) {
+
+	public void EvaluateFunction(Attributes at, Token t) {
 		try {
-			Symbol s = st.getSymbol(fst.name); 
-			evaluateFunction(s, at, fst);
+			Symbol s = st.getSymbol(t.image); 
+			evaluateFunction(s, at);
 		} catch (SymbolNotFoundException e) {
-			System.err.println("Error -- symbol not declared.");
+			se.detection(e,t);
+			at.baseType = Types.UNDEFINED;
 		} catch (FunctionNotFoundException e) {
-			System.err.println("Funcion no encontrada.");
+			se.detection(e,t);
 			at.baseType = Types.UNDEFINED;
 		} catch (MismatchedSymbolTypeException e) {
-			System.err.println("Inutil, utilizas un simbolo que no es procedimiento como procedimiento.");
+			se.detection(e,t);
+			at.baseType = Types.UNDEFINED;
 		}
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
 	}
 
 
-	
-	/* --------------------------------------------------------------------- */
-	/* Verifica si una variable es asignable.                                */
-	/* --------------------------------------------------------------------- */
-	public Types evaluateAssignable(Symbol s, Types index_type, Types match_type) throws MismatchedSymbolTypeException, IndexNotIntegerException {
-		if (match_type == Types.ARRAY) {
-			if (index_type != Types.INT) throw new IndexNotIntegerException(index_type);
-			if (match_type != s.type) throw new MismatchedSymbolTypeException(match_type, s.type);
-			else return ((SymbolArray) s).baseType;
-		} else {
-			if (s.type != Types.INT &&  s.type != Types.CHAR && s.type != Types.BOOL)
-				throw new MismatchedSymbolTypeException(match_type, s.type);
-			else
-				return s.type;
-		}
+	//-----------------------------------------------------------------------
+	// Evaluar Array.
+	//-----------------------------------------------------------------------
+	private Types evaluateArray(Symbol s) throws MismatchedSymbolTypeException {
+		if (s.type != Types.ARRAY) throw new MismatchedSymbolTypeException(Types.ARRAY, s.type);
+		return ((SymbolArray) s).baseType;
 	}
 
-	public void EvaluateAssignable(Attributes at, Token t, Types match_type) {
+	private Types evaluateArray(Symbol s, Types index) throws MismatchedSymbolTypeException, IndexNotIntegerException {
+		if (s.type != Types.ARRAY) throw new MismatchedSymbolTypeException(Types.ARRAY, s.type);
+		if (index != Types.INT) throw new IndexNotIntegerException(index);
+		return ((SymbolArray) s).baseType;
+	}
+
+	public void EvaluateArray(Attributes at, Token t) {
 		try {
 			Symbol s = st.getSymbol(t.image);
-			at.baseType = evaluateAssignable(s, at.baseType, match_type);
+			at.baseType = evaluateArray(s);
+			at.maxInd = ((SymbolArray) s).maxInd;
+			at.name = t.image;
+			at.parClass = ParameterClass.REF;
 		} catch (SymbolNotFoundException e) {
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
+		} catch (MismatchedSymbolTypeException e) {
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
+		}
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
+	}
+
+	public void EvaluateArray(Attributes at, Attributes index, Token t) {
+		try {
+			Symbol s = st.getSymbol(t.image);
+			at.baseType = evaluateArray(s, index.baseType);
+			at.name = t.image;
+			at.parClass = ParameterClass.REF;
+		} catch (SymbolNotFoundException e) {
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
+		} catch (MismatchedSymbolTypeException e) {
 			se.detection(e, t);
 			at.baseType = Types.UNDEFINED;
 		} catch (IndexNotIntegerException e) {
-			se.detection(e, t);
-			at.baseType = Types.UNDEFINED;
-		} catch (MismatchedSymbolTypeException e) {
-			se.detection(e, t);
+			se.detection(e, index.line, index.column);
 			at.baseType = Types.UNDEFINED;
 		}
-	}
-	/* --------------------------------------------------------------------- */
-
-	
-	/* --------------------------------------------------------------------- */
-	/* Evalua una expresion.                                                 */
-	/* --------------------------------------------------------------------- */
-	private void evaluateExpression(Types fst) throws MismatchedTypesException {
-		if (fst != Types.BOOL) throw new MismatchedTypesException();
-	}
-	
-	private void evaluateExpression(Types fst, Types snd) throws MismatchedTypesException {
-		
-		if (fst != snd) {
-			throw new MismatchedTypesException();} 
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
 	}
 
-	private void evaluateExpression(Attributes at, Types fst, Operator op, Types snd) throws MismatchedTypesException {
-		if (op == Operator.CMP_OP) {
-			if (fst == snd) at.baseType = Types.BOOL;
-			else throw new MismatchedTypesException();
-		} else if (op == Operator.INT_OP || op == Operator.BOOL_OP) {
-			if ((fst == Types.INT && snd == Types.INT) || (fst == Types.BOOL && snd == Types.BOOL) ) 
-				at.baseType = fst;
-			else throw new MismatchedTypesException();
-		}
+	//-----------------------------------------------------------------------
+	// Evaluar variable.
+	//-----------------------------------------------------------------------
+	private Types evaluateVar(Symbol s) throws MismatchedSymbolTypeException {
+		if (s.type != Types.CHAR && s.type != Types.INT && s.type != Types.BOOL)
+			throw new MismatchedSymbolTypeException(Types.UNDEFINED, s.type);
+		return s.type;
 	}
 
-	public void EvaluateExpression(Attributes at) {
+	public void EvaluateVar(Attributes at, Token t) {
 		try {
-			evaluateExpression(at.baseType);
-		} catch (MismatchedTypesException e) {
-			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
-			at.baseType = Types.UNDEFINED;
-		}
-	}
-
-	public void EvaluateExpression(Attributes fst, Attributes snd) {
-		try {
-			evaluateExpression(fst.baseType, snd.baseType);
-		} catch(MismatchedTypesException e){
-			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
-		}
-	}
-
-	public void EvaluateExpression(Attributes at, Attributes fst, Attributes snd) {
-		try {
-			evaluateExpression(at, fst.baseType, fst.op, snd.baseType);
-		} catch(MismatchedTypesException e){
-			System.err.println("ERROR DE TIPOS DISTINTOS (EXPRESSION). LUEGO PONEMOS ALGO MAS BONITO.");
-			fst.baseType = at.baseType = Types.UNDEFINED;
-		}
-	}
-
-	public void EvaluateExpression(Attributes at, Types type, int kind) {
-		try {
-			evaluateExpression(at.baseType, type);
-		} catch (MismatchedTypesException e) {
-			System.err.println("ERROR SE ESPERABA BOOL EN WHILE OR IF");
-		}
-	}
-
-	/** EVALUATE IF */
-	public void evaluateIf(Attributes at) throws MismatchedIfConditionType {
-		if (type != Types.BOOL) throw new MismatchedIfConditionType(type);
-	}
-
-	public void EvaluateIf(Attributes at) {
-		try {
-			evaluateIf(at.baseType);
-		} catch (MismatchedIfConditionType e) {
-			se.detection(e, at.line, at.column);
-		}
-	}
-
-	/** EVALUATE WHILE */
-	private void evaluateWhile(Types type) throws MismatchedWhileConditionType {
-		if (type != Types.BOOL) throw new MismatchedWhileConditionType(type);
-	}
-
-	public void EvaluateWhile(Attributes at) {
-		try {
-			evaluateWhile(at.baseType);
-		} catch (MimstachedWhileConditionType e) {
-			se.detection(e, at.line, at.column);
-		}
-	}
-
-	
-	
-	/* --------------------------------------------------------------------- */
-	/* Verifica si el simbolo es una expresion variable.                     */
-	/* --------------------------------------------------------------------- */
-	private void checkExpression(Attributes at, Symbol s, Types t) throws MismatchedSymbolTypeException {
-		//Habra que comprobar el tipo del vector
-		if (t == Types.UNDEFINED) {
-			if (s.type != Types.INT && s.type != Types.CHAR && s.type != Types.BOOL && s.type != Types.ARRAY){ 
-				throw new MismatchedSymbolTypeException();
-			}
-			else 
-				at.baseType = s.type;
-				if(s.type == Types.ARRAY){	//Es de tipo array asi que hay que guardar que es array y el tipo de array
-					at.type = s.type;
-					at.baseType = ((SymbolArray)s).baseType;	
-				}else{
-					at.baseType = s.type;
-				}
-		} else if (t == Types.ARRAY) {
-			if (s.type != t) {
-				throw new MismatchedSymbolTypeException();
-			}
-			else 
-				at.baseType = ((SymbolArray) s).baseType;
-		} else if (t == Types.FUNCTION) {
-			if (s.type != t){
-				throw new MismatchedSymbolTypeException();
-			}
-			else 
-				at.baseType = ((SymbolFunction) s).returnType;
-		}
-	}
-
-	public void CheckExpression(SymbolTable st, Attributes at, Token t, Types type) {
-		Symbol s;
-		try {
-			at.baseType = Types.UNDEFINED;
-			s = st.getSymbol(t.image);	//Se obtiene la variable
-			checkExpression(at, s, type);
-			at.name = s.name;
+			Symbol s = st.getSymbol(t.image);
+			at.baseType = evaluateVar(s);
+			at.name = t.image;
+			at.parClass = ParameterClass.REF;
 		} catch (SymbolNotFoundException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- \'" + t.image + "\' not defined.");
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
 		} catch (MismatchedSymbolTypeException e) {
-			System.err.println("(" + t.beginLine + "," + t.beginColumn + ") ERROR -- Expected " + type + " got " + e.toString());
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
 		}
-	}
-	/* --------------------------------------------------------------------- */
-	private void checkInt2Char(Attributes at, Attributes fst) throws MismatchedTypesException {
-		if(fst.baseType != Types.INT) throw new MismatchedTypesException();
-		else at.baseType = Types.CHAR;
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
 	}
 
-	public void CheckInt2Char(Attributes at, Attributes fst) {
+	public void EvaluateParam(Attributes at, Token t) {
 		try {
-			checkInt2Char(at, fst);
-		} catch (MismatchedTypesException e) {
-			System.err.println("Error -- int2char debe recibir como parametro un integer");
+			Symbol s = st.getSymbol(t.image);
+			at.name = t.image;
+			at.parClass = ParameterClass.REF;
+			if (s.type == Types.ARRAY) {
+				at.type = Types.ARRAY;
+				at.baseType = ((SymbolArray) s).baseType;
+				at.maxInd = ((SymbolArray) s).maxInd;
+			} else {
+				at.baseType = s.type;
+			}
+		} catch (SymbolNotFoundException e) {
+			se.detection(e, t);
+			at.baseType = Types.UNDEFINED;
 		}
 	}
 
-	private void checkChar2Int(Attributes at, Attributes fst) throws MismatchedTypesException {
-		if(fst.baseType != Types.CHAR) throw new MismatchedTypesException();
-		else at.baseType = Types.INT;
+	//-----------------------------------------------------------------------
+	// Evaluacion de constantes.
+	//-----------------------------------------------------------------------
+	// -- Constante entera.
+	public void EvaluateInt(Attributes at, Token t) {
+		at.baseType = Types.INT;
+		at.parClass = ParameterClass.VAL;
+		at.intVal   = Integer.parseInt(t.image);
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
 	}
 
-	public void CheckChar2Int(Attributes at, Attributes fst) {
-		try {
-			checkChar2Int(at, fst);
-		} catch (MismatchedTypesException e) {
-			System.err.println("Error -- char2int debe recibir como parametro un character");
-		}
+	// -- Constante caracter.
+	public void EvaluateChar(Attributes at, Token t) {
+		at.baseType = Types.CHAR;
+		at.parClass = ParameterClass.VAL;
+		at.charVal  = t.image.charAt(0);
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
+	}
+
+	// -- Constante booleana.
+	public void EvaluateBool(Attributes at, Token t) {
+        at.baseType = Types.BOOL;
+        at.parClass = ParameterClass.VAL;
+        at.boolVal  = t.image.equals("true") ? true : false;
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
+	}
+
+	// -- Constante string.
+	public void EvaluateString(Attributes at, Token t) {
+		at.baseType = Types.STRING;
+		at.parClass = ParameterClass.VAL;
+		at.stringVal   = t.image;
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
+	}
+
+	//-----------------------------------------------------------------------
+	// Evaluar tipo de operador.
+	//-----------------------------------------------------------------------
+	public void EvaluateOperator(Attributes at, Token t, Operator op) {
+		at.op = op;
+		at.name = t.image;
+		at.line = t.beginLine;
+		at.column = t.beginColumn;
 	}
 	
+
 	/* --------------------------------------------------------------------- */
 	/* MEMORABLE                                                             */
 	/* --------------------------------------------------------------------- */
 
-	public static void AlgoID(SymbolTable st, Attributes at, Token t){
+	public void AlgoID(SymbolTable st, Attributes at, Token t){
 		try {
 			Symbol aux = st.getSymbol(t.image);
 			at.type = aux.type;
 			at.parClass = aux.parClass;
 		} catch (SymbolNotFoundException e) {
-			System.err.println("Error -- symbol \'" + t.image + "\' not found");
+			se.detection(e,t);
 			at.type = Types.UNDEFINED;
 			at.parClass = ParameterClass.NONE;
 		}
 	}
 
-	/* --------------------------------------------------------------------- */
-	/* --------------------------------------------------------------------- */
-	private void comprobarReturnIfEX(Attributes at,Attributes fst)throws ReturnIfException{
-		at.haveReturn = true;
-				if(at.baseType != fst.baseType && at.baseType != Types.UNDEFINED)
-					System.err.println("Error -- Expected " + at.baseType + " value, got " + fst.baseType);
-					throw new ReturnIfException();
-	}
-
-	public void comprobarReturnIf(Attributes at,Attributes fst){
-		try{
-			comprobarReturnIfEX( at, fst);
-		}catch(ReturnIfException e){
-			
-		}
-	}
 }
+
+
 
 
 

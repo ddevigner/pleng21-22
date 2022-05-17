@@ -1,0 +1,15 @@
+procedure hello is
+    character a;
+    integer b;
+    character c[5];
+    function integer hello(ref character a[5]) is
+    begin
+        put(b);
+    end
+begin
+    b := hello(a);
+    b := not b;
+end
+
+
+--vec + vec da err

@@ -22,7 +22,6 @@ import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
 import lib.tools.SemanticFunctions;
 import lib.tools.SemanticFunctions.Operator;
-import lib.tools.SemanticFunctions.Procedure;
 import lib.tools.exceptions.*;
 import java.util.ArrayList;
 
@@ -272,117 +271,113 @@ void procs_funcs_decl ():
 // Declaracion de procedimiento/funcion
 void proc_func_decl():
 {
-	Attributes method = new Attributes();
+	Attributes at = new Attributes();
 	Token t;
 } {
-	proc_or_func(method)
-	func_return(method)
-	t = <ID> { sf.AddMethod(method, t); }
+	proc_or_func(at)
+	func_return(at)
+	t = <ID> { sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t); }
 	<LPAREN>
-	params_def(method.params)
+	params_def(at.params)
 	<RPAREN>
 	<IS>
 	vars_def()
 	procs_funcs_decl()
-	proc_func_body(method)
+	proc_func_body(at)
 }
 
 //-----------------------------------------------------------------------------
 // Declaracion de si es procedimiento o funcion.
-void proc_or_func(Attributes method):
+void proc_or_func(Attributes at):
 {} {
-		<PROC> { method.type = Types.PROCEDURE; } 
-	| 	<FUNC> { method.type = Types.FUNCTION;  }
+		<PROC> { at.type = Types.PROCEDURE; } 
+	| 	<FUNC> { at.type = Types.FUNCTION;  }
 }
 
 //-----------------------------------------------------------------------------
 // Tipo de dato que devuelve la funcion.
-void func_return(Attributes method):
+void func_return(Attributes at):
 {} {
-	vars_type(method) 
-		{ sf.EvaluateReturnHeader(method, Types.FUNCTION);  }
-	| {}
-		{ sf.EvaluateReturnHeader(method, Types.PROCEDURE); }
+	vars_type(at)
+	| {} { at.baseType = Types.UNDEFINED; }
 }
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
 void params_def(ArrayList<Symbol> params):
 {
-	Attributes par = new Attributes(params);
+	Attributes at = new Attributes(params);
 } {
-	(param_class(par) vars_decl(par) (<SCOLON> param_class(par) vars_decl(par))*)?
+	(param_class(at) vars_decl(at) (<SCOLON> param_class(at) vars_decl(at))*)?
 }
 
 //-----------------------------------------------------------------------------
 // Clase del parametro: por valor o por referencia.
-void param_class(Attributes par):
+void param_class(Attributes at):
 {} {
-		<VAL> { par.parClass = ParameterClass.VAL; }
-	| 	<REF> { par.parClass = ParameterClass.REF; }
+		<VAL> { at.parClass = ParameterClass.VAL; }
+	| 	<REF> { at.parClass = ParameterClass.REF; }
 }
 
 //-----------------------------------------------------------------------------
 // Variables de procedimiento/funcion.
 void vars_def():
 {
-	Attributes var = new Attributes(ParameterClass.NONE);
+	Attributes at = new Attributes(ParameterClass.NONE);
 } {
-	( vars_decl(var) <SCOLON> )*
+	( vars_decl(at) <SCOLON> )*
 }
 
 //-----------------------------------------------------------------------------
 // Tipos de variable y variables asociadas.
-void vars_decl(Attributes var):
+void vars_decl(Attributes at):
 {} {
-	vars_type(var) vars_list(var)
+	vars_type(at) vars_list(at)
 }
 
 
 //-----------------------------------------------------------------------------
 // Tipos de una variable.
-void vars_type(Attributes var):
-{} {
-		<INT>  { var.baseType = Types.INT;  }
-	| 	<BOOL> { var.baseType = Types.BOOL; }
-	| 	<CHAR> { var.baseType = Types.CHAR; }
+void vars_type(Attributes at):
+{
+	Token t;
+} {
+		t = <INT>  { at.baseType = Types.INT; at.line = t.beginLine; at.column = t.beginColumn; }
+	| 	t = <BOOL> { at.baseType = Types.BOOL; at.line = t.beginLine; at.column = t.beginColumn; }
+	| 	t = <CHAR> { at.baseType = Types.CHAR; at.line = t.beginLine; at.column = t.beginColumn; }
 }
 
 //-----------------------------------------------------------------------------
 // Variables del mismo tipo.
-void vars_list(Attributes var):
+void vars_list(Attributes at):
 {}
 {
-	var(var) (<COLON> var(var))*
+	var(at) (<COLON> var(at))*
 }
 
 //-----------------------------------------------------------------------------
 // Nombre de la variable.
-void var(Attributes var):
+void var(Attributes at):
 {
 	Token t, ind;
 } 
 {
 	LOOKAHEAD(2) t = <ID> <LBRACK> ind = <INTVAL> <RBRACK> 
-		{ sf.AddVar(var, t, ind, Types.ARRAY); }
+		{ sf.AddVar(at, t, ind, Types.ARRAY); }
 	| t = <ID>
-		{ sf.AddVar(var, t, null, Types.UNDEFINED); }
+		{ sf.AddVar(at, t, null, Types.UNDEFINED); }
 }
 
 //-----------------------------------------------------------------------------
 // Cuerpo de procedimiento/funcion.
-void proc_func_body(Attributes header):
-{} {
+void proc_func_body(Attributes at):
+{
+	Token t;
+} {
 	try {
 		<BEGIN> 
-		instructions_list(header) 
-		<END> {/*
-			if (at.type == Types.PROCEDURE && at.haveReturn) 
-				System.err.println("Error -- return in procedure?");
-			else if (at.type == Types.FUNCTION && !at.haveReturn)
-				System.err.println("Error -- no return in function?");
-			st.removeBlock(); */
-		}
+		instructions_list(at) 
+		t = <END> { sf.EvaluateReturn(at, t); st.removeBlock(); }
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next, 1);
 	}
@@ -408,37 +403,35 @@ void instruction(Attributes at):
 	Attributes fst = new Attributes(), snd = new Attributes();
 	Token t;
 } {
-		t = <GET> <LPAREN> assignable(fst) { sf.EvaluateGet(t, fst.baseType); } (<COLON> assignable(fst) { sf.EvaluateGet(t, fst.baseType); })* <RPAREN> <SCOLON>
-	| 	t = <PUT> <LPAREN> expression(fst) { sf.EvaluatePut(t, fst.baseType); } (<COLON> expression(fst) { sf.EvaluatePut(t, fst.baseType); })* <RPAREN> <SCOLON> 
-	| 	<PUTLINE> <LPAREN> (expression(fst) { sf.EvaluatePutline(t, fst.baseType); } (<COLON> expression(fst) { sf.EvaluatePutline(t, fst.baseType); })*)? <RPAREN> <SCOLON> 
+		<GET> <LPAREN> assignable(fst) { sf.EvaluateGet(fst); } 
+			( <COLON> assignable(fst) { sf.EvaluateGet(fst); } )* <RPAREN> <SCOLON>
+	| 	<PUT> <LPAREN> expression(fst) { sf.EvaluatePut(fst); } 
+			(<COLON> expression(fst) { sf.EvaluatePut(fst); })* <RPAREN> <SCOLON> 
+	| 	<PUTLINE> <LPAREN> (expression(fst) { sf.EvaluatePutline(fst); }
+			(<COLON> expression(fst) { sf.EvaluatePutline(fst); })*)? <RPAREN> <SCOLON> 
 	| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
-	| 	LOOKAHEAD(2) t = <ID> 
-		<LPAREN> (
-			expression(snd) { fst.given.add(snd); } 
-			(<COLON> {snd = new Attributes(); } expression(snd) {fst.given.add(snd); })*
+	| 	LOOKAHEAD(2) t = <ID> { snd.method = true; }
+			<LPAREN> (expression(snd) { fst.given.add(snd); } 
+			(<COLON> {snd = new Attributes(true); } expression(snd) {fst.given.add(snd); })*
 		)? <RPAREN> <SCOLON> { sf.EvaluateProcedure(fst, t); }
-	| 	assignable(fst) <ASS> expression(snd) { sf.EvaluateExpression(fst,snd); } <SCOLON> 
-	
-	|	<WHILE> expression(fst) { sf.EvaluateWhile(fst); }
-		<DO> instructions_list(at) <END>
-
-	| 	<IF> expression(fst) { sf.EvaluateIf(fst); } <THEN> instructions_list(at) 
-		(<ELSE> instructions_list(at))? <END> 
-
-	| 	<RETURN> expression(fst) { sf.comprobarReturnIf(at,fst); } <SCOLON> 
+	| 	assignable(fst) <ASS> expression(snd) { sf.EvaluateAssignation(fst, snd); } <SCOLON> 
+	|	<WHILE> expression(fst) { sf.EvaluateCondition(fst); }
+			<DO> instructions_list(at) <END>
+	| 	<IF> expression(fst) { sf.EvaluateCondition(fst); } <THEN> instructions_list(at) 
+			(<ELSE> instructions_list(at))? <END> 
+	| 	t = <RETURN> expression(fst) { sf.EvaluateReturn(at, fst, t); } <SCOLON> 
 }
 
 //-----------------------------------------------------------------------------
 // Elementos asignables.
 void assignable(Attributes at):
 {
+	Attributes aux = new Attributes();
 	Token t;
 }
 {
-	LOOKAHEAD(2) t = <ID> <LBRACK> expression(at) <RBRACK>
-		{ sf.EvaluateAssignable(at, t, Types.ARRAY); }
-	| t = <ID>
-		{ sf.EvaluateAssignable(at, t, Types.UNDEFINED); }
+	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { sf.EvaluateArray(at, aux, t); }
+	| t = <ID> { sf.EvaluateVar(at, t); }
 }
 
 
@@ -446,90 +439,77 @@ void assignable(Attributes at):
 // Expresion relacional.
 void expression(Attributes at): 
 {
-	Attributes fst = new Attributes();
-	Attributes snd = new Attributes();
+	Attributes aux = new Attributes();
 }
 {
-	simple_expr(fst) {at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
-	(relational_op(fst) simple_expr(snd) {sf.EvaluateExpression(at, fst, snd); } )?
+	simple_expr(at) (relational_op(aux) simple_expr(aux) {sf.EvaluateOperation(at, aux); })?
 }
 
 //-----------------------------------------------------------------------------
 // Expresion aritmetica.
 void simple_expr(Attributes at): 
 {
-	Attributes fst = new Attributes();
-	Attributes snd = new Attributes();
+	Attributes aux = new Attributes();
 } 
 {
-	( <ADD> | <SUB> )? term(fst) { at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
-	( additive_op(fst) term(snd) {  sf.EvaluateExpression(at, fst, snd); })*
-	
-} 
+	(<ADD> | <SUB>)? term(at) (additive_op(aux) term(aux) { sf.EvaluateOperation(at, aux); })*
+}
 
 //-----------------------------------------------------------------------------
 // Expresion multiplicativa.
 void term(Attributes at):
 {
-	Attributes fst = new Attributes();
-	Attributes snd = new Attributes();
+	Attributes aux = new Attributes();
 }
 {
-	factor(fst) {at.name = fst.name; at.baseType = fst.baseType; at.parClass = fst.parClass; }
-	(multiplicative_op(fst) factor(snd) { sf.EvaluateExpression(at, fst, snd); })*
+	factor(at) (multiplicative_op(aux) factor(aux) { sf.EvaluateOperation(at, aux); })*
 }
 
 void factor(Attributes at):
 {
-	Attributes fst = new Attributes();
-	Attributes snd = new Attributes();
-	int i = 0;
-	SymbolFunction s = null;
+	Attributes aux = new Attributes();
 	Token t;
 } {
-	  	<NOT> factor(at) { sf.EvaluateExpression(at); }
+	  	t = <NOT> factor(at) { sf.EvaluateCondition(at, t); }
 	| 	<LPAREN> expression(at) <RPAREN> 
-	| 	<INT2CHAR> <LPAREN> expression(fst) { sf.CheckInt2Char(at, fst); } <RPAREN>
-	| 	<CHAR2INT> <LPAREN> expression(fst) { sf.CheckChar2Int(at, fst); } <RPAREN>
-	| 	LOOKAHEAD(2) t = <ID> { 
-				fst.name = t.image; }	//Aqui se esta llamando a una funcion
-		<LPAREN> (
-			expression(snd) { fst.given.add(snd);}
-			(<COLON> {snd = new Attributes(); } expression(snd) { fst.given.add(snd); })*
-		)? <RPAREN> { sf.EvaluateFunction(st, at, fst);}
-	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(fst) <RBRACK> { 
-			sf.CheckExpression(st, at, t, Types.ARRAY); 
-			//System.err.println("El token se llama " + t.image);
-			//System.err.println("Me llega el atributte at " + at.name);
-			//System.err.println("Me llega el atributte fst " + fst.name);
-		} 
-	| 	t = <ID> 	  { //System.err.println("Me llega el token " + t.image);
-						//System.err.println("Me llega el at " + at.name);
-						sf.CheckExpression(st, at, t, Types.UNDEFINED);
-						 }
-	| 	t = <INTVAL>  { at.initInt(t.image);    } 
-	| 	t = <CHARVAL> { at.initChar(t.image);   }
-	| 	t = <BOOLVAL> { at.initBool(t.image);   }
-	| 	t = <STRING>  { at.initString(t.image); }
+	| 	t = <INT2CHAR> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateInt2Char(at, aux, t); }
+	| 	t = <CHAR2INT> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateChar2Int(at, aux, t); }
+	| 	LOOKAHEAD(2) t = <ID> { aux.method = true; } 
+			<LPAREN> (expression(aux) { at.given.add(aux); } 
+			(<COLON> {aux = new Attributes(true); } expression(aux) { at.given.add(aux); })*
+		)? <RPAREN> { sf.EvaluateFunction(at, t); }
+	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { sf.EvaluateArray(at, aux, t); } 
+	| 	t = <ID> { if (at.method) { sf.EvaluateParam(at, t); } else { sf.EvaluateVar(at, t); } }
+	| 	t = <INTVAL> { sf.EvaluateInt(at, t); }
+	| 	t = <CHARVAL> { sf.EvaluateChar(at, t); }
+	| 	t = <BOOLVAL> { sf.EvaluateBool(at, t); }
+	| 	t = <STRING> { sf.EvaluateString(at, t); }
 }
 
 void relational_op(Attributes at):
-{} {
-	(<EQ> | <LT> | <GT> | <LE> | <GE> | <NE> ) { at.op = Operator.CMP_OP; }
+{
+	Token t;
+} {
+	( t = <EQ> | t = <LT> | t = <GT> | t = <LE> | t = <GE> | t = <NE> )
+		{ sf.EvaluateOperator(at, t, Operator.CMP_OP); }
 }
 
 void additive_op(Attributes at):
 {
 	Token t;
 } {
-		(<ADD> | <SUB>) { at.op = Operator.INT_OP; }
-	| 	<OR>  { at.op = Operator.BOOL_OP;  }
+	( t = <ADD> | t = <SUB> )
+		{ sf.EvaluateOperator(at, t, Operator.INT_OP); }
+	| t = <OR> 
+		{ sf.EvaluateOperator(at, t, Operator.BOOL_OP); }
 }
 
 void multiplicative_op(Attributes at):
 {
 	Token t;
 } {
-	  	(<MUL> | <MOD> | <DIV>) { at.op = Operator.INT_OP; }
-	|	<AND> { at.op = Operator.BOOL_OP; }
+	( t = <MUL> | t = <MOD> | t = <DIV> ) 
+		{ sf.EvaluateOperator(at, t, Operator.INT_OP); }
+	| t = <AND>
+		{ sf.EvaluateOperator(at, t, Operator.BOOL_OP); }
 }

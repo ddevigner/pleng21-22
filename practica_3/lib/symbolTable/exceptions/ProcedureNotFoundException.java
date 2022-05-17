@@ -1,14 +1,8 @@
 package lib.symbolTable.exceptions;
-import lib.tools.SemanticFunctions.Procedure;
-import lib.Symbol.Types;
+import lib.symbolTable.Symbol.Types;
 
-public class ProcedureNotFoundException extends Error {
-
-    Types type;
+public class ProcedureNotFoundException extends Exception {
 
     public ProcedureNotFoundException() {}
-
-	public ProcedureNotFoundException(Types type) {
-        this.type = type;
-    }
+    
 }

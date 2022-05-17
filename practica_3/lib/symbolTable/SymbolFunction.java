@@ -21,25 +21,22 @@ public class SymbolFunction extends Symbol implements Cloneable {
     public Types returnType; //tipo de la función
 
     public SymbolFunction(String _name, ArrayList<Symbol> _parList, 
-            Types _returnType, int _line, int _column) {
-    	super(_name, Types.FUNCTION, ParameterClass.NONE, _line, _column);
+            Types _returnType) {
+    	super(_name, Types.FUNCTION, ParameterClass.NONE);
         parList = _parList;
         returnType = _returnType;
     }
 
     public String toString() {
-        String str = name + "(" ;
+        String f_str = name + "(";
         for (Symbol i : parList) {
-            str += " " + i.parClass + " ";
-            if (i.type == Types.ARRAY) str += ((SymbolArray) i).baseType;
-            else str += i.type;
-            str += " " + i.name; 
+            f_str += i.parClass + " ";
+            f_str += (i.type == Types.ARRAY ? ((SymbolArray) i).toString() : i.type + " " + i.name);
+            f_str += ","; 
         }
-        return (str + ") -> " + returnType);
+        return (f_str.substring(0, f_str.length()-1) + ") -> " + returnType);
     }
 
-
-    
     public SymbolFunction clone () {
     	SymbolFunction newSymbolFunction = (SymbolFunction) super.clone();
     	newSymbolFunction.parList = new ArrayList<Symbol> (parList); 

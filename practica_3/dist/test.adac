@@ -21,7 +21,7 @@ procedure hello is
         return a+b;
     end
 
-    function integer comprobarVec(val integer a[100],b[100]) is
+    function integer comprobarVec(val integer a[100], b[100]) is
         character f;
         integer p;
     begin
@@ -39,16 +39,17 @@ begin
         g := false;
     end
     c[0] := 'c';
-    get(b,a,g);
+    get(b,a);
     g := not false;
     c[0] := c[0];
     --b := char2int(b);
     --a := int2char(a);
     get(b);
     get(a);
-    get(g);
+    --get(g);
     --get(c);
     get(c[1]);
+    get(c[g and g]);
     --a := comprobar(a,a);
     --a := comprobar(a,a);
     --a := comprobar(b,b);

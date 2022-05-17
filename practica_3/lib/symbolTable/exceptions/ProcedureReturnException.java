@@ -10,9 +10,8 @@
 
 package lib.symbolTable.exceptions;
 
-public class NArgsException extends Exception {
+public class ProcedureReturnException extends Exception {
 
-	public NArgsException() {
 
-	}
+	public ProcedureReturnException() {}
 }
