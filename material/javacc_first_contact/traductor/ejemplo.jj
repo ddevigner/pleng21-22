@@ -1,0 +1,85 @@
+//*****************************************************************
+// File:   ejemplo.jj
+// Author: Procesadores de Lenguajes-University of Zaragoza
+// Date:   febrero 2022
+// Coms:   Ejercicios básicos
+//*****************************************************************
+
+options {
+	IGNORE_CASE = false;
+	COMMON_TOKEN_ACTION = false;
+}
+
+PARSER_BEGIN(ejemplo)
+
+package traductor;
+
+public class ejemplo {
+    public static void main(String[] args) {
+    	ejemplo parser;
+    	try {
+	    	if(args.length == 0) {
+				parser = new ejemplo(System.in);
+			}
+			else {
+	            parser = new ejemplo(new java.io.FileInputStream(args[0]));
+			}
+			parser.S();		} catch (java.io.FileNotFoundException e) {
+			System.err.println ("Fichero " + args[0] + " no encontrado.");
+		} catch (TokenMgrError e) {
+        	System.err.println("LEX_ERROR: " + e.getMessage());
+        } catch (ParseException e) {
+            System.err.println("PARSER_ERROR: " + e.getMessage());
+        }
+    }
+}
+
+PARSER_END(ejemplo)
+
+//---------------------------------------------------------
+TOKEN_MGR_DECLS : {
+	//lo declarado aquí estará en "ejemploTokenManager"
+	//también estará, por ejemplo, "lengthOfMatch", "image", ...
+	static int nPalInt = 0;
+	static int valNums = 0;
+}
+//---------------------------------------------------------
+TOKEN :
+{
+ 	< #tDIGITO: (["0"-"9"])+ >
+|	< tNUM: ("+"|"-")?(< tDIGITO >)+ >
+		{
+			valNums = valNums + Integer.parseInt(matchedToken.image);
+		}
+| 	< tPAL_INT: ["a"-"z","A"-"Z"]
+      (~[" ","\t","\n","\r","0"-"9"])* >
+		{
+			nPalInt++;
+		}
+}
+
+SKIP :
+{
+	" "
+|	"\t"
+|	"\n"
+|	"\r" 
+}
+
+//---------------------------------------------------------
+void S() : 
+{
+	Token t;
+}
+{
+	( 
+		< tNUM >
+	|	< tPAL_INT >
+	)+
+	< EOF > {
+		System.out.println(ejemploTokenManager.nPalInt + "\t" + 
+			               ejemploTokenManager.valNums + "\t");
+	}
+}
+//--------------------------------------------------
+
