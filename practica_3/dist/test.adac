@@ -2,13 +2,16 @@ procedure hello is
     character c[5];
     character vec1[20];
     character vec2[20];
-    integer vec3[20];
-    integer vec4[20]; 
+    integer vec3[100];
+    integer vec4[100]; 
     boolean vec5[30];
     boolean vec6[20];
     character b;
     integer a;
     boolean g;
+    integer prueba1,prueba2;
+    character prueba3;
+    boolean prueba4;
     procedure hola(ref integer b, c) is
         integer a;
     begin
@@ -42,8 +45,8 @@ begin
     get(b,a);
     g := not false;
     c[0] := c[0];
-    --b := char2int(b);
-    --a := int2char(a);
+    a := char2int(vec6[0]);
+    b := int2char(a);
     get(b);
     get(a);
     --get(g);
@@ -69,8 +72,55 @@ begin
     get(vec5[100]);
     vec5[50]:=false;
     vec5:=false;
+    prueba1 := prueba1 + prueba2;
+    prueba1 := prueba1 - prueba2;
+    prueba1 := prueba1 * prueba2;
+    prueba1 := prueba1 div prueba2;
+    prueba1 := prueba1 mod prueba2;
+    --prueba1 := prueba1 + prueba3; 
+    --prueba1 := prueba1 - prueba3;
+    --prueba1 := prueba1 * prueba3;
+    --prueba1 := prueba1 div prueba3;
+    --prueba1 := prueba1 mod prueba3;
+    prueba4 := prueba4 and prueba4;
+    --prueba4 := prueba4 and prueba3;
+    prueba4 := ((prueba1+prueba2)=(prueba1+prueba2)) or ((prueba1+prueba2)=(prueba1+prueba2)) or 10;   
+    prueba1 := prueba1>prueba1;
+    prueba4 := prueba1<prueba1;
+    prueba4 := prueba1>=prueba1;
+    prueba4 := prueba1<=prueba1;
+    prueba4 := prueba1=prueba1;
+    prueba4 := prueba1<>prueba1;
 
+    prueba4 := prueba1<prueba4;
+    prueba4 := prueba1>=prueba2;
+    prueba4 := prueba3<=prueba1;
+    prueba4 := prueba1=prueba4;
+    prueba4 := prueba1<>prueba5;
+    skip_line();
+    --skip_line(prueba1);
+    --put();
+    put("hola");
+    put("hola",prueba1,prueba4,2+3,prueba1 and prueba3);
+    put("hola",prueba1,prueba4,2+3,prueba4 or (prueba1<prueba2));
+    while(2=2) do
 
+    end
+    while(2+2) do
+
+    end
+    while(comprobar(2,2)=3) do
+
+    end
+    while(prueba4 and prueba3) do
+
+    end
+    while(prueba4 or (prueba1<prueba2)) do
+
+    end
+    while(comprobar(2,2,vec3)=3) do
+
+    end
 
     
 end
