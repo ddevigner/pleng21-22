@@ -21,7 +21,7 @@
 	</description>
 
 	<!-- El fuente de jcc será ${project}.jj, y generará  ${project}.tar -->
-	<property name="project" value="adac"/>
+	<property name="project" value="adac_4"/>
 
 	<!-- Variables -->
 	<property name="dir_traductor" value="traductor"/>

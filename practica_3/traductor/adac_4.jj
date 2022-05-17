@@ -1,19 +1,18 @@
 //-----------------------------------------------------------------------------
-// - File: adac.jj
+// - File: adac_4.jj
 // - Author: Sergio Gabete César (774631) & Devid Dokash (780131).
-// - Date: 20/03/2022 (last version).
+// - Date: 17/05/2022 (last version).
 // - Coms: https://javacc.github.io/javacc/tutorials/token-manager.html. Imple-
 // mentacion del analizador sintactico.
-// - Version: 1.
-// - Version-Info: nuevas reglas respecto a funciones definidas en adac para su 
-// diferenciacion a nombres de variable, correccion de regex de comentarios.
+// - Version: 3.
+// - Version-Info: analizador semantico.
 //-----------------------------------------------------------------------------
 
 options {
    //COMMON_TOKEN_ACTION = true;
 }
 
-PARSER_BEGIN(adac)
+PARSER_BEGIN(adac_4)
 package traductor;
 import lib.attributes.Attributes;
 import lib.symbolTable.*;
@@ -25,7 +24,7 @@ import lib.tools.SemanticFunctions.Operator;
 import lib.tools.exceptions.*;
 import java.util.ArrayList;
 
-public class adac {
+public class adac_4 {
 
 	//Se declara la tabla de simbolos
 	static SymbolTable st;
@@ -53,13 +52,13 @@ public class adac {
 		if (type == 0) {
 			while(t.kind != EOF) {
 				System.err.println("Descartando token ("
-					+ adacConstants.tokenImage[t.kind] + "," + t.image + ")");
+					+ adac_4Constants.tokenImage[t.kind] + "," + t.image + ")");
 				t = getNextToken();
 			}
 		} else {
 			while(t.kind != SCOLON && t.kind != END && t.kind != EOF) {
 				System.err.println("Descartando token ("
-					+ adacConstants.tokenImage[t.kind] + "," + t.image + ")");
+					+ adac_4Constants.tokenImage[t.kind] + "," + t.image + ")");
 				t = getNextToken();
 			}
 		}
@@ -69,7 +68,7 @@ public class adac {
     public static void main(String[] args) throws java.io.FileNotFoundException, 
 			ParseException 
 	{
-    	adac parser;
+    	adac_4 parser;
 
     	try {
 			//Se iniciar y crea la tabla de simbolos pero esta vacia
@@ -79,11 +78,11 @@ public class adac {
 
 			// Entrada desde stdin.
 	    	if(args.length == 0) {
-				parser = new adac(System.in);
+				parser = new adac_4(System.in);
 			}
 			// Entrada desde fichero en args[0].
 			else {
-	            parser = new adac(new java.io.FileInputStream(args[0])); 
+	            parser = new adac_4(new java.io.FileInputStream(args[0])); 
 			}
 			// Invoca símbolo inicial de la gramática.
 			parser.main();
@@ -101,7 +100,7 @@ public class adac {
         } 
     }
 }
-PARSER_END(adac)
+PARSER_END(adac_4)
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -119,7 +118,7 @@ SKIP: {
 //TOKEN_MGR_DECLS: {
 //	static void CommonTokenAction(Token t){
 //		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
-//			+ adacConstants.tokenImage[t.kind] + " \"" + t + "\"");
+//			+ adac_4Constants.tokenImage[t.kind] + " \"" + t + "\"");
 //	}
 //}
 
