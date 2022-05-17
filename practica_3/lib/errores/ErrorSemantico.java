@@ -5,7 +5,6 @@
 // Versión:    v1.0
 // Asignatura: Procesadores de Lenguajes, curso 2021-2022
 //*****************************************************************
-
 package lib.errores;
 
 import traductor.Token;
@@ -48,7 +47,7 @@ public class ErrorSemantico {
 		return warnings;
 	}
 
-	// -- AlreadyDefinedSymbolException.
+	// -- Se ha intentado añadir un simbolo ya existente.
 	public static void detection(AlreadyDefinedSymbolException e, Token t) {
 		errors++;
 		System.err.println(sep);
@@ -57,7 +56,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- SymbolNotFoundException.
+	// -- Se ha intentado usar un simbolo no definido.
 	public static void detection(SymbolNotFoundException e, Token t) {
 		errors++;
 		System.err.println(sep);
@@ -66,7 +65,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- ZeroSizeArrayException.
+	// -- Se ha inicializado un array con tamaño 0.
 	public static void detection(ZeroSizeArrayException e, Token t, Token i) {
 		errors++;
 		System.err.println(sep);
@@ -75,7 +74,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- IndexNotIntegerException.
+	// -- Acceso a array con indice no entero.
 	public static void detection(IndexNotIntegerException e, int line, int column)
 	{
 		errors++;
@@ -85,7 +84,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- MainProcedureCallException.
+	// -- Se ha llamado al procedimiento principal.
 	public static void detection(MainProcedureCallException e, Token t) 
 	{
 		errors++;
@@ -94,7 +93,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- ProcedureNotFoundException.
+	// -- Uso incorrecto de un procedimiento existente.
 	public static void detection(ProcedureNotFoundException e, Token t)
 	{
 		errors++;
@@ -105,7 +104,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- Get exception.
+	// -- Uso incorrecto del procedimiento get.
 	public static void detection(GetException e, int line, int column)
 	{
 		errors++;
@@ -121,7 +120,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- PutException.
+	// -- Uso incorrecto del procedimiento put.
 	public static void detection(PutException e, int line, int column)
 	{
 		errors++;
@@ -131,7 +130,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- PutlineException.
+	// -- Uso incorrecto del procedimiento putline.
 	public static void detection(PutlineException e, int line, int column)
 	{
 		errors++;
@@ -141,7 +140,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- MismatchedTypesException.
+	// -- Dos tipos en una expresion o una asignacion difieren.
 	public static void detection(MismatchedTypesException e, Token t)
 	{
 		errors++;
@@ -150,7 +149,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-	// -- MismatchedTypesException.
+	// -- Dos tipos en una expresion o una asignacion difieren.
 	public static void detection(MismatchedTypesException e, int line, int column)
 	{
 		errors++;
@@ -160,7 +159,7 @@ public class ErrorSemantico {
 	}
 
 
-	// -- MismatchedSymbolTypeException.
+	// -- Se utiliza un simbolo de un tipo como otro tipo.
 	public static void detection(MismatchedSymbolTypeException e, Token t)
 	{
 		errors++;
@@ -169,6 +168,7 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
+	// -- Se utiliza una funcion existente de manera incorrecta.
 	public static void detection(FunctionNotFoundException e, Token t)
 	{
 		errors++;
@@ -179,7 +179,8 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
-
+	// -- Un procedimiento tiene el tipo que devuelve o una funcion no la 
+	// tiene declarada.
 	public static void detection(ReturnTypeException e, int line, int column)
 	{
 		warnings++;
@@ -189,6 +190,9 @@ public class ErrorSemantico {
 		System.err.println(sep);
 	}
 
+	// -- El cuerpo de un procedimiento tiene declaracion de un return, una
+	// funcion no tiene ningun return o el tipo en el return es diferente al 
+	// tipo de la funcion.
 	public static void detection(ReturnStatementException e, int line, int column)
 	{
 		System.err.println(sep);

@@ -7,16 +7,8 @@
  * Versión:    v1.1
  * Asignatura: Procesadores de Lenguajes, curso 2021-2022, basado en código del 19-20
  **********************************************************************************/
-
 package lib.symbolTable.exceptions;
 
 public class SymbolNotFoundException extends Exception {
-
 	public SymbolNotFoundException() {}
-
-	@Override
-    public String toString() {
-        return "MENSAJE DE SymbolNotFoundException NO IMPLEMENTADO.";
-    }
-
 }

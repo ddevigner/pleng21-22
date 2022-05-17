@@ -1,5 +1,5 @@
 //*****************************************************************
-// Descripcion: Tratamiento de errores sintácticos.
+// Descripcion: funciones de analisis semantico.
 // Fichero:    SemanticFunctions.java
 // Fecha:      03/03/2022
 // Versión:    v1.0
@@ -84,9 +84,7 @@ public class SemanticFunctions {
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
 	}
-	/* --------------------------------------------------------------------- */
-	/* --------------------------------------------------------------------- */
-	/* Procedimientos y funciones.                                           */
+	
 	/* --------------------------------------------------------------------- */
 	/* Verifica el tipo de retorno de procedimiento o funcion.               */
 	/* --------------------------------------------------------------------- */
@@ -364,21 +362,6 @@ public class SemanticFunctions {
 	//-----------------------------------------------------------------------
 	// Evaluar Int2Char.
 	//-----------------------------------------------------------------------
-	// private Types evaluateInt2Char(Types type) throws MismatchedTypesException {
-	// 	if(type != Types.INT) throw new MismatchedTypesException(Types.INT, type);
-	// 	else return Types.CHAR;
-	// }
-
-	// public void EvaluateInt2Char(Attributes at, Attributes exp, Token t) {
-	// 	try {
-	// 		at.baseType = evaluateInt2Char(exp.baseType);
-	// 	} catch (MismatchedTypesException e) {
-	// 		se.detection(e, exp.line, exp.column);
-	// 		at.baseType = Types.UNDEFINED;
-	// 	}
-	// 	at.line = t.beginLine;
-	// 	at.column = t.beginColumn;
-	// }
 	private Types evaluateInt2Char(Types type) throws FunctionNotFoundException {
 		if(type != Types.INT) {
 			if (type != Types.UNDEFINED) {
