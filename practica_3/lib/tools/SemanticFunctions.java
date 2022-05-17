@@ -166,10 +166,9 @@ public class SemanticFunctions {
 		MainProcedureCallException, 
 		ProcedureNotFoundException
 	{
-		String info;
+		
 		if (s.type != Types.PROCEDURE) 
-			throw new MismatchedSymbolTypeException(s.type, Types.PROCEDURE);
-
+			throw new MismatchedSymbolTypeException(s.name, s.type, Types.PROCEDURE);
 		SymbolProcedure p = (SymbolProcedure) s;
 		if (p.main) throw new MainProcedureCallException(p.name);
 		if (p.parList.size() != at.given.size()) {
@@ -216,6 +215,7 @@ public class SemanticFunctions {
 				se.detection(e, t);
 			}
 		}
+		at.name = t.image;
 		
 	}
 	public void EvaluateProcedure(Attributes at, Token t) {
@@ -401,10 +401,8 @@ public class SemanticFunctions {
 		MismatchedSymbolTypeException, 
 		FunctionNotFoundException
 	{
-		if (s.type != Types.FUNCTION) throw new MismatchedSymbolTypeException(Types.FUNCTION, s.type);
+		if (s.type != Types.FUNCTION) throw new MismatchedSymbolTypeException(s.name, Types.FUNCTION, s.type);
 		SymbolFunction f = (SymbolFunction) s;
-		at.name = f.name;
-		at.baseType = f.returnType;
 		if (f.parList.size() != at.given.size()) {
 			throw new FunctionNotFoundException(f.toString(), at.toFunction(),
 				f.parList.size(), at.given.size());
@@ -450,6 +448,8 @@ public class SemanticFunctions {
 				at.baseType = Types.UNDEFINED;
 			}
 		}
+		at.name = f.name;
+		at.baseType = f.returnType;
 	}
 
 	public void EvaluateFunction(Attributes at, Token t) {
@@ -475,12 +475,12 @@ public class SemanticFunctions {
 	// Evaluar Array.
 	//-----------------------------------------------------------------------
 	private Types evaluateArray(Symbol s) throws MismatchedSymbolTypeException {
-		if (s.type != Types.ARRAY) throw new MismatchedSymbolTypeException(Types.ARRAY, s.type);
+		if (s.type != Types.ARRAY) throw new MismatchedSymbolTypeException(s.name, Types.ARRAY, s.type);
 		return ((SymbolArray) s).baseType;
 	}
 
 	private Types evaluateArray(Symbol s, Types index) throws MismatchedSymbolTypeException, IndexNotIntegerException {
-		if (s.type != Types.ARRAY) throw new MismatchedSymbolTypeException(Types.ARRAY, s.type);
+		if (s.type != Types.ARRAY) throw new MismatchedSymbolTypeException(s.name, Types.ARRAY, s.type);
 		if (index != Types.INT) throw new IndexNotIntegerException(index);
 		return ((SymbolArray) s).baseType;
 	}
@@ -528,7 +528,7 @@ public class SemanticFunctions {
 	//-----------------------------------------------------------------------
 	private Types evaluateVar(Symbol s) throws MismatchedSymbolTypeException {
 		if (s.type != Types.CHAR && s.type != Types.INT && s.type != Types.BOOL)
-			throw new MismatchedSymbolTypeException(Types.UNDEFINED, s.type);
+			throw new MismatchedSymbolTypeException(s.name, Types.UNDEFINED, s.type);
 		return s.type;
 	}
 

@@ -40,7 +40,7 @@ public class SemanticError {
 		return a.length() - b.length();
 	}
 
-	// -- ALREADY DEFINED SYMBOL DETECTION.
+	// -- AlreadyDefinedSymbolException.
 	public static void detection(AlreadyDefinedSymbolException e, Token t) {
 		errors++;
 		System.err.println(sep);
@@ -49,7 +49,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// -- SYMBOL NOT FOUND DETECTION.
+	// -- SymbolNotFoundException.
 	public static void detection(SymbolNotFoundException e, Token t) {
 		errors++;
 		System.err.println(sep);
@@ -58,7 +58,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// -- ZERO SIZE ARRAY DETECTION.
+	// -- ZeroSizeArrayException.
 	public static void detection(ZeroSizeArrayException e, Token t, Token i) {
 		errors++;
 		System.err.println(sep);
@@ -67,7 +67,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// -- INDEX NOT INTEGER TYPE.
+	// -- IndexNotIntegerException.
 	public static void detection(IndexNotIntegerException e, int line, int column)
 	{
 		errors++;
@@ -77,7 +77,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// -- MAIN PROCEDURE CALLED DETECTION.
+	// -- MainProcedureCallException.
 	public static void detection(MainProcedureCallException e) 
 	{
 		errors++;
@@ -86,7 +86,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// CAMBIAR.
+	// -- ProcedureNotFoundException.
 	public static void detection(ProcedureNotFoundException e, Token t)
 	{
 		errors++;
@@ -97,7 +97,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// Get exception.
+	// -- Get exception.
 	public static void detection(GetException e, int line, int column)
 	{
 		errors++;
@@ -112,7 +112,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// PutException.
+	// -- PutException.
 	public static void detection(PutException e, int line, int column)
 	{
 		errors++;
@@ -122,7 +122,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// PutlineException.
+	// -- PutlineException.
 	public static void detection(PutlineException e, int line, int column)
 	{
 		errors++;
@@ -132,7 +132,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	// MismatchedTypesException 
+	// -- MismatchedTypesException.
 	public static void detection(MismatchedTypesException e, Token t)
 	{
 		errors++;
@@ -141,6 +141,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
+	// -- MismatchedTypesException.
 	public static void detection(MismatchedTypesException e, int line, int column)
 	{
 		errors++;
@@ -150,19 +151,12 @@ public class SemanticError {
 	}
 
 
-	// -- MISMATCHED SYMBOL TYPE DETECTION.
+	// -- MismatchedSymbolTypeException.
 	public static void detection(MismatchedSymbolTypeException e, Token t)
 	{
 		errors++;
 		System.err.println(sep);
-		if (e.expected == Types.UNDEFINED) {
-			System.err.println(error_header(t) + "symbol '" + t.image + "' expected"
-				+ " to be character, boolean or integer but got a(n) " + e.got);
-
-		} else {
-			System.err.println(error_header(t) + "symbol '" + t.image + "' expected"
-				+ " to be a(n) " + e.expected + ", but got a(n) " + e.got);
-		}
+		System.err.println(error_header(t) + e.error);
 		System.err.println(sep);
 	}
 
