@@ -12,6 +12,7 @@ package lib.errores;
 import traductor.Token;
 
 import lib.symbolTable.exceptions.*; 
+import lib.tools.exceptions.*;
 import lib.symbolTable.Symbol.Types;
 
 public class SemanticError {
@@ -174,7 +175,7 @@ public class SemanticError {
 		errors++;
 		System.err.println(sep);
 		System.err.println(error_header(t) + e.info);
-		System.err.println("--> function used '" + e.got + "' not found.");
+		System.err.println("--> function used '" + e.got + "'");
 		System.err.println("--> did you mean  '" + e.expected + "' ?");
 		System.err.println(sep);
 	}

@@ -16,6 +16,7 @@ import lib.symbolTable.*;
 import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
 import lib.symbolTable.exceptions.*;
+import lib.tools.exceptions.*;
 import lib.errores.*;
 
 public class SemanticFunctions {
@@ -380,7 +381,15 @@ public class SemanticFunctions {
 	// 	at.column = t.beginColumn;
 	// }
 	private Types evaluateInt2Char(Types type) throws FunctionNotFoundException {
-		if(type != Types.INT) throw new FunctionNotFoundException("int2char", "int2char", Types.INT, type, 1);
+		if(type != Types.INT) {
+			if (type != Types.UNDEFINED) {
+				throw new FunctionNotFoundException("int2char(INT) -> CHAR",
+					"int2char(" + type + ") -> CHAR", Types.INT, type, 1);
+			} else {
+				throw new FunctionNotFoundException("int2char(INT) -> CHAR",
+				"int2char(<undefined>) -> CHAR", Types.INT, type, 1);
+			}
+		}
 		else return Types.CHAR;
 	}
 
@@ -402,7 +411,15 @@ public class SemanticFunctions {
 	// Evaluar Char2Int.
 	//-----------------------------------------------------------------------
 	private Types evaluateChar2Int(Types type) throws FunctionNotFoundException{
-		if(type != Types.CHAR) throw new FunctionNotFoundException("char2int", "char2int", Types.CHAR, type, 1);
+		if(type != Types.CHAR) {
+			if (type != Types.UNDEFINED) {
+				throw new FunctionNotFoundException("char2int(CHAR) -> INT",
+					"char2int(" + type + ") -> INT", Types.CHAR, type, 1);
+			} else {
+				throw new FunctionNotFoundException("char2int(CHAR) -> INT",
+					"char2int(<undefined>) -> INT", Types.CHAR, type, 1);
+			}
+		}
 		else return Types.INT;
 	}
 
