@@ -30,8 +30,12 @@ public class SemanticFunctions {
 		se = new SemanticError();
 	}
 
-	public SemanticError getErrorSemantico(){
-		return se;
+	public int getErrors(){
+		return se.getErrors();
+	}
+
+	public int getWarnings() {
+		return se.getWarnings();
 	}
 
 	/* --------------------------------------------------------------------- */
@@ -168,6 +172,7 @@ public class SemanticFunctions {
 			throw new MismatchedSymbolTypeException(s.name, s.type, Types.PROCEDURE);
 		SymbolProcedure p = (SymbolProcedure) s;
 		if (p.main) throw new MainProcedureCallException(p.name);
+		at.name = t.image;
 		if (p.parList.size() != at.given.size()) {
 			throw new ProcedureNotFoundException(p.toString(), at.toProcedure(), 
 				p.parList.size(), at.given.size());
@@ -212,8 +217,6 @@ public class SemanticFunctions {
 				se.detection(e, t);
 			}
 		}
-		at.name = t.image;
-		
 	}
 	public void EvaluateProcedure(Attributes at, Token t) {
 		try {
@@ -399,6 +402,8 @@ public class SemanticFunctions {
 	{
 		if (s.type != Types.FUNCTION) throw new MismatchedSymbolTypeException(s.name, Types.FUNCTION, s.type);
 		SymbolFunction f = (SymbolFunction) s;
+		at.name = f.name;
+		at.baseType = f.returnType;
 		if (f.parList.size() != at.given.size()) {
 			throw new FunctionNotFoundException(f.toString(), at.toFunction(),
 				f.parList.size(), at.given.size());
@@ -444,8 +449,6 @@ public class SemanticFunctions {
 				at.baseType = Types.UNDEFINED;
 			}
 		}
-		at.name = f.name;
-		at.baseType = f.returnType;
 	}
 
 	public void EvaluateFunction(Attributes at, Token t) {

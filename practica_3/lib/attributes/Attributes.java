@@ -116,27 +116,32 @@ public class Attributes implements Cloneable {
             "\tstringVal: " + stringVal + "\n";
     }
 
+    public String toParam() {
+        if (type == Types.UNDEFINED && baseType == Types.UNDEFINED) return "<undefined>, ";
+        else {
+            String par_str = parClass + " ";
+            if (type == Types.ARRAY) par_str += toArray();
+            else {
+                par_str += baseType;
+                if (name != null) par_str += name; 
+            }
+            return par_str + ", ";
+        }
+    }
+
     public String toArray() {
         return baseType + " " + name + "[0.." + maxInd + "]"; 
     }
 
     public String toFunction() {
         String f_str = name + "(";
-        for (Attributes i : given) {
-            f_str += i.parClass + " ";
-            f_str += (i.type == Types.ARRAY ? i.toArray() : i.baseType + " " + i.name);
-            f_str += ", "; 
-        }
+        for (Attributes i : given) f_str += i.toParam(); 
         return (f_str.substring(0, f_str.length()-2) + ") -> " + baseType);
     }
 
     public String toProcedure() {
         String p_str = name + "(";
-        for (Attributes i : given) {
-            p_str += i.parClass + " ";
-            p_str += (i.type == Types.ARRAY ? i.toArray() : i.baseType + " " + i.name);
-            p_str += ", "; 
-        }
+        for (Attributes i : given) p_str += i.toParam();
         return (p_str.substring(0, p_str.length()-2) + ")");
     }
 }

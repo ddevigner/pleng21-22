@@ -17,7 +17,7 @@ public class adac implements adacConstants {
         static SymbolTable st;
         static SemanticFunctions sf;
 
-        static int errors = 0;
+        static int synt_errors = 0;
 
         //Funcion que a lo mejor hay que cambiar
         private static void initSymbolTable() {
@@ -30,7 +30,7 @@ public class adac implements adacConstants {
         }
 
         public static void panicMode(Token err, int type) {
-                errors++;
+                synt_errors++;
                 System.err.println("ERROR SINTACTICO: (" + err.beginLine + ","
                         + err.beginColumn + "): " + err);
                 System.err.println("----> Iniciando recuperacion en modo panico..."
@@ -73,8 +73,13 @@ public class adac implements adacConstants {
                         }
                         // Invoca símbolo inicial de la gramática.
                         parser.main();
-                        if (errors == 0 && sf.getErrorSemantico().getErrors() == 0) System.out.println("Compilacion con exito.");
-                        else System.out.println("Compilacion con errores.");
+                        if ((synt_errors + sf.getErrors()) == 0) System.out.println("Compilation succeded.");
+                        else {
+                                System.out.println("\nCompilacion failed due to errors: "
+                                        + synt_errors + " syntatic error(s), "
+                                        + sf.getWarnings() + " warning(s), "
+                                        + sf.getErrors() + " error(s).");
+                        }
                 } catch (java.io.FileNotFoundException e) {
                         System.err.println ("Fichero " + args[0] + " no encontrado.");
                 } catch (TokenMgrError e) {

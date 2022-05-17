@@ -33,7 +33,7 @@ public class MismatchedTypesException extends Exception {
 	{
 		if (expected == Types.UNDEFINED ) 
 			if (f_got == Types.UNDEFINED || s_got == Types.UNDEFINED)
-				this.error = "could not evaluate conditionl expression.";
+				this.error = "could not evaluate conditional expression.";
 			else 
 				this.error = "expected same type operators, got" + f_got + " and " + s_got;
 		else if (expected == Types.INT) {

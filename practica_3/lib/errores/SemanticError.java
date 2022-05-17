@@ -40,6 +40,14 @@ public class SemanticError {
 		return a.length() - b.length();
 	}
 
+	public static int getErrors() {
+		return errors;
+	}
+
+	public static int getWarnings() {
+		return warnings;
+	}
+
 	// -- AlreadyDefinedSymbolException.
 	public static void detection(AlreadyDefinedSymbolException e, Token t) {
 		errors++;
@@ -193,7 +201,7 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-
+/*
 	// public static void deteccion(ActionInvocationException e, String mensaje, Token t) {
 	// 	errors++;
 	// 	System.err.println(sep);
@@ -201,7 +209,6 @@ public class SemanticError {
 	// 			"Error al invocar a: '" + t.image + "'. " + mensaje);
 	// 	System.err.println(sep);
 	// }
-/*
 	public static void deteccion(String mensaje, Token t) {
 		errors++;
 		System.err.println(sep);
@@ -216,15 +223,5 @@ public class SemanticError {
 		System.err.println("WARNING: (" + t.beginLine + "," + t.beginColumn + "): " +
 				"Símbolo: '" + t.image + "'. " + mensaje);
 		System.err.println(sep);
-	}*/
-
-	public static int getErrors() {
-		return errors;
-	}
-
-	/*
-	public static void detection(MismatchedTypesException e) {
-		errors++;
-		System.err.println("Error --  Mismatched types in expression");
 	}*/
 }
