@@ -170,42 +170,26 @@ public class SemanticError {
 		System.err.println(sep);
 	}
 
-	public static void detection(ProcedureReturnException e, Token t)
+
+	public static void detection(ReturnTypeException e, int line, int column)
 	{
 		warnings++;
 		System.err.println(sep);
-		System.err.println(warning_header(t) + "return statement in procedure");
+		if (!e.proc_or_func) System.err.println(warning_header(line, column) + e.error);
+		else System.err.println(error_header(line, column) + e.error);
 		System.err.println(sep);
 	}
 
-	public static void detection(ProcedureReturnTypeException e, int line, int column)
-	{
-		warnings++;
-		System.err.println(sep);
-		System.err.println(warning_header(line, column) + "return type in procedure");
-		System.err.println(sep);
-	}
-
-	public static void detection(FunctionReturnException e, int line, int column)
+	public static void detection(ReturnStatementException e, int line, int column)
 	{
 		System.err.println(sep);
-		if (e.hasReturn) {
-			errors++;
-			System.err.println(error_header(line, column) + "return " + e.expected 
-				+ " function with " + e.got + " return statement.");
-		} else {
+		if (!e.proc_or_func || !e.heavy ) {
 			warnings++;
-			System.err.println(warning_header(line, column) + "missing return" 
-				+ " statement in function");
+			System.err.println(warning_header(line, column) + e.error);
+		} else {
+			errors++;
+			System.err.println(error_header(line, column) + e.error);
 		}
-		System.err.println(sep);
-	}
-
-	public static void detection(FunctionReturnTypeException e, Token t)
-	{
-		errors++;
-		System.err.println(sep);
-		System.err.println(error_header(t) + "missing return type in function");
 		System.err.println(sep);
 	}
 

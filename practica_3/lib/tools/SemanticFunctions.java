@@ -86,24 +86,21 @@ public class SemanticFunctions {
 	/* --------------------------------------------------------------------- */
 	/* Verifica el tipo de retorno de procedimiento o funcion.               */
 	/* --------------------------------------------------------------------- */
-	private void evaluateReturnTypeDef(Types type, Types baseType) throws 
-		ProcedureReturnTypeException,
-		FunctionReturnTypeException
+	private void evaluateReturnTypeDef(Types type, Types baseType) throws ReturnTypeException
 	{
 		if (type == Types.PROCEDURE && baseType != Types.UNDEFINED)
-			throw new ProcedureReturnTypeException();
+			throw new ReturnTypeException();
 		if (type == Types.FUNCTION  && baseType == Types.UNDEFINED)
-			throw new FunctionReturnTypeException();
+			throw new ReturnTypeException(true);
 	}
 
 	public void EvaluateReturnTypeDef(Attributes at, Token t) {
 		try {
 			evaluateReturnTypeDef(at.type, at.baseType);
-		} catch (ProcedureReturnTypeException e) {
-			se.detection(e, at.line, at.column);
+		} catch (ReturnTypeException e) {
+			if (!e.proc_or_func) se.detection(e, t.beginLine, t.beginColumn);
+			else se.detection(e, at.line, at.column);
 			at.baseType = Types.UNDEFINED;
-		} catch (FunctionReturnTypeException e) {
-			se.detection(e, t);
 		}
 	}
 
@@ -251,33 +248,32 @@ public class SemanticFunctions {
 	//-----------------------------------------------------------------------
 	// Evaluar declaracion del return.
 	//-----------------------------------------------------------------------
-	private void evaluateReturn(Types type, Types base, Types got) throws 
-		ProcedureReturnException,
-		FunctionReturnException
+	private void evaluateReturn(Types type, Types base, Types got) throws ReturnStatementException
 	{
-		if(type == Types.PROCEDURE) throw new ProcedureReturnException();
-		else if (base != got) throw new FunctionReturnException(base, got);
+		if(type == Types.PROCEDURE) throw new ReturnStatementException();
+		else if (base != got) throw new ReturnStatementException(base, got);
 	}
 
-	public void hasReturn(boolean hasReturn) throws FunctionReturnException {
-		if (!hasReturn) throw new FunctionReturnException();
+	public void hasReturn(boolean hasReturn) throws ReturnStatementException {
+		if (!hasReturn) throw new ReturnStatementException(false);
 	}
 
 	public void EvaluateReturn(Attributes at, Attributes exp, Token t){
 		try{
 			evaluateReturn(at.type, at.baseType, exp.baseType);
 			at.hasReturn = true;
-		} catch(ProcedureReturnException e) {
-			se.detection(e, t);
-		} catch (FunctionReturnException e) {
-			se.detection(e, exp.line, exp.column);
+		} catch(ReturnStatementException e) {
+			if (!e.proc_or_func || !e.heavy) 
+				se.detection(e, t.beginLine, t.beginColumn);
+			else
+				se.detection(e, at.line, at.column);
 		}
 	}
 
 	public void EvaluateReturn(Attributes at, Token t) {
 		try {
 			if (at.type == Types.FUNCTION) hasReturn(at.hasReturn);
-		} catch (FunctionReturnException e) {
+		} catch (ReturnStatementException e) {
 			se.detection(e, t.beginLine, t.beginColumn);
 		}
 	} 
