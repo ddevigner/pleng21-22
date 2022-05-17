@@ -3,16 +3,9 @@
 - [Practica 1](https://github.com/ddevigner/pleng21-22/tree/main/practica_1): implementacion del analizador lexico del lenguaje ADAC.
 - [Practica 2](https://github.com/ddevigner/pleng21-22/tree/main/practica_2): implementacion del analizador sintactico del lenguaje ADAC.
 - [Practica 3](https://github.com/ddevigner/pleng21-22/tree/main/practica_3): implementacion del analizador semantico del lenguaje ADAC.
+- [Practica 4](https://github.com/ddevigner/pleng21-22/tree/main/practica_4): implementacion de la generacion de codigo del lenguaje ADAC, diseño completo del compilador.
 
 ## 2. Material adicional de soporte
-### Documentacion
-- [xamples](https://github.com/ddevigner/pleng21-22/tree/main/doc/xamples): ejemplos en adac.
-- [javacc_intro](https://github.com/ddevigner/pleng21-22/blob/main/doc/javacc_intro.pdf): introduccion a javacc.
-- [javacc_intro_xample](https://github.com/ddevigner/pleng21-22/blob/main/doc/javacc_intro_xample.zip): un primer programa compilado de JavaCC de contacto.
-- [javacc_xamples](https://github.com/ddevigner/pleng21-22/blob/main/doc/javacc_xamples.zip): archivos javacc de ejemplo.
-- [integer calculator](https://github.com/ddevigner/pleng21-22/blob/main/doc/calc_enteros_sint.zip): calculadora de enteros implementada con JavaCC (analizador lexico + sintactico).
-- [wc](https://github.com/ddevigner/pleng21-22/tree/main/doc/wc): comando wc implementado con JavaCC.
-
 ### Ejecutables. Compilados para Hendrix.
 - [adac_cpp](https://github.com/ddevigner/pleng21-22/tree/main/doc/adac_cpp): compilador de adac a C++.
     ```bash
@@ -49,3 +42,11 @@
     ```bash
     maquinap <binario>
     ```
+
+### Banco de tests:
+
+### Proyectos de ejemplo:
+- [Calculadora de enteros](https://github.com/ddevigner/pleng21-22/tree/main/material/calc_enteros): diferentes fases de una calculadora de enteros implementada con JavaCC.
+- [Comando wc](https://github.com/ddevigner/pleng21-22/tree/main/material/wc): comando wc completamente implementado en JavaCC.
+- [JavaCC first proyect](https://github.com/ddevigner/pleng21-22/blob/main/doc/javacc_xamples.zip): un primer proyecto de contacto implementado y compilado en JavaCC.
+- [JavaCC syntax files](https://github.com/ddevigner/pleng21-22/blob/main/doc/calc_enteros_sint.zip): archivos de ejemplo que muestran la implementacion de un fichero JavaCC y su sintaxis.
