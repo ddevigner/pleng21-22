@@ -62,7 +62,7 @@ public class CodeBlock {
 	
 	public String toString() {
 		StringBuilder strBldr = new StringBuilder(); 
-		for (CodeElement element: code) {
+		for (CodeElement element : code) {
 			if (element instanceof XMLTag) {
 				if (generationMode == BlockMode.XML) {
 					strBldr.append(element.toString());

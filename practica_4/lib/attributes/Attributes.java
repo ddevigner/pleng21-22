@@ -6,15 +6,16 @@
 //         Se hace como clase plana, por simplicidad. Los atributos que se pueden almacenar
 //         se autoexplican con el nombre
 //*****************************************************************
-
 package lib.attributes;
+
 import lib.symbolTable.*;
 import lib.symbolTable.Symbol.Types;
 import lib.symbolTable.Symbol.ParameterClass;
+import lib.tools.codeGeneration.CodeBlock;
 import lib.tools.SemanticFunctions;
 import lib.tools.SemanticFunctions.Operator;
+
 import java.util.ArrayList;
-// import java.util.AbstractMap.SimpleEntry;
 
 public class Attributes implements Cloneable {
     /** ATRIBUTOS ************************************************************/
@@ -22,7 +23,6 @@ public class Attributes implements Cloneable {
     public String name;
     public Types type;
     public Types baseType;
-    public Types vectorBaseType;
 
     // Constants.
     public int valInt;
@@ -53,12 +53,15 @@ public class Attributes implements Cloneable {
     public Operator op;
     public String op_name;
 
+    // Code.
+    public CodeBlock code;
+
 
     /** CONSTRUCTORES ********************************************************/
     // Empty Attributes.
     public Attributes() {
         name = "";
-        type = baseType = vectorBaseType = Types.UNDEFINED;
+        type = baseType = Types.UNDEFINED;
         main = false;
         params = null;
         given = new ArrayList<>();
@@ -89,6 +92,7 @@ public class Attributes implements Cloneable {
         this.main = main;
         this.params = params;
         hasReturn = false;
+        this.code = new CodeBlock();
     }
 
     // Variable attributes.

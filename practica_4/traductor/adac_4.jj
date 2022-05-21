@@ -14,15 +14,21 @@ options {
 
 PARSER_BEGIN(adac_4)
 package traductor;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import lib.attributes.Attributes;
 import lib.symbolTable.*;
 import lib.symbolTable.exceptions.*;
 import lib.symbolTable.Symbol.ParameterClass;
 import lib.symbolTable.Symbol.Types;
+import lib.tools.exceptions.*;
+import lib.tools.codeGeneration.*;
+import lib.tools.codeGeneration.PCodeInstruction.OpCode;
 import lib.tools.SemanticFunctions;
 import lib.tools.SemanticFunctions.Operator;
-import lib.tools.exceptions.*;
-import java.util.ArrayList;
 
 public class adac_4 {
 
@@ -31,16 +37,6 @@ public class adac_4 {
 	static SemanticFunctions sf;
 
 	static int synt_errors = 0;
-
-	//Funcion que a lo mejor hay que cambiar
-	private static void initSymbolTable() {
-		boolean b;
-		String[] palsRes = {
-	    	"var","const","escribir"
-		};
-
-		st.insertReservedWords(palsRes);
-	}
 
 	public static void panicMode(Token err, int type) {
 		synt_errors++;
@@ -71,33 +67,39 @@ public class adac_4 {
     	adac_4 parser;
 
     	try {
-			//Se iniciar y crea la tabla de simbolos pero esta vacia
+			// Inicializacion de la tabla de simbolos.
 			st = new SymbolTable();
-    		initSymbolTable();
 			sf = new SemanticFunctions(st);
 
-			// Entrada desde stdin.
-	    	if(args.length == 0) {
-				parser = new adac_4(System.in);
-			}
-			// Entrada desde fichero en args[0].
-			else {
-	            parser = new adac_4(new java.io.FileInputStream(args[0])); 
-			}
+			// Entrada.
+	    	if(args.length == 0) parser = new adac_4(System.in);
+			else parser = new adac_4(new java.io.FileInputStream(args[0])); 
+
 			// Invoca símbolo inicial de la gramática.
-			parser.main();
-			if ((synt_errors + sf.getErrors()) == 0) System.out.println("Compilation succeded.");
+			String code = parser.main();
+			String code_file = args[0].split("\\.(?=[^\\.]+$)")[0] + ".pcode";
+			if ((synt_errors + sf.getErrors()) == 0) {
+				System.out.println("Compilation succeded.");
+				BufferedWriter writer = new BufferedWriter(
+					new FileWriter(code_file));
+				writer.write(code);
+				writer.close();
+			}
 			else {
 				System.out.println("\nCompilation failed due to errors: " 
 					+ synt_errors + " syntatic error(s), " 
 					+ sf.getWarnings() + " warning(s), " 
 					+ sf.getErrors() + " error(s).");
 			}
+
 		} catch (java.io.FileNotFoundException e) {
 			System.err.println ("Fichero " + args[0] + " no encontrado.");
 		} catch (TokenMgrError e) {
         	System.err.println("LEX_ERROR: " + e.getMessage());
-        } 
+        } catch (IOException e) {
+			System.err.println("An error occurred.");
+			e.printStackTrace();
+		}
     }
 }
 PARSER_END(adac_4)
@@ -244,20 +246,37 @@ SPECIAL_TOKEN: {
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 // Declaracion del procedimiento principal del fichero.
-void main() :
+String main() :
 {
 	Attributes main = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
 	Token t;
+	String label;
+	CodeBlock cmain;
 } 
 {	
 	try {
-		<PROC>
-		t = <ID> { sf.AddMethod(main, t); }
-		<IS>
+		<PROC> t = <ID> <IS> 
+			{
+				sf.AddMethod(main, t); 
+				cmain = new CodeBlock();
+				cmain.generationMode = CodeBlock.BlockMode.XML;
+			}
 		vars_def()
 		procs_funcs_decl()
 		proc_func_body(main)
+			{
+				label = CGUtils.newLabel();
+				cmain.addInst(OpCode.ENP, label);
+				cmain.addLabel(label);
+				cmain.addBlock(main.code);
+				cmain.addInst(OpCode.LVP);
+				cmain.encloseXMLTags(t.image);
+			}
 		<EOF>
+			{
+				System.err.println(cmain.toString());
+				return cmain.toString();
+			}
 	} catch (ParseException e) {
 		panicMode(e.currentToken.next, 0);
 	}
@@ -411,8 +430,30 @@ void instruction(Attributes at):
 			( <COLON> assignable(fst) { sf.EvaluateGet(fst); } )* <RPAREN> <SCOLON>
 	| 	<PUT> <LPAREN> expression(fst) { sf.EvaluatePut(fst); } 
 			(<COLON> expression(fst) { sf.EvaluatePut(fst); })* <RPAREN> <SCOLON> 
-	| 	<PUTLINE> <LPAREN> (expression(fst) { sf.EvaluatePutline(fst); }
-			(<COLON> expression(fst) { sf.EvaluatePutline(fst); })*)? <RPAREN> <SCOLON> 
+
+	| 	<PUTLINE> { at.code.addInst(OpCode.STC, '\n'); }
+		<LPAREN> (expression(fst)
+			{ 
+				sf.EvaluatePutline(fst);
+				at.code.addBlock(fst.code);
+				for (int i = 0; i < fst.stringVal.length()-2; i++) {
+					at.code.addInst(OpCode.WRT, 0);
+				}
+			}
+		(<COLON> expression(fst) 
+			{ 
+				sf.EvaluatePutline(fst);
+				at.code.addBlock(fst.code);
+				for (int i = 0; i < fst.stringVal.length()-2; i++) {
+					at.code.addInst(OpCode.WRT, 0);
+				}
+			}
+		)*)? <RPAREN> <SCOLON> 
+			{ 
+				at.code.addInst(OpCode.WRT, 0);
+				at.code.encloseXMLTags("Putline");
+			}
+
 	| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
 	| 	LOOKAHEAD(2) t = <ID> { snd.method = true; }
 			<LPAREN> (expression(snd) { fst.given.add(snd); } 
@@ -475,6 +516,7 @@ void factor(Attributes at):
 {
 	Attributes aux = new Attributes();
 	Token t;
+	CodeBlock cblock;
 } {
 	  	t = <NOT> factor(at) { sf.EvaluateCondition(at, t); }
 	| 	<LPAREN> expression(at) <RPAREN> 
@@ -483,13 +525,23 @@ void factor(Attributes at):
 	| 	LOOKAHEAD(2) t = <ID> { aux.method = true; } 
 			<LPAREN> (expression(aux) { at.given.add(aux); } 
 			(<COLON> {aux = new Attributes(true); } expression(aux) { at.given.add(aux); })*
-		)? <RPAREN> { sf.EvaluateFunction(at, t); }
+			)? <RPAREN> { sf.EvaluateFunction(at, t); }
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { sf.EvaluateArray(at, aux, t); } 
 	| 	t = <ID> { if (at.method) { sf.EvaluateParam(at, t); } else { sf.EvaluateVar(at, t); } }
-	| 	t = <INTVAL> { sf.EvaluateInt(at, t); }
+	| 	t = <INTVAL>  { sf.EvaluateInt(at, t); }
 	| 	t = <CHARVAL> { sf.EvaluateChar(at, t); }
 	| 	t = <BOOLVAL> { sf.EvaluateBool(at, t); }
-	| 	t = <STRING> { sf.EvaluateString(at, t); }
+	| 	t = <STRING>
+			{ 
+				sf.EvaluateString(at, t);
+
+				cblock = new CodeBlock();
+				for (int i = t.image.length() - 2; i > 0; i--) {
+					cblock.addInst(OpCode.STC, t.image.charAt(i));
+				}
+				cblock.encloseXMLTags("String_" + t.image);
+				at.code = cblock;
+			}
 }
 
 void relational_op(Attributes at):
