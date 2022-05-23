@@ -18,7 +18,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.*;
 import lib.attributes.Attributes;
 import lib.symbolTable.*;
 import lib.symbolTable.exceptions.*;
@@ -252,22 +252,26 @@ String main() :
 	Token t;
 	String label;
 	CodeBlock cmain;
+	CodeBlock funcs = new CodeBlock();
 } 
 {	
 	try {
 		<PROC> t = <ID> <IS> 
 			{
+				
 				sf.AddMethod(main, t); 
 				cmain = new CodeBlock();
 				cmain.generationMode = CodeBlock.BlockMode.XML;
+				CGUtils.memorySpaces[0]=3;
 			}
 		vars_def()
-		procs_funcs_decl()
+		procs_funcs_decl(funcs)		//Que esto devuelva un CodeBlock 
 		proc_func_body(main)
 			{
 				label = CGUtils.newLabel();
 				cmain.addInst(OpCode.ENP, label);
 				cmain.addLabel(label);
+				cmain.addBlock(funcs);
 				cmain.addBlock(main.code);
 				cmain.addInst(OpCode.LVP);
 				cmain.encloseXMLTags(t.image);
@@ -285,28 +289,56 @@ String main() :
 
 //-----------------------------------------------------------------------------
 // Declaracion de procedimientos/funciones del fichero.
-void procs_funcs_decl ():
-{} {
-	(proc_func_decl())*
+void procs_funcs_decl (CodeBlock funcs):
+{
+} {
+	(proc_func_decl(funcs))*
 }
 
 //-----------------------------------------------------------------------------
 // Declaracion de procedimiento/funcion
-void proc_func_decl():
+void proc_func_decl(CodeBlock funcs):
 {
 	Attributes at = new Attributes();
 	Token t;
+	String label;
+	CodeBlock proc_func;
+	ArrayList<Symbol> params_invertidos;
+	CodeBlock funciones_dentro_de_funcion = new CodeBlock();
 } {
 	proc_or_func(at)
 	func_return(at)
-	t = <ID> { sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t); }
+	t = <ID> { 
+		sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t); 
+		proc_func = new CodeBlock();
+		CGUtils.memorySpaces[st.level]=3;
+		}	//Se crea el bloque de la funcion
 	<LPAREN>
-	params_def(at.params)
+	params_def(at.params)		//Aqui hacer recuperacion de parametros. Para cada symbol hacer lo de la diapo . Mirar si deberia hacerlo en otro orden
+	{
+		params_invertidos = new ArrayList<>(at.params);
+		Collections.reverse(params_invertidos);
+		for(Symbol sym : params_invertidos){
+			at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)sym.dir);
+			at.code.addInst(PCodeInstruction.OpCode.ASGI);
+			at.code.addComment("Se anyade el parametro " + sym.name);
+		}
+	}
 	<RPAREN>
 	<IS>
 	vars_def()
-	procs_funcs_decl()
-	proc_func_body(at)
+	procs_funcs_decl(funciones_dentro_de_funcion)		//Anyades el codigo de lo que se define dentro //Luego anyadir que devuelva un CodeBlock
+	proc_func_body(at)		//Anyades el codigo de la funcion con el label y tal
+	{
+		label = CGUtils.newLabel();
+		proc_func.addInst(OpCode.JMP, label);
+		proc_func.addLabel(label);
+		proc_func.addBlock(funciones_dentro_de_funcion);
+		proc_func.addBlock(at.code);
+		proc_func.addInst(OpCode.CSF);
+		proc_func.encloseXMLTags(t.image);
+		funcs = proc_func;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -379,14 +411,17 @@ void vars_list(Attributes at):
 }
 
 //-----------------------------------------------------------------------------
-// Nombre de la variable.
+// Nombre de la variable.	//Aqui se guarda la variable en la pila
 void var(Attributes at):
 {
 	Token t, ind;
 } 
 {
 	LOOKAHEAD(2) t = <ID> <LBRACK> ind = <INTVAL> <RBRACK> 
-		{ sf.AddVar(at, t, ind, Types.ARRAY); }
+		{ 
+			sf.AddVar(at, t, ind, Types.ARRAY); 
+			
+			}	//Anyadir 1 al memorySpaces y asiganr dir
 	| t = <ID>
 		{ sf.AddVar(at, t, null, Types.UNDEFINED); }
 }
@@ -426,7 +461,7 @@ void instruction(Attributes at):
 	Attributes fst = new Attributes(), snd = new Attributes();
 	Token t;
 } {
-		<GET> <LPAREN> assignable(fst) { sf.EvaluateGet(fst); } 
+		<GET> <LPAREN> assignable(fst) { sf.EvaluateGet(fst); }		//En el get se le pasa un asignable, se necesita el nivel de ese assignable 
 			( <COLON> assignable(fst) { sf.EvaluateGet(fst); } )* <RPAREN> <SCOLON>
 	| 	<PUT> <LPAREN> expression(fst) { sf.EvaluatePut(fst); } 
 			(<COLON> expression(fst) { sf.EvaluatePut(fst); })* <RPAREN> <SCOLON> 
@@ -464,7 +499,7 @@ void instruction(Attributes at):
 			<DO> instructions_list(at) <END>
 	| 	<IF> expression(fst) { sf.EvaluateCondition(fst); } <THEN> instructions_list(at) 
 			(<ELSE> instructions_list(at))? <END> 
-	| 	t = <RETURN> expression(fst) { sf.EvaluateReturn(at, fst, t); } <SCOLON> 
+	| 	t = <RETURN> expression(fst) { sf.EvaluateReturn(at, fst, t); } <SCOLON> 	//Apilar el return de una funcion //////////////////////////////////
 }
 
 //-----------------------------------------------------------------------------
@@ -518,16 +553,25 @@ void factor(Attributes at):
 	Token t;
 	CodeBlock cblock;
 } {
-	  	t = <NOT> factor(at) { sf.EvaluateCondition(at, t); }
+	  	t = <NOT> factor(at) { 
+			  sf.EvaluateCondition(at, t);
+			  at.code.addInst(PCodeInstruction.OpCode.NGB);	//Se pone el negado
+			}
 	| 	<LPAREN> expression(at) <RPAREN> 
 	| 	t = <INT2CHAR> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateInt2Char(at, aux, t); }
 	| 	t = <CHAR2INT> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateChar2Int(at, aux, t); }
-	| 	LOOKAHEAD(2) t = <ID> { aux.method = true; } 
+	| 	LOOKAHEAD(2) t = <ID> { aux.method = true; } 	//Poner lo de la llamada a funcion
 			<LPAREN> (expression(aux) { at.given.add(aux); } 
 			(<COLON> {aux = new Attributes(true); } expression(aux) { at.given.add(aux); })*
 			)? <RPAREN> { sf.EvaluateFunction(at, t); }
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { sf.EvaluateArray(at, aux, t); } 
-	| 	t = <ID> { if (at.method) { sf.EvaluateParam(at, t); } else { sf.EvaluateVar(at, t); } }
+	| 	t = <ID> { 
+			if (at.method) { 
+			sf.EvaluateParam(at, t); 
+			} else { 
+				sf.EvaluateVar(at, t); 
+			} 
+		}
 	| 	t = <INTVAL>  { sf.EvaluateInt(at, t); }
 	| 	t = <CHARVAL> { sf.EvaluateChar(at, t); }
 	| 	t = <BOOLVAL> { sf.EvaluateBool(at, t); }

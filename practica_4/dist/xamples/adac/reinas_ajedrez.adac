@@ -1,0 +1,206 @@
+procedure ajedrez is
+
+integer tamano_tablero, tablero[1000], reinas[1000], nreinas, fila, columna, f, c;
+
+------------------------------------------------------------------------
+function integer min (val integer x, y) is
+------------------------------------------------------------------------
+begin
+  if x > y then return (y); else return (x); end
+end
+
+------------------------------------------------------------------------
+function integer max (val integer x, y) is
+------------------------------------------------------------------------
+begin
+  if x > y then return (x); else return (y); end
+end
+
+------------------------------------------------------------------------
+procedure linea () is
+------------------------------------------------------------------------
+begin
+  put (int2char (13), int2char (10));
+end
+
+------------------------------------------------------------------------
+function integer sitio (val integer fila, columna) is
+------------------------------------------------------------------------
+begin
+  return (((fila - 1) * tamano_tablero) + columna - 1);
+end
+
+------------------------------------------------------------------------
+function integer componente (ref integer tablero[1000]; val integer fila, columna) is
+------------------------------------------------------------------------
+begin
+  return (tablero[sitio (fila, columna)]);
+end
+
+------------------------------------------------------------------------
+function boolean ocupada (ref integer tablero[1000]; val integer fila, columna) is
+------------------------------------------------------------------------
+begin
+  return (tablero[sitio (fila, columna)] > 0);
+end
+
+------------------------------------------------------------------------
+procedure asignar_componente (ref integer tablero[1000]; val integer fila, columna, valor) is
+------------------------------------------------------------------------
+begin
+  tablero[sitio (fila, columna)] := valor;
+end
+
+------------------------------------------------------------------------
+procedure marcar_componente (ref integer tablero[1000]; val integer fila, columna) is
+------------------------------------------------------------------------
+begin
+  tablero[sitio (fila, columna)] := tablero[sitio (fila, columna)] + 1;
+end
+
+------------------------------------------------------------------------
+procedure desmarcar_componente (ref integer tablero[1000]; val integer fila, columna) is
+------------------------------------------------------------------------
+begin
+  tablero[sitio (fila, columna)] := tablero[sitio (fila, columna)] - 1;
+end
+
+------------------------------------------------------------------------
+procedure colocar_reina (val integer fila, columna) is
+------------------------------------------------------------------------
+integer f, c;
+begin
+  marcar_componente (reinas, fila, columna);
+
+  f := 1;
+  while f <= tamano_tablero do
+	 marcar_componente (tablero, f, columna);
+     f := f + 1;
+  end
+
+  c := 1;
+  while c <= tamano_tablero  do
+	 marcar_componente (tablero, fila, c);
+     c := c + 1;
+  end
+
+  f := fila;
+  c := columna;
+  while (f > 1) and (c > 1) do
+     f := f - 1;
+     c := c - 1;
+  end
+
+  while (f <= tamano_tablero) and (c <= tamano_tablero)  do
+	 marcar_componente (tablero, f, c);
+     f := f + 1;
+     c := c + 1;
+  end
+
+  f := fila;
+  c := columna;
+  while (f > 1) and (c < tamano_tablero) do
+     f := f - 1;
+     c := c + 1;
+  end
+
+  while (f <= tamano_tablero) and (c >= 1) do
+	 marcar_componente (tablero, f, c);
+     f := f + 1;
+     c := c - 1;
+  end
+end
+
+------------------------------------------------------------------------
+procedure iniciar_tablero () is
+------------------------------------------------------------------------
+integer f,c;
+begin
+  f := 1;
+  while f <= tamano_tablero do
+    c := 1;
+    while c <= tamano_tablero do
+      asignar_componente (tablero, f, c, 0);
+      asignar_componente (reinas, f, c, 0);
+    c := c + 1;
+  end
+  f := f + 1;
+  end
+end
+
+------------------------------------------------------------------------
+procedure mostrar_tablero (ref integer tablero[1000]) is
+
+integer f,c;
+------------------------------------------------------------------------
+begin
+  linea ();
+  put_line ("Esta es una solución:");
+  linea ();
+  f := 1;
+  while f <= tamano_tablero do
+    c := 1;
+    while c <= tamano_tablero do
+      if componente (tablero, f,c) > 0
+      then put (" o");
+      else put (" .");
+      end
+      c := c + 1;
+    end
+    linea ();
+    f := f + 1;
+  end
+end
+
+------------------------------------------------------------------------
+function boolean libre (ref integer fila, columna) is
+------------------------------------------------------------------------
+boolean endal;
+
+begin
+    fila := 1;
+    columna := 1;
+    endal := false;
+    while not endal do
+        if fila > tamano_tablero
+            then endal := true;
+        else if columna > tamano_tablero
+            then columna := 1; fila := fila + 1;
+        else if ocupada (tablero, fila, columna)
+            then columna := columna + 1;
+        else 
+            endal := true;
+        end
+        end
+        end
+    end
+    return (fila <= tamano_tablero);
+end
+
+------------------------------------------------------------------------
+begin
+    tamano_tablero := 8;
+    
+    put_line ("Este programa intenta colocar ", tamano_tablero, " reinas en un tablero de ajedrez de ", tamano_tablero, '*', tamano_tablero, " sin que se ataquen.");
+
+    fila := 1;
+    nreinas := 0;
+    while (fila <= tamano_tablero) and (nreinas < tamano_tablero) do
+        columna := 1;
+        while (columna <= tamano_tablero) and (nreinas < tamano_tablero) do
+            nreinas := 1;
+            iniciar_tablero ();
+            colocar_reina (fila, columna);
+            while (nreinas < tamano_tablero) and libre (f, c) do
+                colocar_reina (f, c);
+                nreinas := nreinas + 1;
+            end
+            if nreinas = tamano_tablero then
+                mostrar_tablero (reinas);
+            end
+            columna := columna + 1;
+        end
+        fila := fila + 1;
+    end
+    put_line ("");
+end

@@ -5,7 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.*;
 import lib.attributes.Attributes;
 import lib.symbolTable.*;
 import lib.symbolTable.exceptions.*;
@@ -99,6 +99,7 @@ public class adac_4 implements adac_4Constants {
         Token t;
         String label;
         CodeBlock cmain;
+        CodeBlock funcs = new CodeBlock();
     try {
       jj_consume_token(PROC);
       t = jj_consume_token(ID);
@@ -106,12 +107,14 @@ public class adac_4 implements adac_4Constants {
 sf.AddMethod(main, t);
                                 cmain = new CodeBlock();
                                 cmain.generationMode = CodeBlock.BlockMode.XML;
+                                CGUtils.memorySpaces[0]=3;
       vars_def();
-      procs_funcs_decl();
+      procs_funcs_decl(funcs);
       proc_func_body(main);
 label = CGUtils.newLabel();
                                 cmain.addInst(OpCode.ENP, label);
                                 cmain.addLabel(label);
+                                cmain.addBlock(funcs);
                                 cmain.addBlock(main.code);
                                 cmain.addInst(OpCode.LVP);
                                 cmain.encloseXMLTags(t.image);
@@ -126,7 +129,7 @@ panicMode(e.currentToken.next, 0);
 
 //-----------------------------------------------------------------------------
 // Declaracion de procedimientos/funciones del fichero.
-  static final public void procs_funcs_decl() throws ParseException {
+  static final public void procs_funcs_decl(CodeBlock funcs) throws ParseException {
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -139,25 +142,46 @@ panicMode(e.currentToken.next, 0);
         jj_la1[0] = jj_gen;
         break label_1;
       }
-      proc_func_decl();
+      proc_func_decl(funcs);
     }
 }
 
 //-----------------------------------------------------------------------------
 // Declaracion de procedimiento/funcion
-  static final public void proc_func_decl() throws ParseException {Attributes at = new Attributes();
+  static final public void proc_func_decl(CodeBlock funcs) throws ParseException {Attributes at = new Attributes();
         Token t;
+        String label;
+        CodeBlock proc_func;
+        ArrayList<Symbol> params_invertidos;
+        CodeBlock funciones_dentro_de_funcion = new CodeBlock();
     proc_or_func(at);
     func_return(at);
     t = jj_consume_token(ID);
 sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t);
+                proc_func = new CodeBlock();
+                CGUtils.memorySpaces[st.level]=3;
     jj_consume_token(LPAREN);
     params_def(at.params);
+params_invertidos = new ArrayList<>(at.params);
+                Collections.reverse(params_invertidos);
+                for(Symbol sym : params_invertidos){
+                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)sym.dir);
+                        at.code.addInst(PCodeInstruction.OpCode.ASGI);
+                        at.code.addComment("Se anyade el parametro " + sym.name);
+                }
     jj_consume_token(RPAREN);
     jj_consume_token(IS);
     vars_def();
-    procs_funcs_decl();
+    procs_funcs_decl(funciones_dentro_de_funcion);
     proc_func_body(at);
+label = CGUtils.newLabel();
+                proc_func.addInst(OpCode.JMP, label);
+                proc_func.addLabel(label);
+                proc_func.addBlock(funciones_dentro_de_funcion);
+                proc_func.addBlock(at.code);
+                proc_func.addInst(OpCode.CSF);
+                proc_func.encloseXMLTags(t.image);
+                funcs = proc_func;
 }
 
 //-----------------------------------------------------------------------------
@@ -325,7 +349,7 @@ at.baseType = Types.CHAR; at.line = t.beginLine; at.column = t.beginColumn;
 }
 
 //-----------------------------------------------------------------------------
-// Nombre de la variable.
+// Nombre de la variable.	//Aqui se guarda la variable en la pila
   static final public void var(Attributes at) throws ParseException {Token t, ind;
     if (jj_2_1(2)) {
       t = jj_consume_token(ID);
@@ -731,6 +755,7 @@ sf.EvaluateOperation(at, aux);
       t = jj_consume_token(NOT);
       factor(at);
 sf.EvaluateCondition(at, t);
+                          at.code.addInst(PCodeInstruction.OpCode.NGB);
       break;
       }
     case LPAREN:{
@@ -993,13 +1018,6 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_5()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
   static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
@@ -1018,6 +1036,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 

@@ -17,6 +17,7 @@ import lib.symbolTable.Symbol.Types;
 import lib.symbolTable.exceptions.*;
 import lib.tools.exceptions.*;
 import lib.errores.*;
+import lib.tools.codeGeneration.*;
 
 public class SemanticFunctions {
 	private ErrorSemantico se; //clase común de errores semánticos
@@ -59,6 +60,9 @@ public class SemanticFunctions {
 			} else {
 				s = new SymbolBool(t.image, var.parClass);
 			}
+			//Ahora asignar al symbol la direccion y el nivel///////////////////////////
+			s.dir=CGUtils.memorySpaces[st.level]++;
+			s.nivel=st.level;
 			st.insertSymbol(s);
 			if (var.params != null) st.insertSymbol(var.params, s);
 		} catch (ZeroSizeArrayException e) {
@@ -116,8 +120,36 @@ public class SemanticFunctions {
 	public void EvaluateGet(Attributes at) {
 		try {
 			evaluateGet(at.baseType);
+			//Meter el get en la Maquina P	/////////////////////////////////////////////////
+			long aux=st.getSymbol(at.name).dir;
+			if(at.parClass==ParameterClass.VAL || at.parClass==ParameterClass.NONE){	//Si es una variable por valor entonces se hace srf y RD	
+				//Si es none significa que no es un parametro asi quee se trata como valor
+				if(at.baseType==Types.INT){	//Si es INT a RD se le pasa un 1
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
+					at.code.addInst(PCodeInstruction.OpCode.RD,1);
+					at.code.addComment("Se hace get de una variable por valor y de tipo INT " + at.name);
+				}else if(at.baseType==Types.CHAR){	//Si es CHAR a RD se le pasa un 0
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
+					at.code.addInst(PCodeInstruction.OpCode.RD,0);
+					at.code.addComment("Se hace get de una variable por valor y de tipo CHAR " + at.name);
+				}
+			}else if(at.parClass==ParameterClass.REF){	//Si es por referencia se hace SRF , DRF y RD
+				if(at.baseType==Types.INT){	//Si es INT a RD se le pasa un 1
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+					at.code.addInst(PCodeInstruction.OpCode.RD,1);
+					at.code.addComment("Se hace get de una variable por referencia y de tipo INT " + at.name);
+				}else if(at.baseType==Types.CHAR){	//Si es CHAR a RD se le pasa un 0
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+					at.code.addInst(PCodeInstruction.OpCode.RD,0);
+					at.code.addComment("Se hace get de una variable por referencia y de tipo CHAR " + at.name);
+				}
+			}
 		} catch (GetException e) {
 			se.detection(e, at.line, at.column);
+		} catch (SymbolNotFoundException e){	//A ver que pasa con esto, Habra que mirarlo bien/////////////////////
+
 		}
 	}
 

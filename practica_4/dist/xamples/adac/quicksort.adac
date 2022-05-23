@@ -1,0 +1,112 @@
+--------------------------------------------------------------------
+procedure qsort is
+-- https://en.wikipedia.org/wiki/Quicksort
+--------------------------------------------------------------------
+integer n, t[20], iteraciones;
+
+--------------------------------------------------------------------
+procedure inicializar (ref integer t[20]) is
+--------------------------------------------------------------------
+ integer i;
+ begin
+  i := 0;
+  while i < n do
+    t[i] := n - i;
+    i := i + 1;
+  end
+ end
+
+--------------------------------------------------------------------
+procedure mostrar (val integer t[20]) is
+--------------------------------------------------------------------
+  integer i;
+ begin
+  i := 0;
+  while i < n do
+    put(t[i], " ");
+    i := i + 1;
+  end
+  put(int2char(13),int2char(10));
+ end
+
+--------------------------------------------------------------------
+procedure intercambiar (ref integer i, j) is
+--------------------------------------------------------------------
+integer k;
+ begin
+  k := i;
+  i := j;
+  j := k;
+ end
+
+--------------------------------------------------------------------
+procedure ordenar (ref integer i, j) is
+--------------------------------------------------------------------
+ begin
+  if i > j then
+    intercambiar(i, j);
+  end
+ end
+
+--------------------------------------------------------------------
+procedure divide (ref integer t[20]; val integer izq, der; ref integer me) is
+--------------------------------------------------------------------
+ integer p,k;
+
+ begin
+  p := t[izq];
+  k := izq;
+  me := der + 1;
+  k := k + 1;
+  while (t[k] <= p) and (k < der) do
+   k := k + 1;
+  end
+  me := me - 1;
+  while (t[me] > p) do
+   me := me - 1;
+  end
+  while k < me do
+    intercambiar(t[k], t[me]);
+    k := k + 1;
+    while t[k] <= p do
+     k := k + 1;
+    end
+    me := me - 1;
+    while t[me] > p do
+     me := me - 1;
+    end
+  end
+  intercambiar(t[izq], t[me]);
+ end
+
+--------------------------------------------------------------------
+procedure quicksort (ref integer t[20]; val integer izq, der) is
+--------------------------------------------------------------------
+ integer me;
+ begin
+  if der > izq then
+    mostrar(t);
+    if (der - izq) = 1 then
+     ordenar(t[izq], t[der]);
+    else
+      divide(t, izq, der, me);
+      quicksort(t, izq, me - 1);
+      quicksort(t, me + 1, der);
+      iteraciones := iteraciones + 1;
+    end
+  end
+ end
+
+--------------------------------------------------------------------
+begin
+ put_line ("Ilustración del funcionamiento del algoritmo quicksort para ordenar 20 enteros.");
+ put_line ("");
+
+ n := 20;
+ iteraciones := 0;
+ inicializar (t);
+ quicksort(t, 0, n-1);
+
+ put_line ("");
+ put_line ("Iteraciones: ", iteraciones);
+end

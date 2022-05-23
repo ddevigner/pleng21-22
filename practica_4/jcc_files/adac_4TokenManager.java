@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.*;
 import lib.attributes.Attributes;
 import lib.symbolTable.*;
 import lib.symbolTable.exceptions.*;

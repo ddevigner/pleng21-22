@@ -1,0 +1,401 @@
+<cambio_base>
+  ENP L0
+L0:
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+  STC 10
+<String_"Este programa convierte n=">
+  STC 61
+  STC 110
+  STC 32
+  STC 101
+  STC 116
+  STC 114
+  STC 101
+  STC 105
+  STC 118
+  STC 110
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa convierte n=">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"Este programa convierte n=">
+  STC 61
+  STC 110
+  STC 32
+  STC 101
+  STC 116
+  STC 114
+  STC 101
+  STC 105
+  STC 118
+  STC 110
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa convierte n=">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_" a base b=">
+  STC 61
+  STC 98
+  STC 32
+  STC 101
+  STC 115
+  STC 97
+  STC 98
+  STC 32
+  STC 97
+  STC 32
+</String_" a base b=">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_" a base b=">
+  STC 61
+  STC 98
+  STC 32
+  STC 101
+  STC 115
+  STC 97
+  STC 98
+  STC 32
+  STC 97
+  STC 32
+</String_" a base b=">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_", y luego efecúa la conversión inversa.">
+  STC 46
+  STC 97
+  STC 115
+  STC 114
+  STC 101
+  STC 118
+  STC 110
+  STC 105
+  STC 32
+  STC 110
+  STC 243
+  STC 105
+  STC 115
+  STC 114
+  STC 101
+  STC 118
+  STC 110
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 108
+  STC 32
+  STC 97
+  STC 250
+  STC 99
+  STC 101
+  STC 102
+  STC 101
+  STC 32
+  STC 111
+  STC 103
+  STC 101
+  STC 117
+  STC 108
+  STC 32
+  STC 121
+  STC 32
+  STC 44
+</String_", y luego efecúa la conversión inversa.">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+</Putline>
+  STC 10
+<String_"n: ">
+  STC 32
+  STC 58
+  STC 110
+</String_"n: ">
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"n: ">
+  STC 32
+  STC 58
+  STC 110
+</String_"n: ">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+<String_"b: ">
+  STC 32
+  STC 58
+  STC 98
+</String_"b: ">
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"b: ">
+  STC 32
+  STC 58
+  STC 98
+</String_"b: ">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+<String_"dec_b(">
+  STC 40
+  STC 98
+  STC 95
+  STC 99
+  STC 101
+  STC 100
+</String_"dec_b(">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"dec_b(">
+  STC 40
+  STC 98
+  STC 95
+  STC 99
+  STC 101
+  STC 100
+</String_"dec_b(">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_",">
+  STC 44
+</String_",">
+  WRT  0
+<String_",">
+  STC 44
+</String_",">
+  WRT  0
+<String_"): ">
+  STC 32
+  STC 58
+  STC 41
+</String_"): ">
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"): ">
+  STC 32
+  STC 58
+  STC 41
+</String_"): ">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+<String_"b_dec(">
+  STC 40
+  STC 99
+  STC 101
+  STC 100
+  STC 95
+  STC 98
+</String_"b_dec(">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"b_dec(">
+  STC 40
+  STC 99
+  STC 101
+  STC 100
+  STC 95
+  STC 98
+</String_"b_dec(">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_",">
+  STC 44
+</String_",">
+  WRT  0
+<String_",">
+  STC 44
+</String_",">
+  WRT  0
+<String_"): ">
+  STC 32
+  STC 58
+  STC 41
+</String_"): ">
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"): ">
+  STC 32
+  STC 58
+  STC 41
+</String_"): ">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+</Putline>
+  LVP
+</cambio_base>
