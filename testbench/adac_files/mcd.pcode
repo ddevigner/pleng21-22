@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<calcular_mcd>
+  ENP L0
+<variable_declaration>
+; --- Simple variable "i", type 0, level 0,  address [3]!
+; --- Simple variable "j", type 0, level 0,  address [4]!
+</variable_declaration>
+<procedure_dato>
+L1:
+; --- Simple parameter "d", type 0, class 1, level 1,  address [3]!
+<recover_argument_1>
+; --- Recover simple val / ref variable parameter "d" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L2
+<variable_declaration>
+</variable_declaration>
+L2:
+<dato_instruction_block>
+<Assignment_to__simple_variable_d>
+; --- Address of variable / parameter "d"
+  SRF  0  3
+  DRF 
+  STC  0
+  ASG 
+</Assignment_to__simple_variable_d>
+<while>
+L3:
+<condition>
+; --- Variable / parameter "d"
+  SRF  0  3
+  DRF 
+  DRF 
+  STC  0
+  LTE 
+</condition>
+  JMF L4
+<while_instruction_block>
+<put>
+; --- Put STRING "Escribe un numero (>0): " (length 24)
+; --- Standard string writing
+  STC 69
+  WRT  0
+  STC 115
+  WRT  0
+  STC 99
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 98
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 117
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 40
+  WRT  0
+  STC 62
+  WRT  0
+  STC 48
+  WRT  0
+  STC 41
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<get>
+; --- Get simple variable/parameter "d".
+  SRF  0  3
+  DRF 
+  RD  1
+</get>
+<if-then>
+<condition>
+; --- Variable / parameter "d"
+  SRF  0  3
+  DRF 
+  DRF 
+  STC  0
+  LTE 
+</condition>
+  JMF L5
+<then>
+<put>
+; --- Put STRING "El numero debe ser > 0." (length 23)
+; --- Standard string writing
+  STC 69
+  WRT  0
+  STC 108
+  WRT  0
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 117
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 98
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 62
+  WRT  0
+  STC 32
+  WRT  0
+  STC 48
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+</then>
+L5:
+</if-then>
+</while_instruction_block>
+  JMP L3
+L4:
+</while>
+  CSF 
+</dato_instruction_block>
+</procedure_dato>
+<function_mcd>
+L6:
+; --- Simple parameter "a", type 0, class 0, level 1,  address [3]!
+; --- Simple parameter "b", type 0, class 0, level 1,  address [4]!
+<recover_argument_2>
+; --- Recover simple val / ref variable parameter "b" (number 2).
+  SRF  0  4
+  ASGI 
+</recover_argument_2>
+<recover_argument_1>
+; --- Recover simple val / ref variable parameter "a" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L7
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [5]!
+; --- Simple variable "j", type 0, level 1,  address [6]!
+; --- Simple variable "k", type 0, level 1,  address [7]!
+</variable_declaration>
+L7:
+<mcd_instruction_block>
+<Assignment_to__simple_variable_j>
+; --- Address of variable / parameter "j"
+  SRF  0  6
+; --- Variable / parameter "a"
+  SRF  0  3
+  DRF 
+  ASG 
+</Assignment_to__simple_variable_j>
+<Assignment_to__simple_variable_k>
+; --- Address of variable / parameter "k"
+  SRF  0  7
+; --- Variable / parameter "b"
+  SRF  0  4
+  DRF 
+  ASG 
+</Assignment_to__simple_variable_k>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  5
+; --- Variable / parameter "a"
+  SRF  0  3
+  DRF 
+; --- Variable / parameter "b"
+  SRF  0  4
+  DRF 
+  MOD 
+  ASG 
+</Assignment_to__simple_variable_i>
+<while>
+L8:
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+  STC  0
+  NEQ 
+</condition>
+  JMF L9
+<while_instruction_block>
+<Assignment_to__simple_variable_j>
+; --- Address of variable / parameter "j"
+  SRF  0  6
+; --- Variable / parameter "k"
+  SRF  0  7
+  DRF 
+  ASG 
+</Assignment_to__simple_variable_j>
+<Assignment_to__simple_variable_k>
+; --- Address of variable / parameter "k"
+  SRF  0  7
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+  ASG 
+</Assignment_to__simple_variable_k>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  5
+; --- Variable / parameter "j"
+  SRF  0  6
+  DRF 
+; --- Variable / parameter "k"
+  SRF  0  7
+  DRF 
+  MOD 
+  ASG 
+</Assignment_to__simple_variable_i>
+</while_instruction_block>
+  JMP L8
+L9:
+</while>
+<return>
+; --- Variable / parameter "k"
+  SRF  0  7
+  DRF 
+  CSF 
+</return>
+  CSF 
+</mcd_instruction_block>
+</function_mcd>
+L0:
+<calcular_mcd_instruction_block>
+<put>
+; --- Put STRING "Este programa pide dos números positivos y calcula su máximo común divisor." (length 78)
+; --- Standard string writing
+  STC 69
+  WRT  0
+  STC 115
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 103
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 109
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 105
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC -61
+  WRT  0
+  STC -70
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 105
+  WRT  0
+  STC 116
+  WRT  0
+  STC 105
+  WRT  0
+  STC 118
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 99
+  WRT  0
+  STC 97
+  WRT  0
+  STC 108
+  WRT  0
+  STC 99
+  WRT  0
+  STC 117
+  WRT  0
+  STC 108
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 117
+  WRT  0
+  STC 32
+  WRT  0
+  STC 109
+  WRT  0
+  STC -61
+  WRT  0
+  STC -95
+  WRT  0
+  STC 120
+  WRT  0
+  STC 105
+  WRT  0
+  STC 109
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 99
+  WRT  0
+  STC 111
+  WRT  0
+  STC 109
+  WRT  0
+  STC -61
+  WRT  0
+  STC -70
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 105
+  WRT  0
+  STC 118
+  WRT  0
+  STC 105
+  WRT  0
+  STC 115
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<procedure_call_dato>
+<argument_1>
+; --- Variable / parameter "i"
+  SRF  0  3
+</argument_1>
+  OSF  5  0 L1
+</procedure_call_dato>
+<procedure_call_dato>
+<argument_1>
+; --- Variable / parameter "j"
+  SRF  0  4
+</argument_1>
+  OSF  5  0 L1
+</procedure_call_dato>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "mcd(" (length 4)
+; --- Standard string writing
+  STC 109
+  WRT  0
+  STC 99
+  WRT  0
+  STC 100
+  WRT  0
+  STC 40
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "i"
+  SRF  0  3
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING "," (length 1)
+; --- Standard string writing
+  STC 44
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "j"
+  SRF  0  4
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING ") = " (length 4)
+; --- Standard string writing
+  STC 41
+  WRT  0
+  STC 32
+  WRT  0
+  STC 61
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+<function_call_mcd>
+<argument_1>
+; --- Variable / parameter "i"
+  SRF  0  3
+  DRF 
+</argument_1>
+<argument_2>
+; --- Variable / parameter "j"
+  SRF  0  4
+  DRF 
+</argument_2>
+  OSF  5  0 L6
+</function_call_mcd>
+; --- Put INTEGER
+  WRT  1
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+</calcular_mcd_instruction_block>
+  LVP 
+</calcular_mcd>

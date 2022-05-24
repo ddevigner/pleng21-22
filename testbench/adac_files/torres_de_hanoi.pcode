@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hanoi_towers>
+  ENP L0
+<variable_declaration>
+; --- Simple variable "steps", type 0, level 0,  address [3]!
+; --- Simple variable "n", type 0, level 0,  address [4]!
+</variable_declaration>
+<procedure_hanoi>
+L1:
+; --- Simple parameter "n", type 0, class 0, level 1,  address [3]!
+; --- Simple parameter "source", type 2, class 0, level 1,  address [4]!
+; --- Simple parameter "target", type 2, class 0, level 1,  address [5]!
+; --- Simple parameter "spare", type 2, class 0, level 1,  address [6]!
+<recover_argument_4>
+; --- Recover simple val / ref variable parameter "spare" (number 4).
+  SRF  0  6
+  ASGI 
+</recover_argument_4>
+<recover_argument_3>
+; --- Recover simple val / ref variable parameter "target" (number 3).
+  SRF  0  5
+  ASGI 
+</recover_argument_3>
+<recover_argument_2>
+; --- Recover simple val / ref variable parameter "source" (number 2).
+  SRF  0  4
+  ASGI 
+</recover_argument_2>
+<recover_argument_1>
+; --- Recover simple val / ref variable parameter "n" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L2
+<variable_declaration>
+</variable_declaration>
+L2:
+<hanoi_instruction_block>
+<if-then>
+<condition>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC  1
+  EQ 
+</condition>
+  JMF L3
+<then>
+<put>
+; --- Put STRING "Move disk from tower " (length 21)
+; --- Standard string writing
+  STC 77
+  WRT  0
+  STC 111
+  WRT  0
+  STC 118
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 105
+  WRT  0
+  STC 115
+  WRT  0
+  STC 107
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 109
+  WRT  0
+  STC 32
+  WRT  0
+  STC 116
+  WRT  0
+  STC 111
+  WRT  0
+  STC 119
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "source"
+  SRF  0  4
+  DRF 
+; --- Put CHARACTER
+  WRT  0
+</put>
+<put>
+; --- Put STRING " to tower " (length 10)
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 116
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 116
+  WRT  0
+  STC 111
+  WRT  0
+  STC 119
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "target"
+  SRF  0  5
+  DRF 
+; --- Put CHARACTER
+  WRT  0
+</put>
+<put>
+; --- Put STRING ". " (length 2)
+; --- Standard string writing
+  STC 46
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<Assignment_to__simple_variable_steps>
+; --- Address of variable / parameter "steps"
+  SRF  1  3
+; --- Variable / parameter "steps"
+  SRF  1  3
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_steps>
+  JMP L4
+</then>
+<else>
+L3:
+<procedure_call_hanoi>
+<argument_1>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC  1
+  SBT 
+</argument_1>
+<argument_2>
+; --- Variable / parameter "source"
+  SRF  0  4
+  DRF 
+</argument_2>
+<argument_3>
+; --- Variable / parameter "spare"
+  SRF  0  6
+  DRF 
+</argument_3>
+<argument_4>
+; --- Variable / parameter "target"
+  SRF  0  5
+  DRF 
+</argument_4>
+  OSF  7  1 L1
+</procedure_call_hanoi>
+<procedure_call_hanoi>
+<argument_1>
+  STC  1
+</argument_1>
+<argument_2>
+; --- Variable / parameter "source"
+  SRF  0  4
+  DRF 
+</argument_2>
+<argument_3>
+; --- Variable / parameter "target"
+  SRF  0  5
+  DRF 
+</argument_3>
+<argument_4>
+; --- Variable / parameter "spare"
+  SRF  0  6
+  DRF 
+</argument_4>
+  OSF  7  1 L1
+</procedure_call_hanoi>
+<procedure_call_hanoi>
+<argument_1>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC  1
+  SBT 
+</argument_1>
+<argument_2>
+; --- Variable / parameter "spare"
+  SRF  0  6
+  DRF 
+</argument_2>
+<argument_3>
+; --- Variable / parameter "target"
+  SRF  0  5
+  DRF 
+</argument_3>
+<argument_4>
+; --- Variable / parameter "source"
+  SRF  0  4
+  DRF 
+</argument_4>
+  OSF  7  1 L1
+</procedure_call_hanoi>
+</else>
+L4:
+</if-then>
+  CSF 
+</hanoi_instruction_block>
+</procedure_hanoi>
+L0:
+<hanoi_towers_instruction_block>
+<put>
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "Recursive algorithm to solve the Hanoi Towers problem." (length 54)
+; --- Standard string writing
+  STC 82
+  WRT  0
+  STC 101
+  WRT  0
+  STC 99
+  WRT  0
+  STC 117
+  WRT  0
+  STC 114
+  WRT  0
+  STC 115
+  WRT  0
+  STC 105
+  WRT  0
+  STC 118
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 108
+  WRT  0
+  STC 103
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 116
+  WRT  0
+  STC 104
+  WRT  0
+  STC 109
+  WRT  0
+  STC 32
+  WRT  0
+  STC 116
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 111
+  WRT  0
+  STC 108
+  WRT  0
+  STC 118
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 116
+  WRT  0
+  STC 104
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 72
+  WRT  0
+  STC 97
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 105
+  WRT  0
+  STC 32
+  WRT  0
+  STC 84
+  WRT  0
+  STC 111
+  WRT  0
+  STC 119
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 98
+  WRT  0
+  STC 108
+  WRT  0
+  STC 101
+  WRT  0
+  STC 109
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "https://en.wikipedia.org/wiki/Tower_of_Hanoi#Recursive_solution" (length 63)
+; --- Standard string writing
+  STC 104
+  WRT  0
+  STC 116
+  WRT  0
+  STC 116
+  WRT  0
+  STC 112
+  WRT  0
+  STC 115
+  WRT  0
+  STC 58
+  WRT  0
+  STC 47
+  WRT  0
+  STC 47
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 46
+  WRT  0
+  STC 119
+  WRT  0
+  STC 105
+  WRT  0
+  STC 107
+  WRT  0
+  STC 105
+  WRT  0
+  STC 112
+  WRT  0
+  STC 101
+  WRT  0
+  STC 100
+  WRT  0
+  STC 105
+  WRT  0
+  STC 97
+  WRT  0
+  STC 46
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 103
+  WRT  0
+  STC 47
+  WRT  0
+  STC 119
+  WRT  0
+  STC 105
+  WRT  0
+  STC 107
+  WRT  0
+  STC 105
+  WRT  0
+  STC 47
+  WRT  0
+  STC 84
+  WRT  0
+  STC 111
+  WRT  0
+  STC 119
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 95
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 95
+  WRT  0
+  STC 72
+  WRT  0
+  STC 97
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 105
+  WRT  0
+  STC 35
+  WRT  0
+  STC 82
+  WRT  0
+  STC 101
+  WRT  0
+  STC 99
+  WRT  0
+  STC 117
+  WRT  0
+  STC 114
+  WRT  0
+  STC 115
+  WRT  0
+  STC 105
+  WRT  0
+  STC 118
+  WRT  0
+  STC 101
+  WRT  0
+  STC 95
+  WRT  0
+  STC 115
+  WRT  0
+  STC 111
+  WRT  0
+  STC 108
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 105
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<Assignment_to__simple_variable_steps>
+; --- Address of variable / parameter "steps"
+  SRF  0  3
+  STC  0
+  ASG 
+</Assignment_to__simple_variable_steps>
+<Assignment_to__simple_variable_n>
+; --- Address of variable / parameter "n"
+  SRF  0  4
+  STC  3
+  ASG 
+</Assignment_to__simple_variable_n>
+<put>
+; --- Put STRING "Solving for " (length 12)
+; --- Standard string writing
+  STC 83
+  WRT  0
+  STC 111
+  WRT  0
+  STC 108
+  WRT  0
+  STC 118
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 103
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "n"
+  SRF  0  4
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING " disks." (length 7)
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 105
+  WRT  0
+  STC 115
+  WRT  0
+  STC 107
+  WRT  0
+  STC 115
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<procedure_call_hanoi>
+<argument_1>
+; --- Variable / parameter "n"
+  SRF  0  4
+  DRF 
+</argument_1>
+<argument_2>
+  STC 65
+</argument_2>
+<argument_3>
+  STC 67
+</argument_3>
+<argument_4>
+  STC 66
+</argument_4>
+  OSF  5  0 L1
+</procedure_call_hanoi>
+<put>
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "Finished in " (length 12)
+; --- Standard string writing
+  STC 70
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 105
+  WRT  0
+  STC 115
+  WRT  0
+  STC 104
+  WRT  0
+  STC 101
+  WRT  0
+  STC 100
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "steps"
+  SRF  0  3
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING " steps." (length 7)
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 112
+  WRT  0
+  STC 115
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+</hanoi_towers_instruction_block>
+  LVP 
+</hanoi_towers>

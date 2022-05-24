@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cambio_base>
+  ENP L0
+<variable_declaration>
+; --- Simple variable "num", type 0, level 0,  address [3]!
+; --- Simple variable "base", type 0, level 0,  address [4]!
+; --- Simple variable "enB", type 0, level 0,  address [5]!
+</variable_declaration>
+<function_b_dec>
+L1:
+; --- Simple parameter "n", type 0, class 0, level 1,  address [3]!
+; --- Simple parameter "b", type 0, class 0, level 1,  address [4]!
+<recover_argument_2>
+; --- Recover simple val / ref variable parameter "b" (number 2).
+  SRF  0  4
+  ASGI 
+</recover_argument_2>
+<recover_argument_1>
+; --- Recover simple val / ref variable parameter "n" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L2
+<variable_declaration>
+; --- Simple variable "uc", type 0, level 1,  address [5]!
+; --- Simple variable "valRec", type 0, level 1,  address [6]!
+</variable_declaration>
+L2:
+<b_dec_instruction_block>
+<if-then>
+<condition>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC  0
+  EQ 
+</condition>
+  JMF L3
+<then>
+<return>
+  STC  0
+  CSF 
+</return>
+  JMP L4
+</then>
+<else>
+L3:
+<Assignment_to__simple_variable_uc>
+; --- Address of variable / parameter "uc"
+  SRF  0  5
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC 10
+  MOD 
+  ASG 
+</Assignment_to__simple_variable_uc>
+<Assignment_to__simple_variable_valRec>
+; --- Address of variable / parameter "valRec"
+  SRF  0  6
+<function_call_b_dec>
+<argument_1>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC 10
+  DIV 
+</argument_1>
+<argument_2>
+; --- Variable / parameter "b"
+  SRF  0  4
+  DRF 
+</argument_2>
+  OSF  7  1 L1
+</function_call_b_dec>
+  ASG 
+</Assignment_to__simple_variable_valRec>
+<return>
+; --- Variable / parameter "valRec"
+  SRF  0  6
+  DRF 
+; --- Variable / parameter "b"
+  SRF  0  4
+  DRF 
+  TMS 
+; --- Variable / parameter "uc"
+  SRF  0  5
+  DRF 
+  PLUS 
+  CSF 
+</return>
+</else>
+L4:
+</if-then>
+  CSF 
+</b_dec_instruction_block>
+</function_b_dec>
+<function_dec_b>
+L5:
+; --- Simple parameter "n", type 0, class 0, level 1,  address [3]!
+; --- Simple parameter "b", type 0, class 0, level 1,  address [4]!
+<recover_argument_2>
+; --- Recover simple val / ref variable parameter "b" (number 2).
+  SRF  0  4
+  ASGI 
+</recover_argument_2>
+<recover_argument_1>
+; --- Recover simple val / ref variable parameter "n" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L6
+<variable_declaration>
+; --- Simple variable "resto", type 0, level 1,  address [5]!
+; --- Simple variable "valRec", type 0, level 1,  address [6]!
+</variable_declaration>
+L6:
+<dec_b_instruction_block>
+<if-then>
+<condition>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+; --- Variable / parameter "b"
+  SRF  0  4
+  DRF 
+  LT 
+</condition>
+  JMF L7
+<then>
+<return>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  CSF 
+</return>
+  JMP L8
+</then>
+<else>
+L7:
+<Assignment_to__simple_variable_resto>
+; --- Address of variable / parameter "resto"
+  SRF  0  5
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+; --- Variable / parameter "b"
+  SRF  0  4
+  DRF 
+  MOD 
+  ASG 
+</Assignment_to__simple_variable_resto>
+<Assignment_to__simple_variable_valRec>
+; --- Address of variable / parameter "valRec"
+  SRF  0  6
+<function_call_dec_b>
+<argument_1>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+; --- Variable / parameter "b"
+  SRF  0  4
+  DRF 
+  DIV 
+</argument_1>
+<argument_2>
+; --- Variable / parameter "b"
+  SRF  0  4
+  DRF 
+</argument_2>
+  OSF  7  1 L5
+</function_call_dec_b>
+  ASG 
+</Assignment_to__simple_variable_valRec>
+<return>
+; --- Variable / parameter "valRec"
+  SRF  0  6
+  DRF 
+  STC 10
+  TMS 
+; --- Variable / parameter "resto"
+  SRF  0  5
+  DRF 
+  PLUS 
+  CSF 
+</return>
+</else>
+L8:
+</if-then>
+  CSF 
+</dec_b_instruction_block>
+</function_dec_b>
+L0:
+<cambio_base_instruction_block>
+<Assignment_to__simple_variable_num>
+; --- Address of variable / parameter "num"
+  SRF  0  3
+  STC  4
+  ASG 
+</Assignment_to__simple_variable_num>
+<Assignment_to__simple_variable_base>
+; --- Address of variable / parameter "base"
+  SRF  0  4
+  STC  2
+  ASG 
+</Assignment_to__simple_variable_base>
+<put>
+; --- Put STRING "Este programa convierte n=" (length 26)
+; --- Standard string writing
+  STC 69
+  WRT  0
+  STC 115
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 103
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 109
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 99
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+  STC 118
+  WRT  0
+  STC 105
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 61
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "num"
+  SRF  0  3
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING " a base b=" (length 10)
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 97
+  WRT  0
+  STC 115
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 61
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "base"
+  SRF  0  4
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING ", y luego efecúa la conversión inversa." (length 41)
+; --- Standard string writing
+  STC 44
+  WRT  0
+  STC 32
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 117
+  WRT  0
+  STC 101
+  WRT  0
+  STC 103
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 102
+  WRT  0
+  STC 101
+  WRT  0
+  STC 99
+  WRT  0
+  STC -61
+  WRT  0
+  STC -70
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 99
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+  STC 118
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 115
+  WRT  0
+  STC 105
+  WRT  0
+  STC -61
+  WRT  0
+  STC -77
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 118
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 115
+  WRT  0
+  STC 97
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "n: " (length 3)
+; --- Standard string writing
+  STC 110
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "num"
+  SRF  0  3
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "b: " (length 3)
+; --- Standard string writing
+  STC 98
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "base"
+  SRF  0  4
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<Assignment_to__simple_variable_enB>
+; --- Address of variable / parameter "enB"
+  SRF  0  5
+<function_call_dec_b>
+<argument_1>
+; --- Variable / parameter "num"
+  SRF  0  3
+  DRF 
+</argument_1>
+<argument_2>
+; --- Variable / parameter "base"
+  SRF  0  4
+  DRF 
+</argument_2>
+  OSF  6  0 L5
+</function_call_dec_b>
+  ASG 
+</Assignment_to__simple_variable_enB>
+<put>
+; --- Put STRING "dec_b(" (length 6)
+; --- Standard string writing
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 99
+  WRT  0
+  STC 95
+  WRT  0
+  STC 98
+  WRT  0
+  STC 40
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "num"
+  SRF  0  3
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING "," (length 1)
+; --- Standard string writing
+  STC 44
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "base"
+  SRF  0  4
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING "): " (length 3)
+; --- Standard string writing
+  STC 41
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "enB"
+  SRF  0  5
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "b_dec(" (length 6)
+; --- Standard string writing
+  STC 98
+  WRT  0
+  STC 95
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 99
+  WRT  0
+  STC 40
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "enB"
+  SRF  0  5
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING "," (length 1)
+; --- Standard string writing
+  STC 44
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "base"
+  SRF  0  4
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING "): " (length 3)
+; --- Standard string writing
+  STC 41
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+<function_call_b_dec>
+<argument_1>
+; --- Variable / parameter "enB"
+  SRF  0  5
+  DRF 
+</argument_1>
+<argument_2>
+; --- Variable / parameter "base"
+  SRF  0  4
+  DRF 
+</argument_2>
+  OSF  6  0 L1
+</function_call_b_dec>
+; --- Put INTEGER
+  WRT  1
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+</cambio_base_instruction_block>
+  LVP 
+</cambio_base>

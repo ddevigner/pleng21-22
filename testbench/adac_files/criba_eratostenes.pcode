@@ -1,0 +1,2323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eratostenes>
+  ENP L0
+<variable_declaration>
+; --- Simple variable "n", type 0, level 0,  address [3]!
+; --- Array variable "criba", type 1, size 101, level 0, address [4:104]!
+</variable_declaration>
+<function_pedir_entero>
+L1:
+  JMP L2
+<variable_declaration>
+; --- Simple variable "n", type 0, level 1,  address [3]!
+</variable_declaration>
+L2:
+<pedir_entero_instruction_block>
+<Assignment_to__simple_variable_n>
+; --- Address of variable / parameter "n"
+  SRF  0  3
+  STC  0
+  ASG 
+</Assignment_to__simple_variable_n>
+<while>
+L3:
+<condition>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC  1
+  LT 
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC 100
+  GT 
+  OR 
+</condition>
+  JMF L4
+<while_instruction_block>
+<put>
+; --- Put STRING "Dame un numero entre 1 y 100: " (length 30)
+; --- Standard string writing
+  STC 68
+  WRT  0
+  STC 97
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 117
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 116
+  WRT  0
+  STC 114
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 32
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 48
+  WRT  0
+  STC 48
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<get>
+; --- Get simple variable/parameter "n".
+  SRF  0  3
+  RD  1
+</get>
+</while_instruction_block>
+  JMP L3
+L4:
+</while>
+<return>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  CSF 
+</return>
+  CSF 
+</pedir_entero_instruction_block>
+</function_pedir_entero>
+<procedure_escrib_vect>
+L5:
+; --- Val array parameter "v", type 1, class 0, size 101, level 1, address [3:103]!
+<recover_argument_1>
+; --- Recover array val variable parameter "v" (number 1).
+  SRF  0 103
+  ASGI 
+  SRF  0 102
+  ASGI 
+  SRF  0 101
+  ASGI 
+  SRF  0 100
+  ASGI 
+  SRF  0 99
+  ASGI 
+  SRF  0 98
+  ASGI 
+  SRF  0 97
+  ASGI 
+  SRF  0 96
+  ASGI 
+  SRF  0 95
+  ASGI 
+  SRF  0 94
+  ASGI 
+  SRF  0 93
+  ASGI 
+  SRF  0 92
+  ASGI 
+  SRF  0 91
+  ASGI 
+  SRF  0 90
+  ASGI 
+  SRF  0 89
+  ASGI 
+  SRF  0 88
+  ASGI 
+  SRF  0 87
+  ASGI 
+  SRF  0 86
+  ASGI 
+  SRF  0 85
+  ASGI 
+  SRF  0 84
+  ASGI 
+  SRF  0 83
+  ASGI 
+  SRF  0 82
+  ASGI 
+  SRF  0 81
+  ASGI 
+  SRF  0 80
+  ASGI 
+  SRF  0 79
+  ASGI 
+  SRF  0 78
+  ASGI 
+  SRF  0 77
+  ASGI 
+  SRF  0 76
+  ASGI 
+  SRF  0 75
+  ASGI 
+  SRF  0 74
+  ASGI 
+  SRF  0 73
+  ASGI 
+  SRF  0 72
+  ASGI 
+  SRF  0 71
+  ASGI 
+  SRF  0 70
+  ASGI 
+  SRF  0 69
+  ASGI 
+  SRF  0 68
+  ASGI 
+  SRF  0 67
+  ASGI 
+  SRF  0 66
+  ASGI 
+  SRF  0 65
+  ASGI 
+  SRF  0 64
+  ASGI 
+  SRF  0 63
+  ASGI 
+  SRF  0 62
+  ASGI 
+  SRF  0 61
+  ASGI 
+  SRF  0 60
+  ASGI 
+  SRF  0 59
+  ASGI 
+  SRF  0 58
+  ASGI 
+  SRF  0 57
+  ASGI 
+  SRF  0 56
+  ASGI 
+  SRF  0 55
+  ASGI 
+  SRF  0 54
+  ASGI 
+  SRF  0 53
+  ASGI 
+  SRF  0 52
+  ASGI 
+  SRF  0 51
+  ASGI 
+  SRF  0 50
+  ASGI 
+  SRF  0 49
+  ASGI 
+  SRF  0 48
+  ASGI 
+  SRF  0 47
+  ASGI 
+  SRF  0 46
+  ASGI 
+  SRF  0 45
+  ASGI 
+  SRF  0 44
+  ASGI 
+  SRF  0 43
+  ASGI 
+  SRF  0 42
+  ASGI 
+  SRF  0 41
+  ASGI 
+  SRF  0 40
+  ASGI 
+  SRF  0 39
+  ASGI 
+  SRF  0 38
+  ASGI 
+  SRF  0 37
+  ASGI 
+  SRF  0 36
+  ASGI 
+  SRF  0 35
+  ASGI 
+  SRF  0 34
+  ASGI 
+  SRF  0 33
+  ASGI 
+  SRF  0 32
+  ASGI 
+  SRF  0 31
+  ASGI 
+  SRF  0 30
+  ASGI 
+  SRF  0 29
+  ASGI 
+  SRF  0 28
+  ASGI 
+  SRF  0 27
+  ASGI 
+  SRF  0 26
+  ASGI 
+  SRF  0 25
+  ASGI 
+  SRF  0 24
+  ASGI 
+  SRF  0 23
+  ASGI 
+  SRF  0 22
+  ASGI 
+  SRF  0 21
+  ASGI 
+  SRF  0 20
+  ASGI 
+  SRF  0 19
+  ASGI 
+  SRF  0 18
+  ASGI 
+  SRF  0 17
+  ASGI 
+  SRF  0 16
+  ASGI 
+  SRF  0 15
+  ASGI 
+  SRF  0 14
+  ASGI 
+  SRF  0 13
+  ASGI 
+  SRF  0 12
+  ASGI 
+  SRF  0 11
+  ASGI 
+  SRF  0 10
+  ASGI 
+  SRF  0  9
+  ASGI 
+  SRF  0  8
+  ASGI 
+  SRF  0  7
+  ASGI 
+  SRF  0  6
+  ASGI 
+  SRF  0  5
+  ASGI 
+  SRF  0  4
+  ASGI 
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L6
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [104]!
+; --- Simple variable "m", type 0, level 1,  address [105]!
+; --- Simple variable "salir", type 1, level 1,  address [106]!
+</variable_declaration>
+L6:
+<escrib_vect_instruction_block>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0 104
+  STC  2
+  ASG 
+</Assignment_to__simple_variable_i>
+<Assignment_to__simple_variable_m>
+; --- Address of variable / parameter "m"
+  SRF  0 105
+  STC  0
+  ASG 
+</Assignment_to__simple_variable_m>
+<Assignment_to__simple_variable_salir>
+; --- Address of variable / parameter "salir"
+  SRF  0 106
+  STC  0
+  ASG 
+</Assignment_to__simple_variable_salir>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "Numeros primos hasta " (length 21)
+; --- Standard string writing
+  STC 78
+  WRT  0
+  STC 117
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 109
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 104
+  WRT  0
+  STC 97
+  WRT  0
+  STC 115
+  WRT  0
+  STC 116
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "n"
+  SRF  1  3
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING ": " (length 2)
+; --- Standard string writing
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<while>
+L7:
+<condition>
+; --- Variable / parameter "salir"
+  SRF  0 106
+  DRF 
+  NGB 
+</condition>
+  JMF L8
+<while_instruction_block>
+<if-then>
+<condition>
+; --- Variable / parameter "i"
+  SRF  0 104
+  DRF 
+; --- Variable / parameter "n"
+  SRF  1  3
+  DRF 
+  GT 
+</condition>
+  JMF L9
+<then>
+<Assignment_to__simple_variable_salir>
+; --- Address of variable / parameter "salir"
+  SRF  0 106
+  STC  1
+  ASG 
+</Assignment_to__simple_variable_salir>
+  JMP L10
+</then>
+<else>
+L9:
+<if-then>
+<condition>
+<component_of_array_v>
+; --- Variable / parameter "i"
+  SRF  0 104
+  DRF 
+; --- Checking if index is valid for array "v"
+  DUP 
+  STC  0
+  GTE 
+  JMF L11
+  DUP 
+  STC 101
+  LT 
+  JMT L12
+L11:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 118
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 52
+  WRT  0
+  STC 49
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L12:
+; --- Initial address of array "v"
+  SRF  0  3
+  PLUS 
+  DRF 
+</component_of_array_v>
+</condition>
+  JMF L13
+<then>
+<put>
+; --- Variable / parameter "i"
+  SRF  0 104
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING " es primo." (length 10)
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 109
+  WRT  0
+  STC 111
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<Assignment_to__simple_variable_m>
+; --- Address of variable / parameter "m"
+  SRF  0 105
+; --- Variable / parameter "m"
+  SRF  0 105
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_m>
+</then>
+L13:
+</if-then>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0 104
+; --- Variable / parameter "i"
+  SRF  0 104
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_i>
+</else>
+L10:
+</if-then>
+</while_instruction_block>
+  JMP L7
+L8:
+</while>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "Hasta " (length 6)
+; --- Standard string writing
+  STC 72
+  WRT  0
+  STC 97
+  WRT  0
+  STC 115
+  WRT  0
+  STC 116
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "n"
+  SRF  1  3
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING " hay " (length 5)
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 104
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "m"
+  SRF  0 105
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING " números primos." (length 17)
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC -61
+  WRT  0
+  STC -70
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 109
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+  CSF 
+</escrib_vect_instruction_block>
+</procedure_escrib_vect>
+<procedure_inicializar>
+L14:
+; --- Ref array parameter "v", type 1, class 1, size 101, level 1, address [3]!
+<recover_argument_1>
+; --- Recover array ref variable parameter "v" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L15
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [4]!
+</variable_declaration>
+L15:
+<inicializar_instruction_block>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  4
+  STC  1
+  ASG 
+</Assignment_to__simple_variable_i>
+<while>
+L16:
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+; --- Variable / parameter "n"
+  SRF  1  3
+  DRF 
+  LTE 
+</condition>
+  JMF L17
+<while_instruction_block>
+<Assignment_to_component_of_array_v>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+; --- Checking if index is valid for array "v"
+  DUP 
+  STC  0
+  GTE 
+  JMF L18
+  DUP 
+  STC 101
+  LT 
+  JMT L19
+L18:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 118
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 54
+  WRT  0
+  STC 48
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L19:
+; --- Initial address of array "v"
+  SRF  0  3
+  DRF 
+  PLUS 
+  STC  1
+  ASG 
+</Assignment_to_component_of_array_v>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  4
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_i>
+</while_instruction_block>
+  JMP L16
+L17:
+</while>
+  CSF 
+</inicializar_instruction_block>
+</procedure_inicializar>
+<procedure_eliminar_no_primos>
+L20:
+; --- Ref array parameter "v", type 1, class 1, size 101, level 1, address [3]!
+<recover_argument_1>
+; --- Recover array ref variable parameter "v" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L21
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [4]!
+; --- Simple variable "j", type 0, level 1,  address [5]!
+</variable_declaration>
+L21:
+<eliminar_no_primos_instruction_block>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  4
+  STC  2
+  ASG 
+</Assignment_to__simple_variable_i>
+<while>
+L22:
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+; --- Variable / parameter "n"
+  SRF  1  3
+  DRF 
+  STC  2
+  DIV 
+  LTE 
+</condition>
+  JMF L23
+<while_instruction_block>
+<if-then>
+<condition>
+<component_of_array_v>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+; --- Checking if index is valid for array "v"
+  DUP 
+  STC  0
+  GTE 
+  JMF L24
+  DUP 
+  STC 101
+  LT 
+  JMT L25
+L24:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 118
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 55
+  WRT  0
+  STC 51
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L25:
+; --- Initial ref address of array "v"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_v>
+</condition>
+  JMF L26
+<then>
+<Assignment_to__simple_variable_j>
+; --- Address of variable / parameter "j"
+  SRF  0  5
+  STC  2
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+  TMS 
+  ASG 
+</Assignment_to__simple_variable_j>
+<while>
+L27:
+<condition>
+; --- Variable / parameter "j"
+  SRF  0  5
+  DRF 
+; --- Variable / parameter "n"
+  SRF  1  3
+  DRF 
+  LTE 
+</condition>
+  JMF L28
+<while_instruction_block>
+<Assignment_to_component_of_array_v>
+; --- Variable / parameter "j"
+  SRF  0  5
+  DRF 
+; --- Checking if index is valid for array "v"
+  DUP 
+  STC  0
+  GTE 
+  JMF L29
+  DUP 
+  STC 101
+  LT 
+  JMT L30
+L29:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 118
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 55
+  WRT  0
+  STC 54
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L30:
+; --- Initial address of array "v"
+  SRF  0  3
+  DRF 
+  PLUS 
+  STC  0
+  ASG 
+</Assignment_to_component_of_array_v>
+<Assignment_to__simple_variable_j>
+; --- Address of variable / parameter "j"
+  SRF  0  5
+; --- Variable / parameter "j"
+  SRF  0  5
+  DRF 
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_j>
+</while_instruction_block>
+  JMP L27
+L28:
+</while>
+</then>
+L26:
+</if-then>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  4
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_i>
+</while_instruction_block>
+  JMP L22
+L23:
+</while>
+  CSF 
+</eliminar_no_primos_instruction_block>
+</procedure_eliminar_no_primos>
+<procedure_procesar>
+L31:
+; --- Ref array parameter "v", type 1, class 1, size 101, level 1, address [3]!
+<recover_argument_1>
+; --- Recover array ref variable parameter "v" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L32
+<variable_declaration>
+</variable_declaration>
+L32:
+<procesar_instruction_block>
+<procedure_call_inicializar>
+<argument_1>
+; --- Variable / parameter "v"
+  SRF  0  3
+  DRF 
+</argument_1>
+  OSF  4  1 L14
+</procedure_call_inicializar>
+<procedure_call_eliminar_no_primos>
+<argument_1>
+; --- Variable / parameter "v"
+  SRF  0  3
+  DRF 
+</argument_1>
+  OSF  4  1 L20
+</procedure_call_eliminar_no_primos>
+<procedure_call_escrib_vect>
+<argument_1>
+; --- Variable / parameter "v"
+  SRF  0  3
+  DRF 
+  STC  0
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  1
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  2
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  3
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  4
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  5
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  6
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  7
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  8
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC  9
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 10
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 11
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 12
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 13
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 14
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 15
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 16
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 17
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 18
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 19
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 20
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 21
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 22
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 23
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 24
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 25
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 26
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 27
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 28
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 29
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 30
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 31
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 32
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 33
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 34
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 35
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 36
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 37
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 38
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 39
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 40
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 41
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 42
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 43
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 44
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 45
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 46
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 47
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 48
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 49
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 50
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 51
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 52
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 53
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 54
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 55
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 56
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 57
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 58
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 59
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 60
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 61
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 62
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 63
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 64
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 65
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 66
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 67
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 68
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 69
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 70
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 71
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 72
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 73
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 74
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 75
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 76
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 77
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 78
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 79
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 80
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 81
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 82
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 83
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 84
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 85
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 86
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 87
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 88
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 89
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 90
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 91
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 92
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 93
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 94
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 95
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 96
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 97
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 98
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 99
+  PLUS 
+  DRF 
+  SRF  0  3
+  DRF 
+  STC 100
+  PLUS 
+  DRF 
+</argument_1>
+  OSF  4  1 L5
+</procedure_call_escrib_vect>
+  CSF 
+</procesar_instruction_block>
+</procedure_procesar>
+L0:
+<eratostenes_instruction_block>
+<put>
+; --- Put STRING "Criba de Eratóstenes: determinación de qué números son primos hasta un n dado." (length 82)
+; --- Standard string writing
+  STC 67
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 98
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 69
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 116
+  WRT  0
+  STC -61
+  WRT  0
+  STC -77
+  WRT  0
+  STC 115
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 115
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 109
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 97
+  WRT  0
+  STC 99
+  WRT  0
+  STC 105
+  WRT  0
+  STC -61
+  WRT  0
+  STC -77
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 113
+  WRT  0
+  STC 117
+  WRT  0
+  STC -61
+  WRT  0
+  STC -87
+  WRT  0
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC -61
+  WRT  0
+  STC -70
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 109
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 104
+  WRT  0
+  STC 97
+  WRT  0
+  STC 115
+  WRT  0
+  STC 116
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 97
+  WRT  0
+  STC 100
+  WRT  0
+  STC 111
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "https://es.wikipedia.org/wiki/Criba_de_Erat%C3%B3stenes" (length 55)
+; --- Standard string writing
+  STC 104
+  WRT  0
+  STC 116
+  WRT  0
+  STC 116
+  WRT  0
+  STC 112
+  WRT  0
+  STC 115
+  WRT  0
+  STC 58
+  WRT  0
+  STC 47
+  WRT  0
+  STC 47
+  WRT  0
+  STC 101
+  WRT  0
+  STC 115
+  WRT  0
+  STC 46
+  WRT  0
+  STC 119
+  WRT  0
+  STC 105
+  WRT  0
+  STC 107
+  WRT  0
+  STC 105
+  WRT  0
+  STC 112
+  WRT  0
+  STC 101
+  WRT  0
+  STC 100
+  WRT  0
+  STC 105
+  WRT  0
+  STC 97
+  WRT  0
+  STC 46
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 103
+  WRT  0
+  STC 47
+  WRT  0
+  STC 119
+  WRT  0
+  STC 105
+  WRT  0
+  STC 107
+  WRT  0
+  STC 105
+  WRT  0
+  STC 47
+  WRT  0
+  STC 67
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 98
+  WRT  0
+  STC 97
+  WRT  0
+  STC 95
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 95
+  WRT  0
+  STC 69
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 116
+  WRT  0
+  STC 37
+  WRT  0
+  STC 67
+  WRT  0
+  STC 51
+  WRT  0
+  STC 37
+  WRT  0
+  STC 66
+  WRT  0
+  STC 51
+  WRT  0
+  STC 115
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 115
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<Assignment_to__simple_variable_n>
+; --- Address of variable / parameter "n"
+  SRF  0  3
+<function_call_pedir_entero>
+  OSF 105  0 L1
+</function_call_pedir_entero>
+  ASG 
+</Assignment_to__simple_variable_n>
+<procedure_call_procesar>
+<argument_1>
+; --- Variable / parameter "criba"
+  SRF  0  4
+</argument_1>
+  OSF 105  0 L31
+</procedure_call_procesar>
+</eratostenes_instruction_block>
+  LVP 
+</eratostenes>
