@@ -114,6 +114,7 @@ sf.AddMethod(main, t);
 label = CGUtils.newLabel();
                                 cmain.addInst(OpCode.ENP, label);
                                 cmain.addLabel(label);
+                                //System.out.println(funcs.toString());
                                 cmain.addBlock(funcs);
                                 cmain.addBlock(main.code);
                                 cmain.addInst(OpCode.LVP);
@@ -148,26 +149,26 @@ panicMode(e.currentToken.next, 0);
 
 //-----------------------------------------------------------------------------
 // Declaracion de procedimiento/funcion
-  static final public void proc_func_decl(CodeBlock funcs) throws ParseException {Attributes at = new Attributes();
+  static final public void proc_func_decl(CodeBlock proc_func) throws ParseException {Attributes at = new Attributes();
         Token t;
         String label;
-        CodeBlock proc_func;
+        //CodeBlock proc_func;
         ArrayList<Symbol> params_invertidos;
         CodeBlock funciones_dentro_de_funcion = new CodeBlock();
     proc_or_func(at);
     func_return(at);
     t = jj_consume_token(ID);
 sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t);
-                proc_func = new CodeBlock();
+                //proc_func = new CodeBlock();
                 CGUtils.memorySpaces[st.level]=3;
     jj_consume_token(LPAREN);
     params_def(at.params);
-params_invertidos = new ArrayList<>(at.params);
-                Collections.reverse(params_invertidos);
-                for(Symbol sym : params_invertidos){
-                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)sym.dir);
+long aux;
+                for(int i=at.params.size()-1;i>=0;i--){
+                        aux = at.params.get(i).dir;
+                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);  //Aqui da error
                         at.code.addInst(PCodeInstruction.OpCode.ASGI);
-                        at.code.addComment("Se anyade el parametro " + sym.name);
+                        at.code.addComment("Se anyade el parametro " + at.params.get(i).name);
                 }
     jj_consume_token(RPAREN);
     jj_consume_token(IS);
@@ -177,11 +178,14 @@ params_invertidos = new ArrayList<>(at.params);
 label = CGUtils.newLabel();
                 proc_func.addInst(OpCode.JMP, label);
                 proc_func.addLabel(label);
+                System.out.println("Antes de anyadir funciones dentro de funciones");
                 proc_func.addBlock(funciones_dentro_de_funcion);
+                System.out.println("Despues de anyadir funciones dentro de funciones");
                 proc_func.addBlock(at.code);
                 proc_func.addInst(OpCode.CSF);
                 proc_func.encloseXMLTags(t.image);
-                funcs = proc_func;
+                //funcs = proc_func;
+
 }
 
 //-----------------------------------------------------------------------------
@@ -425,6 +429,7 @@ panicMode(e.currentToken.next, 1);
       jj_consume_token(LPAREN);
       assignable(fst);
 sf.EvaluateGet(fst);
+                                at.code.addBlock(fst.code);
       label_6:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -573,6 +578,8 @@ fst.given.add(snd);
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
 sf.EvaluateProcedure(fst, t);
+                                        //Anyadir lo que se ha metido de procedure en los attributes
+                                        at.code.addBlock(fst.code);
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
@@ -755,7 +762,8 @@ sf.EvaluateOperation(at, aux);
       t = jj_consume_token(NOT);
       factor(at);
 sf.EvaluateCondition(at, t);
-                          at.code.addInst(PCodeInstruction.OpCode.NGB);
+                          at.code.addInst(PCodeInstruction.OpCode.NGB); //Se pone el negado
+
       break;
       }
     case LPAREN:{
@@ -834,7 +842,11 @@ sf.EvaluateArray(at, aux, t);
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
           t = jj_consume_token(ID);
-if (at.method) { sf.EvaluateParam(at, t); } else { sf.EvaluateVar(at, t); }
+if (at.method) {
+                        sf.EvaluateParam(at, t);
+                        } else {
+                                sf.EvaluateVar(at, t);
+                        }
           break;
           }
         case INTVAL:{
@@ -1018,6 +1030,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
+  static private boolean jj_3_2()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
   static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
@@ -1032,21 +1051,14 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
-  static private boolean jj_3_2()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5()
+  static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 
-  static private boolean jj_3_1()
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;

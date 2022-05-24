@@ -271,6 +271,7 @@ String main() :
 				label = CGUtils.newLabel();
 				cmain.addInst(OpCode.ENP, label);
 				cmain.addLabel(label);
+				//System.out.println(funcs.toString());
 				cmain.addBlock(funcs);
 				cmain.addBlock(main.code);
 				cmain.addInst(OpCode.LVP);
@@ -297,12 +298,12 @@ void procs_funcs_decl (CodeBlock funcs):
 
 //-----------------------------------------------------------------------------
 // Declaracion de procedimiento/funcion
-void proc_func_decl(CodeBlock funcs):
+void proc_func_decl(CodeBlock proc_func):
 {
 	Attributes at = new Attributes();
 	Token t;
 	String label;
-	CodeBlock proc_func;
+	//CodeBlock proc_func;
 	ArrayList<Symbol> params_invertidos;
 	CodeBlock funciones_dentro_de_funcion = new CodeBlock();
 } {
@@ -310,18 +311,18 @@ void proc_func_decl(CodeBlock funcs):
 	func_return(at)
 	t = <ID> { 
 		sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t); 
-		proc_func = new CodeBlock();
+		//proc_func = new CodeBlock();
 		CGUtils.memorySpaces[st.level]=3;
 		}	//Se crea el bloque de la funcion
 	<LPAREN>
 	params_def(at.params)		//Aqui hacer recuperacion de parametros. Para cada symbol hacer lo de la diapo . Mirar si deberia hacerlo en otro orden
 	{
-		params_invertidos = new ArrayList<>(at.params);
-		Collections.reverse(params_invertidos);
-		for(Symbol sym : params_invertidos){
-			at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)sym.dir);
+		long aux;
+		for(int i=at.params.size()-1;i>=0;i--){
+			aux = at.params.get(i).dir;
+			at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);	//Aqui da error
 			at.code.addInst(PCodeInstruction.OpCode.ASGI);
-			at.code.addComment("Se anyade el parametro " + sym.name);
+			at.code.addComment("Se anyade el parametro " + at.params.get(i).name);
 		}
 	}
 	<RPAREN>
@@ -333,11 +334,13 @@ void proc_func_decl(CodeBlock funcs):
 		label = CGUtils.newLabel();
 		proc_func.addInst(OpCode.JMP, label);
 		proc_func.addLabel(label);
+		System.out.println("Antes de anyadir funciones dentro de funciones");
 		proc_func.addBlock(funciones_dentro_de_funcion);
+		System.out.println("Despues de anyadir funciones dentro de funciones");
 		proc_func.addBlock(at.code);
 		proc_func.addInst(OpCode.CSF);
 		proc_func.encloseXMLTags(t.image);
-		funcs = proc_func;
+		//funcs = proc_func;
 	}
 }
 
@@ -461,7 +464,10 @@ void instruction(Attributes at):
 	Attributes fst = new Attributes(), snd = new Attributes();
 	Token t;
 } {
-		<GET> <LPAREN> assignable(fst) { sf.EvaluateGet(fst); }		//En el get se le pasa un asignable, se necesita el nivel de ese assignable 
+		<GET> <LPAREN> assignable(fst) { 
+				sf.EvaluateGet(fst); 
+				at.code.addBlock(fst.code);
+			}		//En el get se le pasa un asignable, se necesita el nivel de ese assignable 
 			( <COLON> assignable(fst) { sf.EvaluateGet(fst); } )* <RPAREN> <SCOLON>
 	| 	<PUT> <LPAREN> expression(fst) { sf.EvaluatePut(fst); } 
 			(<COLON> expression(fst) { sf.EvaluatePut(fst); })* <RPAREN> <SCOLON> 
@@ -490,10 +496,14 @@ void instruction(Attributes at):
 			}
 
 	| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
-	| 	LOOKAHEAD(2) t = <ID> { snd.method = true; }
+	| 	LOOKAHEAD(2) t = <ID> { snd.method = true; }	//Este es una llamada a funcion
 			<LPAREN> (expression(snd) { fst.given.add(snd); } 
 			(<COLON> {snd = new Attributes(true); } expression(snd) {fst.given.add(snd); })*
-			)? <RPAREN> <SCOLON> { sf.EvaluateProcedure(fst, t); }
+			)? <RPAREN> <SCOLON> { 
+					sf.EvaluateProcedure(fst, t); 
+					//Anyadir lo que se ha metido de procedure en los attributes
+					at.code.addBlock(fst.code);
+				}
 	| 	assignable(fst) <ASS> expression(snd) { sf.EvaluateAssignation(fst, snd); } <SCOLON> 
 	|	<WHILE> expression(fst) { sf.EvaluateCondition(fst); }
 			<DO> instructions_list(at) <END>

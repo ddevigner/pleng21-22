@@ -1,0 +1,22 @@
+--cambios de base
+procedure cambio_base is
+	integer num, base;
+	integer enB;
+    character a;
+------------------------------------------------------
+------------------------------------------------------
+procedure dec_b(val integer n,b;ref character a) is
+	integer resto,valRec;
+begin
+	get(n);
+    get(a);
+    --put_line ("Dentro de dec_b");
+end
+------------------------------------------------------
+begin
+	num := 4;
+	base := 2;
+
+	--put_line ("Este programa convierte n=",num," a base b=", base, ", y luego efecúa la conversión inversa.");
+	dec_b(num,base,a);
+end

@@ -125,25 +125,25 @@ public class SemanticFunctions {
 			if(at.parClass==ParameterClass.VAL || at.parClass==ParameterClass.NONE){	//Si es una variable por valor entonces se hace srf y RD	
 				//Si es none significa que no es un parametro asi quee se trata como valor
 				if(at.baseType==Types.INT){	//Si es INT a RD se le pasa un 1
+					at.code.addComment("Se hace get de una variable por valor y de tipo INT " + at.name);
 					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
 					at.code.addInst(PCodeInstruction.OpCode.RD,1);
-					at.code.addComment("Se hace get de una variable por valor y de tipo INT " + at.name);
 				}else if(at.baseType==Types.CHAR){	//Si es CHAR a RD se le pasa un 0
+					at.code.addComment("Se hace get de una variable por valor y de tipo CHAR " + at.name);
 					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
 					at.code.addInst(PCodeInstruction.OpCode.RD,0);
-					at.code.addComment("Se hace get de una variable por valor y de tipo CHAR " + at.name);
 				}
 			}else if(at.parClass==ParameterClass.REF){	//Si es por referencia se hace SRF , DRF y RD
 				if(at.baseType==Types.INT){	//Si es INT a RD se le pasa un 1
+					at.code.addComment("Se hace get de una variable por referencia y de tipo INT " + at.name);
 					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
 					at.code.addInst(PCodeInstruction.OpCode.DRF);
 					at.code.addInst(PCodeInstruction.OpCode.RD,1);
-					at.code.addComment("Se hace get de una variable por referencia y de tipo INT " + at.name);
 				}else if(at.baseType==Types.CHAR){	//Si es CHAR a RD se le pasa un 0
+					at.code.addComment("Se hace get de una variable por referencia y de tipo CHAR " + at.name);
 					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
 					at.code.addInst(PCodeInstruction.OpCode.DRF);
 					at.code.addInst(PCodeInstruction.OpCode.RD,0);
-					at.code.addComment("Se hace get de una variable por referencia y de tipo CHAR " + at.name);
 				}
 			}
 		} catch (GetException e) {
@@ -252,6 +252,26 @@ public class SemanticFunctions {
 		try {
 			Symbol s = st.getSymbol(t.image); 
 			evaluateProcedure(s, at, t);
+			//Ahora recorro las variables pasadas, si es por valor hago SRF y RDF y si es por referencia hago SRF
+			//Por ultimo se llama a OSF
+			//Coger el recibido por parametro y mirar si el de la funcion es por valor o referencia
+			//Los parametros pasados estan en at.parList
+			//Los que deberian ser esta en (SymbolProcedure)s
+			SymbolProcedure p = (SymbolProcedure) s;
+			long aux;
+			for (int i = 0; i < p.parList.size(); i++) {
+				aux = p.parList.get(i).dir;
+				if(p.parList.get(i).parClass==ParameterClass.REF){
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
+				}else if(p.parList.get(i).parClass==ParameterClass.VAL){
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+				}
+			}
+			//Aqui hago el osf
+			long aux2 = s.dir;
+			at.code.addInst (PCodeInstruction.OpCode.OSF,st.level, st.level-s.nivel,(int) aux2);	//Comprobar si esta bien/////////////////
+
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
 		} catch (ProcedureNotFoundException e) {
@@ -512,6 +532,7 @@ public class SemanticFunctions {
 		try {
 			Symbol s = st.getSymbol(t.image); 
 			evaluateFunction(s, at, t);
+			
 		} catch (SymbolNotFoundException e) {
 			se.detection(e,t);
 			at.baseType = Types.UNDEFINED;

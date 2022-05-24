@@ -67,15 +67,18 @@ public class Attributes implements Cloneable {
         given = new ArrayList<>();
         hasReturn = false;
         parClass = ParameterClass.NONE;
+        this.code = new CodeBlock();
     }
 
     // Method attributes.
     public Attributes(boolean method) {
         this.method = method;
+        this.code = new CodeBlock();
     }
 
     public Attributes(ArrayList<Symbol> params) {
         this.params = params;
+        this.code = new CodeBlock();
     }
 
     public Attributes(Types methodType, Types returnType, ArrayList<Symbol> params) {
@@ -84,6 +87,7 @@ public class Attributes implements Cloneable {
         this.main = false;
         this.params = params;
         hasReturn = false;
+        this.code = new CodeBlock();
     }
 
     public Attributes(Types methodType, Types returnType, ArrayList<Symbol> params, boolean main) {
@@ -98,6 +102,7 @@ public class Attributes implements Cloneable {
     // Variable attributes.
     public Attributes(ParameterClass parClass) {
         this.parClass = parClass;
+        this.code = new CodeBlock();
     }
 
     /** METODOS **************************************************************/
