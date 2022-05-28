@@ -18,6 +18,7 @@ public class SymbolProcedure extends Symbol {
     //necesario mantener la información de los parámetros.
     public ArrayList<Symbol> parList;
     public boolean main;
+    public String label;
 
     public SymbolProcedure(String name, ArrayList<Symbol> parList, boolean main) {
     	super(name, Types.PROCEDURE, ParameterClass.NONE);

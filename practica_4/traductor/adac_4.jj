@@ -258,8 +258,8 @@ String main() :
 	try {
 		<PROC> t = <ID> <IS> 
 			{
-				
-				sf.AddMethod(main, t); 
+				label = CGUtils.newLabel();
+				sf.AddMethod(main, t, label); 
 				cmain = new CodeBlock();
 				cmain.generationMode = CodeBlock.BlockMode.XML;
 				CGUtils.memorySpaces[0]=3;
@@ -268,11 +268,11 @@ String main() :
 		procs_funcs_decl(funcs)		//Que esto devuelva un CodeBlock 
 		proc_func_body(main)
 			{
-				label = CGUtils.newLabel();
+				//label = CGUtils.newLabel();
 				cmain.addInst(OpCode.ENP, label);
-				cmain.addLabel(label);
-				//System.out.println(funcs.toString());
+				//cmain.addLabel(label);
 				cmain.addBlock(funcs);
+				cmain.addLabel(label);
 				cmain.addBlock(main.code);
 				cmain.addInst(OpCode.LVP);
 				cmain.encloseXMLTags(t.image);
@@ -306,23 +306,46 @@ void proc_func_decl(CodeBlock proc_func):
 	//CodeBlock proc_func;
 	ArrayList<Symbol> params_invertidos;
 	CodeBlock funciones_dentro_de_funcion = new CodeBlock();
+	String label_params;
 } {
 	proc_or_func(at)
 	func_return(at)
 	t = <ID> { 
-		sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t); 
+		label_params=CGUtils.newLabel();
+		sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t, label_params); 
 		//proc_func = new CodeBlock();
 		CGUtils.memorySpaces[st.level]=3;
+
 		}	//Se crea el bloque de la funcion
 	<LPAREN>
 	params_def(at.params)		//Aqui hacer recuperacion de parametros. Para cada symbol hacer lo de la diapo . Mirar si deberia hacerlo en otro orden
 	{
+		proc_func.addLabel(label_params);	//Se anyade la label para recuperar los argumentos de la funcion
 		long aux;
 		for(int i=at.params.size()-1;i>=0;i--){
 			aux = at.params.get(i).dir;
-			at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);	//Aqui da error
-			at.code.addInst(PCodeInstruction.OpCode.ASGI);
-			at.code.addComment("Se anyade el parametro " + at.params.get(i).name);
+			//Si es por referencia se anyade 1
+			//Si es por valor y es un vector entonces se anyaden sus componentes 
+			if(at.params.get(i).parClass == ParameterClass.REF){
+				proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);	//Aqui da error
+				proc_func.addInst(PCodeInstruction.OpCode.ASGI);
+				proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
+				CGUtils.memorySpaces[st.level] += 1;
+			}else if(at.params.get(i).parClass == ParameterClass.VAL && at.params.get(i).type != Types.ARRAY){
+				CGUtils.memorySpaces[st.level] += 1;
+				proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);	//Aqui da error
+				proc_func.addInst(PCodeInstruction.OpCode.ASGI);
+				proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
+			}else if(at.params.get(i).parClass == ParameterClass.VAL && at.params.get(i).type == Types.ARRAY){
+				SymbolArray vec = (SymbolArray) at.params.get(i);
+				CGUtils.memorySpaces[st.level] += vec.maxInd;
+				//Se recorre el vector y se recupera cada Posicion 
+				for(int j=0;j<vec.maxInd;j++){
+					proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux + j);	//Aqui da error
+					proc_func.addInst(PCodeInstruction.OpCode.ASGI);
+					proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
+				}
+			}
 		}
 	}
 	<RPAREN>
@@ -333,14 +356,11 @@ void proc_func_decl(CodeBlock proc_func):
 	{
 		label = CGUtils.newLabel();
 		proc_func.addInst(OpCode.JMP, label);
-		proc_func.addLabel(label);
-		System.out.println("Antes de anyadir funciones dentro de funciones");
 		proc_func.addBlock(funciones_dentro_de_funcion);
-		System.out.println("Despues de anyadir funciones dentro de funciones");
+		proc_func.addLabel(label);	//Pones la label donde empieza el codigo
 		proc_func.addBlock(at.code);
 		proc_func.addInst(OpCode.CSF);
 		proc_func.encloseXMLTags(t.image);
-		//funcs = proc_func;
 	}
 }
 
@@ -463,8 +483,12 @@ void instruction(Attributes at):
 {
 	Attributes fst = new Attributes(), snd = new Attributes();
 	Token t;
+	String label_else;
+	String label_fin_if;
+	String label_exp_while;
+	String label_fin_while;
 } {
-		<GET> <LPAREN> assignable(fst) { 
+		<GET> <LPAREN> assignable(fst) { //A lo mejor el get hay que cambiarlo ya que en assignable los metere en la pila en vez de en la funcion del get
 				sf.EvaluateGet(fst); 
 				at.code.addBlock(fst.code);
 			}		//En el get se le pasa un asignable, se necesita el nivel de ese assignable 
@@ -497,19 +521,55 @@ void instruction(Attributes at):
 
 	| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
 	| 	LOOKAHEAD(2) t = <ID> { snd.method = true; }	//Este es una llamada a funcion
-			<LPAREN> (expression(snd) { fst.given.add(snd); } 
-			(<COLON> {snd = new Attributes(true); } expression(snd) {fst.given.add(snd); })*
+			<LPAREN> (expression(snd) { fst.given.add(snd); at.code.addBlock(snd.code);//Se anyade el codigo de la primera expression } 
+			(<COLON> {snd = new Attributes(true); } expression(snd) {fst.given.add(snd); at.code.addBlock(snd.code)})*
 			)? <RPAREN> <SCOLON> { 
-					sf.EvaluateProcedure(fst, t); 
 					//Anyadir lo que se ha metido de procedure en los attributes
 					at.code.addBlock(fst.code);
+					sf.EvaluateProcedure(fst, t); 
 				}
-	| 	assignable(fst) <ASS> expression(snd) { sf.EvaluateAssignation(fst, snd); } <SCOLON> 
-	|	<WHILE> expression(fst) { sf.EvaluateCondition(fst); }
-			<DO> instructions_list(at) <END>
-	| 	<IF> expression(fst) { sf.EvaluateCondition(fst); } <THEN> instructions_list(at) 
-			(<ELSE> instructions_list(at))? <END> 
-	| 	t = <RETURN> expression(fst) { sf.EvaluateReturn(at, fst, t); } <SCOLON> 	//Apilar el return de una funcion //////////////////////////////////
+	| 	assignable(fst) <ASS> expression(snd) { 
+								sf.EvaluateAssignation(fst, snd); 
+								at.code.addBlock(fst.code);	//Se anyaden los bloques en orden
+								at.code.addBlock(snd.code);
+								at.code.addInst(PCodeInstruction.OpCode.ASG);
+							} <SCOLON> 
+	|	<WHILE> {
+					label_exp_while=CGUtils.newLabel();
+					at.code.addLabel(label_exp_while);
+				}
+			expression(fst) { 
+					sf.EvaluateCondition(fst); 
+					label_fin_while = CGUtils.newLabel();
+					at.code.addBlock(fst.code);	//Aqui hay que anyadir el codigo de expression que sera un store constant de 0 o 1 lo mas seguro
+					at.code.addInst(PCodeInstruction.OpCode.JMF,label_fin_while);
+				}
+			<DO> instructions_list(at) <END>{
+											at.code.addInst(PCodeInstruction.OpCode.JMP,label_exp_while);
+											at.code.addLabel(label_fin_while);
+										}
+	| 	<IF> expression(fst) { 
+				//Aqui habria que anyadir el codigo de expression
+				sf.EvaluateCondition(fst); 
+				label_else = CGUtils.newLabel();
+				at.code.addBlock(fst.code);	//Se anyade el codigo de la expression (que lo mas seguroque haga un store constan de 0 o 1 para indicar true o false)
+				at.code.addInst(PCodeInstruction.OpCode.JMF,label_else);
+			} <THEN> instructions_list(at) {
+										label_fin_if=CGUtils.newLabel();
+										at.code.addInst(PCodeInstruction.OpCode.JMP,label_fin_if);
+										at.code.addLabel(label_else);
+										at.code.encloseXMLTags("then");
+									}
+			(<ELSE> instructions_list(at))? <END> {
+													at.code.addLabel(label_fin_if);
+													at.code.encloseXMLTags("if_else");
+													
+												}
+	| 	t = <RETURN> expression(fst) { 
+			sf.EvaluateReturn(at, fst, t); 
+			at.code.addBlock(fst.code);
+			at.code.addInst(OpCode.CSF);	//Como hay un return se pone CSF porque es el final de la funcion
+			} <SCOLON> 	//Apilar el return de una funcion //////////////////////////////////
 }
 
 //-----------------------------------------------------------------------------
@@ -520,8 +580,30 @@ void assignable(Attributes at):
 	Token t;
 }
 {
-	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { sf.EvaluateArray(at, aux, t); }
-	| t = <ID> { sf.EvaluateVar(at, t); }
+	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { 
+													sf.EvaluateArray(at, aux, t); 
+													//Pendiente
+													at.code.addBlock(aux.code);
+												}
+	| t = <ID> { 
+				sf.EvaluateVar(at, t); 
+				//Anyadir a at el codigo de esta variable que sera para escritura
+				try {
+					Symbol s = st.getSymbol(t.image);
+					long auxDir=s.dir;
+					if(s.parClass==ParameterClass.VAL){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+					}else if(s.parClass==ParameterClass.REF){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+						at.code.addInst(PCodeInstruction.OpCode.DRF);	
+					}else if(s.parClass==ParameterClass.NONE){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+					}
+				} catch (SymbolNotFoundException e) {
+					
+				}
+				
+			}
 }
 
 
@@ -530,9 +612,13 @@ void assignable(Attributes at):
 void expression(Attributes at): 
 {
 	Attributes aux = new Attributes();
+	CodeBlock operacion = new CodeBlock();
 }
 {
-	simple_expr(at) (relational_op(aux) simple_expr(aux) {sf.EvaluateOperation(at, aux); })?
+	simple_expr(at) (relational_op(aux) simple_expr(aux) {
+			sf.EvaluateOperation(at, aux); 
+			//at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
+		})?
 }
 
 //-----------------------------------------------------------------------------
@@ -544,7 +630,10 @@ void simple_expr(Attributes at):
 } 
 {
 	((t = <ADD> | t = <SUB>) { at.op = Operator.INT_OP; })? term(at) { sf.EvaluateOperation(at, t); }
-	(additive_op(aux) term(aux) { sf.EvaluateOperation(at, aux); })*
+	(additive_op(aux) term(aux) { 
+		sf.EvaluateOperation(at, aux); 
+		//at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
+		})*
 }
 
 //-----------------------------------------------------------------------------
@@ -554,7 +643,10 @@ void term(Attributes at):
 	Attributes aux = new Attributes();
 }
 {
-	factor(at) (multiplicative_op(aux) factor(aux) { sf.EvaluateOperation(at, aux); })*
+	factor(at) (multiplicative_op(aux) factor(aux) { 
+			sf.EvaluateOperation(at, aux); 
+			//at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
+		})*
 }
 
 void factor(Attributes at):
@@ -571,15 +663,37 @@ void factor(Attributes at):
 	| 	t = <INT2CHAR> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateInt2Char(at, aux, t); }
 	| 	t = <CHAR2INT> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateChar2Int(at, aux, t); }
 	| 	LOOKAHEAD(2) t = <ID> { aux.method = true; } 	//Poner lo de la llamada a funcion
-			<LPAREN> (expression(aux) { at.given.add(aux); } 
+			<LPAREN> (expression(aux) { at.given.add(aux); at.code.addBlock(aux.code);} 
 			(<COLON> {aux = new Attributes(true); } expression(aux) { at.given.add(aux); })*
-			)? <RPAREN> { sf.EvaluateFunction(at, t); }
+			)? <RPAREN> { 
+						//Anyadir el codigo de la expression
+						at.code.addBlock(aux.code);
+						sf.EvaluateFunction(at, t); 	//En evaluateFunction pongo la operacion OSF (A lo mejor deberia ponerla aqui y no en semantic functions)
+						
+					}
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { sf.EvaluateArray(at, aux, t); } 
 	| 	t = <ID> { 
 			if (at.method) { 
-			sf.EvaluateParam(at, t); 
+				sf.EvaluateParam(at, t); 
 			} else { 
 				sf.EvaluateVar(at, t); 
+				try {
+					Symbol s = st.getSymbol(t.image);
+					long auxDir=s.dir;
+					if(s.parClass==ParameterClass.VAL){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+						at.code.addInst(PCodeInstruction.OpCode.DRF);
+					}else if(s.parClass==ParameterClass.REF){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+						at.code.addInst(PCodeInstruction.OpCode.DRF);
+						at.code.addInst(PCodeInstruction.OpCode.DRF);		
+					}else if(s.parClass==ParameterClass.NONE){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+						at.code.addInst(PCodeInstruction.OpCode.DRF);	
+					}
+				} catch (SymbolNotFoundException e) {
+					
+				}
 			} 
 		}
 	| 	t = <INTVAL>  { sf.EvaluateInt(at, t); }
@@ -594,7 +708,8 @@ void factor(Attributes at):
 					cblock.addInst(OpCode.STC, t.image.charAt(i));
 				}
 				cblock.encloseXMLTags("String_" + t.image);
-				at.code = cblock;
+				//at.code = cblock;
+				at.code.addBlock(cblock);
 			}
 }
 

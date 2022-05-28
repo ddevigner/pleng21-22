@@ -62,6 +62,10 @@ public class SemanticFunctions {
 			}
 			//Ahora asignar al symbol la direccion y el nivel///////////////////////////
 			s.dir=CGUtils.memorySpaces[st.level]++;
+			if(s.type == Types.ARRAY){	//En caso de ser arrray tienes que anyadir todas sus posiciones
+				SymbolArray vec = (SymbolArray) s;
+				CGUtils.memorySpaces[st.level] += vec.maxInd-1;	//-1 porque ya le he sumado 1 antes
+			}
 			s.nivel=st.level;
 			st.insertSymbol(s);
 			if (var.params != null) st.insertSymbol(var.params, s);
@@ -72,14 +76,21 @@ public class SemanticFunctions {
 		}
 	}
 
-	public void AddMethod(Attributes at, Token t) {
+	public void AddMethod(Attributes at, Token t,String Label) {
 		try {
+			//Aqui al añadir un procedimiento le guardas su label de las funciones para poder llamarla en OSF
 			at.name = t.image;
 			if (!at.main) at.params = new ArrayList<>();
-			if (at.type == Types.PROCEDURE) 
-				st.insertSymbol(new SymbolProcedure(t.image, at.params, at.main));
-			else 
-				st.insertSymbol(new SymbolFunction(t.image, at.params, at.baseType));
+			if (at.type == Types.PROCEDURE){
+				SymbolProcedure new_func = new SymbolProcedure(t.image, at.params, at.main);
+				new_func.label = Label;
+				st.insertSymbol(new_func);
+			}
+			else{ 
+				SymbolFunction new_func = new SymbolFunction(t.image, at.params, at.baseType);
+				new_func.label = Label;
+				st.insertSymbol(new_func);
+			}
 		} catch (AlreadyDefinedSymbolException e) {
 			se.detection(e, t);
 			at.params = null;
@@ -257,20 +268,21 @@ public class SemanticFunctions {
 			//Coger el recibido por parametro y mirar si el de la funcion es por valor o referencia
 			//Los parametros pasados estan en at.parList
 			//Los que deberian ser esta en (SymbolProcedure)s
-			SymbolProcedure p = (SymbolProcedure) s;
-			long aux;
-			for (int i = 0; i < p.parList.size(); i++) {
-				aux = p.parList.get(i).dir;
-				if(p.parList.get(i).parClass==ParameterClass.REF){
-					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
-				}else if(p.parList.get(i).parClass==ParameterClass.VAL){
-					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
-					at.code.addInst(PCodeInstruction.OpCode.DRF);
-				}
-			}
+
+			// SymbolProcedure p = (SymbolProcedure) s;
+			// long aux;
+			// for (int i = 0; i < p.parList.size(); i++) {
+			// 	aux = p.parList.get(i).dir;
+			// 	if(p.parList.get(i).parClass==ParameterClass.REF){
+			// 		at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
+			// 	}else if(p.parList.get(i).parClass==ParameterClass.VAL){
+			// 		at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
+			// 		at.code.addInst(PCodeInstruction.OpCode.DRF);
+			// 	}
+			// }
 			//Aqui hago el osf
-			long aux2 = s.dir;
-			at.code.addInst (PCodeInstruction.OpCode.OSF,st.level, st.level-s.nivel,(int) aux2);	//Comprobar si esta bien/////////////////
+			
+			at.code.addOSFInst (st.level, st.level-s.nivel, p.label);	//La label sera la que se ha anyadido al simbol desdel su creacion
 
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
@@ -334,23 +346,63 @@ public class SemanticFunctions {
 	//-----------------------------------------------------------------------
 	// Evaluar operacion.
 	//-----------------------------------------------------------------------
+	//Aqui fst es el at que se devuelve asi que su code es el primero (bien)
+	//Luego hay que anyadir el codigo de snd
+	//Por utlimo anyades la operacion
+	//Se hace asi porque hace por ejemplo en la suma push(pop + pop) por eso se hace asi
 	private void evaluateOperation(Attributes fst, Attributes snd) throws MismatchedTypesException {
 		if (snd.op == Operator.CMP_OP) {
+			//System.out.println("Es una operacion de comparacion " + snd.op_name);
+			//Mirar el numbre a ver que operacion es 
 			if (fst.baseType != snd.baseType) { 
 				throw new MismatchedTypesException(snd.op_name, Types.UNDEFINED, 
 					fst.baseType, snd.baseType);
 			}
 			else fst.baseType = Types.BOOL;
 		} else if (snd.op == Operator.INT_OP) {
+			//System.out.println("Es una operacion de enteros " + snd.op_name);
 			if (fst.baseType != Types.INT || snd.baseType != Types.INT) {
 				throw new MismatchedTypesException(snd.op_name, Types.INT, 
 					fst.baseType, snd.baseType);
 			}
 		} else if (snd.op == Operator.BOOL_OP) {
+			//System.out.println("Es una operacion de booleanos " + snd.op_name);
 			if (fst.baseType != Types.BOOL || snd.baseType != Types.BOOL) {
 				throw new MismatchedTypesException(snd.op_name, Types.BOOL, 
 					fst.baseType, snd.baseType);
 			}
+		}
+
+		//Se anyade a at (en esta funcion se llama fst) el codigo de snd y luego el codigo del operando
+		fst.code.addBlock(snd.code);
+		if(snd.op_name=="+"){
+			fst.code.addInst(PCodeInstruction.OpCode.PLUS);
+		}else if(snd.op_name=="-"){
+			fst.code.addInst(PCodeInstruction.OpCode.SBT);
+		}else if(snd.op_name=="*"){
+			fst.code.addInst(PCodeInstruction.OpCode.TMS);
+		}else if(snd.op_name=="div"){
+			fst.code.addInst(PCodeInstruction.OpCode.DIV);
+		}else if(snd.op_name=="mod"){
+			fst.code.addInst(PCodeInstruction.OpCode.MOD);
+		}else if(snd.op_name=="and"){
+			fst.code.addInst(PCodeInstruction.OpCode.AND);
+		}else if(snd.op_name=="or"){
+			fst.code.addInst(PCodeInstruction.OpCode.OR);
+		}else if(snd.op_name=="="){
+			fst.code.addInst(PCodeInstruction.OpCode.EQ);
+		}else if(snd.op_name=="<>"){
+			fst.code.addInst(PCodeInstruction.OpCode.NEQ);
+		}else if(snd.op_name=="<"){
+			fst.code.addInst(PCodeInstruction.OpCode.LT);
+		}else if(snd.op_name=="<="){
+			fst.code.addInst(PCodeInstruction.OpCode.LTE);
+		}else if(snd.op_name==">"){
+			fst.code.addInst(PCodeInstruction.OpCode.GT);
+		}else if(snd.op_name==">="){
+			fst.code.addInst(PCodeInstruction.OpCode.GTE);
+		}else if(snd.op_name=="not"){
+			fst.code.addInst(PCodeInstruction.OpCode.NGB);
 		}
 	}
 
@@ -528,11 +580,30 @@ public class SemanticFunctions {
 		}
 	}
 
-	public void EvaluateFunction(Attributes at, Token t) {
+	public void EvaluateFunction(Attributes at, Token t) {		//Cuidado que a lo mejor aqui no hay que comprobar parametros, a lo mejor hay que hcaerlo al anydadir la variable
 		try {
 			Symbol s = st.getSymbol(t.image); 
 			evaluateFunction(s, at, t);
 			
+			//Se anyaden las cosas 
+			SymbolFunction p = (SymbolFunction) s;
+			long aux;
+			//Este for a lo mejor hay que cambiarlo
+			////////////////////////////////////////////////////
+			///////////////////////////////////////////////////
+			// for (int i = 0; i < p.parList.size(); i++) {
+			// 	aux = p.parList.get(i).dir;
+			// 	if(p.parList.get(i).parClass==ParameterClass.REF){
+			// 		at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
+			// 	}else if(p.parList.get(i).parClass==ParameterClass.VAL){
+			// 		at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
+			// 		at.code.addInst(PCodeInstruction.OpCode.DRF);
+			// 	}
+			// }
+			///////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////
+			//Aqui hago el osf
+			at.code.addOSFInst (st.level, st.level-s.nivel, p.label);	//La label sera la que se ha anyadido al simbol desdel su creacion
 		} catch (SymbolNotFoundException e) {
 			se.detection(e,t);
 			at.baseType = Types.UNDEFINED;
@@ -615,6 +686,10 @@ public class SemanticFunctions {
 			at.baseType = evaluateVar(s);
 			at.name = t.image;
 			at.parClass = s.parClass;
+
+
+			long aux= s.dir;
+
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
 			at.baseType = Types.UNDEFINED;
@@ -624,6 +699,7 @@ public class SemanticFunctions {
 		}
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
+		
 	}
 
 	public void EvaluateParam(Attributes at, Token t) {
@@ -638,11 +714,37 @@ public class SemanticFunctions {
 			} else {
 				at.baseType = s.type;
 			}
+			long aux= s.dir;
+			//Aqui hago un drf y rd de la v ariable dependiendo de si es por referencia o por valor
+			////////////////////////////////////////////////////////////////////////////
+			//Creo que los push de las variables deberian hacerse aqui. Deberia comprobar que el get esta bien
+			//Porque si estoy en lo correcto aqui se hace el push en la pila y en el get se escribe
+			///////////////////////////////////////////////////////////////////////////
+			if(s.parClass == ParameterClass.VAL){	//Pusheo el valor en la pila
+				//at.code.addInst(PCodeInstruction.OpCode.SRF)
+				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//DRF mete en la pila la direccion de la variable
+				at.code.addInst(PCodeInstruction.OpCode.DRF);	//Se mete el valor de la variable en la pila, DRF mete en la pila el valor de la direccion que hay en la pila
+			}else if(s.parClass == ParameterClass.REF){
+				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);
+				//at.code.addInst(PCodeInstruction.OpCode.DRF);
+			}else if(s.parClass == ParameterClass.NONE){	//El none es si es una variable local, entonces deberia ser tratada igual que REF porque puede cambiar su valor???
+				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);
+			}
+			at.code.addComment("Se anyade el parametro "+s.name);
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
 			at.baseType = Types.UNDEFINED;
 		}
 	}
+	//Cuando anyades una variable local que es un vector entonces sumas a memorySpaces el tamanyo del vector
+	//La cosa es que al pasar un parametro este se convierte en local a la funcion por
+	//tanto hay que anyadirlo tambien a memorySpaces
+	//Cuando defines la funcion tienes que modificar memorySpaces (anyades 1 por cada variable)
+	//Para int y char da igual ya que tanto por valor como por referencia ocupan 1
+	//Pero en el caso del vector si es por referencia anyades 1 ya que solo es la direccion del vector
+	//Pero si es por valor tienes que sumar 1 por cada componente del vector
+	//Ademas al recuperar los argumentos si el vector es por referencia lo recuperas a el solo
+	//Pero si el vector es por valor entonces recuperas cada una de las componentes
 
 	//-----------------------------------------------------------------------
 	// Evaluacion de constantes.
@@ -654,6 +756,9 @@ public class SemanticFunctions {
 		at.intVal   = Integer.parseInt(t.image);
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
+		//Se mete el valor en la pila
+		//at.code.addInst(PCodeInstruction.OpCode.STC,at.intVal);
+		at.code.addInst(PCodeInstruction.OpCode.STC,at.intVal);
 	}
 
 	// -- Constante caracter.
@@ -663,6 +768,9 @@ public class SemanticFunctions {
 		at.charVal  = t.image.charAt(0);
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
+		//Se mete el valor en la pila
+		at.code.addInst(PCodeInstruction.OpCode.STC,at.charVal);
+
 	}
 
 	// -- Constante booleana.
@@ -672,6 +780,12 @@ public class SemanticFunctions {
         at.boolVal  = t.image.equals("true") ? true : false;
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
+		//Habra que almacenar 1 o 0 dependiendo de si el true o false
+		if(t.image=="true"){
+			at.code.addInst(PCodeInstruction.OpCode.STC,1);			/////////////////De momento comento esto porque en el if hacia eq 
+		}else if(t.image=="false"){
+			at.code.addInst(PCodeInstruction.OpCode.STC,0);
+		}
 	}
 
 	// -- Constante string.

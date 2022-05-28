@@ -104,18 +104,19 @@ public class adac_4 implements adac_4Constants {
       jj_consume_token(PROC);
       t = jj_consume_token(ID);
       jj_consume_token(IS);
-sf.AddMethod(main, t);
+label = CGUtils.newLabel();
+                                sf.AddMethod(main, t, label);
                                 cmain = new CodeBlock();
                                 cmain.generationMode = CodeBlock.BlockMode.XML;
                                 CGUtils.memorySpaces[0]=3;
       vars_def();
       procs_funcs_decl(funcs);
       proc_func_body(main);
-label = CGUtils.newLabel();
+//label = CGUtils.newLabel();
                                 cmain.addInst(OpCode.ENP, label);
-                                cmain.addLabel(label);
-                                //System.out.println(funcs.toString());
+                                //cmain.addLabel(label);
                                 cmain.addBlock(funcs);
+                                cmain.addLabel(label);
                                 cmain.addBlock(main.code);
                                 cmain.addInst(OpCode.LVP);
                                 cmain.encloseXMLTags(t.image);
@@ -155,20 +156,42 @@ panicMode(e.currentToken.next, 0);
         //CodeBlock proc_func;
         ArrayList<Symbol> params_invertidos;
         CodeBlock funciones_dentro_de_funcion = new CodeBlock();
+        String label_params;
     proc_or_func(at);
     func_return(at);
     t = jj_consume_token(ID);
-sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t);
+label_params=CGUtils.newLabel();
+                sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t, label_params);
                 //proc_func = new CodeBlock();
                 CGUtils.memorySpaces[st.level]=3;
     jj_consume_token(LPAREN);
     params_def(at.params);
-long aux;
+proc_func.addLabel(label_params);       //Se anyade la label para recuperar los argumentos de la funcion
+                long aux;
                 for(int i=at.params.size()-1;i>=0;i--){
                         aux = at.params.get(i).dir;
-                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);  //Aqui da error
-                        at.code.addInst(PCodeInstruction.OpCode.ASGI);
-                        at.code.addComment("Se anyade el parametro " + at.params.get(i).name);
+                        //Si es por referencia se anyade 1
+                        //Si es por valor y es un vector entonces se anyaden sus componentes 
+                        if(at.params.get(i).parClass == ParameterClass.REF){
+                                proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);        //Aqui da error
+                                proc_func.addInst(PCodeInstruction.OpCode.ASGI);
+                                proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
+                                CGUtils.memorySpaces[st.level] += 1;
+                        }else if(at.params.get(i).parClass == ParameterClass.VAL && at.params.get(i).type != Types.ARRAY){
+                                CGUtils.memorySpaces[st.level] += 1;
+                                proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);        //Aqui da error
+                                proc_func.addInst(PCodeInstruction.OpCode.ASGI);
+                                proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
+                        }else if(at.params.get(i).parClass == ParameterClass.VAL && at.params.get(i).type == Types.ARRAY){
+                                SymbolArray vec = (SymbolArray) at.params.get(i);
+                                CGUtils.memorySpaces[st.level] += vec.maxInd;
+                                //Se recorre el vector y se recupera cada Posicion 
+                                for(int j=0;j<vec.maxInd;j++){
+                                        proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux + j);    //Aqui da error
+                                        proc_func.addInst(PCodeInstruction.OpCode.ASGI);
+                                        proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
+                                }
+                        }
                 }
     jj_consume_token(RPAREN);
     jj_consume_token(IS);
@@ -177,15 +200,11 @@ long aux;
     proc_func_body(at);
 label = CGUtils.newLabel();
                 proc_func.addInst(OpCode.JMP, label);
-                proc_func.addLabel(label);
-                System.out.println("Antes de anyadir funciones dentro de funciones");
                 proc_func.addBlock(funciones_dentro_de_funcion);
-                System.out.println("Despues de anyadir funciones dentro de funciones");
+                proc_func.addLabel(label);      //Pones la label donde empieza el codigo
                 proc_func.addBlock(at.code);
                 proc_func.addInst(OpCode.CSF);
                 proc_func.encloseXMLTags(t.image);
-                //funcs = proc_func;
-
 }
 
 //-----------------------------------------------------------------------------
@@ -423,12 +442,17 @@ panicMode(e.currentToken.next, 1);
 //	- Return.
   static final public void instruction(Attributes at) throws ParseException {Attributes fst = new Attributes(), snd = new Attributes();
         Token t;
+        String label_else;
+        String label_fin_if;
+        String label_exp_while;
+        String label_fin_while;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case GET:{
       jj_consume_token(GET);
       jj_consume_token(LPAREN);
       assignable(fst);
-sf.EvaluateGet(fst);
+//A lo mejor el get hay que cambiarlo ya que en assignable los metere en la pila en vez de en la funcion del get
+                                sf.EvaluateGet(fst);
                                 at.code.addBlock(fst.code);
       label_6:
       while (true) {
@@ -587,24 +611,42 @@ sf.EvaluateProcedure(fst, t);
           jj_consume_token(ASS);
           expression(snd);
 sf.EvaluateAssignation(fst, snd);
+                                                                at.code.addBlock(fst.code);     //Se anyaden los bloques en orden
+                                                                at.code.addBlock(snd.code);
+                                                                at.code.addInst(PCodeInstruction.OpCode.ASG);
           jj_consume_token(SCOLON);
           break;
           }
         case WHILE:{
           jj_consume_token(WHILE);
+label_exp_while=CGUtils.newLabel();
+                                        at.code.addLabel(label_exp_while);
           expression(fst);
 sf.EvaluateCondition(fst);
+                                        label_fin_while = CGUtils.newLabel();
+                                        at.code.addBlock(fst.code);     //Aqui hay que anyadir el codigo de expression que sera un store constant de 0 o 1 lo mas seguro
+                                        at.code.addInst(PCodeInstruction.OpCode.JMF,label_fin_while);
           jj_consume_token(DO);
           instructions_list(at);
           jj_consume_token(END);
+at.code.addInst(PCodeInstruction.OpCode.JMP,label_exp_while);
+                                                                                        at.code.addLabel(label_fin_while);
           break;
           }
         case IF:{
           jj_consume_token(IF);
           expression(fst);
-sf.EvaluateCondition(fst);
+//Aqui habria que anyadir el codigo de expression
+                                sf.EvaluateCondition(fst);
+                                label_else = CGUtils.newLabel();
+                                at.code.addBlock(fst.code);     //Se anyade el codigo de la expression (que lo mas seguroque haga un store constan de 0 o 1 para indicar true o false)
+                                at.code.addInst(PCodeInstruction.OpCode.JMF,label_else);
           jj_consume_token(THEN);
           instructions_list(at);
+label_fin_if=CGUtils.newLabel();
+                                                                                at.code.addInst(PCodeInstruction.OpCode.JMP,label_fin_if);
+                                                                                at.code.addLabel(label_else);
+                                                                                at.code.encloseXMLTags("then");
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
           case ELSE:{
             jj_consume_token(ELSE);
@@ -616,12 +658,17 @@ sf.EvaluateCondition(fst);
             ;
           }
           jj_consume_token(END);
+at.code.addLabel(label_fin_if);
+                                                                                                        at.code.encloseXMLTags("if_else");
           break;
           }
         case RETURN:{
           t = jj_consume_token(RETURN);
           expression(fst);
 sf.EvaluateReturn(at, fst, t);
+                        at.code.addBlock(fst.code);
+                        at.code.addInst(OpCode.CSF);    //Como hay un return se pone CSF porque es el final de la funcion
+
           jj_consume_token(SCOLON);
           break;
           }
@@ -644,11 +691,28 @@ sf.EvaluateReturn(at, fst, t);
       expression(aux);
       jj_consume_token(RBRACK);
 sf.EvaluateArray(at, aux, t);
+                                                                                                        //Pendiente
+                                                                                                        at.code.addBlock(aux.code);
     } else {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case ID:{
         t = jj_consume_token(ID);
 sf.EvaluateVar(at, t);
+                                //Anyadir a at el codigo de esta variable que sera para escritura
+                                try {
+                                        Symbol s = st.getSymbol(t.image);
+                                        long auxDir=s.dir;
+                                        if(s.parClass==ParameterClass.VAL){
+                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+                                        }else if(s.parClass==ParameterClass.REF){
+                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                        }else if(s.parClass==ParameterClass.NONE){
+                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+                                        }
+                                } catch (SymbolNotFoundException e) {
+
+                                }
         break;
         }
       default:
@@ -662,6 +726,7 @@ sf.EvaluateVar(at, t);
 //-----------------------------------------------------------------------------
 // Expresion relacional.
   static final public void expression(Attributes at) throws ParseException {Attributes aux = new Attributes();
+        CodeBlock operacion = new CodeBlock();
     simple_expr(at);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case EQ:
@@ -673,6 +738,8 @@ sf.EvaluateVar(at, t);
       relational_op(aux);
       simple_expr(aux);
 sf.EvaluateOperation(at, aux);
+                        //at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
+
       break;
       }
     default:
@@ -727,6 +794,8 @@ sf.EvaluateOperation(at, t);
       additive_op(aux);
       term(aux);
 sf.EvaluateOperation(at, aux);
+                //at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
+
     }
 }
 
@@ -751,6 +820,8 @@ sf.EvaluateOperation(at, aux);
       multiplicative_op(aux);
       factor(aux);
 sf.EvaluateOperation(at, aux);
+                        //at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
+
     }
 }
 
@@ -807,7 +878,7 @@ aux.method = true;
         case INT2CHAR:
         case ID:{
           expression(aux);
-at.given.add(aux);
+at.given.add(aux); at.code.addBlock(aux.code);
           label_12:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -831,7 +902,10 @@ at.given.add(aux);
           ;
         }
         jj_consume_token(RPAREN);
-sf.EvaluateFunction(at, t);
+//Anyadir el codigo de la expression
+                                                at.code.addBlock(aux.code);
+                                                sf.EvaluateFunction(at, t);     //En evaluateFunction pongo la operacion OSF (A lo mejor deberia ponerla aqui y no en semantic functions)
+
       } else if (jj_2_5(2)) {
         t = jj_consume_token(ID);
         jj_consume_token(LBRACK);
@@ -843,9 +917,26 @@ sf.EvaluateArray(at, aux, t);
         case ID:{
           t = jj_consume_token(ID);
 if (at.method) {
-                        sf.EvaluateParam(at, t);
+                                sf.EvaluateParam(at, t);
                         } else {
                                 sf.EvaluateVar(at, t);
+                                try {
+                                        Symbol s = st.getSymbol(t.image);
+                                        long auxDir=s.dir;
+                                        if(s.parClass==ParameterClass.VAL){
+                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                        }else if(s.parClass==ParameterClass.REF){
+                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                        }else if(s.parClass==ParameterClass.NONE){
+                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                        }
+                                } catch (SymbolNotFoundException e) {
+
+                                }
                         }
           break;
           }
@@ -873,7 +964,8 @@ sf.EvaluateString(at, t);
                                         cblock.addInst(OpCode.STC, t.image.charAt(i));
                                 }
                                 cblock.encloseXMLTags("String_" + t.image);
-                                at.code = cblock;
+                                //at.code = cblock;
+                                at.code.addBlock(cblock);
           break;
           }
         default:
@@ -1030,17 +1122,10 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_2()
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
+    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 
@@ -1051,6 +1136,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
+  static private boolean jj_3_2()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
   static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
@@ -1058,10 +1150,10 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
-  static private boolean jj_3_5()
+  static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

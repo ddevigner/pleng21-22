@@ -6,12 +6,13 @@ procedure cambio_base is
 function integer b_dec(val integer n,b) is
 	integer uc;
 	integer valRec;
+
 begin
 	if n = 0 then
 		return 0;
 	else
 		uc := n mod 10;
-
+		
 		valRec := b_dec (n div 10, b);
 		return valRec*b + uc;
 	end
@@ -34,12 +35,12 @@ begin
 	num := 4;
 	base := 2;
 
-	put_line ("Este programa convierte n=",num," a base b=", base, ", y luego efecúa la conversión inversa.");
-	put_line();
-	put_line("n: ",num);
-	put_line("b: ",base);
+	--put_line ("Este programa convierte n=",num," a base b=", base, ", y luego efecúa la conversión inversa.");
+	--put_line();
+	--put_line("n: ",num);
+	--put_line("b: ",base);
 	enB := dec_b(num,base);
-	put_line ("dec_b(",num,",",base,"): ",enB);
-    put_line ("b_dec(",enB,",",base,"): ",b_dec(enB,base));
-	put_line();
+	--put_line ("dec_b(",num,",",base,"): ",enB);
+    --put_line ("b_dec(",enB,",",base,"): ",b_dec(enB,base));
+	--put_line();
 end

@@ -20,3 +20,18 @@ begin
 	--put_line ("Este programa convierte n=",num," a base b=", base, ", y luego efecúa la conversión inversa.");
 	dec_b(num,base,a);
 end
+
+--Cosas hechas
+--Asignar las posiciones en memorySpaces, si es declaracion local o un parametro por referencia o valor
+--Asignar las label de las funciones
+--Recuperar los parametros de las funciones
+--Declarar funcion
+--Llamar a la funcion
+--Que acabe la declaracion de la funcion
+--Lo del OSF
+--
+--
+--
+--
+--
+-
