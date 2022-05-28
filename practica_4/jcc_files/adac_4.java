@@ -576,7 +576,7 @@ snd.method = true;
         case INT2CHAR:
         case ID:{
           expression(snd);
-fst.given.add(snd);
+fst.given.add(snd); at.code.addBlock(snd.code);
           label_9:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -591,7 +591,7 @@ fst.given.add(snd);
             jj_consume_token(COLON);
 snd = new Attributes(true);
             expression(snd);
-fst.given.add(snd);
+fst.given.add(snd); at.code.addBlock(snd.code);
           }
           break;
           }
@@ -601,9 +601,9 @@ fst.given.add(snd);
         }
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
-sf.EvaluateProcedure(fst, t);
-                                        //Anyadir lo que se ha metido de procedure en los attributes
+//Anyadir lo que se ha metido de procedure en los attributes
                                         at.code.addBlock(fst.code);
+                                        sf.EvaluateProcedure(fst, t);
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{

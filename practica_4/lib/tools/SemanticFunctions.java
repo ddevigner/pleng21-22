@@ -269,7 +269,7 @@ public class SemanticFunctions {
 			//Los parametros pasados estan en at.parList
 			//Los que deberian ser esta en (SymbolProcedure)s
 
-			// SymbolProcedure p = (SymbolProcedure) s;
+			 SymbolProcedure p = (SymbolProcedure) s;
 			// long aux;
 			// for (int i = 0; i < p.parList.size(); i++) {
 			// 	aux = p.parList.get(i).dir;

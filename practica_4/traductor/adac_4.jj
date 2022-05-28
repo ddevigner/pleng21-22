@@ -521,8 +521,8 @@ void instruction(Attributes at):
 
 	| 	<SKIPLINE> <LPAREN> <RPAREN> <SCOLON> 
 	| 	LOOKAHEAD(2) t = <ID> { snd.method = true; }	//Este es una llamada a funcion
-			<LPAREN> (expression(snd) { fst.given.add(snd); at.code.addBlock(snd.code);//Se anyade el codigo de la primera expression } 
-			(<COLON> {snd = new Attributes(true); } expression(snd) {fst.given.add(snd); at.code.addBlock(snd.code)})*
+			<LPAREN> (expression(snd) { fst.given.add(snd); at.code.addBlock(snd.code); } 
+			(<COLON> {snd = new Attributes(true); } expression(snd) {fst.given.add(snd); at.code.addBlock(snd.code);})*
 			)? <RPAREN> <SCOLON> { 
 					//Anyadir lo que se ha metido de procedure en los attributes
 					at.code.addBlock(fst.code);
