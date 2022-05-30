@@ -13,18 +13,23 @@ L1:
 ; --Se anyade el parametro en el for este colonia
   JMP L4
 L4:
+; --Comprobar variable i
   SRF  0 83
   STC  0
   ASG
 L2:
+; --Comprobar variable i
   SRF  0 83
   DRF
+; --Comprobar variable elementos
   SRF  1 81
   DRF
   LT
   JMF L3
+; --Comprobar variable i
   SRF  0 83
   DRF
+; --Comprobar variable i
   SRF  0 83
   DRF
   STC 20
@@ -32,7 +37,9 @@ L2:
   STC  0
   EQ
   ASG
+; --Comprobar variable i
   SRF  0 83
+; --Comprobar variable i
   SRF  0 83
   DRF
   STC  1
@@ -48,28 +55,35 @@ L5:
 ; --Se anyade el parametro en el for este colonia
   JMP L8
 L8:
+; --Comprobar variable i
   SRF  0 83
   STC  0
   ASG
 L6:
+; --Comprobar variable i
   SRF  0 83
   DRF
   STC 80
   LT
   JMF L7
+; --Comprobar variable i
   SRF  0 83
   DRF
+; --Comprobar variable i
   SRF  0 83
   DRF
   STC 37
   GTE
+; --Comprobar variable i
   SRF  0 83
   DRF
   STC 43
   LTE
   AND
   ASG
+; --Comprobar variable i
   SRF  0 83
+; --Comprobar variable i
   SRF  0 83
   DRF
   STC  1
@@ -322,20 +336,30 @@ L9:
 ; --Se anyade el parametro en el for este colonia
   JMP L12
 L12:
+; --Comprobar variable i
   SRF  0 241
   STC  0
   ASG
 L10:
+; --Comprobar variable i
   SRF  0 241
   DRF
+; --Comprobar variable elementos
   SRF  1 81
   DRF
   LT
   JMF L11
+; --Comprobar variable i
+  SRF  0 241
+  DRF
+; --Expresion de los [] del vector
+; --Comprobar variable i
   SRF  0 241
   DRF
   ASG
+; --Comprobar variable i
   SRF  0 241
+; --Comprobar variable i
   SRF  0 241
   DRF
   STC  1
@@ -358,6 +382,7 @@ L18:
 <if_else>
 <then>
 <then>
+; --Comprobar variable i
   SRF  0 82
   DRF
   STC  0
@@ -367,8 +392,10 @@ L18:
   JMP L15
 L14:
 </then>
+; --Comprobar variable i
   SRF  0 82
   DRF
+; --Comprobar variable elementos
   SRF  1 81
   DRF
   STC  1
@@ -379,10 +406,38 @@ L14:
   JMP L17
 L16:
 </then>
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
   NGB
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
+  STC  1
+  SBT
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
+  STC  1
+  PLUS
   NGB
   AND
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
+  STC  1
+  SBT
   NGB
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
+  STC  1
+  PLUS
   AND
   OR
   AND
@@ -420,16 +475,26 @@ L38:
 <then>
 <if_else>
 <then>
+; --Comprobar variable vivos
   SRF  0 85
   STC  0
   ASG
+; --Comprobar variable i
   SRF  0 82
   DRF
   STC  0
   GT
   JMF L20
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
+  STC  1
+  SBT
   JMF L21
+; --Comprobar variable vivos
   SRF  0 85
+; --Comprobar variable vivos
   SRF  0 85
   DRF
   STC  1
@@ -445,13 +510,22 @@ L20:
 </then>
 L23:
 </if_else>
+; --Comprobar variable i
   SRF  0 82
   DRF
   STC  1
   GT
   JMF L24
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
+  STC  2
+  SBT
   JMF L25
+; --Comprobar variable vivos
   SRF  0 85
+; --Comprobar variable vivos
   SRF  0 85
   DRF
   STC  1
@@ -467,13 +541,22 @@ L24:
 </then>
 L27:
 </if_else>
+; --Comprobar variable i
   SRF  0 82
   DRF
   STC 79
   LT
   JMF L28
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
+  STC  1
+  PLUS
   JMF L29
+; --Comprobar variable vivos
   SRF  0 85
+; --Comprobar variable vivos
   SRF  0 85
   DRF
   STC  1
@@ -489,13 +572,22 @@ L28:
 </then>
 L31:
 </if_else>
+; --Comprobar variable i
   SRF  0 82
   DRF
   STC 78
   LT
   JMF L32
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
+  STC  2
+  PLUS
   JMF L33
+; --Comprobar variable vivos
   SRF  0 85
+; --Comprobar variable vivos
   SRF  0 85
   DRF
   STC  1
@@ -511,12 +603,18 @@ L32:
 </then>
 L35:
 </if_else>
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 82
+  DRF
   NGB
   JMF L36
+; --Comprobar variable vivos
   SRF  0 85
   DRF
   STC  2
   EQ
+; --Comprobar variable vivos
   SRF  0 85
   DRF
   STC  3
@@ -526,10 +624,12 @@ L35:
   JMP L37
 L36:
 </then>
+; --Comprobar variable vivos
   SRF  0 85
   DRF
   STC  2
   EQ
+; --Comprobar variable vivos
   SRF  0 85
   DRF
   STC  4
@@ -546,25 +646,33 @@ L39:
 ; --Se anyade el parametro en el for este colonia
   JMP L42
 L42:
+; --Comprobar variable i
   SRF  0 83
   STC  0
   ASG
 L40:
+; --Comprobar variable i
   SRF  0 83
   DRF
+; --Comprobar variable elementos
   SRF  1 81
   DRF
   LT
   JMF L41
+; --Comprobar variable i
   SRF  0 83
   DRF
+; --Comprobar variable colonia
   SRF  0  3
 ; --Se anyade el parametro colonia
+; --Comprobar variable i
   SRF  0 83
 ; --Se anyade el parametro i
   OSF  2  1 L13
   ASG
+; --Comprobar variable i
   SRF  0 83
+; --Comprobar variable i
   SRF  0 83
   DRF
   STC  1
@@ -572,8 +680,10 @@ L40:
   ASG
   JMP L40
 L41:
+; --Comprobar variable colonia
   SRF  0  3
 ; --Se anyade el parametro colonia
+; --Comprobar variable siguiente
   SRF  0 84
 ; --Se anyade el parametro siguiente
   CSF
@@ -820,23 +930,32 @@ L43:
 L48:
 <if_else>
 <then>
+; --Comprobar variable i
   SRF  0 161
   STC  0
   ASG
 L44:
+; --Comprobar variable i
   SRF  0 161
   DRF
+; --Comprobar variable elementos
   SRF  1 81
   DRF
   LT
   JMF L45
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0 161
+  DRF
   JMF L46
   JMP L47
 L46:
 </then>
 L47:
 </if_else>
+; --Comprobar variable i
   SRF  0 161
+; --Comprobar variable i
   SRF  0 161
   DRF
   STC  1
@@ -1097,31 +1216,42 @@ L0:
 </String_"">
   WRT  0
 </Putline>
+; --Comprobar variable elementos
   SRF  0 81
   STC 80
   ASG
+; --Comprobar variable colonia
   SRF  0  0
 ; --Se anyade el parametro colonia
+; --Comprobar variable colonia
   SRF  0  0
 ; --Se anyade el parametro colonia
+; --Comprobar variable i
   SRF  0 79
   STC  1
   ASG
+; --Comprobar variable iteraciones
   SRF  0 80
   STC 50
   ASG
 L49:
+; --Comprobar variable i
   SRF  0 79
   DRF
+; --Comprobar variable iteraciones
   SRF  0 80
   DRF
   LTE
   JMF L50
+; --Comprobar variable colonia
   SRF  0  0
 ; --Se anyade el parametro colonia
+; --Comprobar variable colonia
   SRF  0  0
 ; --Se anyade el parametro colonia
+; --Comprobar variable i
   SRF  0 79
+; --Comprobar variable i
   SRF  0 79
   DRF
   STC  1

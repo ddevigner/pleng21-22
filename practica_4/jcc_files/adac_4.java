@@ -698,6 +698,7 @@ sf.EvaluateArray(at, aux, t);
       case ID:{
         t = jj_consume_token(ID);
 sf.EvaluateVar(at, t);
+                                at.code.addComment("Comprobar variable " + t.image);
                                 //Anyadir a at el codigo de esta variable que sera para escritura
                                 try {
                                         Symbol s = st.getSymbol(t.image);
@@ -912,11 +913,15 @@ at.given.add(aux);
         expression(aux);
         jj_consume_token(RBRACK);
 sf.EvaluateArray(at, aux, t);
+                                                                                                //Anyadir la expresion del [] 
+                                                                                                at.code.addComment("Expresion de los [] del vector");
+                                                                                                at.code.addBlock(aux.code);
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
           t = jj_consume_token(ID);
-if (at.method) {
+at.code.addComment("Comprobar variable " + t.image);
+                        if (at.method) {
                                 sf.EvaluateParam(at, t);
                         } else {
                                 sf.EvaluateVar(at, t);
@@ -1136,6 +1141,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
+  static private boolean jj_3_4()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
   static private boolean jj_3_2()
  {
     if (jj_scan_token(ID)) return true;
@@ -1147,13 +1159,6 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

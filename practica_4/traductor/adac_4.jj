@@ -586,7 +586,8 @@ void assignable(Attributes at):
 													at.code.addBlock(aux.code);
 												}
 	| t = <ID> { 
-				sf.EvaluateVar(at, t); 
+				sf.EvaluateVar(at, t);
+				at.code.addComment("Comprobar variable " + t.image); 
 				//Anyadir a at el codigo de esta variable que sera para escritura
 				try {
 					Symbol s = st.getSymbol(t.image);
@@ -671,8 +672,14 @@ void factor(Attributes at):
 						sf.EvaluateFunction(at, t); 	//En evaluateFunction pongo la operacion OSF (A lo mejor deberia ponerla aqui y no en semantic functions)
 						
 					}
-	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { sf.EvaluateArray(at, aux, t); } 
+	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { 
+												sf.EvaluateArray(at, aux, t); 
+												//Anyadir la expresion del [] 
+												at.code.addComment("Expresion de los [] del vector");
+												at.code.addBlock(aux.code);
+											} 
 	| 	t = <ID> { 
+			at.code.addComment("Comprobar variable " + t.image); 
 			if (at.method) { 
 				sf.EvaluateParam(at, t); 
 			} else { 
