@@ -302,11 +302,12 @@ void proc_func_decl(CodeBlock proc_func):
 {
 	Attributes at = new Attributes();
 	Token t;
-	String label;
+	String label= CGUtils.newLabel();
 	//CodeBlock proc_func;
 	ArrayList<Symbol> params_invertidos;
 	CodeBlock funciones_dentro_de_funcion = new CodeBlock();
 	String label_params;
+	
 } {
 	proc_or_func(at)
 	func_return(at)
@@ -318,35 +319,11 @@ void proc_func_decl(CodeBlock proc_func):
 
 		}	//Se crea el bloque de la funcion
 	<LPAREN>
-	params_def(at.params)		//Aqui hacer recuperacion de parametros. Para cada symbol hacer lo de la diapo . Mirar si deberia hacerlo en otro orden
+	{at.code.addLabel(label_params);}
+	params_def(at)		//Aqui hacer recuperacion de parametros. Para cada symbol hacer lo de la diapo . Mirar si deberia hacerlo en otro orden
 	{
-		proc_func.addLabel(label_params);	//Se anyade la label para recuperar los argumentos de la funcion
-		long aux;
-		for(int i=at.params.size()-1;i>=0;i--){
-			aux = at.params.get(i).dir;
-			//Si es por referencia se anyade 1
-			//Si es por valor y es un vector entonces se anyaden sus componentes 
-			if(at.params.get(i).parClass == ParameterClass.REF){
-				proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);	//Aqui da error
-				proc_func.addInst(PCodeInstruction.OpCode.ASGI);
-				proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
-				CGUtils.memorySpaces[st.level] += 1;
-			}else if(at.params.get(i).parClass == ParameterClass.VAL && at.params.get(i).type != Types.ARRAY){
-				CGUtils.memorySpaces[st.level] += 1;
-				proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);	//Aqui da error
-				proc_func.addInst(PCodeInstruction.OpCode.ASGI);
-				proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
-			}else if(at.params.get(i).parClass == ParameterClass.VAL && at.params.get(i).type == Types.ARRAY){
-				SymbolArray vec = (SymbolArray) at.params.get(i);
-				CGUtils.memorySpaces[st.level] += vec.maxInd;
-				//Se recorre el vector y se recupera cada Posicion 
-				for(int j=0;j<vec.maxInd;j++){
-					proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux + j);	//Aqui da error
-					proc_func.addInst(PCodeInstruction.OpCode.ASGI);
-					proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
-				}
-			}
-		}
+		//proc_func.addLabel(label_params);	//Se anyade la label para recuperar los argumentos de la funcion
+		at.code.addInst(OpCode.JMP, label);
 	}
 	<RPAREN>
 	<IS>
@@ -354,10 +331,10 @@ void proc_func_decl(CodeBlock proc_func):
 	procs_funcs_decl(funciones_dentro_de_funcion)		//Anyades el codigo de lo que se define dentro //Luego anyadir que devuelva un CodeBlock
 	proc_func_body(at)		//Anyades el codigo de la funcion con el label y tal
 	{
-		label = CGUtils.newLabel();
-		proc_func.addInst(OpCode.JMP, label);
-		proc_func.addBlock(funciones_dentro_de_funcion);
-		proc_func.addLabel(label);	//Pones la label donde empieza el codigo
+		//label = CGUtils.newLabel();
+		//at.code.addInst(OpCode.JMP, label);
+		at.code.addBlock(funciones_dentro_de_funcion);
+		at.code.addLabel(label);	//Pones la label donde empieza el codigo
 		proc_func.addBlock(at.code);
 		proc_func.addInst(OpCode.CSF);
 		proc_func.encloseXMLTags(t.image);
@@ -382,11 +359,12 @@ void func_return(Attributes at):
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
-void params_def(ArrayList<Symbol> params):
+void params_def(Attributes at):
 {
-	Attributes at = new Attributes(params);
+	Attributes aux = new Attributes(at.params);
 } {
-	(param_class(at) vars_decl(at) (<SCOLON> param_class(at) vars_decl(at))*)?
+	(param_class(aux) vars_decl(aux) (<SCOLON> param_class(aux) vars_decl(aux))*)?
+		{ at.code.addBlock(aux.code); }
 }
 
 //-----------------------------------------------------------------------------
@@ -420,7 +398,7 @@ void vars_type(Attributes at):
 {
 	Token t;
 } {
-		t = <INT>  { at.baseType = Types.INT; at.line = t.beginLine; at.column = t.beginColumn; }
+		t = <INT>  { at.baseType = Types.INT;  at.line = t.beginLine; at.column = t.beginColumn; }
 	| 	t = <BOOL> { at.baseType = Types.BOOL; at.line = t.beginLine; at.column = t.beginColumn; }
 	| 	t = <CHAR> { at.baseType = Types.CHAR; at.line = t.beginLine; at.column = t.beginColumn; }
 }
@@ -618,7 +596,9 @@ void expression(Attributes at):
 {
 	simple_expr(at) (relational_op(aux) simple_expr(aux) {
 			sf.EvaluateOperation(at, aux); 
-			//at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
+			//Se anyade el bloque de aux en at (Comentado porque ya lo hago en 
+			// EvaluateOperation ya que el operador debe ir despues de los push)
+			//at.code.addBlock(aux.code);
 		})?
 }
 
@@ -670,7 +650,6 @@ void factor(Attributes at):
 						//Anyadir el codigo de la expression
 						at.code.addBlock(aux.code);
 						sf.EvaluateFunction(at, t); 	//En evaluateFunction pongo la operacion OSF (A lo mejor deberia ponerla aqui y no en semantic functions)
-						
 					}
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { 
 												sf.EvaluateArray(at, aux, t); 
@@ -703,21 +682,10 @@ void factor(Attributes at):
 				}
 			} 
 		}
-	| 	t = <INTVAL>  { sf.EvaluateInt(at, t); }
-	| 	t = <CHARVAL> { sf.EvaluateChar(at, t); }
-	| 	t = <BOOLVAL> { sf.EvaluateBool(at, t); }
-	| 	t = <STRING>
-			{ 
-				sf.EvaluateString(at, t);
-
-				cblock = new CodeBlock();
-				for (int i = t.image.length() - 2; i > 0; i--) {
-					cblock.addInst(OpCode.STC, t.image.charAt(i));
-				}
-				cblock.encloseXMLTags("String_" + t.image);
-				//at.code = cblock;
-				at.code.addBlock(cblock);
-			}
+	| 	t = <INTVAL>  { sf.EvaluateInt(at, t);    }
+	| 	t = <CHARVAL> { sf.EvaluateChar(at, t);   }
+	| 	t = <BOOLVAL> { sf.EvaluateBool(at, t);   }
+	| 	t = <STRING>  { sf.EvaluateString(at, t); }
 }
 
 void relational_op(Attributes at):

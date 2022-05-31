@@ -7,16 +7,17 @@
 <asignar>
 <inicializar2>
 <inicializar>
-L2:
+L1:
+  JMP L4
+L4:
   SRF  0 -1
   ASGI
 ; --Se anyade el parametro en el for este y es ref colonia
-  JMP L1
 ; --Comprobar variable i
   SRF  0  4
   STC  0
   ASG
-L3:
+L2:
 ; --Comprobar variable i
   SRF  0  4
   DRF
@@ -24,7 +25,7 @@ L3:
   SRF  1 81
   DRF
   LT
-  JMF L4
+  JMF L3
 ; --Comprobar variable i
   SRF  0  4
   DRF
@@ -44,27 +45,27 @@ L3:
   STC  1
   PLUS
   ASG
-  JMP L3
-L4:
-L1:
+  JMP L2
+L3:
   CSF
 </inicializar>
-L6:
+L5:
+  JMP L8
+L8:
   SRF  0 -1
   ASGI
 ; --Se anyade el parametro en el for este y es ref colonia
-  JMP L5
 ; --Comprobar variable i
   SRF  0  4
   STC  0
   ASG
-L7:
+L6:
 ; --Comprobar variable i
   SRF  0  4
   DRF
   STC 80
   LT
-  JMF L8
+  JMF L7
 ; --Comprobar variable i
   SRF  0  4
   DRF
@@ -88,12 +89,13 @@ L7:
   STC  1
   PLUS
   ASG
-  JMP L7
-L8:
-L5:
+  JMP L6
+L7:
   CSF
 </inicializar2>
-L10:
+L9:
+  JMP L12
+L12:
   SRF  0 -1
   ASGI
 ; --Se anyade el parametro en el for este y es ref colonia
@@ -335,12 +337,11 @@ L10:
   SRF  0 77
   ASGI
 ; --Se anyade el parametro en el for este y es valor y arraysiguiente
-  JMP L9
 ; --Comprobar variable i
   SRF  0 83
   STC  0
   ASG
-L11:
+L10:
 ; --Comprobar variable i
   SRF  0 83
   DRF
@@ -348,7 +349,7 @@ L11:
   SRF  1 81
   DRF
   LT
-  JMF L12
+  JMF L11
 ; --Comprobar variable i
   SRF  0 83
   DRF
@@ -365,33 +366,33 @@ L11:
   STC  1
   PLUS
   ASG
-  JMP L11
-L12:
-L9:
+  JMP L10
+L11:
   CSF
 </asignar>
+L13:
+  JMP L18
+L18:
 <if_else>
 <if_else>
 <then>
 <then>
-L14:
   SRF  0 -1
   ASGI
 ; --Se anyade el parametro en el for este y es ref colonia
   SRF  0 -1
   ASGI
 ; --Se anyade el parametro en el for este y es valor y no arrayi
-  JMP L13
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   STC  0
   EQ
-  JMF L15
+  JMF L14
   STC  1
   CSF
-  JMP L16
-L15:
+  JMP L15
+L14:
 </then>
 ; --Comprobar variable i
   SRF  0 -1
@@ -402,11 +403,11 @@ L15:
   STC  1
   SBT
   EQ
-  JMF L17
+  JMF L16
   STC  1
   CSF
-  JMP L18
-L17:
+  JMP L17
+L16:
 </then>
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
@@ -444,13 +445,15 @@ L17:
   OR
   AND
   CSF
-L18:
+L17:
 </if_else>
-L16:
+L15:
 </if_else>
-L13:
   CSF
 </vivira>
+L19:
+  JMP L38
+L38:
 <if_else>
 <then>
 <if_else>
@@ -469,14 +472,12 @@ L13:
 <then>
 <if_else>
 <then>
-L20:
   SRF  0 -1
   ASGI
 ; --Se anyade el parametro en el for este y es ref colonia
   SRF  0 -1
   ASGI
 ; --Se anyade el parametro en el for este y es valor y no arrayi
-  JMP L19
 ; --Comprobar variable vivos
   SRF  0  5
   STC  0
@@ -486,14 +487,14 @@ L20:
   DRF
   STC  0
   GT
-  JMF L21
+  JMF L20
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   STC  1
   SBT
-  JMF L22
+  JMF L21
 ; --Comprobar variable vivos
   SRF  0  5
 ; --Comprobar variable vivos
@@ -502,29 +503,29 @@ L20:
   STC  1
   PLUS
   ASG
-  JMP L23
-L22:
-</then>
-L23:
-</if_else>
-  JMP L24
+  JMP L22
 L21:
 </then>
-L24:
+L22:
+</if_else>
+  JMP L23
+L20:
+</then>
+L23:
 </if_else>
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   STC  1
   GT
-  JMF L25
+  JMF L24
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   STC  2
   SBT
-  JMF L26
+  JMF L25
 ; --Comprobar variable vivos
   SRF  0  5
 ; --Comprobar variable vivos
@@ -533,29 +534,29 @@ L24:
   STC  1
   PLUS
   ASG
-  JMP L27
-L26:
-</then>
-L27:
-</if_else>
-  JMP L28
+  JMP L26
 L25:
 </then>
-L28:
+L26:
+</if_else>
+  JMP L27
+L24:
+</then>
+L27:
 </if_else>
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   STC 79
   LT
-  JMF L29
+  JMF L28
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   STC  1
   PLUS
-  JMF L30
+  JMF L29
 ; --Comprobar variable vivos
   SRF  0  5
 ; --Comprobar variable vivos
@@ -564,29 +565,29 @@ L28:
   STC  1
   PLUS
   ASG
-  JMP L31
-L30:
-</then>
-L31:
-</if_else>
-  JMP L32
+  JMP L30
 L29:
 </then>
-L32:
+L30:
+</if_else>
+  JMP L31
+L28:
+</then>
+L31:
 </if_else>
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   STC 78
   LT
-  JMF L33
+  JMF L32
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   STC  2
   PLUS
-  JMF L34
+  JMF L33
 ; --Comprobar variable vivos
   SRF  0  5
 ; --Comprobar variable vivos
@@ -595,22 +596,22 @@ L32:
   STC  1
   PLUS
   ASG
-  JMP L35
-L34:
-</then>
-L35:
-</if_else>
-  JMP L36
+  JMP L34
 L33:
 </then>
-L36:
+L34:
+</if_else>
+  JMP L35
+L32:
+</then>
+L35:
 </if_else>
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 -1
   DRF
   NGB
-  JMF L37
+  JMF L36
 ; --Comprobar variable vivos
   SRF  0  5
   DRF
@@ -623,8 +624,8 @@ L36:
   EQ
   OR
   CSF
-  JMP L38
-L37:
+  JMP L37
+L36:
 </then>
 ; --Comprobar variable vivos
   SRF  0  5
@@ -638,21 +639,21 @@ L37:
   EQ
   OR
   CSF
-L38:
+L37:
 </if_else>
-L19:
   CSF
 </vivira2>
-L40:
+L39:
+  JMP L42
+L42:
   SRF  0 -1
   ASGI
 ; --Se anyade el parametro en el for este y es ref colonia
-  JMP L39
 ; --Comprobar variable i
   SRF  0  4
   STC  0
   ASG
-L41:
+L40:
 ; --Comprobar variable i
   SRF  0  4
   DRF
@@ -660,7 +661,7 @@ L41:
   SRF  1 81
   DRF
   LT
-  JMF L42
+  JMF L41
 ; --Comprobar variable i
   SRF  0  4
   DRF
@@ -670,7 +671,7 @@ L41:
 ; --Comprobar variable i
   SRF  0  4
 ; --Se anyade el parametro i
-  OSF  2  1 L14
+  OSF  2  1 L13
   ASG
 ; --Comprobar variable i
   SRF  0  4
@@ -680,20 +681,21 @@ L41:
   STC  1
   PLUS
   ASG
-  JMP L41
-L42:
+  JMP L40
+L41:
 ; --Comprobar variable colonia
   SRF  0 -1
 ; --Se anyade el parametro colonia
 ; --Comprobar variable siguiente
   SRF  0  5
 ; --Se anyade el parametro siguiente
-L39:
   CSF
 </siguientegeneracion>
+L43:
+  JMP L48
+L48:
 <if_else>
 <then>
-L44:
 ; --Se suma al nivel 2el tamanyo 79
   SRF  0 -1
   ASGI
@@ -932,12 +934,11 @@ L44:
   SRF  0 77
   ASGI
 ; --Se anyade el parametro en el for este y es valor y arraycolonia
-  JMP L43
 ; --Comprobar variable i
   SRF  0 82
   STC  0
   ASG
-L45:
+L44:
 ; --Comprobar variable i
   SRF  0 82
   DRF
@@ -945,16 +946,16 @@ L45:
   SRF  1 81
   DRF
   LT
-  JMF L46
+  JMF L45
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 82
   DRF
-  JMF L47
-  JMP L48
-L47:
+  JMF L46
+  JMP L47
+L46:
 </then>
-L48:
+L47:
 </if_else>
 ; --Comprobar variable i
   SRF  0 82
@@ -964,9 +965,8 @@ L48:
   STC  1
   PLUS
   ASG
-  JMP L45
-L46:
-L43:
+  JMP L44
+L45:
   CSF
 </mostrarcolonia>
 L0:

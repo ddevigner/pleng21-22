@@ -1,0 +1,21 @@
+procedure main is
+character i;
+------------------------------------------------------
+function integer foo(val character n) is
+begin
+    return n;
+end
+------------------------------------------------------
+function integer bar() is
+	integer i;
+begin
+    foo(i);
+    return i;
+end
+------------------------------------------------------
+begin
+    bar();
+end
+
+
+

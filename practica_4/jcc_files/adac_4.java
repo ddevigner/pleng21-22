@@ -152,7 +152,7 @@ panicMode(e.currentToken.next, 0);
 // Declaracion de procedimiento/funcion
   static final public void proc_func_decl(CodeBlock proc_func) throws ParseException {Attributes at = new Attributes();
         Token t;
-        String label;
+        String label= CGUtils.newLabel();
         //CodeBlock proc_func;
         ArrayList<Symbol> params_invertidos;
         CodeBlock funciones_dentro_de_funcion = new CodeBlock();
@@ -165,43 +165,19 @@ label_params=CGUtils.newLabel();
                 //proc_func = new CodeBlock();
                 CGUtils.memorySpaces[st.level]=3;
     jj_consume_token(LPAREN);
-    params_def(at.params);
-proc_func.addLabel(label_params);       //Se anyade la label para recuperar los argumentos de la funcion
-                long aux;
-                for(int i=at.params.size()-1;i>=0;i--){
-                        aux = at.params.get(i).dir;
-                        //Si es por referencia se anyade 1
-                        //Si es por valor y es un vector entonces se anyaden sus componentes 
-                        if(at.params.get(i).parClass == ParameterClass.REF){
-                                proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);        //Aqui da error
-                                proc_func.addInst(PCodeInstruction.OpCode.ASGI);
-                                proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
-                                CGUtils.memorySpaces[st.level] += 1;
-                        }else if(at.params.get(i).parClass == ParameterClass.VAL && at.params.get(i).type != Types.ARRAY){
-                                CGUtils.memorySpaces[st.level] += 1;
-                                proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux);        //Aqui da error
-                                proc_func.addInst(PCodeInstruction.OpCode.ASGI);
-                                proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
-                        }else if(at.params.get(i).parClass == ParameterClass.VAL && at.params.get(i).type == Types.ARRAY){
-                                SymbolArray vec = (SymbolArray) at.params.get(i);
-                                CGUtils.memorySpaces[st.level] += vec.maxInd;
-                                //Se recorre el vector y se recupera cada Posicion 
-                                for(int j=0;j<vec.maxInd;j++){
-                                        proc_func.addInst(PCodeInstruction.OpCode.SRF,st.level-at.params.get(i).nivel,(int)aux + j);    //Aqui da error
-                                        proc_func.addInst(PCodeInstruction.OpCode.ASGI);
-                                        proc_func.addComment("Se anyade el parametro en el for este " + at.params.get(i).name);
-                                }
-                        }
-                }
+at.code.addLabel(label_params);
+    params_def(at);
+//proc_func.addLabel(label_params);	//Se anyade la label para recuperar los argumentos de la funcion
+                at.code.addInst(OpCode.JMP, label);
     jj_consume_token(RPAREN);
     jj_consume_token(IS);
     vars_def();
     procs_funcs_decl(funciones_dentro_de_funcion);
     proc_func_body(at);
-label = CGUtils.newLabel();
-                proc_func.addInst(OpCode.JMP, label);
-                proc_func.addBlock(funciones_dentro_de_funcion);
-                proc_func.addLabel(label);      //Pones la label donde empieza el codigo
+//label = CGUtils.newLabel();
+                //at.code.addInst(OpCode.JMP, label);
+                at.code.addBlock(funciones_dentro_de_funcion);
+                at.code.addLabel(label);        //Pones la label donde empieza el codigo
                 proc_func.addBlock(at.code);
                 proc_func.addInst(OpCode.CSF);
                 proc_func.encloseXMLTags(t.image);
@@ -247,12 +223,12 @@ at.baseType = Types.UNDEFINED;
 
 //-----------------------------------------------------------------------------
 // Parametros de procedimiento/funcion.
-  static final public void params_def(ArrayList<Symbol> params) throws ParseException {Attributes at = new Attributes(params);
+  static final public void params_def(Attributes at) throws ParseException {Attributes aux = new Attributes(at.params);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case VAL:
     case REF:{
-      param_class(at);
-      vars_decl(at);
+      param_class(aux);
+      vars_decl(aux);
       label_2:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -265,8 +241,8 @@ at.baseType = Types.UNDEFINED;
           break label_2;
         }
         jj_consume_token(SCOLON);
-        param_class(at);
-        vars_decl(at);
+        param_class(aux);
+        vars_decl(aux);
       }
       break;
       }
@@ -274,6 +250,7 @@ at.baseType = Types.UNDEFINED;
       jj_la1[4] = jj_gen;
       ;
     }
+at.code.addBlock(aux.code);
 }
 
 //-----------------------------------------------------------------------------
@@ -331,7 +308,7 @@ at.parClass = ParameterClass.REF;
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case INT:{
       t = jj_consume_token(INT);
-at.baseType = Types.INT; at.line = t.beginLine; at.column = t.beginColumn;
+at.baseType = Types.INT;  at.line = t.beginLine; at.column = t.beginColumn;
       break;
       }
     case BOOL:{
@@ -739,7 +716,9 @@ sf.EvaluateVar(at, t);
       relational_op(aux);
       simple_expr(aux);
 sf.EvaluateOperation(at, aux);
-                        //at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
+                        //Se anyade el bloque de aux en at (Comentado porque ya lo hago en 
+                        // EvaluateOperation ya que el operador debe ir despues de los push)
+                        //at.code.addBlock(aux.code);
 
       break;
       }
@@ -963,14 +942,6 @@ sf.EvaluateBool(at, t);
         case STRING:{
           t = jj_consume_token(STRING);
 sf.EvaluateString(at, t);
-
-                                cblock = new CodeBlock();
-                                for (int i = t.image.length() - 2; i > 0; i--) {
-                                        cblock.addInst(OpCode.STC, t.image.charAt(i));
-                                }
-                                cblock.encloseXMLTags("String_" + t.image);
-                                //at.code = cblock;
-                                at.code.addBlock(cblock);
           break;
           }
         default:
@@ -1127,13 +1098,6 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_5()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
   static private boolean jj_3_3()
  {
     if (jj_scan_token(ID)) return true;
@@ -1156,6 +1120,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
   }
 
   static private boolean jj_3_1()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;

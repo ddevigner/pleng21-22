@@ -18,6 +18,7 @@ import lib.symbolTable.exceptions.*;
 import lib.tools.exceptions.*;
 import lib.errores.*;
 import lib.tools.codeGeneration.*;
+import lib.tools.codeGeneration.PCodeInstruction.OpCode;
 
 public class SemanticFunctions {
 	private ErrorSemantico se; //clase común de errores semánticos
@@ -50,25 +51,64 @@ public class SemanticFunctions {
 		try {
 			Symbol s;
 			if (type == Types.ARRAY) {
+				//var.code.addComment("Se ha anyadido una variable de tipo array");
 				int n = Integer.parseInt(i.image);
 				checkArrayIndexDefinition(n);
 				s = new SymbolArray(t.image, n, var.baseType, var.parClass);
-			} else if (var.baseType == Types.INT) {
-				s = new SymbolInt(t.image, var.parClass);
-			} else if (var.baseType == Types.CHAR) {
-				s = new SymbolChar(t.image, var.parClass);
 			} else {
-				s = new SymbolBool(t.image, var.parClass);
+				if (var.baseType == Types.INT) {
+					s = new SymbolInt(t.image, var.parClass);
+				} else if (var.baseType == Types.CHAR) {
+					s = new SymbolChar(t.image, var.parClass);
+				} else {
+					s = new SymbolBool(t.image, var.parClass);
+				}
 			}
-			//Ahora asignar al symbol la direccion y el nivel///////////////////////////
-			s.dir=CGUtils.memorySpaces[st.level]++;
-			if(s.type == Types.ARRAY){	//En caso de ser arrray tienes que anyadir todas sus posiciones
-				SymbolArray vec = (SymbolArray) s;
-				CGUtils.memorySpaces[st.level] += vec.maxInd-1;	//-1 porque ya le he sumado 1 antes
-			}
-			s.nivel=st.level;
+			
 			st.insertSymbol(s);
 			if (var.params != null) st.insertSymbol(var.params, s);
+
+			//Meter una variable como en la funcion
+			if(var.params != null){
+					
+				long aux = s.dir;
+				//Si es por referencia se anyade 1
+				//Si es por valor y es un vector entonces se anyaden sus componentes 
+				System.out.println(s.name + ":" + s.parClass + ":" + st.level + ":" + CGUtils.memorySpaces[st.level] + 
+					":" + aux);
+				if(s.parClass == ParameterClass.REF){
+					var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
+					var.code.addInst(PCodeInstruction.OpCode.ASGI);
+					var.code.addComment("Se anyade el parametro en el for este y es ref " + s.name);
+					CGUtils.memorySpaces[st.level] += 1;
+				}else if(s.parClass == ParameterClass.VAL && s.type != Types.ARRAY){
+					CGUtils.memorySpaces[st.level] += 1;
+					var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
+					var.code.addInst(PCodeInstruction.OpCode.ASGI);
+					var.code.addComment("Se anyade el parametro en el for este y es valor y no array" + s.name);
+				}else if(s.parClass == ParameterClass.VAL && s.type == Types.ARRAY){
+					SymbolArray vec = (SymbolArray) s;
+					CGUtils.memorySpaces[st.level] += vec.maxInd;
+					var.code.addComment("Se suma al nivel " + st.level + "el tamanyo " + vec.maxInd);
+					//Se recorre el vector y se recupera cada Posicion 
+					for(int j=0;j<vec.maxInd;j++){
+						var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux + j);	//Aqui da error
+						var.code.addInst(PCodeInstruction.OpCode.ASGI);
+						var.code.addComment("Se anyade el parametro en el for este y es valor y array" + s.name);
+					}
+				}
+				
+			}else{ //Se esta definiendo una funcion
+				if (type == Types.ARRAY) {
+					SymbolArray vec = (SymbolArray) s;
+					s.dir = CGUtils.memorySpaces[st.level]++;
+					CGUtils.memorySpaces[st.level] += vec.maxInd-1;
+				} else {
+					s.dir = CGUtils.memorySpaces[st.level]++;
+					var.code.addComment("Se ha anyadido una variable de tipo normal");
+				}
+			}
+
 		} catch (ZeroSizeArrayException e) {
 			se.detection(e, t, i);
 		} catch (AlreadyDefinedSymbolException e) {
@@ -686,10 +726,6 @@ public class SemanticFunctions {
 			at.baseType = evaluateVar(s);
 			at.name = t.image;
 			at.parClass = s.parClass;
-
-
-			long aux= s.dir;
-
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
 			at.baseType = Types.UNDEFINED;
@@ -699,7 +735,6 @@ public class SemanticFunctions {
 		}
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
-		
 	}
 
 	public void EvaluateParam(Attributes at, Token t) {
@@ -756,8 +791,8 @@ public class SemanticFunctions {
 		at.intVal   = Integer.parseInt(t.image);
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
-		//Se mete el valor en la pila
-		//at.code.addInst(PCodeInstruction.OpCode.STC,at.intVal);
+
+		// Se mete el valor en la pila
 		at.code.addInst(PCodeInstruction.OpCode.STC,at.intVal);
 	}
 
@@ -768,23 +803,25 @@ public class SemanticFunctions {
 		at.charVal  = t.image.charAt(0);
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
-		//Se mete el valor en la pila
-		at.code.addInst(PCodeInstruction.OpCode.STC,at.charVal);
 
+		// Se mete el valor en la pila
+		at.code.addInst(PCodeInstruction.OpCode.STC,at.charVal);
 	}
 
 	// -- Constante booleana.
 	public void EvaluateBool(Attributes at, Token t) {
         at.baseType = Types.BOOL;
         at.parClass = ParameterClass.VAL;
-        at.boolVal  = t.image.equals("true") ? true : false;
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
-		//Habra que almacenar 1 o 0 dependiendo de si el true o false
-		if(t.image=="true"){
-			at.code.addInst(PCodeInstruction.OpCode.STC,1);			/////////////////De momento comento esto porque en el if hacia eq 
-		}else if(t.image=="false"){
-			at.code.addInst(PCodeInstruction.OpCode.STC,0);
+
+		// Se mete el valor en la pila: 1 si true o 0 si false.
+		if (t.image == "false") {
+			at.boolVal = false;
+			at.code.addInst(OpCode.STC, 0);
+		} else {
+			at.boolVal = true;
+			at.code.addInst(OpCode.STC, 1);
 		}
 	}
 
@@ -795,6 +832,10 @@ public class SemanticFunctions {
 		at.stringVal   = t.image;
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
+		
+		for (int i = t.image.length() - 2; i > 0; i--) 
+			at.code.addInst(OpCode.STC, t.image.charAt(i));
+		at.code.encloseXMLTags("String_" + t.image);
 	}
 
 	//-----------------------------------------------------------------------
