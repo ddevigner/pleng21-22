@@ -302,7 +302,7 @@ void proc_func_decl(CodeBlock proc_func):
 {
 	Attributes at = new Attributes();
 	Token t;
-	String label= CGUtils.newLabel();
+	String label;
 	//CodeBlock proc_func;
 	ArrayList<Symbol> params_invertidos;
 	CodeBlock funciones_dentro_de_funcion = new CodeBlock();
@@ -313,6 +313,7 @@ void proc_func_decl(CodeBlock proc_func):
 	func_return(at)
 	t = <ID> { 
 		label_params=CGUtils.newLabel();
+		label= CGUtils.newLabel();
 		sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t, label_params); 
 		//proc_func = new CodeBlock();
 		CGUtils.memorySpaces[st.level]=3;
@@ -322,19 +323,18 @@ void proc_func_decl(CodeBlock proc_func):
 	{at.code.addLabel(label_params);}
 	params_def(at)		//Aqui hacer recuperacion de parametros. Para cada symbol hacer lo de la diapo . Mirar si deberia hacerlo en otro orden
 	{
-		//proc_func.addLabel(label_params);	//Se anyade la label para recuperar los argumentos de la funcion
 		at.code.addInst(OpCode.JMP, label);
 	}
 	<RPAREN>
 	<IS>
 	vars_def()
 	procs_funcs_decl(funciones_dentro_de_funcion)		//Anyades el codigo de lo que se define dentro //Luego anyadir que devuelva un CodeBlock
+	{
+		at.code.addBlock(funciones_dentro_de_funcion);
+		at.code.addLabel(label);
+	}
 	proc_func_body(at)		//Anyades el codigo de la funcion con el label y tal
 	{
-		//label = CGUtils.newLabel();
-		//at.code.addInst(OpCode.JMP, label);
-		at.code.addBlock(funciones_dentro_de_funcion);
-		at.code.addLabel(label);	//Pones la label donde empieza el codigo
 		proc_func.addBlock(at.code);
 		proc_func.addInst(OpCode.CSF);
 		proc_func.encloseXMLTags(t.image);
@@ -556,12 +556,64 @@ void assignable(Attributes at):
 {
 	Attributes aux = new Attributes();
 	Token t;
+	String label_codigo_correcto;
+	String label_error_index;
 }
 {
 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { 
-													sf.EvaluateArray(at, aux, t); 
-													//Pendiente
-													at.code.addBlock(aux.code);
+							sf.EvaluateArray(at, aux, t); 
+							at.code.addBlock(aux.code);
+							try
+							{
+								at.code.addComment("Comprobando el indice del vector");
+								//Comprobar que el indice no se sale 
+								label_codigo_correcto= CGUtils.newLabel();
+								label_error_index = CGUtils.newLabel();
+								SymbolArray vec = (SymbolArray) st.getSymbol(t.image);
+								at.code.addInst(PCodeInstruction.OpCode.DUP);
+								at.code.addInst(PCodeInstruction.OpCode.STC,0);
+								at.code.addInst(PCodeInstruction.OpCode.GTE);
+								at.code.addInst(PCodeInstruction.OpCode.JMF,label_error_index);
+								at.code.addInst(PCodeInstruction.OpCode.DUP);
+								at.code.addInst(PCodeInstruction.OpCode.STC,vec.maxInd);
+								at.code.addInst(PCodeInstruction.OpCode.LTE);
+								at.code.addInst(PCodeInstruction.OpCode.JMT,label_codigo_correcto);
+								at.code.addLabel(label_error_index);
+								//Meter el mensaje de error y LVP
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.LVP);
+								at.code.addLabel(label_codigo_correcto);
+								//Ahora se carga la componentes correcta del vector
+								long auxDir = vec.dir;
+								at.code.addComment("Accediendo al index del vector " + vec.name);
+								if(vec.parClass == ParameterClass.REF){
+									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+									at.code.addInst(PCodeInstruction.OpCode.DRF);	
+								}else if(vec.parClass == ParameterClass.VAL){
+									at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
+								}else if(vec.parClass == ParameterClass.NONE){
+									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+								}
+								at.code.addInst(PCodeInstruction.OpCode.PLUS);
+
+							}catch(SymbolNotFoundException e){
+
+							}
 												}
 	| t = <ID> { 
 				sf.EvaluateVar(at, t);
@@ -635,6 +687,8 @@ void factor(Attributes at):
 	Attributes aux = new Attributes();
 	Token t;
 	CodeBlock cblock;
+	String label_codigo_correcto;
+	String label_error_index;
 } {
 	  	t = <NOT> factor(at) { 
 			  sf.EvaluateCondition(at, t);
@@ -656,6 +710,59 @@ void factor(Attributes at):
 												//Anyadir la expresion del [] 
 												at.code.addComment("Expresion de los [] del vector");
 												at.code.addBlock(aux.code);
+												try
+							{
+								at.code.addComment("Comprobando el indice del vector");
+								//Comprobar que el indice no se sale 
+								label_codigo_correcto= CGUtils.newLabel();
+								label_error_index = CGUtils.newLabel();
+								SymbolArray vec = (SymbolArray) st.getSymbol(t.image);
+								at.code.addInst(PCodeInstruction.OpCode.DUP);
+								at.code.addInst(PCodeInstruction.OpCode.STC,0);
+								at.code.addInst(PCodeInstruction.OpCode.GTE);
+								at.code.addInst(PCodeInstruction.OpCode.JMF,label_error_index);
+								at.code.addInst(PCodeInstruction.OpCode.DUP);
+								at.code.addInst(PCodeInstruction.OpCode.STC,vec.maxInd);
+								at.code.addInst(PCodeInstruction.OpCode.LTE);
+								at.code.addInst(PCodeInstruction.OpCode.JMT,label_codigo_correcto);
+								at.code.addLabel(label_error_index);
+								//Meter el mensaje de error y LVP
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.LVP);
+								at.code.addLabel(label_codigo_correcto);
+								//Ahora se carga la componentes correcta del vector
+								long auxDir = vec.dir;
+								at.code.addComment("Accediendo al index del vector " + vec.name);
+								if(vec.parClass == ParameterClass.REF){
+									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+									at.code.addInst(PCodeInstruction.OpCode.DRF);
+									at.code.addInst(PCodeInstruction.OpCode.DRF);	
+								}else if(vec.parClass == ParameterClass.VAL){
+									at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
+									at.code.addInst(PCodeInstruction.OpCode.DRF);
+								}else if(vec.parClass == ParameterClass.NONE){
+									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+									at.code.addInst(PCodeInstruction.OpCode.DRF);
+								}
+								at.code.addInst(PCodeInstruction.OpCode.PLUS);
+							}catch(SymbolNotFoundException e){
+
+							}
 											} 
 	| 	t = <ID> { 
 			at.code.addComment("Comprobar variable " + t.image); 
