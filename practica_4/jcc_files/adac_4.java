@@ -168,7 +168,37 @@ label_params=CGUtils.newLabel();
     jj_consume_token(LPAREN);
 at.code.addLabel(label_params);
     params_def(at);
-at.code.addInst(OpCode.JMP, label);
+for(int i=at.params.size()-1;i>=0;i--){
+                        Symbol s = at.params.get(i);
+                        if(s.parClass == ParameterClass.REF){
+                                at.code.addComment("Se anyade el parametro en el for este y es ref " + s.name);
+                                s.dir = CGUtils.memorySpaces[st.level]++;
+                                long aux = s.dir;
+                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux); //Aqui da error
+                                at.code.addInst(PCodeInstruction.OpCode.ASGI);
+                        }else if(s.parClass == ParameterClass.VAL && s.type != Types.ARRAY){
+                                at.code.addComment("Se anyade el parametro en el for este y es valor y no array " + s.name);
+                                s.dir = CGUtils.memorySpaces[st.level]++;
+                                long aux = s.dir;
+                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux); //Aqui da error
+                                at.code.addInst(PCodeInstruction.OpCode.ASGI);
+                        }else if(s.parClass == ParameterClass.VAL && s.type == Types.ARRAY){
+                                s.dir = CGUtils.memorySpaces[st.level]++;
+                                SymbolArray vec = (SymbolArray) s;
+                                CGUtils.memorySpaces[st.level] += vec.maxInd;
+                                at.code.addComment("Se suma al nivel " + st.level + "el tamanyo " + vec.maxInd);
+                                //Se recorre el vector y se recupera cada Posicion 
+                                for(int j=vec.maxInd;j>=0;j--){
+                                        at.code.addComment("Se anyade el parametro en el for este y es valor y array " + s.name);
+                                        long aux = s.dir + (long) j;    //Revisarlo
+                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux); //Aqui da error
+                                        at.code.addInst(PCodeInstruction.OpCode.ASGI);
+                                }
+                        }
+                }
+
+
+                at.code.addInst(OpCode.JMP, label);
     jj_consume_token(RPAREN);
     jj_consume_token(IS);
     vars_def();
@@ -453,6 +483,8 @@ sf.EvaluateGet(fst);
       jj_consume_token(LPAREN);
       expression(fst);
 sf.EvaluatePut(fst);
+                                                at.code.addBlock(fst.code);
+                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
       label_7:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -467,6 +499,8 @@ sf.EvaluatePut(fst);
         jj_consume_token(COLON);
         expression(fst);
 sf.EvaluatePut(fst);
+                                                at.code.addBlock(fst.code);
+                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
       }
       jj_consume_token(RPAREN);
       jj_consume_token(SCOLON);
@@ -474,7 +508,7 @@ sf.EvaluatePut(fst);
       }
     case PUTLINE:{
       jj_consume_token(PUTLINE);
-at.code.addInst(OpCode.STC, '\n');
+at.code.addInst(OpCode.STC, '\n'); at.code.addInst(OpCode.WRT, 0);
       jj_consume_token(LPAREN);
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case LPAREN:
@@ -491,8 +525,15 @@ at.code.addInst(OpCode.STC, '\n');
         expression(fst);
 sf.EvaluatePutline(fst);
                                 at.code.addBlock(fst.code);
-                                for (int i = 0; i < fst.stringVal.length()-2; i++) {
-                                        at.code.addInst(OpCode.WRT, 0);
+                                at.code.addComment("Se va a anyadir el string del putline");
+                                if(fst.baseType==Types.INT){
+                                        at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+                                }else if(fst.baseType==Types.CHAR){
+                                        at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                }else{
+                                        for (int i = 0; i < fst.stringVal.length()-2; i++) {
+                                                at.code.addInst(OpCode.WRT, 0);
+                                        }
                                 }
         label_8:
         while (true) {
@@ -509,8 +550,15 @@ sf.EvaluatePutline(fst);
           expression(fst);
 sf.EvaluatePutline(fst);
                                 at.code.addBlock(fst.code);
-                                for (int i = 0; i < fst.stringVal.length()-2; i++) {
-                                        at.code.addInst(OpCode.WRT, 0);
+                                at.code.addComment("Se va a anyadir el string del putline");
+                                if(fst.baseType==Types.INT){
+                                        at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+                                }else if(fst.baseType==Types.CHAR){
+                                        at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                }else{
+                                        for (int i = 0; i < fst.stringVal.length()-2; i++) {
+                                                at.code.addInst(OpCode.WRT, 0);
+                                        }
                                 }
         }
         break;
@@ -529,6 +577,8 @@ at.code.addInst(OpCode.WRT, 0);
       jj_consume_token(SKIPLINE);
       jj_consume_token(LPAREN);
       jj_consume_token(RPAREN);
+at.code.addInst(PCodeInstruction.OpCode.STC,'\n');
+                        at.code.addInst(PCodeInstruction.OpCode.WRT,0);
       jj_consume_token(SCOLON);
       break;
       }
@@ -880,7 +930,7 @@ sf.EvaluateCondition(at, t);
       jj_consume_token(LPAREN);
       expression(aux);
       jj_consume_token(RPAREN);
-sf.EvaluateInt2Char(at, aux, t);
+sf.EvaluateInt2Char(at, aux, t); at.code.addBlock(aux.code);
       break;
       }
     case CHAR2INT:{
@@ -888,7 +938,7 @@ sf.EvaluateInt2Char(at, aux, t);
       jj_consume_token(LPAREN);
       expression(aux);
       jj_consume_token(RPAREN);
-sf.EvaluateChar2Int(at, aux, t);
+sf.EvaluateChar2Int(at, aux, t); at.code.addBlock(aux.code);
       break;
       }
     default:
@@ -988,12 +1038,18 @@ sf.EvaluateArray(at, aux, t);
                                                                 if(vec.parClass == ParameterClass.REF){
                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
                                                                         at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.PLUS);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                 }else if(vec.parClass == ParameterClass.VAL){
-                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
+                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                 }else if(vec.parClass == ParameterClass.NONE){
                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                 }
-                                                                at.code.addInst(PCodeInstruction.OpCode.PLUS);
+
                                                         }catch(SymbolNotFoundException e){
 
                                                         }
@@ -1207,6 +1263,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
+  static private boolean jj_3_1()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
   static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
@@ -1218,13 +1281,6 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 

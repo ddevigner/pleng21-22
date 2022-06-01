@@ -70,39 +70,40 @@ public class SemanticFunctions {
 
 			//Meter una variable como en la funcion
 			if(var.params != null){
-					
-				long aux = s.dir;
-				//Si es por referencia se anyade 1
-				//Si es por valor y es un vector entonces se anyaden sus componentes 
-				System.out.println(s.name + ":" + s.parClass + ":" + st.level + ":" + CGUtils.memorySpaces[st.level] + 
-					":" + aux);
-				if(s.parClass == ParameterClass.REF){
-					var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
-					var.code.addInst(PCodeInstruction.OpCode.ASGI);
-					var.code.addComment("Se anyade el parametro en el for este y es ref " + s.name);
-					CGUtils.memorySpaces[st.level] += 1;
-				}else if(s.parClass == ParameterClass.VAL && s.type != Types.ARRAY){
-					CGUtils.memorySpaces[st.level] += 1;
-					var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
-					var.code.addInst(PCodeInstruction.OpCode.ASGI);
-					var.code.addComment("Se anyade el parametro en el for este y es valor y no array" + s.name);
-				}else if(s.parClass == ParameterClass.VAL && s.type == Types.ARRAY){
-					SymbolArray vec = (SymbolArray) s;
-					CGUtils.memorySpaces[st.level] += vec.maxInd;
-					var.code.addComment("Se suma al nivel " + st.level + "el tamanyo " + vec.maxInd);
-					//Se recorre el vector y se recupera cada Posicion 
-					for(int j=0;j<vec.maxInd;j++){
-						var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux + j);	//Aqui da error
-						var.code.addInst(PCodeInstruction.OpCode.ASGI);
-						var.code.addComment("Se anyade el parametro en el for este y es valor y array" + s.name);
-					}
-				}
+				// if(s.parClass == ParameterClass.REF){
+				// 	var.code.addComment("Se anyade el parametro en el for este y es ref " + s.name);
+				// 	//CGUtils.memorySpaces[st.level] += 1;
+				// 	s.dir = CGUtils.memorySpaces[st.level]++;
+				// 	long aux = s.dir;
+				// 	//var.code.addComment("S.dir del simbolo es " + s.dir + " pero deberia ser " + CGUtils.memorySpaces[st.level]);
+				// 	var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
+				// 	var.code.addInst(PCodeInstruction.OpCode.ASGI);
+				// }else if(s.parClass == ParameterClass.VAL && s.type != Types.ARRAY){
+				// 	//CGUtils.memorySpaces[st.level] += 1;
+				// 	var.code.addComment("Se anyade el parametro en el for este y es valor y no array " + s.name);
+				// 	s.dir = CGUtils.memorySpaces[st.level]++;
+				// 	long aux = s.dir;
+				// 	var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
+				// 	var.code.addInst(PCodeInstruction.OpCode.ASGI);
+				// }else if(s.parClass == ParameterClass.VAL && s.type == Types.ARRAY){
+				// 	s.dir = CGUtils.memorySpaces[st.level]++;
+				// 	SymbolArray vec = (SymbolArray) s;
+				// 	CGUtils.memorySpaces[st.level] += vec.maxInd;
+				// 	var.code.addComment("Se suma al nivel " + st.level + "el tamanyo " + vec.maxInd);
+				// 	//Se recorre el vector y se recupera cada Posicion 
+				// 	for(int j=0;j<vec.maxInd;j++){
+				// 		var.code.addComment("Se anyade el parametro en el for este y es valor y array " + s.name);
+				// 		long aux = s.dir + (long) j;	//Revisarlo
+				// 		var.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux + j);	//Aqui da error
+				// 		var.code.addInst(PCodeInstruction.OpCode.ASGI);
+				// 	}
+				// }
 				
 			}else{ //Se esta definiendo una funcion
 				if (type == Types.ARRAY) {
 					SymbolArray vec = (SymbolArray) s;
 					s.dir = CGUtils.memorySpaces[st.level]++;
-					CGUtils.memorySpaces[st.level] += vec.maxInd-1;
+					CGUtils.memorySpaces[st.level] += vec.maxInd;
 				} else {
 					s.dir = CGUtils.memorySpaces[st.level]++;
 					var.code.addComment("Se ha anyadido una variable de tipo normal");
@@ -171,36 +172,14 @@ public class SemanticFunctions {
 	public void EvaluateGet(Attributes at) {
 		try {
 			evaluateGet(at.baseType);
-			//Meter el get en la Maquina P	/////////////////////////////////////////////////
-			long aux=st.getSymbol(at.name).dir;
-			if(at.parClass==ParameterClass.VAL || at.parClass==ParameterClass.NONE){	//Si es una variable por valor entonces se hace srf y RD	
-				//Si es none significa que no es un parametro asi quee se trata como valor
-				if(at.baseType==Types.INT){	//Si es INT a RD se le pasa un 1
-					at.code.addComment("Se hace get de una variable por valor y de tipo INT " + at.name);
-					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
-					at.code.addInst(PCodeInstruction.OpCode.RD,1);
-				}else if(at.baseType==Types.CHAR){	//Si es CHAR a RD se le pasa un 0
-					at.code.addComment("Se hace get de una variable por valor y de tipo CHAR " + at.name);
-					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
-					at.code.addInst(PCodeInstruction.OpCode.RD,0);
-				}
-			}else if(at.parClass==ParameterClass.REF){	//Si es por referencia se hace SRF , DRF y RD
-				if(at.baseType==Types.INT){	//Si es INT a RD se le pasa un 1
-					at.code.addComment("Se hace get de una variable por referencia y de tipo INT " + at.name);
-					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
-					at.code.addInst(PCodeInstruction.OpCode.DRF);
-					at.code.addInst(PCodeInstruction.OpCode.RD,1);
-				}else if(at.baseType==Types.CHAR){	//Si es CHAR a RD se le pasa un 0
-					at.code.addComment("Se hace get de una variable por referencia y de tipo CHAR " + at.name);
-					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-st.getSymbol(at.name).nivel,(int)aux);
-					at.code.addInst(PCodeInstruction.OpCode.DRF);
-					at.code.addInst(PCodeInstruction.OpCode.RD,0);
-				}
+			if(at.baseType==Types.INT){	//Si es INT a RD se le pasa un 1
+				at.code.addInst(OpCode.RD,1);
+			}else if(at.baseType==Types.CHAR){	//Si es CHAR a RD se le pasa un 0
+				at.code.addInst(OpCode.RD,0);
 			}
+			
 		} catch (GetException e) {
 			se.detection(e, at.line, at.column);
-		} catch (SymbolNotFoundException e){	//A ver que pasa con esto, Habra que mirarlo bien/////////////////////
-
 		}
 	}
 
@@ -818,10 +797,10 @@ public class SemanticFunctions {
 		// Se mete el valor en la pila: 1 si true o 0 si false.
 		if (t.image == "false") {
 			at.boolVal = false;
-			at.code.addInst(OpCode.STC, 0);
+			at.code.addInst(OpCode.STC, 1);
 		} else {
 			at.boolVal = true;
-			at.code.addInst(OpCode.STC, 1);
+			at.code.addInst(OpCode.STC, 0);
 		}
 	}
 
