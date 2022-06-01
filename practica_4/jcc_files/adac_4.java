@@ -525,7 +525,7 @@ at.code.addInst(OpCode.STC, '\n'); at.code.addInst(OpCode.WRT, 0);
         expression(fst);
 sf.EvaluatePutline(fst);
                                 at.code.addBlock(fst.code);
-                                at.code.addComment("Se va a anyadir el string del putline");
+                                at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
                                 if(fst.baseType==Types.INT){
                                         at.code.addInst(PCodeInstruction.OpCode.WRT,1);
                                 }else if(fst.baseType==Types.CHAR){
@@ -550,7 +550,7 @@ sf.EvaluatePutline(fst);
           expression(fst);
 sf.EvaluatePutline(fst);
                                 at.code.addBlock(fst.code);
-                                at.code.addComment("Se va a anyadir el string del putline");
+                                at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
                                 if(fst.baseType==Types.INT){
                                         at.code.addInst(PCodeInstruction.OpCode.WRT,1);
                                 }else if(fst.baseType==Types.CHAR){
@@ -569,7 +569,7 @@ sf.EvaluatePutline(fst);
       }
       jj_consume_token(RPAREN);
       jj_consume_token(SCOLON);
-at.code.addInst(OpCode.WRT, 0);
+//at.code.addInst(OpCode.WRT, 0);
                                 at.code.encloseXMLTags("Putline");
       break;
       }
