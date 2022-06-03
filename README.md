@@ -9,6 +9,10 @@
 ### Programas. Compilados para su uso en Hendrix.
 - [adac_cpp](https://github.com/ddevigner/pleng21-22/tree/main/testbench/adac_cpp/): compilador que traduce de adac a C++.
     ```bash
+    # Entrada estandar.
+    java -jar adac_cpp.jar
+
+    # Lee del fichero Adac. 
     java -jar adac_cpp.jar <fichero>.adac [> <fichero_output>]
     ```
 

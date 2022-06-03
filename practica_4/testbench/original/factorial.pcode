@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<factorial>
+  ENP L0
+<variable_declaration>
+; --- Simple variable "n", type 0, level 0,  address [3]!
+</variable_declaration>
+<function_fact>
+L1:
+; --- Simple parameter "m", type 0, class 0, level 1,  address [3]!
+<recover_argument_1>
+; --- Recover simple val / ref variable parameter "m" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L2
+<variable_declaration>
+</variable_declaration>
+L2:
+<fact_instruction_block>
+<if-then>
+<condition>
+; --- Variable / parameter "m"
+  SRF  0  3
+  DRF 
+  STC  1
+  EQ 
+</condition>
+  JMF L3
+<then>
+<return>
+  STC  1
+  CSF 
+</return>
+  JMP L4
+</then>
+<else>
+L3:
+<return>
+; --- Variable / parameter "m"
+  SRF  0  3
+  DRF 
+<function_call_fact>
+<argument_1>
+; --- Variable / parameter "m"
+  SRF  0  3
+  DRF 
+  STC  1
+  SBT 
+</argument_1>
+  OSF  4  1 L1
+</function_call_fact>
+  TMS 
+  CSF 
+</return>
+</else>
+L4:
+</if-then>
+  CSF 
+</fact_instruction_block>
+</function_fact>
+L0:
+<factorial_instruction_block>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "Calcula k! para k=1..20." (length 24)
+; --- Standard string writing
+  STC 67
+  WRT  0
+  STC 97
+  WRT  0
+  STC 108
+  WRT  0
+  STC 99
+  WRT  0
+  STC 117
+  WRT  0
+  STC 108
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 107
+  WRT  0
+  STC 33
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 107
+  WRT  0
+  STC 61
+  WRT  0
+  STC 49
+  WRT  0
+  STC 46
+  WRT  0
+  STC 46
+  WRT  0
+  STC 50
+  WRT  0
+  STC 48
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "Habrá MATH overflow en 13! porque los enteros en la máquina p son de 4 bytes." (length 79)
+; --- Standard string writing
+  STC 72
+  WRT  0
+  STC 97
+  WRT  0
+  STC 98
+  WRT  0
+  STC 114
+  WRT  0
+  STC -61
+  WRT  0
+  STC -95
+  WRT  0
+  STC 32
+  WRT  0
+  STC 77
+  WRT  0
+  STC 65
+  WRT  0
+  STC 84
+  WRT  0
+  STC 72
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 118
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 102
+  WRT  0
+  STC 108
+  WRT  0
+  STC 111
+  WRT  0
+  STC 119
+  WRT  0
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 51
+  WRT  0
+  STC 33
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 113
+  WRT  0
+  STC 117
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 109
+  WRT  0
+  STC -61
+  WRT  0
+  STC -95
+  WRT  0
+  STC 113
+  WRT  0
+  STC 117
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 52
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 121
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 115
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<Assignment_to__simple_variable_n>
+; --- Address of variable / parameter "n"
+  SRF  0  3
+  STC  1
+  ASG 
+</Assignment_to__simple_variable_n>
+<while>
+L5:
+<condition>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC 20
+  LTE 
+</condition>
+  JMF L6
+<while_instruction_block>
+<put>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING "! = " (length 4)
+; --- Standard string writing
+  STC 33
+  WRT  0
+  STC 32
+  WRT  0
+  STC 61
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+<function_call_fact>
+<argument_1>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+</argument_1>
+  OSF  4  0 L1
+</function_call_fact>
+; --- Put INTEGER
+  WRT  1
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<Assignment_to__simple_variable_n>
+; --- Address of variable / parameter "n"
+  SRF  0  3
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_n>
+</while_instruction_block>
+  JMP L5
+L6:
+</while>
+</factorial_instruction_block>
+  LVP 
+</factorial>

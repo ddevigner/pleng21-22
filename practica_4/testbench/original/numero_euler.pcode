@@ -1,0 +1,4258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<numero_euler>
+  ENP L0
+<variable_declaration>
+; --- Simple variable "n", type 0, level 0,  address [3]!
+; --- Array variable "e", type 0, size 101, level 0, address [4:104]!
+; --- Array variable "sumando", type 0, size 101, level 0, address [105:205]!
+; --- Array variable "resultado", type 0, size 101, level 0, address [206:306]!
+; --- Simple variable "ndigitos", type 0, level 0,  address [307]!
+</variable_declaration>
+<procedure_iniciar>
+L1:
+; --- Ref array parameter "s", type 0, class 1, size 101, level 1, address [3]!
+<recover_argument_1>
+; --- Recover array ref variable parameter "s" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L2
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [4]!
+</variable_declaration>
+L2:
+<iniciar_instruction_block>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  4
+  STC  0
+  ASG 
+</Assignment_to__simple_variable_i>
+<while>
+L3:
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+; --- Variable / parameter "ndigitos"
+  SRF  1 307
+  DRF 
+  LTE 
+</condition>
+  JMF L4
+<while_instruction_block>
+<Assignment_to_component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L5
+  DUP 
+  STC 101
+  LT 
+  JMT L6
+L5:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 54
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L6:
+; --- Initial address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  STC  0
+  ASG 
+</Assignment_to_component_of_array_s>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  4
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_i>
+</while_instruction_block>
+  JMP L3
+L4:
+</while>
+  CSF 
+</iniciar_instruction_block>
+</procedure_iniciar>
+<procedure_mostrar_numero>
+L7:
+; --- Ref array parameter "s", type 0, class 1, size 101, level 1, address [3]!
+<recover_argument_1>
+; --- Recover array ref variable parameter "s" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L8
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [4]!
+</variable_declaration>
+L8:
+<mostrar_numero_instruction_block>
+<put>
+<component_of_array_s>
+  STC  0
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+  STC 46
+; --- Put CHARACTER
+  WRT  0
+</put>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  4
+  STC  1
+  ASG 
+</Assignment_to__simple_variable_i>
+<while>
+L9:
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+; --- Variable / parameter "ndigitos"
+  SRF  1 307
+  DRF 
+  LTE 
+</condition>
+  JMF L10
+<while_instruction_block>
+<if-then>
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+  STC  1
+  SBT 
+  STC  5
+  MOD 
+  STC  0
+  EQ 
+</condition>
+  JMF L11
+<then>
+<put>
+; --- Put STRING " " (length 1)
+; --- Standard string writing
+  STC 32
+  WRT  0
+</put>
+</then>
+L11:
+</if-then>
+<put>
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L12
+  DUP 
+  STC 101
+  LT 
+  JMT L13
+L12:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 51
+  WRT  0
+  STC 50
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L13:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+; --- Put INTEGER
+  WRT  1
+</put>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  4
+; --- Variable / parameter "i"
+  SRF  0  4
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_i>
+</while_instruction_block>
+  JMP L9
+L10:
+</while>
+<put>
+  STC 13
+; --- Put CHARACTER
+  WRT  0
+</put>
+<put>
+  STC 10
+; --- Put CHARACTER
+  WRT  0
+</put>
+  CSF 
+</mostrar_numero_instruction_block>
+</procedure_mostrar_numero>
+<procedure_sumar>
+L14:
+; --- Ref array parameter "s", type 0, class 1, size 101, level 1, address [3]!
+; --- Ref array parameter "r", type 0, class 1, size 101, level 1, address [4]!
+<recover_argument_2>
+; --- Recover array ref variable parameter "r" (number 2).
+  SRF  0  4
+  ASGI 
+</recover_argument_2>
+<recover_argument_1>
+; --- Recover array ref variable parameter "s" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L15
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [5]!
+; --- Simple variable "n", type 0, level 1,  address [6]!
+</variable_declaration>
+L15:
+<sumar_instruction_block>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  5
+; --- Variable / parameter "ndigitos"
+  SRF  1 307
+  DRF 
+  ASG 
+</Assignment_to__simple_variable_i>
+<while>
+L16:
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+  STC  0
+  GT 
+</condition>
+  JMF L17
+<while_instruction_block>
+<Assignment_to__simple_variable_n>
+; --- Address of variable / parameter "n"
+  SRF  0  6
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L18
+  DUP 
+  STC 101
+  LT 
+  JMT L19
+L18:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 52
+  WRT  0
+  STC 54
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L19:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+<component_of_array_r>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+; --- Checking if index is valid for array "r"
+  DUP 
+  STC  0
+  GTE 
+  JMF L20
+  DUP 
+  STC 101
+  LT 
+  JMT L21
+L20:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 114
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 52
+  WRT  0
+  STC 54
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L21:
+; --- Initial ref address of array "r"
+  SRF  0  4
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_r>
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_n>
+<if-then>
+<condition>
+; --- Variable / parameter "n"
+  SRF  0  6
+  DRF 
+  STC  9
+  GT 
+</condition>
+  JMF L22
+<then>
+<Assignment_to_component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L23
+  DUP 
+  STC 101
+  LT 
+  JMT L24
+L23:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 52
+  WRT  0
+  STC 57
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L24:
+; --- Initial address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+; --- Variable / parameter "n"
+  SRF  0  6
+  DRF 
+  STC 10
+  MOD 
+  ASG 
+</Assignment_to_component_of_array_s>
+<Assignment_to_component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+  STC  1
+  SBT 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L25
+  DUP 
+  STC 101
+  LT 
+  JMT L26
+L25:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 53
+  WRT  0
+  STC 48
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L26:
+; --- Initial address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+  STC  1
+  SBT 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L27
+  DUP 
+  STC 101
+  LT 
+  JMT L28
+L27:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 53
+  WRT  0
+  STC 48
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L28:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+; --- Variable / parameter "n"
+  SRF  0  6
+  DRF 
+  STC 10
+  DIV 
+  PLUS 
+  ASG 
+</Assignment_to_component_of_array_s>
+  JMP L29
+</then>
+<else>
+L22:
+<Assignment_to_component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L30
+  DUP 
+  STC 101
+  LT 
+  JMT L31
+L30:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 53
+  WRT  0
+  STC 50
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L31:
+; --- Initial address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+; --- Variable / parameter "n"
+  SRF  0  6
+  DRF 
+  ASG 
+</Assignment_to_component_of_array_s>
+</else>
+L29:
+</if-then>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  5
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+  STC  1
+  SBT 
+  ASG 
+</Assignment_to__simple_variable_i>
+</while_instruction_block>
+  JMP L16
+L17:
+</while>
+  CSF 
+</sumar_instruction_block>
+</procedure_sumar>
+<procedure_dividir>
+L32:
+; --- Ref array parameter "s", type 0, class 1, size 101, level 1, address [3]!
+; --- Ref array parameter "r", type 0, class 1, size 101, level 1, address [4]!
+; --- Simple parameter "n", type 0, class 0, level 1,  address [5]!
+<recover_argument_3>
+; --- Recover simple val / ref variable parameter "n" (number 3).
+  SRF  0  5
+  ASGI 
+</recover_argument_3>
+<recover_argument_2>
+; --- Recover array ref variable parameter "r" (number 2).
+  SRF  0  4
+  ASGI 
+</recover_argument_2>
+<recover_argument_1>
+; --- Recover array ref variable parameter "s" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L33
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [6]!
+</variable_declaration>
+L33:
+<dividir_instruction_block>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  6
+  STC  0
+  ASG 
+</Assignment_to__simple_variable_i>
+<while>
+L34:
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+; --- Variable / parameter "ndigitos"
+  SRF  1 307
+  DRF 
+  LT 
+</condition>
+  JMF L35
+<while_instruction_block>
+<if-then>
+<condition>
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L36
+  DUP 
+  STC 101
+  LT 
+  JMT L37
+L36:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 54
+  WRT  0
+  STC 53
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L37:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+; --- Variable / parameter "n"
+  SRF  0  5
+  DRF 
+  DIV 
+  STC  0
+  GT 
+</condition>
+  JMF L38
+<then>
+<Assignment_to_component_of_array_r>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+; --- Checking if index is valid for array "r"
+  DUP 
+  STC  0
+  GTE 
+  JMF L39
+  DUP 
+  STC 101
+  LT 
+  JMT L40
+L39:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 114
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 54
+  WRT  0
+  STC 54
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L40:
+; --- Initial address of array "r"
+  SRF  0  4
+  DRF 
+  PLUS 
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L41
+  DUP 
+  STC 101
+  LT 
+  JMT L42
+L41:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 54
+  WRT  0
+  STC 54
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L42:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+; --- Variable / parameter "n"
+  SRF  0  5
+  DRF 
+  DIV 
+  ASG 
+</Assignment_to_component_of_array_r>
+<Assignment_to_component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+  STC  1
+  PLUS 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L43
+  DUP 
+  STC 101
+  LT 
+  JMT L44
+L43:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 54
+  WRT  0
+  STC 55
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L44:
+; --- Initial address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L45
+  DUP 
+  STC 101
+  LT 
+  JMT L46
+L45:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 54
+  WRT  0
+  STC 55
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L46:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+; --- Variable / parameter "n"
+  SRF  0  5
+  DRF 
+  MOD 
+  STC 10
+  TMS 
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+  STC  1
+  PLUS 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L47
+  DUP 
+  STC 101
+  LT 
+  JMT L48
+L47:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 54
+  WRT  0
+  STC 55
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L48:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+  PLUS 
+  ASG 
+</Assignment_to_component_of_array_s>
+  JMP L49
+</then>
+<else>
+L38:
+<Assignment_to_component_of_array_r>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+; --- Checking if index is valid for array "r"
+  DUP 
+  STC  0
+  GTE 
+  JMF L50
+  DUP 
+  STC 101
+  LT 
+  JMT L51
+L50:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 114
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 54
+  WRT  0
+  STC 57
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L51:
+; --- Initial address of array "r"
+  SRF  0  4
+  DRF 
+  PLUS 
+  STC  0
+  ASG 
+</Assignment_to_component_of_array_r>
+<Assignment_to_component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+  STC  1
+  PLUS 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L52
+  DUP 
+  STC 101
+  LT 
+  JMT L53
+L52:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 55
+  WRT  0
+  STC 48
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L53:
+; --- Initial address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L54
+  DUP 
+  STC 101
+  LT 
+  JMT L55
+L54:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 55
+  WRT  0
+  STC 48
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L55:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+  STC 10
+  TMS 
+<component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+  STC  1
+  PLUS 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L56
+  DUP 
+  STC 101
+  LT 
+  JMT L57
+L56:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 55
+  WRT  0
+  STC 48
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L57:
+; --- Initial ref address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_s>
+  PLUS 
+  ASG 
+</Assignment_to_component_of_array_s>
+</else>
+L49:
+</if-then>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  6
+; --- Variable / parameter "i"
+  SRF  0  6
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_i>
+</while_instruction_block>
+  JMP L34
+L35:
+</while>
+  CSF 
+</dividir_instruction_block>
+</procedure_dividir>
+<procedure_asignar>
+L58:
+; --- Ref array parameter "s", type 0, class 1, size 101, level 1, address [3]!
+; --- Ref array parameter "r", type 0, class 1, size 101, level 1, address [4]!
+<recover_argument_2>
+; --- Recover array ref variable parameter "r" (number 2).
+  SRF  0  4
+  ASGI 
+</recover_argument_2>
+<recover_argument_1>
+; --- Recover array ref variable parameter "s" (number 1).
+  SRF  0  3
+  ASGI 
+</recover_argument_1>
+  JMP L59
+<variable_declaration>
+; --- Simple variable "i", type 0, level 1,  address [5]!
+</variable_declaration>
+L59:
+<asignar_instruction_block>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  5
+  STC  0
+  ASG 
+</Assignment_to__simple_variable_i>
+<while>
+L60:
+<condition>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+; --- Variable / parameter "ndigitos"
+  SRF  1 307
+  DRF 
+  LTE 
+</condition>
+  JMF L61
+<while_instruction_block>
+<Assignment_to_component_of_array_s>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+; --- Checking if index is valid for array "s"
+  DUP 
+  STC  0
+  GTE 
+  JMF L62
+  DUP 
+  STC 101
+  LT 
+  JMT L63
+L62:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 115
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 56
+  WRT  0
+  STC 51
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L63:
+; --- Initial address of array "s"
+  SRF  0  3
+  DRF 
+  PLUS 
+<component_of_array_r>
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+; --- Checking if index is valid for array "r"
+  DUP 
+  STC  0
+  GTE 
+  JMF L64
+  DUP 
+  STC 101
+  LT 
+  JMT L65
+L64:
+; --- Standard string writing
+  STC 73
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 111
+  WRT  0
+  STC 102
+  WRT  0
+  STC 32
+  WRT  0
+  STC 98
+  WRT  0
+  STC 111
+  WRT  0
+  STC 117
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 102
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 97
+  WRT  0
+  STC 114
+  WRT  0
+  STC 114
+  WRT  0
+  STC 97
+  WRT  0
+  STC 121
+  WRT  0
+  STC 32
+  WRT  0
+  STC 34
+  WRT  0
+  STC 114
+  WRT  0
+  STC 34
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 56
+  WRT  0
+  STC 51
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 32
+  WRT  0
+  WRT  1
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 116
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 91
+  WRT  0
+  STC 48
+  WRT  0
+  STC 44
+  WRT  0
+  STC 100
+  WRT  1
+; --- Standard string writing
+  STC 93
+  WRT  0
+  STC 46
+  WRT  0
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+  LVP 
+L65:
+; --- Initial ref address of array "r"
+  SRF  0  4
+  DRF 
+  PLUS 
+  DRF 
+</component_of_array_r>
+  ASG 
+</Assignment_to_component_of_array_s>
+<Assignment_to__simple_variable_i>
+; --- Address of variable / parameter "i"
+  SRF  0  5
+; --- Variable / parameter "i"
+  SRF  0  5
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_i>
+</while_instruction_block>
+  JMP L60
+L61:
+</while>
+  CSF 
+</asignar_instruction_block>
+</procedure_asignar>
+L0:
+<numero_euler_instruction_block>
+<Assignment_to__simple_variable_ndigitos>
+; --- Address of variable / parameter "ndigitos"
+  SRF  0 307
+  STC 20
+  ASG 
+</Assignment_to__simple_variable_ndigitos>
+<put>
+; --- Put STRING "Aproximación del número de Euler e utilizando la serie infinita e = 1/0! + 1/1! + 1/2! + 1/3! ..." (length 99)
+; --- Standard string writing
+  STC 65
+  WRT  0
+  STC 112
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 120
+  WRT  0
+  STC 105
+  WRT  0
+  STC 109
+  WRT  0
+  STC 97
+  WRT  0
+  STC 99
+  WRT  0
+  STC 105
+  WRT  0
+  STC -61
+  WRT  0
+  STC -77
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 108
+  WRT  0
+  STC 32
+  WRT  0
+  STC 110
+  WRT  0
+  STC -61
+  WRT  0
+  STC -70
+  WRT  0
+  STC 109
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 69
+  WRT  0
+  STC 117
+  WRT  0
+  STC 108
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 117
+  WRT  0
+  STC 116
+  WRT  0
+  STC 105
+  WRT  0
+  STC 108
+  WRT  0
+  STC 105
+  WRT  0
+  STC 122
+  WRT  0
+  STC 97
+  WRT  0
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 111
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 102
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 105
+  WRT  0
+  STC 116
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 61
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 47
+  WRT  0
+  STC 48
+  WRT  0
+  STC 33
+  WRT  0
+  STC 32
+  WRT  0
+  STC 43
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 47
+  WRT  0
+  STC 49
+  WRT  0
+  STC 33
+  WRT  0
+  STC 32
+  WRT  0
+  STC 43
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 47
+  WRT  0
+  STC 50
+  WRT  0
+  STC 33
+  WRT  0
+  STC 32
+  WRT  0
+  STC 43
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 47
+  WRT  0
+  STC 51
+  WRT  0
+  STC 33
+  WRT  0
+  STC 32
+  WRT  0
+  STC 46
+  WRT  0
+  STC 46
+  WRT  0
+  STC 46
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<procedure_call_iniciar>
+<argument_1>
+; --- Variable / parameter "sumando"
+  SRF  0 105
+</argument_1>
+  OSF 308  0 L1
+</procedure_call_iniciar>
+<procedure_call_iniciar>
+<argument_1>
+; --- Variable / parameter "e"
+  SRF  0  4
+</argument_1>
+  OSF 308  0 L1
+</procedure_call_iniciar>
+<Assignment_to_component_of_array_sumando>
+  STC  0
+; --- Initial address of array "sumando"
+  SRF  0 105
+  PLUS 
+  STC  1
+  ASG 
+</Assignment_to_component_of_array_sumando>
+<Assignment_to_component_of_array_e>
+  STC  0
+; --- Initial address of array "e"
+  SRF  0  4
+  PLUS 
+  STC  2
+  ASG 
+</Assignment_to_component_of_array_e>
+<Assignment_to__simple_variable_n>
+; --- Address of variable / parameter "n"
+  SRF  0  3
+  STC  1
+  ASG 
+</Assignment_to__simple_variable_n>
+<while>
+L66:
+<condition>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+; --- Variable / parameter "ndigitos"
+  SRF  0 307
+  DRF 
+  LT 
+</condition>
+  JMF L67
+<while_instruction_block>
+<procedure_call_dividir>
+<argument_1>
+; --- Variable / parameter "sumando"
+  SRF  0 105
+</argument_1>
+<argument_2>
+; --- Variable / parameter "resultado"
+  SRF  0 206
+</argument_2>
+<argument_3>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+</argument_3>
+  OSF 308  0 L32
+</procedure_call_dividir>
+<procedure_call_sumar>
+<argument_1>
+; --- Variable / parameter "e"
+  SRF  0  4
+</argument_1>
+<argument_2>
+; --- Variable / parameter "resultado"
+  SRF  0 206
+</argument_2>
+  OSF 308  0 L14
+</procedure_call_sumar>
+<put>
+; --- Put STRING "e con " (length 6)
+; --- Standard string writing
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 99
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<put>
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC  1
+  PLUS 
+; --- Put INTEGER
+  WRT  1
+</put>
+<put>
+; --- Put STRING " componentes de la serie: " (length 26)
+; --- Standard string writing
+  STC 32
+  WRT  0
+  STC 99
+  WRT  0
+  STC 111
+  WRT  0
+  STC 109
+  WRT  0
+  STC 112
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 116
+  WRT  0
+  STC 101
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 105
+  WRT  0
+  STC 101
+  WRT  0
+  STC 58
+  WRT  0
+  STC 32
+  WRT  0
+</put>
+<procedure_call_mostrar_numero>
+<argument_1>
+; --- Variable / parameter "e"
+  SRF  0  4
+</argument_1>
+  OSF 308  0 L7
+</procedure_call_mostrar_numero>
+<procedure_call_asignar>
+<argument_1>
+; --- Variable / parameter "sumando"
+  SRF  0 105
+</argument_1>
+<argument_2>
+; --- Variable / parameter "resultado"
+  SRF  0 206
+</argument_2>
+  OSF 308  0 L58
+</procedure_call_asignar>
+<Assignment_to__simple_variable_n>
+; --- Address of variable / parameter "n"
+  SRF  0  3
+; --- Variable / parameter "n"
+  SRF  0  3
+  DRF 
+  STC  1
+  PLUS 
+  ASG 
+</Assignment_to__simple_variable_n>
+</while_instruction_block>
+  JMP L66
+L67:
+</while>
+<put>
+; --- Put STRING "" (length 0)
+; --- Standard string writing
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+<put>
+; --- Put STRING "La convergencia es rápida porque los términos de la suma son 1/k!" (length 67)
+; --- Standard string writing
+  STC 76
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 99
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+  STC 118
+  WRT  0
+  STC 101
+  WRT  0
+  STC 114
+  WRT  0
+  STC 103
+  WRT  0
+  STC 101
+  WRT  0
+  STC 110
+  WRT  0
+  STC 99
+  WRT  0
+  STC 105
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 101
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 114
+  WRT  0
+  STC -61
+  WRT  0
+  STC -95
+  WRT  0
+  STC 112
+  WRT  0
+  STC 105
+  WRT  0
+  STC 100
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 112
+  WRT  0
+  STC 111
+  WRT  0
+  STC 114
+  WRT  0
+  STC 113
+  WRT  0
+  STC 117
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 116
+  WRT  0
+  STC -61
+  WRT  0
+  STC -87
+  WRT  0
+  STC 114
+  WRT  0
+  STC 109
+  WRT  0
+  STC 105
+  WRT  0
+  STC 110
+  WRT  0
+  STC 111
+  WRT  0
+  STC 115
+  WRT  0
+  STC 32
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 32
+  WRT  0
+  STC 108
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 117
+  WRT  0
+  STC 109
+  WRT  0
+  STC 97
+  WRT  0
+  STC 32
+  WRT  0
+  STC 115
+  WRT  0
+  STC 111
+  WRT  0
+  STC 110
+  WRT  0
+  STC 32
+  WRT  0
+  STC 49
+  WRT  0
+  STC 47
+  WRT  0
+  STC 107
+  WRT  0
+  STC 33
+  WRT  0
+</put>
+<put_line>
+; --- CR/LF
+  STC 13
+  WRT  0
+  STC 10
+  WRT  0
+</put_line>
+</numero_euler_instruction_block>
+  LVP 
+</numero_euler>
