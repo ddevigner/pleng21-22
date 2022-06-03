@@ -282,27 +282,11 @@ public class SemanticFunctions {
 		try {
 			Symbol s = st.getSymbol(t.image); 
 			evaluateProcedure(s, at, t);
-			//Ahora recorro las variables pasadas, si es por valor hago SRF y RDF y si es por referencia hago SRF
-			//Por ultimo se llama a OSF
-			//Coger el recibido por parametro y mirar si el de la funcion es por valor o referencia
-			//Los parametros pasados estan en at.parList
-			//Los que deberian ser esta en (SymbolProcedure)s
-
-			 SymbolProcedure p = (SymbolProcedure) s;
-			// long aux;
-			// for (int i = 0; i < p.parList.size(); i++) {
-			// 	aux = p.parList.get(i).dir;
-			// 	if(p.parList.get(i).parClass==ParameterClass.REF){
-			// 		at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
-			// 	}else if(p.parList.get(i).parClass==ParameterClass.VAL){
-			// 		at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
-			// 		at.code.addInst(PCodeInstruction.OpCode.DRF);
-			// 	}
-			// }
-			//Aqui hago el osf
 			
-			at.code.addOSFInst (st.level, st.level-s.nivel, p.label);	//La label sera la que se ha anyadido al simbol desdel su creacion
-
+			 SymbolProcedure p = (SymbolProcedure) s;
+			
+			//at.code.addOSFInst (st.level, st.level-s.nivel, p.label);	//La label sera la que se ha anyadido al simbol desdel su creacion
+			at.code.addOSFInst (CGUtils.memorySpaces[st.level], st.level-s.nivel, p.label);
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
 		} catch (ProcedureNotFoundException e) {
@@ -597,6 +581,50 @@ public class SemanticFunctions {
 				at.baseType = Types.UNDEFINED;
 			}
 		}
+
+		//Comprobar la lista de parametros pasados con los que deberia ser
+		/////////////////////////////////////////////////////
+		//********************************************* */
+		////////////////////////////////////////////////////
+
+		// for (int i = 0; i < f.parList.size(); i++) {
+		// 	try {
+		// 		Symbol e = f.parList.get(i);	//El symbol de cada hueco del parametro de la funcion
+		// 		Attributes g = at.given.get(i);	//Los attributes de los parametros pasados
+		// 		Symbol sym = st.getSymbol(g.name);
+		// 		long aux = sym.dir;
+		// 		at.code.addComment("Se anyade un parametro desde evaluateFunction");
+		// 		if(e.parClass==ParameterClass.VAL){
+		// 			if(g.parClass==ParameterClass.NONE){
+		// 				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)aux);
+		// 				at.code.addInst(PCodeInstruction.OpCode.DRF);
+		// 			}else if(g.parClass==ParameterClass.VAL){
+		// 				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)aux);
+		// 				at.code.addInst(PCodeInstruction.OpCode.DRF);
+		// 			}else if(g.parClass==ParameterClass.REF){
+		// 				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)aux);
+		// 				at.code.addInst(PCodeInstruction.OpCode.DRF);
+		// 				at.code.addInst(PCodeInstruction.OpCode.DRF);
+		// 			}
+		// 		}else if(e.parClass==ParameterClass.REF){
+		// 			if(g.parClass==ParameterClass.NONE){
+		// 				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)aux);
+		// 			}else if(g.parClass==ParameterClass.VAL){
+		// 				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)aux);
+		// 				at.code.addInst(PCodeInstruction.OpCode.DRF);
+		// 			}else if(g.parClass==ParameterClass.REF){
+		// 				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-sym.nivel,(int)aux);
+		// 				at.code.addInst(PCodeInstruction.OpCode.DRF);
+		// 			}
+		// 		}
+		// 	}catch (SymbolNotFoundException e) {
+				
+		// 	}
+		// }
+
+		/////////////////////////////////////////////////////
+		//********************************************* */
+		////////////////////////////////////////////////////
 	}
 
 	public void EvaluateFunction(Attributes at, Token t) {		//Cuidado que a lo mejor aqui no hay que comprobar parametros, a lo mejor hay que hcaerlo al anydadir la variable
@@ -607,22 +635,10 @@ public class SemanticFunctions {
 			//Se anyaden las cosas 
 			SymbolFunction p = (SymbolFunction) s;
 			long aux;
-			//Este for a lo mejor hay que cambiarlo
-			////////////////////////////////////////////////////
-			///////////////////////////////////////////////////
-			// for (int i = 0; i < p.parList.size(); i++) {
-			// 	aux = p.parList.get(i).dir;
-			// 	if(p.parList.get(i).parClass==ParameterClass.REF){
-			// 		at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
-			// 	}else if(p.parList.get(i).parClass==ParameterClass.VAL){
-			// 		at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-p.parList.get(i).nivel,(int)aux);
-			// 		at.code.addInst(PCodeInstruction.OpCode.DRF);
-			// 	}
-			// }
-			///////////////////////////////////////////////////////
-			//////////////////////////////////////////////////////
-			//Aqui hago el osf
-			at.code.addOSFInst (st.level, st.level-s.nivel, p.label);	//La label sera la que se ha anyadido al simbol desdel su creacion
+			//at.code.addOSFInst (st.level, st.level-s.nivel, p.label);	//La label sera la que se ha anyadido al simbol desdel su creacion
+			at.code.addComment("Se llama a la funcion " + t.image);
+			at.code.addOSFInst (CGUtils.memorySpaces[st.level], st.level-s.nivel, p.label);
+			//cgu.memorySpaces[st.level]
 		} catch (SymbolNotFoundException e) {
 			se.detection(e,t);
 			at.baseType = Types.UNDEFINED;
@@ -729,22 +745,33 @@ public class SemanticFunctions {
 				at.baseType = s.type;
 			}
 			long aux= s.dir;
-			//Aqui hago un drf y rd de la v ariable dependiendo de si es por referencia o por valor
-			////////////////////////////////////////////////////////////////////////////
-			//Creo que los push de las variables deberian hacerse aqui. Deberia comprobar que el get esta bien
-			//Porque si estoy en lo correcto aqui se hace el push en la pila y en el get se escribe
-			///////////////////////////////////////////////////////////////////////////
-			if(s.parClass == ParameterClass.VAL){	//Pusheo el valor en la pila
-				//at.code.addInst(PCodeInstruction.OpCode.SRF)
-				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//DRF mete en la pila la direccion de la variable
-				at.code.addInst(PCodeInstruction.OpCode.DRF);	//Se mete el valor de la variable en la pila, DRF mete en la pila el valor de la direccion que hay en la pila
-			}else if(s.parClass == ParameterClass.REF){
-				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);
-				//at.code.addInst(PCodeInstruction.OpCode.DRF);
-			}else if(s.parClass == ParameterClass.NONE){	//El none es si es una variable local, entonces deberia ser tratada igual que REF porque puede cambiar su valor???
-				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);
+			
+			if(s.type != Types.ARRAY){	//El tipo array funciona distinto
+				if(s.parClass == ParameterClass.VAL){	//Pusheo el valor en la pila
+					//at.code.addInst(PCodeInstruction.OpCode.SRF)
+					at.code.addComment("Se anyade el parametro y es VAL");
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//DRF mete en la pila la direccion de la variable
+					at.code.addInst(PCodeInstruction.OpCode.DRF);	//Se mete el valor de la variable en la pila, DRF mete en la pila el valor de la direccion que hay en la pila
+				}else if(s.parClass == ParameterClass.REF){
+					at.code.addComment("Se anyade el parametro y es REF");
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+					//at.code.addInst(PCodeInstruction.OpCode.DRF);
+				}else if(s.parClass == ParameterClass.NONE){	//El none es si es una variable local, entonces deberia ser tratada igual que REF porque puede cambiar su valor???
+					at.code.addComment("Se anyade el parametro y es NONE");
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+				}else{
+					at.code.addComment("Se anyade el parametro y no se mete en nada");
+				}
+			}else{	//Es de tipo array. Si es valor meto cada una de sus componentes
+				// if(s.parClass == ParameterClass.VAL){
+
+				// }
 			}
-			at.code.addComment("Se anyade el parametro "+s.name);
+
+			at.code.addComment("Se anyade el parametro !!!!!"+s.name);
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
 			at.baseType = Types.UNDEFINED;

@@ -108,7 +108,7 @@ label = CGUtils.newLabel();
                                 sf.AddMethod(main, t, label);
                                 cmain = new CodeBlock();
                                 cmain.generationMode = CodeBlock.BlockMode.XML;
-                                CGUtils.memorySpaces[0]=3;
+                                CGUtils.memorySpaces[st.level]=3;
       vars_def();
       procs_funcs_decl(funcs);
       proc_func_body(main);
@@ -483,8 +483,17 @@ sf.EvaluateGet(fst);
       jj_consume_token(LPAREN);
       expression(fst);
 sf.EvaluatePut(fst);
-                                                at.code.addBlock(fst.code);
+                                        at.code.addBlock(fst.code);
+                                        at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+                                        if(fst.baseType==Types.INT){
+                                                at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+                                        }else if(fst.baseType==Types.CHAR){
                                                 at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                        }else{
+                                                for (int i = 0; i < fst.stringVal.length()-2; i++) {
+                                                        at.code.addInst(OpCode.WRT, 0);
+                                                }
+                                        }
       label_7:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -500,7 +509,16 @@ sf.EvaluatePut(fst);
         expression(fst);
 sf.EvaluatePut(fst);
                                                 at.code.addBlock(fst.code);
-                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+                                                        if(fst.baseType==Types.INT){
+                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+                                                        }else if(fst.baseType==Types.CHAR){
+                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                        }else{
+                                                                for (int i = 0; i < fst.stringVal.length()-2; i++) {
+                                                                        at.code.addInst(OpCode.WRT, 0);
+                                                                }
+                                                        }
       }
       jj_consume_token(RPAREN);
       jj_consume_token(SCOLON);
@@ -601,7 +619,35 @@ snd.method = true;
         case INT2CHAR:
         case ID:{
           expression(snd);
-fst.given.add(snd); at.code.addBlock(snd.code);
+fst.given.add(snd);
+                                                        at.code.addBlock(snd.code);
+                                                        int index = fst.given.size() - 1;
+                                                        try{
+                                                                SymbolProcedure sym = (SymbolProcedure) st.getSymbol(t.image);
+                                                                //System.out.println("Hola1");
+                                                                Symbol e = sym.parList.get(index);
+                                                                //System.out.println("Hola2");
+                                                                Attributes g = fst.given.get(index);
+                                                                //System.out.println("Hola3");
+                                                                if(e.parClass==ParameterClass.REF){
+                                                                        if(g.parClass==ParameterClass.VAL){
+                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                        }else if(g.parClass==ParameterClass.REF){
+                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                long auxDir = param.dir;
+                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                        }else if(g.parClass==ParameterClass.NONE){
+                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                long auxDir = param.dir;
+                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                        }
+                                                                }
+                                                        }catch(SymbolNotFoundException e){
+
+                                                        }
           label_9:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -616,7 +662,32 @@ fst.given.add(snd); at.code.addBlock(snd.code);
             jj_consume_token(COLON);
 snd = new Attributes(true);
             expression(snd);
-fst.given.add(snd); at.code.addBlock(snd.code);
+fst.given.add(snd);
+                                                                        at.code.addBlock(snd.code);
+                                                                        index = fst.given.size() - 1;
+                                                                        try{
+                                                                                SymbolProcedure sym = (SymbolProcedure) st.getSymbol(t.image);
+                                                                                Symbol e= sym.parList.get(index);
+                                                                                Attributes g = fst.given.get(index);
+                                                                                if(e.parClass==ParameterClass.REF){
+                                                                                        if(g.parClass==ParameterClass.VAL){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        }else if(g.parClass==ParameterClass.REF){
+                                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                                long auxDir = param.dir;
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }else if(g.parClass==ParameterClass.NONE){
+                                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                                long auxDir = param.dir;
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                        }
+                                                                                }
+                                                                        }catch(SymbolNotFoundException e){
+
+                                                                        }
           }
           break;
           }
@@ -692,6 +763,7 @@ at.code.addLabel(label_fin_if);
           expression(fst);
 sf.EvaluateReturn(at, fst, t);
                         at.code.addBlock(fst.code);
+                        at.code.addComment("Se hace return ");
                         at.code.addInst(OpCode.CSF);    //Como hay un return se pone CSF porque es el final de la funcion
 
           jj_consume_token(SCOLON);
@@ -960,7 +1032,34 @@ aux.method = true;
         case INT2CHAR:
         case ID:{
           expression(aux);
-at.given.add(aux); at.code.addBlock(aux.code);
+at.given.add(aux);
+                                                        at.code.addBlock(aux.code);
+                                                        //Ahora miro del symbolo funcion la lista de parametros (la ultima anyadida - 1)
+                                                        int index = at.given.size() - 1;
+                                                        try{
+                                                                SymbolFunction sym = (SymbolFunction) st.getSymbol(t.image);
+                                                                Symbol e
+                                                                 = sym.parList.get(index);
+                                                                Attributes g = at.given.get(index);
+                                                                if(e.parClass==ParameterClass.REF){
+                                                                        if(g.parClass==ParameterClass.VAL){
+                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                        }else if(g.parClass==ParameterClass.REF){
+                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                long auxDir = param.dir;
+                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                        }else if(g.parClass==ParameterClass.NONE){
+                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                long auxDir = param.dir;
+                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                        }
+                                                                }
+                                                        }catch(SymbolNotFoundException e){
+
+                                                        }
           label_12:
           while (true) {
             switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -976,6 +1075,33 @@ at.given.add(aux); at.code.addBlock(aux.code);
 aux = new Attributes(true);
             expression(aux);
 at.given.add(aux);
+                                                                at.code.addBlock(aux.code);
+                                                                //Ahora miro del symbolo funcion la lista de parametros (la ultima anyadida - 1)
+                                                                index = at.given.size() - 1;
+                                                                try{
+                                                                        SymbolFunction sym = (SymbolFunction) st.getSymbol(t.image);
+                                                                        Symbol e
+                                                                        = sym.parList.get(index);
+                                                                        Attributes g = at.given.get(index);
+                                                                        if(e.parClass==ParameterClass.REF){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                }else if(g.parClass==ParameterClass.REF){
+                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                        long auxDir = param.dir;
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                }else if(g.parClass==ParameterClass.NONE){
+                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                        long auxDir = param.dir;
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                }
+                                                                        }
+                                                                }catch(SymbolNotFoundException e){
+
+                                                                }
           }
           break;
           }
@@ -985,7 +1111,7 @@ at.given.add(aux);
         }
         jj_consume_token(RPAREN);
 //Anyadir el codigo de la expression
-                                                at.code.addBlock(aux.code);
+
                                                 sf.EvaluateFunction(at, t);     //En evaluateFunction pongo la operacion OSF (A lo mejor deberia ponerla aqui y no en semantic functions)
 
       } else if (jj_2_5(2)) {
@@ -1256,7 +1382,7 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_5()
+  static private boolean jj_3_3()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
@@ -1270,13 +1396,6 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_2()
  {
     if (jj_scan_token(ID)) return true;
@@ -1284,10 +1403,17 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
-  static private boolean jj_3_3()
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_4()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

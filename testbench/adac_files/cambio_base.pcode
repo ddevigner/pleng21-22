@@ -20,6 +20,7 @@ L2:
   EQ
   JMF L3
   STC  0
+; --Se hace return 
   CSF
   JMP L4
 L3:
@@ -35,16 +36,18 @@ L3:
 ; --Comprobar variable valRec
   SRF  0  6
 ; --Comprobar variable n
+; --Se anyade el parametro y es VAL
   SRF  0  4
   DRF
-; --Se anyade el parametro n
+; --Se anyade el parametro !!!!!n
   STC 10
   DIV
 ; --Comprobar variable b
+; --Se anyade el parametro y es VAL
   SRF  0  3
   DRF
-; --Se anyade el parametro b
-  OSF  2  1 L1
+; --Se anyade el parametro !!!!!b
+  OSF  7  1 L1
   ASG
 ; --Comprobar variable valRec
   SRF  0  6
@@ -57,6 +60,7 @@ L3:
   SRF  0  5
   DRF
   PLUS
+; --Se hace return 
   CSF
 L4:
 </if_else>
@@ -84,6 +88,7 @@ L6:
 ; --Comprobar variable n
   SRF  0  4
   DRF
+; --Se hace return 
   CSF
   JMP L8
 L7:
@@ -101,18 +106,20 @@ L7:
 ; --Comprobar variable valRec
   SRF  0  6
 ; --Comprobar variable n
+; --Se anyade el parametro y es VAL
   SRF  0  4
   DRF
-; --Se anyade el parametro n
+; --Se anyade el parametro !!!!!n
 ; --Comprobar variable b
   SRF  0  3
   DRF
   DIV
 ; --Comprobar variable b
+; --Se anyade el parametro y es VAL
   SRF  0  3
   DRF
-; --Se anyade el parametro b
-  OSF  2  1 L5
+; --Se anyade el parametro !!!!!b
+  OSF  7  1 L5
   ASG
 ; --Comprobar variable valRec
   SRF  0  6
@@ -123,6 +130,7 @@ L7:
   SRF  0  5
   DRF
   PLUS
+; --Se hace return 
   CSF
 L8:
 </if_else>
@@ -137,11 +145,11 @@ L0:
 <Putline>
 <Putline>
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   STC  4
   ASG
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   STC  2
   ASG
   STC 10
@@ -230,7 +238,7 @@ L0:
   STC 69
 </String_"Este programa convierte n=">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra num
   WRT  1
@@ -264,7 +272,7 @@ L0:
   STC 69
 </String_"Este programa convierte n=">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
   STC 61
   STC 98
@@ -318,7 +326,7 @@ L0:
   STC 69
 </String_"Este programa convierte n=">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
   STC 61
   STC 98
@@ -332,7 +340,7 @@ L0:
   STC 32
 </String_" a base b=">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra base
   WRT  1
@@ -367,7 +375,7 @@ L0:
   STC 69
 </String_"Este programa convierte n=">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
   STC 61
   STC 98
@@ -381,7 +389,7 @@ L0:
   STC 32
 </String_" a base b=">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
   STC 46
   STC 97
@@ -484,7 +492,7 @@ L0:
   STC 110
 </String_"n: ">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra num
   WRT  1
@@ -506,20 +514,24 @@ L0:
   STC 98
 </String_"b: ">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra base
   WRT  1
 </Putline>
 ; --Comprobar variable enB
-  SRF  0  2
+  SRF  0  5
 ; --Comprobar variable num
-  SRF  0  0
-; --Se anyade el parametro num
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!num
 ; --Comprobar variable base
-  SRF  0  1
-; --Se anyade el parametro base
-  OSF  1  0 L5
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!base
+  OSF  6  0 L5
   ASG
   STC 10
   WRT  0
@@ -547,7 +559,7 @@ L0:
   STC 100
 </String_"dec_b(">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra num
   WRT  1
@@ -561,7 +573,7 @@ L0:
   STC 100
 </String_"dec_b(">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
   STC 44
 </String_",">
@@ -577,12 +589,12 @@ L0:
   STC 100
 </String_"dec_b(">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
   STC 44
 </String_",">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra base
   WRT  1
@@ -597,12 +609,12 @@ L0:
   STC 100
 </String_"dec_b(">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
   STC 44
 </String_",">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
   STC 32
   STC 58
@@ -623,19 +635,19 @@ L0:
   STC 100
 </String_"dec_b(">
 ; --Comprobar variable num
-  SRF  0  0
+  SRF  0  3
   DRF
   STC 44
 </String_",">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
   STC 32
   STC 58
   STC 41
 </String_"): ">
 ; --Comprobar variable enB
-  SRF  0  2
+  SRF  0  5
   DRF
 ; --Se va a anyadir el string del putline y se muestra enB
   WRT  1
@@ -666,7 +678,7 @@ L0:
   STC 98
 </String_"b_dec(">
 ; --Comprobar variable enB
-  SRF  0  2
+  SRF  0  5
   DRF
 ; --Se va a anyadir el string del putline y se muestra enB
   WRT  1
@@ -680,7 +692,7 @@ L0:
   STC 98
 </String_"b_dec(">
 ; --Comprobar variable enB
-  SRF  0  2
+  SRF  0  5
   DRF
   STC 44
 </String_",">
@@ -696,12 +708,12 @@ L0:
   STC 98
 </String_"b_dec(">
 ; --Comprobar variable enB
-  SRF  0  2
+  SRF  0  5
   DRF
   STC 44
 </String_",">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra base
   WRT  1
@@ -716,12 +728,12 @@ L0:
   STC 98
 </String_"b_dec(">
 ; --Comprobar variable enB
-  SRF  0  2
+  SRF  0  5
   DRF
   STC 44
 </String_",">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
   STC 32
   STC 58
@@ -742,24 +754,28 @@ L0:
   STC 98
 </String_"b_dec(">
 ; --Comprobar variable enB
-  SRF  0  2
+  SRF  0  5
   DRF
   STC 44
 </String_",">
 ; --Comprobar variable base
-  SRF  0  1
+  SRF  0  4
   DRF
   STC 32
   STC 58
   STC 41
 </String_"): ">
 ; --Comprobar variable enB
-  SRF  0  2
-; --Se anyade el parametro enB
+; --Se anyade el parametro y es NONE
+  SRF  0  5
+  DRF
+; --Se anyade el parametro !!!!!enB
 ; --Comprobar variable base
-  SRF  0  1
-; --Se anyade el parametro base
-  OSF  1  0 L1
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!base
+  OSF  6  0 L1
 ; --Se va a anyadir el string del putline y se muestra b_dec
   WRT  1
 </Putline>

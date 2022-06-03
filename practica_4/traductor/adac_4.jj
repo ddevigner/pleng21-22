@@ -262,7 +262,7 @@ String main() :
 				sf.AddMethod(main, t, label); 
 				cmain = new CodeBlock();
 				cmain.generationMode = CodeBlock.BlockMode.XML;
-				CGUtils.memorySpaces[0]=3;
+				CGUtils.memorySpaces[st.level]=3;
 			}
 		vars_def()
 		procs_funcs_decl(funcs)		//Que esto devuelva un CodeBlock 
@@ -503,13 +503,31 @@ void instruction(Attributes at):
 			( <COLON> assignable(fst) { sf.EvaluateGet(fst); } )* <RPAREN> <SCOLON>
 	| 	<PUT> <LPAREN> expression(fst) { 
 					sf.EvaluatePut(fst); 
-						at.code.addBlock(fst.code); 
+					at.code.addBlock(fst.code); 
+					at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+					if(fst.baseType==Types.INT){
+						at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+					}else if(fst.baseType==Types.CHAR){
 						at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+					}else{
+						for (int i = 0; i < fst.stringVal.length()-2; i++) {
+							at.code.addInst(OpCode.WRT, 0);
+						}
+					}
 						} 
 			(<COLON> expression(fst) { 
 						sf.EvaluatePut(fst); 
 						at.code.addBlock(fst.code); 
-						at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+						at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+							if(fst.baseType==Types.INT){
+								at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+							}else if(fst.baseType==Types.CHAR){
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+							}else{
+								for (int i = 0; i < fst.stringVal.length()-2; i++) {
+									at.code.addInst(OpCode.WRT, 0);
+								}
+							}
 						})* <RPAREN> <SCOLON> 
 
 	| 	<PUTLINE> { at.code.addInst(OpCode.STC, '\n'); at.code.addInst(OpCode.WRT, 0); }
@@ -554,8 +572,65 @@ void instruction(Attributes at):
 			at.code.addInst(PCodeInstruction.OpCode.WRT,0);
 		} <SCOLON> 
 	| 	LOOKAHEAD(2) t = <ID> { snd.method = true; }	//Este es una llamada a funcion
-			<LPAREN> (expression(snd) { fst.given.add(snd); at.code.addBlock(snd.code); } 
-			(<COLON> {snd = new Attributes(true); } expression(snd) {fst.given.add(snd); at.code.addBlock(snd.code);})*
+			<LPAREN> (expression(snd) { 
+							fst.given.add(snd); 
+							at.code.addBlock(snd.code);
+							int index = fst.given.size() - 1;
+							try{
+								SymbolProcedure sym = (SymbolProcedure) st.getSymbol(t.image);
+								//System.out.println("Hola1");
+								Symbol e = sym.parList.get(index);
+								//System.out.println("Hola2");
+								Attributes g = fst.given.get(index);
+								//System.out.println("Hola3");
+								if(e.parClass==ParameterClass.REF){
+									if(g.parClass==ParameterClass.VAL){
+										at.code.addInst(PCodeInstruction.OpCode.LVP);
+									}else if(g.parClass==ParameterClass.REF){
+										Symbol param = st.getSymbol(g.name);
+										long auxDir = param.dir;
+										at.code.addInst(PCodeInstruction.OpCode.POP);
+										at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+										at.code.addInst(PCodeInstruction.OpCode.DRF);
+									}else if(g.parClass==ParameterClass.NONE){
+										Symbol param = st.getSymbol(g.name);
+										long auxDir = param.dir;
+										at.code.addInst(PCodeInstruction.OpCode.POP);
+										at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+									}
+								}
+							}catch(SymbolNotFoundException e){
+
+							}
+						} 
+			(<COLON> {snd = new Attributes(true); } expression(snd) {
+									fst.given.add(snd); 
+									at.code.addBlock(snd.code);
+									index = fst.given.size() - 1;
+									try{
+										SymbolProcedure sym = (SymbolProcedure) st.getSymbol(t.image);
+										Symbol e= sym.parList.get(index);
+										Attributes g = fst.given.get(index);
+										if(e.parClass==ParameterClass.REF){
+											if(g.parClass==ParameterClass.VAL){
+												at.code.addInst(PCodeInstruction.OpCode.LVP);
+											}else if(g.parClass==ParameterClass.REF){
+												Symbol param = st.getSymbol(g.name);
+												long auxDir = param.dir;
+												at.code.addInst(PCodeInstruction.OpCode.POP);
+												at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+												at.code.addInst(PCodeInstruction.OpCode.DRF);
+											}else if(g.parClass==ParameterClass.NONE){
+												Symbol param = st.getSymbol(g.name);
+												long auxDir = param.dir;
+												at.code.addInst(PCodeInstruction.OpCode.POP);
+												at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+											}
+										}
+									}catch(SymbolNotFoundException e){
+
+									}
+									})*
 			)? <RPAREN> <SCOLON> { 
 					//Anyadir lo que se ha metido de procedure en los attributes
 					at.code.addBlock(fst.code);
@@ -601,6 +676,7 @@ void instruction(Attributes at):
 	| 	t = <RETURN> expression(fst) { 
 			sf.EvaluateReturn(at, fst, t); 
 			at.code.addBlock(fst.code);
+			at.code.addComment("Se hace return ");
 			at.code.addInst(OpCode.CSF);	//Como hay un return se pone CSF porque es el final de la funcion
 			} <SCOLON> 	//Apilar el return de una funcion //////////////////////////////////
 }
@@ -683,7 +759,7 @@ void assignable(Attributes at):
 						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
 						at.code.addInst(PCodeInstruction.OpCode.DRF);	
 					}else if(s.parClass==ParameterClass.NONE){
-						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
 					}
 				} catch (SymbolNotFoundException e) {
 					
@@ -753,12 +829,71 @@ void factor(Attributes at):
 	| 	t = <INT2CHAR> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateInt2Char(at, aux, t); at.code.addBlock(aux.code); }
 	| 	t = <CHAR2INT> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateChar2Int(at, aux, t); at.code.addBlock(aux.code); }
 	| 	LOOKAHEAD(2) t = <ID> { aux.method = true; } 	//Poner lo de la llamada a funcion
-			<LPAREN> (expression(aux) { at.given.add(aux); at.code.addBlock(aux.code);} 
-			(<COLON> {aux = new Attributes(true); } expression(aux) { at.given.add(aux); })*
+			<LPAREN> (expression(aux) { 
+							at.given.add(aux); 
+							at.code.addBlock(aux.code);
+							//Ahora miro del symbolo funcion la lista de parametros (la ultima anyadida - 1)
+							int index = at.given.size() - 1;
+							try{
+								SymbolFunction sym = (SymbolFunction) st.getSymbol(t.image);
+								Symbol e
+								 = sym.parList.get(index);
+								Attributes g = at.given.get(index);
+								if(e.parClass==ParameterClass.REF){
+									if(g.parClass==ParameterClass.VAL){
+										at.code.addInst(PCodeInstruction.OpCode.LVP);
+									}else if(g.parClass==ParameterClass.REF){
+										Symbol param = st.getSymbol(g.name);
+										long auxDir = param.dir;
+										at.code.addInst(PCodeInstruction.OpCode.POP);
+										at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+										at.code.addInst(PCodeInstruction.OpCode.DRF);
+									}else if(g.parClass==ParameterClass.NONE){
+										Symbol param = st.getSymbol(g.name);
+										long auxDir = param.dir;
+										at.code.addInst(PCodeInstruction.OpCode.POP);
+										at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+									}
+								}
+							}catch(SymbolNotFoundException e){
+
+							}
+						} 
+			(<COLON> {aux = new Attributes(true); } expression(aux) { 
+								at.given.add(aux); 
+								at.code.addBlock(aux.code);
+								//Ahora miro del symbolo funcion la lista de parametros (la ultima anyadida - 1)
+								index = at.given.size() - 1;
+								try{
+									SymbolFunction sym = (SymbolFunction) st.getSymbol(t.image);
+									Symbol e
+									= sym.parList.get(index);
+									Attributes g = at.given.get(index);
+									if(e.parClass==ParameterClass.REF){
+										if(g.parClass==ParameterClass.VAL){
+											at.code.addInst(PCodeInstruction.OpCode.LVP);
+										}else if(g.parClass==ParameterClass.REF){
+											Symbol param = st.getSymbol(g.name);
+											long auxDir = param.dir;
+											at.code.addInst(PCodeInstruction.OpCode.POP);
+											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+											at.code.addInst(PCodeInstruction.OpCode.DRF);
+										}else if(g.parClass==ParameterClass.NONE){
+											Symbol param = st.getSymbol(g.name);
+											long auxDir = param.dir;
+											at.code.addInst(PCodeInstruction.OpCode.POP);
+											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+										}
+									}
+								}catch(SymbolNotFoundException e){
+
+								}
+							})*
 			)? <RPAREN> { 
 						//Anyadir el codigo de la expression
-						at.code.addBlock(aux.code);
+						
 						sf.EvaluateFunction(at, t); 	//En evaluateFunction pongo la operacion OSF (A lo mejor deberia ponerla aqui y no en semantic functions)
+
 					}
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { 
 												sf.EvaluateArray(at, aux, t); 

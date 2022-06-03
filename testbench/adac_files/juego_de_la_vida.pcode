@@ -22,7 +22,7 @@ L3:
   SRF  0  4
   DRF
 ; --Comprobar variable elementos
-  SRF  1 82
+  SRF  1 85
   DRF
   LT
   JMF L4
@@ -413,7 +413,7 @@ L15:
   SRF  0 84
   DRF
 ; --Comprobar variable elementos
-  SRF  1 82
+  SRF  1 85
   DRF
   LT
   JMF L16
@@ -521,6 +521,7 @@ L22:
   EQ
   JMF L23
   STC  0
+; --Se hace return 
   CSF
   JMP L24
 L23:
@@ -529,13 +530,14 @@ L23:
   SRF  0  3
   DRF
 ; --Comprobar variable elementos
-  SRF  1 82
+  SRF  1 85
   DRF
   STC  1
   SBT
   EQ
   JMF L25
   STC  0
+; --Se hace return 
   CSF
   JMP L26
 L25:
@@ -740,6 +742,7 @@ L35:
   AND
   OR
   AND
+; --Se hace return 
   CSF
 L26:
 </if_else>
@@ -1084,6 +1087,7 @@ L63:
   STC  3
   EQ
   OR
+; --Se hace return 
   CSF
   JMP L66
 L65:
@@ -1099,6 +1103,7 @@ L65:
   STC  4
   EQ
   OR
+; --Se hace return 
   CSF
 L66:
 </if_else>
@@ -1119,7 +1124,7 @@ L69:
   SRF  0  4
   DRF
 ; --Comprobar variable elementos
-  SRF  1 82
+  SRF  1 85
   DRF
   LT
   JMF L70
@@ -1158,12 +1163,20 @@ L71:
   SRF  0  5
   PLUS
 ; --Comprobar variable colonia
+; --Se anyade el parametro y es REF
   SRF  0  3
-; --Se anyade el parametro colonia
+  DRF
+  DRF
+; --Se anyade el parametro !!!!!colonia
+  POP
+  SRF  0  3
+  DRF
 ; --Comprobar variable i
+; --Se anyade el parametro y es NONE
   SRF  0  4
-; --Se anyade el parametro i
-  OSF  2  1 L21
+  DRF
+; --Se anyade el parametro !!!!!i
+  OSF 85  1 L21
   ASG
 ; --Comprobar variable i
   SRF  0  4
@@ -1176,11 +1189,19 @@ L71:
   JMP L69
 L70:
 ; --Comprobar variable colonia
+; --Se anyade el parametro y es REF
   SRF  0  3
-; --Se anyade el parametro colonia
+  DRF
+  DRF
+; --Se anyade el parametro !!!!!colonia
+  POP
+  SRF  0  3
+  DRF
 ; --Comprobar variable siguiente
+; --Se anyade el parametro y es NONE
   SRF  0  5
-; --Se anyade el parametro siguiente
+  DRF
+; --Se anyade el parametro !!!!!siguiente
   CSF
 </siguientegeneracion>
 <if_else>
@@ -1438,7 +1459,7 @@ L75:
   SRF  0 83
   DRF
 ; --Comprobar variable elementos
-  SRF  1 82
+  SRF  1 85
   DRF
   LT
   JMF L76
@@ -1479,9 +1500,13 @@ L77:
   DRF
   PLUS
   JMF L79
+  STC 39
+  WRT  0
   JMP L80
 L79:
 </then>
+  STC 39
+  WRT  0
 L80:
 </if_else>
 ; --Comprobar variable i
@@ -1494,6 +1519,11 @@ L80:
   ASG
   JMP L75
 L76:
+  STC 13
+  WRT  0
+  STC 13
+  STC 10
+  WRT  0
   CSF
 </mostrarcolonia>
 L0:
@@ -1501,6 +1531,7 @@ L0:
 <Putline>
 <Putline>
   STC 10
+  WRT  0
 <String_"Implementación de la versión 1D del Juego de la Vida de Conway.">
   STC 46
   STC 121
@@ -1566,7 +1597,7 @@ L0:
   STC 109
   STC 73
 </String_"Implementación de la versión 1D del Juego de la Vida de Conway.">
-  WRT  0
+; --Se va a anyadir el string del putline y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -1632,6 +1663,7 @@ L0:
   WRT  0
 </Putline>
   STC 10
+  WRT  0
 <String_"https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
   STC 101
   STC 102
@@ -1687,7 +1719,7 @@ L0:
   STC 116
   STC 104
 </String_"https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
-  WRT  0
+; --Se va a anyadir el string del putline y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -1743,47 +1775,60 @@ L0:
   WRT  0
 </Putline>
   STC 10
+  WRT  0
 <String_"">
 </String_"">
-  WRT  0
+; --Se va a anyadir el string del putline y se muestra 
 </Putline>
 ; --Comprobar variable elementos
-  SRF  0 82
+  SRF  0 85
   STC 80
   ASG
 ; --Comprobar variable colonia
-  SRF  0  0
-; --Se anyade el parametro colonia
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!colonia
+  POP
+  SRF  0  3
 ; --Comprobar variable colonia
-  SRF  0  0
-; --Se anyade el parametro colonia
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!colonia
 ; --Comprobar variable i
-  SRF  0 80
+  SRF  0 83
   STC  1
   ASG
 ; --Comprobar variable iteraciones
-  SRF  0 81
+  SRF  0 84
   STC 50
   ASG
 L81:
 ; --Comprobar variable i
-  SRF  0 80
+  SRF  0 83
   DRF
 ; --Comprobar variable iteraciones
-  SRF  0 81
+  SRF  0 84
   DRF
   LTE
   JMF L82
 ; --Comprobar variable colonia
-  SRF  0  0
-; --Se anyade el parametro colonia
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!colonia
+  POP
+  SRF  0  3
 ; --Comprobar variable colonia
-  SRF  0  0
-; --Se anyade el parametro colonia
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!colonia
 ; --Comprobar variable i
-  SRF  0 80
+  SRF  0 83
 ; --Comprobar variable i
-  SRF  0 80
+  SRF  0 83
   DRF
   STC  1
   PLUS
