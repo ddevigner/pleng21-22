@@ -47,7 +47,7 @@ begin
     put (k, " es la suma de: ");
     while (a < k) and (b < k) do
         put_line("Antes de evaluar el if");
-        if (es_primo (a) and es_primo (b)) and ((a + b) = k) then
+        if es_primo (a) and es_primo (b) and ((a + b) = k) then
             put_line("Se mete en el if");
             put(a, "+", b,", ");
             n := n + 1;

@@ -47,6 +47,7 @@ L3:
   SRF  0  3
   DRF
 ; --Se anyade el parametro !!!!!b
+; --Se llama a la funcion b_dec
   OSF  7  1 L1
   ASG
 ; --Comprobar variable valRec
@@ -119,6 +120,7 @@ L7:
   SRF  0  3
   DRF
 ; --Se anyade el parametro !!!!!b
+; --Se llama a la funcion dec_b
   OSF  7  1 L5
   ASG
 ; --Comprobar variable valRec
@@ -531,6 +533,7 @@ L0:
   SRF  0  4
   DRF
 ; --Se anyade el parametro !!!!!base
+; --Se llama a la funcion dec_b
   OSF  6  0 L5
   ASG
   STC 10
@@ -775,6 +778,7 @@ L0:
   SRF  0  4
   DRF
 ; --Se anyade el parametro !!!!!base
+; --Se llama a la funcion b_dec
   OSF  6  0 L1
 ; --Se va a anyadir el string del putline y se muestra b_dec
   WRT  1

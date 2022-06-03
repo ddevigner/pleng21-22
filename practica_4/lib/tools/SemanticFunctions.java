@@ -378,6 +378,7 @@ public class SemanticFunctions {
 
 		//Se anyade a at (en esta funcion se llama fst) el codigo de snd y luego el codigo del operando
 		fst.code.addBlock(snd.code);
+		snd.code.clearBlock();
 		if(snd.op_name=="+"){
 			fst.code.addInst(PCodeInstruction.OpCode.PLUS);
 		}else if(snd.op_name=="-"){
@@ -629,7 +630,7 @@ public class SemanticFunctions {
 
 	public void EvaluateFunction(Attributes at, Token t) {		//Cuidado que a lo mejor aqui no hay que comprobar parametros, a lo mejor hay que hcaerlo al anydadir la variable
 		try {
-			System.out.println("Se llama a EvaluateFunction para " + t.image);
+			//System.out.println("Se llama a EvaluateFunction para " + t.image);
 			Symbol s = st.getSymbol(t.image); 
 			evaluateFunction(s, at, t);
 			
