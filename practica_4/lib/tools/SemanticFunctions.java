@@ -629,6 +629,7 @@ public class SemanticFunctions {
 
 	public void EvaluateFunction(Attributes at, Token t) {		//Cuidado que a lo mejor aqui no hay que comprobar parametros, a lo mejor hay que hcaerlo al anydadir la variable
 		try {
+			System.out.println("Se llama a EvaluateFunction para " + t.image);
 			Symbol s = st.getSymbol(t.image); 
 			evaluateFunction(s, at, t);
 			

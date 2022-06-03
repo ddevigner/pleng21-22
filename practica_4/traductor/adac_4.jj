@@ -279,7 +279,7 @@ String main() :
 			}
 		<EOF>
 			{
-				System.err.println(cmain.toString());
+				//System.err.println(cmain.toString());
 				return cmain.toString();
 			}
 	} catch (ParseException e) {

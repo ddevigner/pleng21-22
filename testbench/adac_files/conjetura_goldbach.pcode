@@ -167,6 +167,8 @@ L8:
 <then>
 <if_else>
 <then>
+<Putline>
+<Putline>
 L9:
 ; --Se anyade el parametro en el for este y es valor y no array k
   SRF  0  3
@@ -245,6 +247,56 @@ L11:
   LT
   AND
   JMF L12
+  STC 10
+  WRT  0
+<String_"Antes de evaluar el if">
+  STC 102
+  STC 105
+  STC 32
+  STC 108
+  STC 101
+  STC 32
+  STC 114
+  STC 97
+  STC 117
+  STC 108
+  STC 97
+  STC 118
+  STC 101
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 116
+  STC 110
+  STC 65
+</String_"Antes de evaluar el if">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Comprobar variable a
 ; --Se anyade el parametro y es NONE
   SRF  0  6
@@ -260,13 +312,6 @@ L11:
 ; --Se llama a la funcion es_primo
   OSF  8  1 L5
   AND
-; --Comprobar variable b
-; --Se anyade el parametro y es NONE
-  SRF  0  7
-  DRF
-; --Se anyade el parametro !!!!!b
-; --Se llama a la funcion es_primo
-  OSF  8  1 L5
 ; --Comprobar variable a
   SRF  0  6
   DRF
@@ -280,6 +325,44 @@ L11:
   EQ
   AND
   JMF L13
+  STC 10
+  WRT  0
+<String_"Se mete en el if">
+  STC 102
+  STC 105
+  STC 32
+  STC 108
+  STC 101
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 101
+  STC 116
+  STC 101
+  STC 109
+  STC 32
+  STC 101
+  STC 83
+</String_"Se mete en el if">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Comprobar variable a
   SRF  0  6
   DRF

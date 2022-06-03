@@ -121,7 +121,7 @@ label = CGUtils.newLabel();
                                 cmain.addInst(OpCode.LVP);
                                 cmain.encloseXMLTags(t.image);
       jj_consume_token(0);
-System.err.println(cmain.toString());
+//System.err.println(cmain.toString());
                                 {if ("" != null) return cmain.toString();}
     } catch (ParseException e) {
 panicMode(e.currentToken.next, 0);
