@@ -767,12 +767,19 @@ public class SemanticFunctions {
 				}else{
 					at.code.addComment("Se anyade el parametro y no se mete en nada");
 				}
-			}else{	//Es de tipo array. Si es valor meto cada una de sus componentes
-				// if(s.parClass == ParameterClass.VAL){
-
-				// }
+			} else {	//Es de tipo array. Si es valor meto cada una de sus componentes
+				SymbolArray a = (SymbolArray) s;
+				if (s.parClass != ParameterClass.REF) {
+					for (int i = 0; i < a.maxInd; i++) {
+						at.code.addInst(OpCode.SRF, st.level - s.nivel, (int) aux + i);
+						at.code.addInst(OpCode.DRF);
+					}
+				} else {
+					at.code.addInst(OpCode.SRF, st.level - s.nivel, (int) aux);
+					at.code.addInst(OpCode.DRF);
+					at.code.addInst(OpCode.DRF);
+				}
 			}
-
 			at.code.addComment("Se anyade el parametro !!!!!"+s.name);
 		} catch (SymbolNotFoundException e) {
 			se.detection(e, t);
