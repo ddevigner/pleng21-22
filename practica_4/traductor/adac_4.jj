@@ -633,8 +633,9 @@ void instruction(Attributes at):
 									})*
 			)? <RPAREN> <SCOLON> { 
 					//Anyadir lo que se ha metido de procedure en los attributes
-					at.code.addBlock(fst.code);
+					//at.code.addBlock(fst.code);
 					sf.EvaluateProcedure(fst, t); 
+					at.code.addBlock(fst.code);
 				}
 	| 	assignable(fst) <ASS> expression(snd) { 
 								sf.EvaluateAssignation(fst, snd); 

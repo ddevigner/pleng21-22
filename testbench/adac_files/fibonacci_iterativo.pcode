@@ -103,12 +103,45 @@ L6:
 </pedir_dato>
 <if_else>
 <then>
+<Putline>
+<Putline>
+<Putline>
 L7:
 ; --Se anyade el parametro en el for este y es ref dato
   SRF  0  3
   ASGI
   JMP L8
 L8:
+  STC 10
+  WRT  0
+<String_"Empieza dato">
+  STC 111
+  STC 116
+  STC 97
+  STC 100
+  STC 32
+  STC 97
+  STC 122
+  STC 101
+  STC 105
+  STC 112
+  STC 109
+  STC 69
+</String_"Empieza dato">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Comprobar variable dato
   SRF  0  3
   DRF
@@ -118,12 +151,108 @@ L8:
   SRF  0  4
   STC  0
   ASG
+  STC 10
+  WRT  0
+<String_"Antes del while">
+  STC 101
+  STC 108
+  STC 105
+  STC 104
+  STC 119
+  STC 32
+  STC 108
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 116
+  STC 110
+  STC 65
+</String_"Antes del while">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 L9:
 ; --Comprobar variable correcto
   SRF  0  4
   DRF
   NGB
   JMF L10
+  STC 10
+  WRT  0
+<String_"Se va a llamar a pedir_dato">
+  STC 111
+  STC 116
+  STC 97
+  STC 100
+  STC 95
+  STC 114
+  STC 105
+  STC 100
+  STC 101
+  STC 112
+  STC 32
+  STC 97
+  STC 32
+  STC 114
+  STC 97
+  STC 109
+  STC 97
+  STC 108
+  STC 108
+  STC 32
+  STC 97
+  STC 32
+  STC 97
+  STC 118
+  STC 32
+  STC 101
+  STC 83
+</String_"Se va a llamar a pedir_dato">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Comprobar variable dato
 ; --Se anyade el parametro y es REF
   SRF  0  3
@@ -133,6 +262,7 @@ L9:
   POP
   SRF  0  3
   DRF
+  OSF  5  1 L3
 ; --Comprobar variable correcto
   SRF  0  4
 ; --Comprobar variable dato
@@ -214,6 +344,7 @@ L10:
   CSF
 </dato>
 L0:
+<Putline>
 <Putline>
 <Putline>
 <Putline>
@@ -741,6 +872,62 @@ L0:
 </String_"">
 ; --Se va a anyadir el string del putline y se muestra 
 </Putline>
+  STC 10
+  WRT  0
+<String_"Antes de llamar a dato(n)">
+  STC 41
+  STC 110
+  STC 40
+  STC 111
+  STC 116
+  STC 97
+  STC 100
+  STC 32
+  STC 97
+  STC 32
+  STC 114
+  STC 97
+  STC 109
+  STC 97
+  STC 108
+  STC 108
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 116
+  STC 110
+  STC 65
+</String_"Antes de llamar a dato(n)">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Comprobar variable n
 ; --Se anyade el parametro y es NONE
   SRF  0  4
@@ -748,6 +935,7 @@ L0:
 ; --Se anyade el parametro !!!!!n
   POP
   SRF  0  4
+  OSF  8  0 L7
   STC 10
   WRT  0
 <String_"">
@@ -924,5 +1112,6 @@ L13:
   ASG
   JMP L13
 L14:
+  OSF  8  0 L1
   LVP
 </fibonacci>

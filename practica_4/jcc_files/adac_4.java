@@ -698,8 +698,9 @@ fst.given.add(snd);
         jj_consume_token(RPAREN);
         jj_consume_token(SCOLON);
 //Anyadir lo que se ha metido de procedure en los attributes
-                                        at.code.addBlock(fst.code);
+                                        //at.code.addBlock(fst.code);
                                         sf.EvaluateProcedure(fst, t);
+                                        at.code.addBlock(fst.code);
       } else {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case ID:{
@@ -1382,13 +1383,6 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_3()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
   static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
@@ -1414,6 +1408,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_3()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 

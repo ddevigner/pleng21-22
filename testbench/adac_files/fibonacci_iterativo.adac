@@ -27,9 +27,12 @@ procedure dato (ref integer dato) is
 boolean correcto;
    
 begin
+  put_line("Empieza dato");
   dato := 0;
   correcto := false;
+  put_line("Antes del while");
   while not correcto do
+    put_line("Se va a llamar a pedir_dato");
      pedir_dato (dato);
      correcto := dato > 0;
      if not correcto then
@@ -45,6 +48,7 @@ begin
   put_line ("Es muy rápido porque la implementación es iterativa.");
   put_line ("Habrá MATH overflow en fib(47) porque los enteros en la máquina p son de 4 bytes).");
   put_line ("");
+  put_line("Antes de llamar a dato(n)");
   dato (n);
   put_line ("");
 
