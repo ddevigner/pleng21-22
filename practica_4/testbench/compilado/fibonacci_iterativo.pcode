@@ -262,6 +262,7 @@ L9:
   POP
   SRF  0  3
   DRF
+; --Se llama al procedure pedir_dato
   OSF  5  1 L3
 ; --Comprobar variable correcto
   SRF  0  4
@@ -935,6 +936,7 @@ L0:
 ; --Se anyade el parametro !!!!!n
   POP
   SRF  0  4
+; --Se llama al procedure dato
   OSF  8  0 L7
   STC 10
   WRT  0
@@ -1112,6 +1114,7 @@ L13:
   ASG
   JMP L13
 L14:
+; --Se llama al procedure cambiar_de_linea
   OSF  8  0 L1
   LVP
 </fibonacci>

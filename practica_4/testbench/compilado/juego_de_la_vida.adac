@@ -98,9 +98,11 @@ begin
     i := 0;
     while i < elementos do
         if colonia[i] then
-            put ('*');
+            put ("*");
+            --put ('*');
         else
-            put (' ');
+            --put (' ');
+            put (" ");
         end
         i := i + 1;
     end

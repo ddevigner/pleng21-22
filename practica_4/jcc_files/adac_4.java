@@ -629,22 +629,67 @@ fst.given.add(snd);
                                                                 //System.out.println("Hola2");
                                                                 Attributes g = fst.given.get(index);
                                                                 //System.out.println("Hola3");
-                                                                if(e.parClass==ParameterClass.REF){
-                                                                        if(g.parClass==ParameterClass.VAL){
-                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
-                                                                        }else if(g.parClass==ParameterClass.REF){
-                                                                                Symbol param = st.getSymbol(g.name);
-                                                                                long auxDir = param.dir;
-                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
-                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
-                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
-                                                                        }else if(g.parClass==ParameterClass.NONE){
-                                                                                Symbol param = st.getSymbol(g.name);
-                                                                                long auxDir = param.dir;
-                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
-                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                if(g.type!=Types.ARRAY){
+                                                                        if(e.parClass==ParameterClass.REF){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                }else if(g.parClass==ParameterClass.REF){
+                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                        long auxDir = param.dir;
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                }else if(g.parClass==ParameterClass.NONE){
+                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                        long auxDir = param.dir;
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                }
                                                                         }
                                                                 }
+
+
+                                                                //Para los vectores es diferente
+                                                                long auxVecDir;
+                                                                if(g.type==Types.ARRAY){
+                                                                        SymbolArray vec = (SymbolArray) st.getSymbol(g.name);
+                                                                        auxVecDir=vec.dir;
+                                                                        if(e.parClass==ParameterClass.VAL){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.REF){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.NONE){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                        }else if(e.parClass==ParameterClass.REF){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.REF){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.NONE){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
+                                                                                }
+                                                                        }
+                                                                }
+
+
+
                                                         }catch(SymbolNotFoundException e){
 
                                                         }
@@ -669,22 +714,67 @@ fst.given.add(snd);
                                                                                 SymbolProcedure sym = (SymbolProcedure) st.getSymbol(t.image);
                                                                                 Symbol e= sym.parList.get(index);
                                                                                 Attributes g = fst.given.get(index);
-                                                                                if(e.parClass==ParameterClass.REF){
-                                                                                        if(g.parClass==ParameterClass.VAL){
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
-                                                                                        }else if(g.parClass==ParameterClass.REF){
-                                                                                                Symbol param = st.getSymbol(g.name);
-                                                                                                long auxDir = param.dir;
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
-                                                                                        }else if(g.parClass==ParameterClass.NONE){
-                                                                                                Symbol param = st.getSymbol(g.name);
-                                                                                                long auxDir = param.dir;
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                if(g.type!=Types.ARRAY){
+                                                                                        if(e.parClass==ParameterClass.REF){
+                                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                                }else if(g.parClass==ParameterClass.REF){
+                                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                                        long auxDir = param.dir;
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                }else if(g.parClass==ParameterClass.NONE){
+                                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                                        long auxDir = param.dir;
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                                }
                                                                                         }
                                                                                 }
+
+
+
+                                                                                //Para los vectores es diferente
+                                                                long auxVecDir;
+                                                                if(g.type==Types.ARRAY){
+                                                                        SymbolArray vec = (SymbolArray) st.getSymbol(g.name);
+                                                                        auxVecDir=vec.dir;
+                                                                        if(e.parClass==ParameterClass.VAL){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.REF){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.NONE){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                        }else if(e.parClass==ParameterClass.REF){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.REF){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.NONE){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
+                                                                                }
+                                                                        }
+                                                                }
+
+
                                                                         }catch(SymbolNotFoundException e){
 
                                                                         }
@@ -832,13 +922,15 @@ sf.EvaluateArray(at, aux, t);
                                                                 at.code.addComment("Accediendo al index del vector " + vec.name);
                                                                 if(vec.parClass == ParameterClass.REF){
                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                         at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                 }else if(vec.parClass == ParameterClass.VAL){
                                                                         at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
                                                                 }else if(vec.parClass == ParameterClass.NONE){
                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                 }
-                                                                at.code.addInst(PCodeInstruction.OpCode.PLUS);
+                                                                //at.code.addInst(PCodeInstruction.OpCode.PLUS);
 
                                                         }catch(SymbolNotFoundException e){
 
@@ -1042,20 +1134,60 @@ at.given.add(aux);
                                                                 Symbol e
                                                                  = sym.parList.get(index);
                                                                 Attributes g = at.given.get(index);
-                                                                if(e.parClass==ParameterClass.REF){
-                                                                        if(g.parClass==ParameterClass.VAL){
-                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
-                                                                        }else if(g.parClass==ParameterClass.REF){
-                                                                                Symbol param = st.getSymbol(g.name);
-                                                                                long auxDir = param.dir;
-                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
-                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
-                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
-                                                                        }else if(g.parClass==ParameterClass.NONE){
-                                                                                Symbol param = st.getSymbol(g.name);
-                                                                                long auxDir = param.dir;
-                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
-                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                if(g.type!=Types.ARRAY){
+                                                                        if(e.parClass==ParameterClass.REF){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                }else if(g.parClass==ParameterClass.REF){
+                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                        long auxDir = param.dir;
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                }else if(g.parClass==ParameterClass.NONE){
+                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                        long auxDir = param.dir;
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                }
+                                                                        }
+                                                                }
+                                                                //Para los vectores es diferente
+                                                                long auxVecDir;
+                                                                if(g.type==Types.ARRAY){
+                                                                        SymbolArray vec = (SymbolArray) st.getSymbol(g.name);
+                                                                        auxVecDir=vec.dir;
+                                                                        if(e.parClass==ParameterClass.VAL){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.REF){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.NONE){
+                                                                                        for(int h=0;h<=vec.maxInd;h++){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                }
+                                                                        }else if(e.parClass==ParameterClass.REF){
+                                                                                if(g.parClass==ParameterClass.VAL){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.REF){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                }
+                                                                                if(g.parClass==ParameterClass.NONE){
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
+                                                                                }
                                                                         }
                                                                 }
                                                         }catch(SymbolNotFoundException e){
@@ -1081,25 +1213,68 @@ at.given.add(aux);
                                                                 index = at.given.size() - 1;
                                                                 try{
                                                                         SymbolFunction sym = (SymbolFunction) st.getSymbol(t.image);
-                                                                        Symbol e
-                                                                        = sym.parList.get(index);
+                                                                        Symbol e = sym.parList.get(index);
                                                                         Attributes g = at.given.get(index);
-                                                                        if(e.parClass==ParameterClass.REF){
-                                                                                if(g.parClass==ParameterClass.VAL){
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
-                                                                                }else if(g.parClass==ParameterClass.REF){
-                                                                                        Symbol param = st.getSymbol(g.name);
-                                                                                        long auxDir = param.dir;
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
-                                                                                }else if(g.parClass==ParameterClass.NONE){
-                                                                                        Symbol param = st.getSymbol(g.name);
-                                                                                        long auxDir = param.dir;
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                        if(g.type!=Types.ARRAY){
+                                                                                if(e.parClass==ParameterClass.REF){
+                                                                                        if(g.parClass==ParameterClass.VAL){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        }else if(g.parClass==ParameterClass.REF){
+                                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                                long auxDir = param.dir;
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }else if(g.parClass==ParameterClass.NONE){
+                                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                                long auxDir = param.dir;
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+                                                                                        }
                                                                                 }
                                                                         }
+
+
+                                                                                //Para los vectores es diferente
+                                                                        long auxVecDir;
+                                                                        if(g.type==Types.ARRAY){
+                                                                                SymbolArray vec = (SymbolArray) st.getSymbol(g.name);
+                                                                                auxVecDir=vec.dir;
+                                                                                if(e.parClass==ParameterClass.VAL){
+                                                                                        if(g.parClass==ParameterClass.VAL){
+                                                                                                for(int h=0;h<=vec.maxInd;h++){
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                }
+                                                                                        }
+                                                                                        if(g.parClass==ParameterClass.REF){
+                                                                                                for(int h=0;h<=vec.maxInd;h++){
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                }
+                                                                                        }
+                                                                                        if(g.parClass==ParameterClass.NONE){
+                                                                                                for(int h=0;h<=vec.maxInd;h++){
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                }
+                                                                                        }
+                                                                                }else if(e.parClass==ParameterClass.REF){
+                                                                                        if(g.parClass==ParameterClass.VAL){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        }
+                                                                                        if(g.parClass==ParameterClass.REF){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                        }
+                                                                                        if(g.parClass==ParameterClass.NONE){
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
+                                                                                        }
+                                                                                }
+                                                                        }
+
+
                                                                 }catch(SymbolNotFoundException e){
 
                                                                 }
@@ -1169,12 +1344,14 @@ sf.EvaluateArray(at, aux, t);
                                                                         at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                 }else if(vec.parClass == ParameterClass.VAL){
                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
-                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                         at.code.addInst(PCodeInstruction.OpCode.PLUS);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                        //at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                 }else if(vec.parClass == ParameterClass.NONE){
                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
-                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                         at.code.addInst(PCodeInstruction.OpCode.PLUS);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                        //at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                 }
 
                                                         }catch(SymbolNotFoundException e){
@@ -1397,17 +1574,17 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
-  static private boolean jj_3_5()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
   static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
     return false;
   }
 

@@ -284,7 +284,7 @@ public class SemanticFunctions {
 			evaluateProcedure(s, at, t);
 			
 			 SymbolProcedure p = (SymbolProcedure) s;
-			
+			 at.code.addComment("Se llama al procedure " + t.image);
 			//at.code.addOSFInst (st.level, st.level-s.nivel, p.label);	//La label sera la que se ha anyadido al simbol desdel su creacion
 			at.code.addOSFInst (CGUtils.memorySpaces[st.level], st.level-s.nivel, p.label);
 		} catch (SymbolNotFoundException e) {
@@ -768,17 +768,17 @@ public class SemanticFunctions {
 					at.code.addComment("Se anyade el parametro y no se mete en nada");
 				}
 			} else {	//Es de tipo array. Si es valor meto cada una de sus componentes
-				SymbolArray a = (SymbolArray) s;
-				if (s.parClass != ParameterClass.REF) {
-					for (int i = 0; i < a.maxInd; i++) {
-						at.code.addInst(OpCode.SRF, st.level - s.nivel, (int) aux + i);
-						at.code.addInst(OpCode.DRF);
-					}
-				} else {
-					at.code.addInst(OpCode.SRF, st.level - s.nivel, (int) aux);
-					at.code.addInst(OpCode.DRF);
-					at.code.addInst(OpCode.DRF);
-				}
+				// SymbolArray a = (SymbolArray) s;
+				// if (s.parClass != ParameterClass.REF) {
+				// 	for (int i = 0; i < a.maxInd; i++) {
+				// 		at.code.addInst(OpCode.SRF, st.level - s.nivel, (int) aux + i);
+				// 		at.code.addInst(OpCode.DRF);
+				// 	}
+				// } else {
+				// 	at.code.addInst(OpCode.SRF, st.level - s.nivel, (int) aux);
+				// 	at.code.addInst(OpCode.DRF);
+				// 	at.code.addInst(OpCode.DRF);
+				// }
 			}
 			at.code.addComment("Se anyade el parametro !!!!!"+s.name);
 		} catch (SymbolNotFoundException e) {
