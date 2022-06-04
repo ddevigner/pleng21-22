@@ -825,7 +825,6 @@ void assignable(Attributes at):
 								at.code.addComment("Accediendo al index del vector " + vec.name);
 								if(vec.parClass == ParameterClass.REF){
 									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
-									//at.code.addInst(PCodeInstruction.OpCode.PLUS);
 									at.code.addInst(PCodeInstruction.OpCode.DRF);	
 									at.code.addInst(PCodeInstruction.OpCode.PLUS);
 								}else if(vec.parClass == ParameterClass.VAL){

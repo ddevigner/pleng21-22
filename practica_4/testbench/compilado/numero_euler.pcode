@@ -1,0 +1,1676 @@
+<numero_euler>
+  ENP L0
+<asignar>
+<dividir>
+<sumar>
+<mostrar_numero>
+<iniciar>
+L1:
+; --Se anyade el parametro en el for este y es ref s
+  SRF  0  3
+  ASGI
+  JMP L2
+L2:
+; --Comprobar variable i
+  SRF  0  4
+  STC  0
+  ASG
+L3:
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+; --Comprobar variable ndigitos
+  SRF  1 307
+  DRF
+  LTE
+  JMF L4
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L6
+  DUP
+  STC 100
+  LTE
+  JMT L5
+L6:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L5:
+; --Accediendo al index del vector s
+  SRF  0  3
+  DRF
+  PLUS
+  STC  0
+  ASG
+; --Comprobar variable i
+  SRF  0  4
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L3
+L4:
+  CSF
+</iniciar>
+<if_else>
+<then>
+L7:
+; --Se anyade el parametro en el for este y es ref s
+  SRF  0  3
+  ASGI
+  JMP L8
+L8:
+; --Expresion de los [] del vector
+  STC  0
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L10
+  DUP
+  STC 100
+  LTE
+  JMT L9
+L10:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L9:
+; --Accediendo al index del vector s
+  SRF  0  3
+  DRF
+  PLUS
+  DRF
+; --Se va a anyadir el string del putline y se muestra s
+  WRT  1
+; --Expresion de los [] del vector
+  STC  0
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L10
+  DUP
+  STC 100
+  LTE
+  JMT L9
+L10:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L9:
+; --Accediendo al index del vector s
+  SRF  0  3
+  DRF
+  PLUS
+  DRF
+  STC 39
+; --Se va a anyadir el string del putline y se muestra s
+  WRT  0
+; --Comprobar variable i
+  SRF  0  4
+  STC  1
+  ASG
+L11:
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+; --Comprobar variable ndigitos
+  SRF  1 307
+  DRF
+  LTE
+  JMF L12
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+  STC  1
+  SBT
+  STC  5
+  MOD
+  STC  0
+  EQ
+  JMF L13
+<String_" ">
+  STC 32
+</String_" ">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  JMP L14
+L13:
+</then>
+L14:
+</if_else>
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L16
+  DUP
+  STC 100
+  LTE
+  JMT L15
+L16:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L15:
+; --Accediendo al index del vector s
+  SRF  0  3
+  DRF
+  PLUS
+  DRF
+; --Se va a anyadir el string del putline y se muestra s
+  WRT  1
+; --Comprobar variable i
+  SRF  0  4
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L11
+L12:
+  STC 13
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  STC 13
+  STC 10
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  CSF
+</mostrar_numero>
+<if_else>
+<then>
+L17:
+; --Se anyade el parametro en el for este y es ref r
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es ref s
+  SRF  0  4
+  ASGI
+  JMP L18
+L18:
+; --Comprobar variable i
+  SRF  0  5
+; --Comprobar variable ndigitos
+  SRF  1 307
+  DRF
+  ASG
+L19:
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+  STC  0
+  GT
+  JMF L20
+; --Comprobar variable n
+  SRF  0  6
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L22
+  DUP
+  STC 100
+  LTE
+  JMT L21
+L22:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L21:
+; --Accediendo al index del vector s
+  SRF  0  4
+  DRF
+  PLUS
+  DRF
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L24
+  DUP
+  STC 100
+  LTE
+  JMT L23
+L24:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L23:
+; --Accediendo al index del vector r
+  SRF  0  3
+  DRF
+  PLUS
+  DRF
+  PLUS
+  ASG
+; --Comprobar variable n
+  SRF  0  6
+  DRF
+  STC  9
+  GT
+  JMF L25
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L27
+  DUP
+  STC 100
+  LTE
+  JMT L26
+L27:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L26:
+; --Accediendo al index del vector s
+  SRF  0  4
+  DRF
+  PLUS
+; --Comprobar variable n
+  SRF  0  6
+  DRF
+  STC 10
+  MOD
+  ASG
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+  STC  1
+  SBT
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L29
+  DUP
+  STC 100
+  LTE
+  JMT L28
+L29:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L28:
+; --Accediendo al index del vector s
+  SRF  0  4
+  DRF
+  PLUS
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+  STC  1
+  SBT
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L31
+  DUP
+  STC 100
+  LTE
+  JMT L30
+L31:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L30:
+; --Accediendo al index del vector s
+  SRF  0  4
+  DRF
+  PLUS
+  DRF
+; --Comprobar variable n
+  SRF  0  6
+  DRF
+  STC 10
+  DIV
+  PLUS
+  ASG
+  JMP L32
+L25:
+</then>
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L34
+  DUP
+  STC 100
+  LTE
+  JMT L33
+L34:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L33:
+; --Accediendo al index del vector s
+  SRF  0  4
+  DRF
+  PLUS
+; --Comprobar variable n
+  SRF  0  6
+  DRF
+  ASG
+L32:
+</if_else>
+; --Comprobar variable i
+  SRF  0  5
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+  STC  1
+  SBT
+  ASG
+  JMP L19
+L20:
+  CSF
+</sumar>
+<if_else>
+<then>
+L35:
+; --Se anyade el parametro en el for este y es valor y no array n
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es ref r
+  SRF  0  4
+  ASGI
+; --Se anyade el parametro en el for este y es ref s
+  SRF  0  5
+  ASGI
+  JMP L36
+L36:
+; --Comprobar variable i
+  SRF  0  6
+  STC  0
+  ASG
+L37:
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+; --Comprobar variable ndigitos
+  SRF  1 307
+  DRF
+  LT
+  JMF L38
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L40
+  DUP
+  STC 100
+  LTE
+  JMT L39
+L40:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L39:
+; --Accediendo al index del vector s
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  DIV
+  STC  0
+  GT
+  JMF L41
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L43
+  DUP
+  STC 100
+  LTE
+  JMT L42
+L43:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L42:
+; --Accediendo al index del vector r
+  SRF  0  4
+  DRF
+  PLUS
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L45
+  DUP
+  STC 100
+  LTE
+  JMT L44
+L45:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L44:
+; --Accediendo al index del vector s
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  DIV
+  ASG
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L47
+  DUP
+  STC 100
+  LTE
+  JMT L46
+L47:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L46:
+; --Accediendo al index del vector s
+  SRF  0  5
+  DRF
+  PLUS
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L49
+  DUP
+  STC 100
+  LTE
+  JMT L48
+L49:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L48:
+; --Accediendo al index del vector s
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  MOD
+  STC 10
+  TMS
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L51
+  DUP
+  STC 100
+  LTE
+  JMT L50
+L51:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L50:
+; --Accediendo al index del vector s
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+  PLUS
+  ASG
+  JMP L52
+L41:
+</then>
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L54
+  DUP
+  STC 100
+  LTE
+  JMT L53
+L54:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L53:
+; --Accediendo al index del vector r
+  SRF  0  4
+  DRF
+  PLUS
+  STC  0
+  ASG
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L56
+  DUP
+  STC 100
+  LTE
+  JMT L55
+L56:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L55:
+; --Accediendo al index del vector s
+  SRF  0  5
+  DRF
+  PLUS
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L58
+  DUP
+  STC 100
+  LTE
+  JMT L57
+L58:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L57:
+; --Accediendo al index del vector s
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+  STC 10
+  TMS
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L60
+  DUP
+  STC 100
+  LTE
+  JMT L59
+L60:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L59:
+; --Accediendo al index del vector s
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+  PLUS
+  ASG
+L52:
+</if_else>
+; --Comprobar variable i
+  SRF  0  6
+; --Comprobar variable i
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L37
+L38:
+  CSF
+</dividir>
+L61:
+; --Se anyade el parametro en el for este y es ref r
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es ref s
+  SRF  0  4
+  ASGI
+  JMP L62
+L62:
+; --Comprobar variable i
+  SRF  0  5
+  STC  0
+  ASG
+L63:
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+; --Comprobar variable ndigitos
+  SRF  1 307
+  DRF
+  LTE
+  JMF L64
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L66
+  DUP
+  STC 100
+  LTE
+  JMT L65
+L66:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L65:
+; --Accediendo al index del vector s
+  SRF  0  4
+  DRF
+  PLUS
+; --Expresion de los [] del vector
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L68
+  DUP
+  STC 100
+  LTE
+  JMT L67
+L68:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L67:
+; --Accediendo al index del vector r
+  SRF  0  3
+  DRF
+  PLUS
+  DRF
+  ASG
+; --Comprobar variable i
+  SRF  0  5
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L63
+L64:
+  CSF
+</asignar>
+L0:
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+; --Comprobar variable ndigitos
+  SRF  0 307
+  STC 20
+  ASG
+  STC 10
+  WRT  0
+<String_"Aproximación del número de Euler e utilizando la serie infinita e = 1/0! + 1/1! + 1/2! + 1/3! ...">
+  STC 46
+  STC 46
+  STC 46
+  STC 32
+  STC 33
+  STC 51
+  STC 47
+  STC 49
+  STC 32
+  STC 43
+  STC 32
+  STC 33
+  STC 50
+  STC 47
+  STC 49
+  STC 32
+  STC 43
+  STC 32
+  STC 33
+  STC 49
+  STC 47
+  STC 49
+  STC 32
+  STC 43
+  STC 32
+  STC 33
+  STC 48
+  STC 47
+  STC 49
+  STC 32
+  STC 61
+  STC 32
+  STC 101
+  STC 32
+  STC 97
+  STC 116
+  STC 105
+  STC 110
+  STC 105
+  STC 102
+  STC 110
+  STC 105
+  STC 32
+  STC 101
+  STC 105
+  STC 114
+  STC 101
+  STC 115
+  STC 32
+  STC 97
+  STC 108
+  STC 32
+  STC 111
+  STC 100
+  STC 110
+  STC 97
+  STC 122
+  STC 105
+  STC 108
+  STC 105
+  STC 116
+  STC 117
+  STC 32
+  STC 101
+  STC 32
+  STC 114
+  STC 101
+  STC 108
+  STC 117
+  STC 69
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 109
+  STC 250
+  STC 110
+  STC 32
+  STC 108
+  STC 101
+  STC 100
+  STC 32
+  STC 110
+  STC 243
+  STC 105
+  STC 99
+  STC 97
+  STC 109
+  STC 105
+  STC 120
+  STC 111
+  STC 114
+  STC 112
+  STC 65
+</String_"Aproximación del número de Euler e utilizando la serie infinita e = 1/0! + 1/1! + 1/2! + 1/3! ...">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"">
+</String_"">
+; --Se va a anyadir el string del putline y se muestra 
+</Putline>
+; --Comprobar variable sumando
+; --Se anyade el parametro !!!!!sumando
+  SRF  0 105
+; --Se llama al procedure iniciar
+  OSF 308  0 L1
+; --Comprobar variable e
+; --Se anyade el parametro !!!!!e
+  SRF  0  4
+; --Se llama al procedure iniciar
+  OSF 308  0 L1
+  STC  0
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L70
+  DUP
+  STC 100
+  LTE
+  JMT L69
+L70:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L69:
+; --Accediendo al index del vector sumando
+  SRF  0 105
+  PLUS
+  STC  1
+  ASG
+  STC  0
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L72
+  DUP
+  STC 100
+  LTE
+  JMT L71
+L72:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L71:
+; --Accediendo al index del vector e
+  SRF  0  4
+  PLUS
+  STC  2
+  ASG
+; --Comprobar variable n
+  SRF  0  3
+  STC  1
+  ASG
+L73:
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+; --Comprobar variable ndigitos
+  SRF  0 307
+  DRF
+  LT
+  JMF L74
+; --Comprobar variable sumando
+; --Se anyade el parametro !!!!!sumando
+  SRF  0 105
+; --Comprobar variable resultado
+; --Se anyade el parametro !!!!!resultado
+  SRF  0 206
+; --Comprobar variable n
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!n
+; --Se llama al procedure dividir
+  OSF 308  0 L35
+; --Comprobar variable e
+; --Se anyade el parametro !!!!!e
+  SRF  0  4
+; --Comprobar variable resultado
+; --Se anyade el parametro !!!!!resultado
+  SRF  0 206
+; --Se llama al procedure sumar
+  OSF 308  0 L17
+<String_"e con ">
+  STC 32
+  STC 110
+  STC 111
+  STC 99
+  STC 32
+  STC 101
+</String_"e con ">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"e con ">
+  STC 32
+  STC 110
+  STC 111
+  STC 99
+  STC 32
+  STC 101
+</String_"e con ">
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  STC  1
+  PLUS
+; --Se va a anyadir el string del putline y se muestra n
+  WRT  1
+<String_" componentes de la serie: ">
+<String_"e con ">
+  STC 32
+  STC 110
+  STC 111
+  STC 99
+  STC 32
+  STC 101
+</String_"e con ">
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  STC  1
+  PLUS
+  STC 32
+  STC 58
+  STC 101
+  STC 105
+  STC 114
+  STC 101
+  STC 115
+  STC 32
+  STC 97
+  STC 108
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 116
+  STC 110
+  STC 101
+  STC 110
+  STC 111
+  STC 112
+  STC 109
+  STC 111
+  STC 99
+  STC 32
+</String_" componentes de la serie: ">
+; --Se va a anyadir el string del putline y se muestra n
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+; --Comprobar variable e
+; --Se anyade el parametro !!!!!e
+  SRF  0  4
+; --Se llama al procedure mostrar_numero
+  OSF 308  0 L7
+; --Comprobar variable sumando
+; --Se anyade el parametro !!!!!sumando
+  SRF  0 105
+; --Comprobar variable resultado
+; --Se anyade el parametro !!!!!resultado
+  SRF  0 206
+; --Se llama al procedure asignar
+  OSF 308  0 L61
+; --Comprobar variable n
+  SRF  0  3
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L73
+L74:
+  STC 10
+  WRT  0
+<String_"">
+</String_"">
+; --Se va a anyadir el string del putline y se muestra 
+</Putline>
+  STC 10
+  WRT  0
+<String_"La convergencia es rápida porque los términos de la suma son 1/k!">
+  STC 33
+  STC 107
+  STC 47
+  STC 49
+  STC 32
+  STC 110
+  STC 111
+  STC 115
+  STC 32
+  STC 97
+  STC 109
+  STC 117
+  STC 115
+  STC 32
+  STC 97
+  STC 108
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 111
+  STC 110
+  STC 105
+  STC 109
+  STC 114
+  STC 233
+  STC 116
+  STC 32
+  STC 115
+  STC 111
+  STC 108
+  STC 32
+  STC 101
+  STC 117
+  STC 113
+  STC 114
+  STC 111
+  STC 112
+  STC 32
+  STC 97
+  STC 100
+  STC 105
+  STC 112
+  STC 225
+  STC 114
+  STC 32
+  STC 115
+  STC 101
+  STC 32
+  STC 97
+  STC 105
+  STC 99
+  STC 110
+  STC 101
+  STC 103
+  STC 114
+  STC 101
+  STC 118
+  STC 110
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 76
+</String_"La convergencia es rápida porque los términos de la suma son 1/k!">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  LVP
+</numero_euler>

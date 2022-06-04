@@ -831,12 +831,13 @@ public class SemanticFunctions {
 		at.column = t.beginColumn;
 
 		// Se mete el valor en la pila: 1 si true o 0 si false.
-		if (t.image == "false") {
+		//if (t.image == "false") {
+		if (t.image.equals("false")) {
 			at.boolVal = false;
-			at.code.addInst(OpCode.STC, 1);
+			at.code.addInst(OpCode.STC, 0);	//Deberia ser 0
 		} else {
 			at.boolVal = true;
-			at.code.addInst(OpCode.STC, 0);
+			at.code.addInst(OpCode.STC, 1);
 		}
 	}
 

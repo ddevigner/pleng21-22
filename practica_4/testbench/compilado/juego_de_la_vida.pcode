@@ -59,8 +59,8 @@ L6:
 L5:
 ; --Accediendo al index del vector colonia
   SRF  0  3
-  PLUS
   DRF
+  PLUS
 ; --Comprobar variable i
   SRF  0  4
   DRF
@@ -131,8 +131,8 @@ L12:
 L11:
 ; --Accediendo al index del vector colonia
   SRF  0  3
-  PLUS
   DRF
+  PLUS
 ; --Comprobar variable i
   SRF  0  4
   DRF
@@ -450,8 +450,8 @@ L18:
 L17:
 ; --Accediendo al index del vector colonia
   SRF  0 83
-  PLUS
   DRF
+  PLUS
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 84

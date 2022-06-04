@@ -1,0 +1,721 @@
+<fibonacci>
+  ENP L0
+<fib>
+<dato>
+<cambiar_de_linea>
+L1:
+  JMP L2
+L2:
+  STC 13
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  STC 13
+  STC 10
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  CSF
+</cambiar_de_linea>
+<if_else>
+<then>
+<Putline>
+L3:
+; --Se anyade el parametro en el for este y es ref dato
+  SRF  0  3
+  ASGI
+  JMP L4
+L4:
+; --Comprobar variable dato
+  SRF  0  3
+  DRF
+  STC  0
+  ASG
+; --Comprobar variable correcto
+  SRF  0  4
+  STC  0
+  ASG
+L5:
+; --Comprobar variable correcto
+  SRF  0  4
+  DRF
+  NGB
+  JMF L6
+<String_"Escribe un numero positivo: ">
+  STC 32
+  STC 58
+  STC 111
+  STC 118
+  STC 105
+  STC 116
+  STC 105
+  STC 115
+  STC 111
+  STC 112
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 109
+  STC 117
+  STC 110
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 101
+  STC 98
+  STC 105
+  STC 114
+  STC 99
+  STC 115
+  STC 69
+</String_"Escribe un numero positivo: ">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+; --Comprobar variable dato
+  SRF  0  3
+  DRF
+  RD  1
+; --Comprobar variable correcto
+  SRF  0  4
+; --Comprobar variable dato
+  SRF  0  3
+  DRF
+  DRF
+  STC  0
+  GT
+  ASG
+; --Comprobar variable correcto
+  SRF  0  4
+  DRF
+  NGB
+  JMF L7
+  STC 10
+  WRT  0
+<String_"El numero debe ser positivo.">
+  STC 46
+  STC 111
+  STC 118
+  STC 105
+  STC 116
+  STC 105
+  STC 115
+  STC 111
+  STC 112
+  STC 32
+  STC 114
+  STC 101
+  STC 115
+  STC 32
+  STC 101
+  STC 98
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 109
+  STC 117
+  STC 110
+  STC 32
+  STC 108
+  STC 69
+</String_"El numero debe ser positivo.">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  JMP L8
+L7:
+</then>
+L8:
+</if_else>
+  JMP L5
+L6:
+  CSF
+</dato>
+<if_else>
+<then>
+L9:
+; --Se anyade el parametro en el for este y es ref r
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array n
+  SRF  0  4
+  ASGI
+  JMP L10
+L10:
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+  STC  1
+  GT
+  JMF L11
+; --Comprobar variable n
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!n
+  STC  1
+  SBT
+; --Comprobar variable r1
+; --Se anyade el parametro y es NONE
+  SRF  0  5
+  DRF
+; --Se anyade el parametro !!!!!r1
+  POP
+  SRF  0  5
+; --Se llama al procedure fib
+  OSF  7  1 L9
+; --Comprobar variable n
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!n
+  STC  2
+  SBT
+; --Comprobar variable r2
+; --Se anyade el parametro y es NONE
+  SRF  0  6
+  DRF
+; --Se anyade el parametro !!!!!r2
+  POP
+  SRF  0  6
+; --Se llama al procedure fib
+  OSF  7  1 L9
+; --Comprobar variable r
+  SRF  0  3
+  DRF
+; --Comprobar variable r1
+  SRF  0  5
+  DRF
+; --Comprobar variable r2
+  SRF  0  6
+  DRF
+  PLUS
+  ASG
+  JMP L12
+L11:
+</then>
+; --Comprobar variable r
+  SRF  0  3
+  DRF
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+  ASG
+L12:
+</if_else>
+  CSF
+</fib>
+L0:
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+  STC 10
+  WRT  0
+<String_"Este programa pide un número positivo n y calcula fib(n) con la fórmula recursiva fib(n) = fib(n-1) + fib(n-2)">
+  STC 41
+  STC 50
+  STC 45
+  STC 110
+  STC 40
+  STC 98
+  STC 105
+  STC 102
+  STC 32
+  STC 43
+  STC 32
+  STC 41
+  STC 49
+  STC 45
+  STC 110
+  STC 40
+  STC 98
+  STC 105
+  STC 102
+  STC 32
+  STC 61
+  STC 32
+  STC 41
+  STC 110
+  STC 40
+  STC 98
+  STC 105
+  STC 102
+  STC 32
+  STC 97
+  STC 118
+  STC 105
+  STC 115
+  STC 114
+  STC 117
+  STC 99
+  STC 101
+  STC 114
+  STC 32
+  STC 97
+  STC 108
+  STC 117
+  STC 109
+  STC 114
+  STC 243
+  STC 102
+  STC 32
+  STC 97
+  STC 108
+  STC 32
+  STC 110
+  STC 111
+  STC 99
+  STC 32
+  STC 41
+  STC 110
+  STC 40
+  STC 98
+  STC 105
+  STC 102
+  STC 32
+  STC 97
+  STC 108
+  STC 117
+  STC 99
+  STC 108
+  STC 97
+  STC 99
+  STC 32
+  STC 121
+  STC 32
+  STC 110
+  STC 32
+  STC 111
+  STC 118
+  STC 105
+  STC 116
+  STC 105
+  STC 115
+  STC 111
+  STC 112
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 109
+  STC 250
+  STC 110
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 101
+  STC 100
+  STC 105
+  STC 112
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa pide un número positivo n y calcula fib(n) con la fórmula recursiva fib(n) = fib(n-1) + fib(n-2)">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"A partir de 30 será muy lento por la recursividad.">
+  STC 46
+  STC 100
+  STC 97
+  STC 100
+  STC 105
+  STC 118
+  STC 105
+  STC 115
+  STC 114
+  STC 117
+  STC 99
+  STC 101
+  STC 114
+  STC 32
+  STC 97
+  STC 108
+  STC 32
+  STC 114
+  STC 111
+  STC 112
+  STC 32
+  STC 111
+  STC 116
+  STC 110
+  STC 101
+  STC 108
+  STC 32
+  STC 121
+  STC 117
+  STC 109
+  STC 32
+  STC 225
+  STC 114
+  STC 101
+  STC 115
+  STC 32
+  STC 48
+  STC 51
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 114
+  STC 105
+  STC 116
+  STC 114
+  STC 97
+  STC 112
+  STC 32
+  STC 65
+</String_"A partir de 30 será muy lento por la recursividad.">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"">
+</String_"">
+; --Se va a anyadir el string del putline y se muestra 
+</Putline>
+; --Comprobar variable n
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!n
+  POP
+  SRF  0  4
+; --Se llama al procedure dato
+  OSF  6  0 L3
+; --Comprobar variable i
+  SRF  0  3
+  STC  1
+  ASG
+L13:
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+  LTE
+  JMF L14
+; --Comprobar variable i
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!i
+; --Comprobar variable r
+; --Se anyade el parametro y es NONE
+  SRF  0  5
+  DRF
+; --Se anyade el parametro !!!!!r
+  POP
+  SRF  0  5
+; --Se llama al procedure fib
+  OSF  6  0 L9
+  STC 10
+  WRT  0
+<String_"fib(">
+  STC 40
+  STC 98
+  STC 105
+  STC 102
+</String_"fib(">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"fib(">
+  STC 40
+  STC 98
+  STC 105
+  STC 102
+</String_"fib(">
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+; --Se va a anyadir el string del putline y se muestra i
+  WRT  1
+<String_") = ">
+<String_"fib(">
+  STC 40
+  STC 98
+  STC 105
+  STC 102
+</String_"fib(">
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+  STC 32
+  STC 61
+  STC 32
+  STC 41
+</String_") = ">
+; --Se va a anyadir el string del putline y se muestra i
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_") = ">
+<String_"fib(">
+  STC 40
+  STC 98
+  STC 105
+  STC 102
+</String_"fib(">
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+  STC 32
+  STC 61
+  STC 32
+  STC 41
+</String_") = ">
+; --Comprobar variable r
+  SRF  0  5
+  DRF
+; --Se va a anyadir el string del putline y se muestra r
+  WRT  1
+</Putline>
+; --Comprobar variable i
+  SRF  0  3
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L13
+L14:
+; --Se llama al procedure cambiar_de_linea
+  OSF  6  0 L1
+  LVP
+</fibonacci>

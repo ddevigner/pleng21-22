@@ -922,8 +922,8 @@ sf.EvaluateArray(at, aux, t);
                                                                 at.code.addComment("Accediendo al index del vector " + vec.name);
                                                                 if(vec.parClass == ParameterClass.REF){
                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
-                                                                        at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                         at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                 }else if(vec.parClass == ParameterClass.VAL){
                                                                         at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
                                                                 }else if(vec.parClass == ParameterClass.NONE){
