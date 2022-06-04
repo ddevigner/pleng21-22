@@ -98,6 +98,7 @@ begin
     i := 0;
     while i < elementos do
         if colonia[i] then
+            --put("Se pone algo");
             put ("*");
             --put ('*');
         else
