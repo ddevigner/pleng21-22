@@ -268,9 +268,7 @@ String main() :
 		procs_funcs_decl(funcs)		//Que esto devuelva un CodeBlock 
 		proc_func_body(main)
 			{
-				//label = CGUtils.newLabel();
 				cmain.addInst(OpCode.ENP, label);
-				//cmain.addLabel(label);
 				cmain.addBlock(funcs);
 				cmain.addLabel(label);
 				cmain.addBlock(main.code);
@@ -281,7 +279,6 @@ String main() :
 			}
 		<EOF>
 			{
-				//System.err.println(cmain.toString());
 				return cmain.toString();
 			}
 	} catch (ParseException e) {
@@ -305,7 +302,6 @@ void proc_func_decl(CodeBlock proc_func):
 	Attributes at = new Attributes();
 	Token t;
 	String label;
-	//CodeBlock proc_func;
 	ArrayList<Symbol> params_invertidos;
 	CodeBlock funciones_dentro_de_funcion = new CodeBlock();
 	String label_params;
@@ -317,13 +313,12 @@ void proc_func_decl(CodeBlock proc_func):
 		label_params=CGUtils.newLabel();
 		label= CGUtils.newLabel();
 		sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t, label_params); 
-		//proc_func = new CodeBlock();
 		CGUtils.memorySpaces[st.level]=3;
 
-		}	//Se crea el bloque de la funcion
+		}
 	<LPAREN>
 	{at.code.addLabel(label_params);}
-	params_def(at)		//Aqui hacer recuperacion de parametros. Para cada symbol hacer lo de la diapo . Mirar si deberia hacerlo en otro orden
+	params_def(at)	
 	{
 		for(int i=at.params.size()-1;i>=0;i--){
 			Symbol s = at.params.get(i);
@@ -344,7 +339,6 @@ void proc_func_decl(CodeBlock proc_func):
 				SymbolArray vec = (SymbolArray) s;
 				CGUtils.memorySpaces[st.level] += vec.maxInd;
 				at.code.addComment("Se suma al nivel " + st.level + "el tamanyo " + vec.maxInd);
-				//Se recorre el vector y se recupera cada Posicion 
 				for(int j=vec.maxInd;j>=0;j--){
 					at.code.addComment("Se anyade el parametro en el for este y es valor y array " + s.name);
 					long aux = s.dir + (long) j;	//Revisarlo
@@ -360,12 +354,12 @@ void proc_func_decl(CodeBlock proc_func):
 	<RPAREN>
 	<IS>
 	vars_def()
-	procs_funcs_decl(funciones_dentro_de_funcion)		//Anyades el codigo de lo que se define dentro //Luego anyadir que devuelva un CodeBlock
+	procs_funcs_decl(funciones_dentro_de_funcion)
 	{
 		at.code.addBlock(funciones_dentro_de_funcion);
 		at.code.addLabel(label);
 	}
-	proc_func_body(at)		//Anyades el codigo de la funcion con el label y tal
+	proc_func_body(at)
 	{
 		proc_func.addBlock(at.code);
 		proc_func.addInst(OpCode.CSF);
@@ -507,7 +501,6 @@ void instruction(Attributes at):
 	| 	<PUT> <LPAREN> expression(fst) { 
 					sf.EvaluatePut(fst); 
 					at.code.addBlock(fst.code); 
-					//at.code.addComment("Se va a anyadir el string del putl y se muestra " + fst.name);
 					if(fst.baseType==Types.INT){
 						at.code.addInst(PCodeInstruction.OpCode.WRT,1);
 					}else if(fst.baseType==Types.CHAR){
@@ -570,7 +563,6 @@ void instruction(Attributes at):
 			}
 		)*)? <RPAREN> <SCOLON> 
 			{ 
-				//at.code.addInst(OpCode.WRT, 0);
 				at.code.encloseXMLTags("Putline");
 			}
 
@@ -585,15 +577,11 @@ void instruction(Attributes at):
 							int index = fst.given.size() - 1;
 							try{
 								SymbolProcedure sym = (SymbolProcedure) st.getSymbol(t.image);
-								//System.out.println("Hola1");
 								Symbol e = sym.parList.get(index);
-								//System.out.println("Hola2");
 								Attributes g = fst.given.get(index);
-								//System.out.println("Hola3");
 								if(g.type!=Types.ARRAY){
 									if(e.parClass==ParameterClass.REF){
 										if(g.parClass==ParameterClass.VAL){
-											//at.code.addInst(PCodeInstruction.OpCode.LVP);
 											Symbol param = st.getSymbol(g.name);
 											long auxDir = param.dir;
 											at.code.addInst(PCodeInstruction.OpCode.POP);
@@ -670,9 +658,6 @@ void instruction(Attributes at):
 										}
 									}
 								}
-
-
-
 							}catch(SymbolNotFoundException e){
 
 							}
@@ -688,7 +673,6 @@ void instruction(Attributes at):
 										if(g.type!=Types.ARRAY){
 											if(e.parClass==ParameterClass.REF){
 												if(g.parClass==ParameterClass.VAL){
-													//at.code.addInst(PCodeInstruction.OpCode.LVP);
 													Symbol param = st.getSymbol(g.name);
 													long auxDir = param.dir;
 													at.code.addInst(PCodeInstruction.OpCode.POP);
@@ -723,9 +707,6 @@ void instruction(Attributes at):
 											}
 										}
 
-
-
-										//Para los vectores es diferente
 								long auxVecDir;
 								if(g.type==Types.ARRAY){
 									SymbolArray vec = (SymbolArray) st.getSymbol(g.name);
@@ -752,7 +733,6 @@ void instruction(Attributes at):
 										}
 									}else if(e.parClass==ParameterClass.REF){
 										if(g.parClass==ParameterClass.VAL){
-											//at.code.addInst(PCodeInstruction.OpCode.LVP);
 											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
 										}
 										if(g.parClass==ParameterClass.REF){
@@ -771,8 +751,6 @@ void instruction(Attributes at):
 									}
 									})*
 			)? <RPAREN> <SCOLON> { 
-					//Anyadir lo que se ha metido de procedure en los attributes
-					//at.code.addBlock(fst.code);
 					sf.EvaluateProcedure(fst, t); 
 					at.code.addBlock(fst.code);
 				}
@@ -797,7 +775,6 @@ void instruction(Attributes at):
 											at.code.addLabel(label_fin_while);
 										}
 	| 	<IF> expression(fst) { 
-				//Aqui habria que anyadir el codigo de expression
 				sf.EvaluateCondition(fst); 
 				label_else = CGUtils.newLabel();
 				at.code.addBlock(fst.code);	//Se anyade el codigo de la expression (que lo mas seguroque haga un store constan de 0 o 1 para indicar true o false)
@@ -817,8 +794,8 @@ void instruction(Attributes at):
 			sf.EvaluateReturn(at, fst, t); 
 			at.code.addBlock(fst.code);
 			at.code.addComment("Se hace return ");
-			at.code.addInst(OpCode.CSF);	//Como hay un return se pone CSF porque es el final de la funcion
-			} <SCOLON> 	//Apilar el return de una funcion //////////////////////////////////
+			at.code.addInst(OpCode.CSF);	
+			} <SCOLON> 	
 }
 
 //-----------------------------------------------------------------------------
@@ -837,7 +814,6 @@ void assignable(Attributes at):
 							try
 							{
 								at.code.addComment("Comprobando el indice del vector");
-								//Comprobar que el indice no se sale 
 								label_codigo_correcto= CGUtils.newLabel();
 								label_error_index = CGUtils.newLabel();
 								SymbolArray vec = (SymbolArray) st.getSymbol(t.image);
@@ -850,7 +826,7 @@ void assignable(Attributes at):
 								at.code.addInst(PCodeInstruction.OpCode.LTE);
 								at.code.addInst(PCodeInstruction.OpCode.JMT,label_codigo_correcto);
 								at.code.addLabel(label_error_index);
-								//Meter el mensaje de error y LVP
+								//Indicar con un mensaje que el index ha superado el limite de tamanyo del vector
 								at.code.addInst(PCodeInstruction.OpCode.STC,'E'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
 								at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
 								at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
@@ -873,15 +849,12 @@ void assignable(Attributes at):
 									at.code.addInst(PCodeInstruction.OpCode.DRF);	
 									at.code.addInst(PCodeInstruction.OpCode.PLUS);
 								}else if(vec.parClass == ParameterClass.VAL){
-									//at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
 									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
 									at.code.addInst(PCodeInstruction.OpCode.PLUS);
 								}else if(vec.parClass == ParameterClass.NONE){
 									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
 									at.code.addInst(PCodeInstruction.OpCode.PLUS);
 								}
-								//at.code.addInst(PCodeInstruction.OpCode.PLUS);
-								//at.vector_indexado=true;
 							}catch(SymbolNotFoundException e){
 
 							}
@@ -889,7 +862,6 @@ void assignable(Attributes at):
 	| t = <ID> { 
 				sf.EvaluateVar(at, t);
 				at.code.addComment("Comprobar variable " + t.image); 
-				//Anyadir a at el codigo de esta variable que sera para escritura
 				try {
 					Symbol s = st.getSymbol(t.image);
 					long auxDir=s.dir;
@@ -919,9 +891,6 @@ void expression(Attributes at):
 {
 	simple_expr(at) (relational_op(aux) simple_expr(aux) {
 			sf.EvaluateOperation(at, aux); 
-			//Se anyade el bloque de aux en at (Comentado porque ya lo hago en 
-			// EvaluateOperation ya que el operador debe ir despues de los push)
-			//at.code.addBlock(aux.code);
 		})?
 }
 
@@ -936,7 +905,6 @@ void simple_expr(Attributes at):
 	((t = <ADD> | t = <SUB>) { at.op = Operator.INT_OP; })? term(at) { sf.EvaluateOperation(at, t); }
 	(additive_op(aux) term(aux) { 
 		sf.EvaluateOperation(at, aux); 
-		//at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
 		})*
 }
 
@@ -949,7 +917,6 @@ void term(Attributes at):
 {
 	factor(at) (multiplicative_op(aux) factor(aux) { 
 			sf.EvaluateOperation(at, aux); 
-			//at.code.addBlock(aux.code);	//Se anyade el bloque de aux en at (Comentado porque ya lo hago en EvaluateOperation ya que el operador debe ir despues de los push)
 		})*
 }
 
@@ -972,7 +939,6 @@ void factor(Attributes at):
 			<LPAREN> (expression(aux) { 
 							at.given.add(aux); 
 							at.code.addBlock(aux.code);
-							//Ahora miro del symbolo funcion la lista de parametros (la ultima anyadida - 1)
 							int index = at.given.size() - 1;
 							try{
 								SymbolFunction sym = (SymbolFunction) st.getSymbol(t.image);
@@ -982,7 +948,6 @@ void factor(Attributes at):
 								if(g.type!=Types.ARRAY){
 									if(e.parClass==ParameterClass.REF){
 										if(g.parClass==ParameterClass.VAL){
-											//at.code.addInst(PCodeInstruction.OpCode.LVP);
 											Symbol param = st.getSymbol(g.name);
 											long auxDir = param.dir;
 											at.code.addInst(PCodeInstruction.OpCode.POP);
@@ -1043,7 +1008,6 @@ void factor(Attributes at):
 										}
 									}else if(e.parClass==ParameterClass.REF){
 										if(g.parClass==ParameterClass.VAL){
-											//at.code.addInst(PCodeInstruction.OpCode.LVP);
 											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
 										}
 										if(g.parClass==ParameterClass.REF){
@@ -1071,7 +1035,6 @@ void factor(Attributes at):
 									if(g.type!=Types.ARRAY){
 										if(e.parClass==ParameterClass.REF){
 											if(g.parClass==ParameterClass.VAL){
-												//at.code.addInst(PCodeInstruction.OpCode.LVP);
 												Symbol param = st.getSymbol(g.name);
 												long auxDir = param.dir;
 												at.code.addInst(PCodeInstruction.OpCode.POP);
@@ -1106,8 +1069,6 @@ void factor(Attributes at):
 										}
 									}
 
-
-										//Para los vectores es diferente
 									long auxVecDir;
 									if(g.type==Types.ARRAY){
 										SymbolArray vec = (SymbolArray) st.getSymbol(g.name);
@@ -1155,7 +1116,7 @@ void factor(Attributes at):
 			)? <RPAREN> { 
 						//Anyadir el codigo de la expression
 						
-						sf.EvaluateFunction(at, t); 	//En evaluateFunction pongo la operacion OSF (A lo mejor deberia ponerla aqui y no en semantic functions)
+						sf.EvaluateFunction(at, t); 
 
 					}
 	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { 
@@ -1167,7 +1128,6 @@ void factor(Attributes at):
 												try
 							{
 								at.code.addComment("Comprobando el indice del vector");
-								//Comprobar que el indice no se sale 
 								label_codigo_correcto= CGUtils.newLabel();
 								label_error_index = CGUtils.newLabel();
 								SymbolArray vec = (SymbolArray) st.getSymbol(t.image);
@@ -1180,7 +1140,6 @@ void factor(Attributes at):
 								at.code.addInst(PCodeInstruction.OpCode.LTE);
 								at.code.addInst(PCodeInstruction.OpCode.JMT,label_codigo_correcto);
 								at.code.addLabel(label_error_index);
-								//Meter el mensaje de error y LVP
 								at.code.addInst(PCodeInstruction.OpCode.STC,'E'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
 								at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
 								at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
@@ -1195,7 +1154,6 @@ void factor(Attributes at):
 								at.code.addInst(PCodeInstruction.OpCode.STC,'\n'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
 								at.code.addInst(PCodeInstruction.OpCode.LVP);
 								at.code.addLabel(label_codigo_correcto);
-								//Ahora se carga la componentes correcta del vector
 								long auxDir = vec.dir;
 								at.code.addComment("Accediendo al index del vector " + vec.name);
 								if(vec.parClass == ParameterClass.REF){
@@ -1207,12 +1165,10 @@ void factor(Attributes at):
 									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
 									at.code.addInst(PCodeInstruction.OpCode.PLUS);
 									at.code.addInst(PCodeInstruction.OpCode.DRF);
-									//at.code.addInst(PCodeInstruction.OpCode.PLUS);
 								}else if(vec.parClass == ParameterClass.NONE){
 									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
 									at.code.addInst(PCodeInstruction.OpCode.PLUS);
 									at.code.addInst(PCodeInstruction.OpCode.DRF);
-									//at.code.addInst(PCodeInstruction.OpCode.PLUS);
 								}
 								at.vector_indexado=true;
 							}catch(SymbolNotFoundException e){
