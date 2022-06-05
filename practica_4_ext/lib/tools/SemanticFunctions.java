@@ -334,6 +334,9 @@ public class SemanticFunctions {
 			if (aux.s != null) {
 				evaluateProcedure(aux);
 				at.code.addBlock(aux.code);
+				at.code.addComment("Se llama al procedure " + t.image);
+				at.code.addOSFInst (CGUtils.memorySpaces[st.level], 
+					st.level - at.s.nivel, ((SymbolProcedure) at.s).label);
 			}
 		} catch (ProcedureNotFoundException e) {
 			se.detection(e, t);
@@ -674,9 +677,13 @@ public class SemanticFunctions {
 				at.name = aux.s.name;
 				at.baseType = ((SymbolFunction) aux.s).returnType;
 				at.code.addBlock(aux.code);
+				at.code.addComment("Se llama a la funcion " + t.image);
+				at.code.addOSFInst(CGUtils.memorySpaces[st.level], st.level - aux.s.nivel, 
+					((SymbolFunction) aux.s).label);
 			}
 		} catch (FunctionNotFoundException e) {
 			se.detection(e, t);
+			at.type = at.baseType = Types.UNDEFINED;
 		}
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
