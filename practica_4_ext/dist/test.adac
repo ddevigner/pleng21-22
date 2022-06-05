@@ -1,0 +1,63 @@
+--cambios de base
+procedure cambio_base is
+	integer v[90], w[89], i;
+------------------------------------------------------
+procedure hola(ref integer h[90]) is
+	integer resto, n;
+begin
+	get(n);
+end
+
+function integer adios(ref integer h[90]) is
+	integer z;
+begin
+	return z;
+end
+------------------------------------------------------
+begin
+	hola(w);
+	v[0] := adios(v);
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--Cosas hechas
+--Asignar las posiciones en memorySpaces, si es declaracion local o un parametro por referencia o valor
+--Asignar las label de las funciones
+--Recuperar los parametros de las funciones
+--Declarar funcion
+--Llamar a la funcion
+--Que acabe la declaracion de la funcion
+--Lo del OSF
+--
+--
+--
+--
+--

@@ -1,0 +1,127 @@
+--------------------------------------------------------------------------
+procedure juego_de_la_vida is
+--------------------------------------------------------------------------
+
+boolean colonia[80];
+integer i, iteraciones, elementos;
+
+--------------------------------------------------------------------------
+procedure inicializar (ref boolean colonia[80]) is
+--------------------------------------------------------------------------
+integer i;
+begin
+    i := 0;
+    while i < elementos do
+        colonia[i] := (i mod 20) = 0;
+        i := i + 1;
+    end
+end
+
+--------------------------------------------------------------------------
+procedure inicializar2 (ref boolean colonia[80]) is
+--------------------------------------------------------------------------
+integer i;
+begin
+    i := 0;
+    while i < 80 do
+        colonia[i] := (i >= 37) and (i <= 43);
+        i := i + 1;
+    end
+end
+
+--------------------------------------------------------------------------
+procedure asignar (ref boolean colonia[80]; val boolean siguiente[80]) is
+--------------------------------------------------------------------------
+integer i;
+begin
+    i := 0;
+    while i < elementos do
+        colonia[i] := siguiente[i];
+        i := i + 1;
+    end
+end
+
+--------------------------------------------------------------------------
+function boolean vivira (ref boolean colonia[80]; val integer i) is
+--------------------------------------------------------------------------
+begin
+    if i = 0 then
+        return (false);
+    else if i = elementos - 1 then
+        return (false);
+    else
+        return (not colonia[i] and ((colonia[i - 1] and not colonia[i +
+        1]) or (not colonia[i - 1] and colonia[i + 1])));
+    end
+    end
+end
+
+--------------------------------------------------------------------------
+function boolean vivira2 (ref boolean colonia[80]; val integer i) is
+--------------------------------------------------------------------------
+integer vivos;
+begin
+    vivos := 0;
+    if i > 0 then if colonia[i-1] then vivos := vivos + 1; end end
+    if i > 1 then if colonia[i-2] then vivos := vivos + 1; end end
+    if i < 79 then if colonia[i+1] then vivos := vivos + 1; end end
+    if i < 78 then if colonia[i+2] then vivos := vivos + 1; end end
+
+    if not colonia[i] then
+        return (vivos = 2) or (vivos = 3);
+    else
+        return (vivos = 2) or (vivos = 4);
+    end
+end
+
+--------------------------------------------------------------------------
+procedure siguientegeneracion (ref boolean colonia[80]) is
+--------------------------------------------------------------------------
+integer i;
+boolean siguiente[80];
+
+begin
+    i := 0;
+    while i < elementos do
+        siguiente[i] := vivira (colonia, i);
+        i := i + 1;
+    end
+    asignar (colonia, siguiente);
+end
+
+--------------------------------------------------------------------------
+procedure mostrarcolonia (val boolean colonia[80]) is
+--------------------------------------------------------------------------
+integer i;
+
+begin
+    i := 0;
+    while i < elementos do
+        if colonia[i] then
+            put ('*');
+        else
+            put (' ');
+        end
+        i := i + 1;
+    end
+    put (int2char (13), int2char (10));
+end
+
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+begin
+    put_line ("Implementación de la versión 1D del Juego de la Vida de Conway.");
+    put_line ("https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life");
+    put_line ("");
+    elementos := 80;
+    inicializar (colonia);
+    mostrarcolonia (colonia);
+    i := 1;
+    iteraciones := 50;
+    while i <= iteraciones do
+        siguientegeneracion (colonia);
+        mostrarcolonia (colonia);
+        i := i + 1;
+    end
+end

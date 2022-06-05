@@ -1,0 +1,490 @@
+<test_stats>
+  ENP L0
+<upcase>
+<separator>
+<if_else>
+<if_else>
+<if_else>
+<then>
+<then>
+<then>
+L1:
+; --Se anyade el parametro en el for este y es valor y no array c
+  SRF  0  3
+  ASGI
+  JMP L2
+L2:
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 39
+  GTE
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 39
+  LTE
+  AND
+  JMF L3
+  STC  0
+; --Se hace return 
+  CSF
+  JMP L4
+L3:
+</then>
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 39
+  GTE
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 39
+  LTE
+  AND
+  JMF L5
+  STC  0
+; --Se hace return 
+  CSF
+  JMP L6
+L5:
+</then>
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 39
+  GTE
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 39
+  LTE
+  AND
+  JMF L7
+  STC  0
+; --Se hace return 
+  CSF
+  JMP L8
+L7:
+</then>
+  STC  1
+; --Se hace return 
+  CSF
+L8:
+</if_else>
+L6:
+</if_else>
+L4:
+</if_else>
+  CSF
+</separator>
+<if_else>
+<then>
+L9:
+; --Se anyade el parametro en el for este y es valor y no array c
+  SRF  0  3
+  ASGI
+  JMP L10
+L10:
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 39
+  GTE
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 39
+  LTE
+  AND
+  JMF L11
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 32
+  SBT
+; --Se hace return 
+  CSF
+  JMP L12
+L11:
+</then>
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+; --Se hace return 
+  CSF
+L12:
+</if_else>
+  CSF
+</upcase>
+L0:
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<if_else>
+<if_else>
+<if_else>
+<then>
+<then>
+<then>
+; --Comprobar variable chars
+  SRF  0  4
+  STC  0
+  ASG
+; --Comprobar variable words
+  SRF  0  5
+  STC  0
+  ASG
+; --Comprobar variable lines
+  SRF  0  6
+  STC  0
+  ASG
+; --Comprobar variable in_word
+  SRF  0  7
+  STC  0
+  ASG
+; --Comprobar variable c
+  SRF  0  3
+  RD  0
+L13:
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC  0
+  GTE
+  JMF L14
+; --Comprobar variable chars
+  SRF  0  4
+; --Comprobar variable chars
+  SRF  0  4
+  DRF
+  STC  1
+  PLUS
+  ASG
+; --Comprobar variable c
+  SRF  0  3
+  DRF
+  STC 10
+  EQ
+  JMF L15
+; --Comprobar variable lines
+  SRF  0  6
+; --Comprobar variable lines
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L16
+L15:
+</then>
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+  JMF L17
+; --Comprobar variable in_word
+  SRF  0  7
+  STC  0
+  ASG
+  JMP L18
+L17:
+</then>
+; --Comprobar variable in_word
+  SRF  0  7
+  DRF
+  NGB
+  JMF L19
+; --Comprobar variable in_word
+  SRF  0  7
+  STC  1
+  ASG
+; --Comprobar variable words
+  SRF  0  5
+; --Comprobar variable words
+  SRF  0  5
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L20
+L19:
+</then>
+L20:
+</if_else>
+L18:
+</if_else>
+L16:
+</if_else>
+; --Comprobar variable c
+  SRF  0  3
+  RD  0
+  JMP L13
+L14:
+  STC 10
+  WRT  0
+<String_"uso: maquinap text_stats < fichero_de_texto">
+  STC 111
+  STC 116
+  STC 120
+  STC 101
+  STC 116
+  STC 95
+  STC 101
+  STC 100
+  STC 95
+  STC 111
+  STC 114
+  STC 101
+  STC 104
+  STC 99
+  STC 105
+  STC 102
+  STC 32
+  STC 60
+  STC 32
+  STC 115
+  STC 116
+  STC 97
+  STC 116
+  STC 115
+  STC 95
+  STC 116
+  STC 120
+  STC 101
+  STC 116
+  STC 32
+  STC 112
+  STC 97
+  STC 110
+  STC 105
+  STC 117
+  STC 113
+  STC 97
+  STC 109
+  STC 32
+  STC 58
+  STC 111
+  STC 115
+  STC 117
+</String_"uso: maquinap text_stats < fichero_de_texto">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"Statistics of the input file:">
+  STC 58
+  STC 101
+  STC 108
+  STC 105
+  STC 102
+  STC 32
+  STC 116
+  STC 117
+  STC 112
+  STC 110
+  STC 105
+  STC 32
+  STC 101
+  STC 104
+  STC 116
+  STC 32
+  STC 102
+  STC 111
+  STC 32
+  STC 115
+  STC 99
+  STC 105
+  STC 116
+  STC 115
+  STC 105
+  STC 116
+  STC 97
+  STC 116
+  STC 83
+</String_"Statistics of the input file:">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"Chars: ">
+  STC 32
+  STC 58
+  STC 115
+  STC 114
+  STC 97
+  STC 104
+  STC 67
+</String_"Chars: ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"Chars: ">
+  STC 32
+  STC 58
+  STC 115
+  STC 114
+  STC 97
+  STC 104
+  STC 67
+</String_"Chars: ">
+; --Comprobar variable chars
+  SRF  0  4
+  DRF
+; --Se va a anyadir el string del putline y se muestra chars
+  WRT  1
+</Putline>
+  STC 10
+  WRT  0
+<String_"Words: ">
+  STC 32
+  STC 58
+  STC 115
+  STC 100
+  STC 114
+  STC 111
+  STC 87
+</String_"Words: ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"Words: ">
+  STC 32
+  STC 58
+  STC 115
+  STC 100
+  STC 114
+  STC 111
+  STC 87
+</String_"Words: ">
+; --Comprobar variable words
+  SRF  0  5
+  DRF
+; --Se va a anyadir el string del putline y se muestra words
+  WRT  1
+</Putline>
+  STC 10
+  WRT  0
+<String_"Lines: ">
+  STC 32
+  STC 58
+  STC 115
+  STC 101
+  STC 110
+  STC 105
+  STC 76
+</String_"Lines: ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"Lines: ">
+  STC 32
+  STC 58
+  STC 115
+  STC 101
+  STC 110
+  STC 105
+  STC 76
+</String_"Lines: ">
+; --Comprobar variable lines
+  SRF  0  6
+  DRF
+; --Se va a anyadir el string del putline y se muestra lines
+  WRT  1
+</Putline>
+  LVP
+</test_stats>

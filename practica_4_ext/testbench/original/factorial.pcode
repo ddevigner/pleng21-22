@@ -1,0 +1,342 @@
+<factorial>
+  ENP L0
+<fact>
+<if_else>
+<then>
+L1:
+; --Se anyade el parametro en el for este y es valor y no array m
+  SRF  0  3
+  ASGI
+  JMP L2
+L2:
+; --Comprobar variable m
+  SRF  0  3
+  DRF
+  STC  1
+  EQ
+  JMF L3
+  STC  1
+; --Se hace return 
+  CSF
+  JMP L4
+L3:
+</then>
+; --Comprobar variable m
+  SRF  0  3
+  DRF
+; --Comprobar variable m
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+  STC  1
+  SBT
+  TMS
+; --Se hace return 
+  CSF
+L4:
+</if_else>
+  CSF
+</fact>
+L0:
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+  STC 10
+  WRT  0
+<String_"">
+</String_"">
+; --Se va a anyadir el string del putline y se muestra null
+</Putline>
+  STC 10
+  WRT  0
+<String_"Calcula k! para k=1..20.">
+  STC 46
+  STC 48
+  STC 50
+  STC 46
+  STC 46
+  STC 49
+  STC 61
+  STC 107
+  STC 32
+  STC 97
+  STC 114
+  STC 97
+  STC 112
+  STC 32
+  STC 33
+  STC 107
+  STC 32
+  STC 97
+  STC 108
+  STC 117
+  STC 99
+  STC 108
+  STC 97
+  STC 67
+</String_"Calcula k! para k=1..20.">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"">
+</String_"">
+; --Se va a anyadir el string del putline y se muestra null
+</Putline>
+  STC 10
+  WRT  0
+<String_"Habrá MATH overflow en 13! porque los enteros en la máquina p son de 4 bytes.">
+  STC 46
+  STC 115
+  STC 101
+  STC 116
+  STC 121
+  STC 98
+  STC 32
+  STC 52
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 110
+  STC 111
+  STC 115
+  STC 32
+  STC 112
+  STC 32
+  STC 97
+  STC 110
+  STC 105
+  STC 117
+  STC 113
+  STC 161
+  STC 195
+  STC 109
+  STC 32
+  STC 97
+  STC 108
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 115
+  STC 111
+  STC 114
+  STC 101
+  STC 116
+  STC 110
+  STC 101
+  STC 32
+  STC 115
+  STC 111
+  STC 108
+  STC 32
+  STC 101
+  STC 117
+  STC 113
+  STC 114
+  STC 111
+  STC 112
+  STC 32
+  STC 33
+  STC 51
+  STC 49
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 119
+  STC 111
+  STC 108
+  STC 102
+  STC 114
+  STC 101
+  STC 118
+  STC 111
+  STC 32
+  STC 72
+  STC 84
+  STC 65
+  STC 77
+  STC 32
+  STC 161
+  STC 195
+  STC 114
+  STC 98
+  STC 97
+  STC 72
+</String_"Habrá MATH overflow en 13! porque los enteros en la máquina p son de 4 bytes.">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"">
+</String_"">
+; --Se va a anyadir el string del putline y se muestra null
+</Putline>
+; --Comprobar variable n
+  SRF  0  3
+  STC  1
+  ASG
+L5:
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  STC 20
+  LTE
+  JMF L6
+  STC 10
+  WRT  0
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+; --Se va a anyadir el string del putline y se muestra n
+  WRT  1
+<String_"! = ">
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  STC 32
+  STC 61
+  STC 32
+  STC 33
+</String_"! = ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"! = ">
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  STC 32
+  STC 61
+  STC 32
+  STC 33
+</String_"! = ">
+; --Comprobar variable n
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se va a anyadir el string del putline y se muestra fact
+  WRT  1
+</Putline>
+; --Comprobar variable n
+  SRF  0  3
+; --Comprobar variable n
+  SRF  0  3
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L5
+L6:
+  LVP
+</factorial>

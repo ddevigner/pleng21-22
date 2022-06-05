@@ -1,0 +1,13 @@
+procedure max is 
+
+integer i, j;
+
+begin
+	get (i);
+	get (j);
+	if i > j then
+		put (i);
+	else
+		put (j);
+	end
+end

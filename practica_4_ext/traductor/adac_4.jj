@@ -1,0 +1,883 @@
+//-----------------------------------------------------------------------------
+// - File: adac_4.jj
+// - Author: Sergio Gabete César (774631) & Devid Dokash (780131).
+// - Date: 17/05/2022 (last version).
+// - Coms: https://javacc.github.io/javacc/tutorials/token-manager.html. Imple-
+// mentacion del analizador sintactico.
+// - Version: 3.
+// - Version-Info: analizador semantico.
+//-----------------------------------------------------------------------------
+
+options {
+   //COMMON_TOKEN_ACTION = true;
+}
+
+PARSER_BEGIN(adac_4)
+package traductor;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.*;
+import lib.attributes.Attributes;
+import lib.symbolTable.*;
+import lib.symbolTable.exceptions.*;
+import lib.symbolTable.Symbol.ParameterClass;
+import lib.symbolTable.Symbol.Types;
+import lib.tools.exceptions.*;
+import lib.tools.codeGeneration.*;
+import lib.tools.codeGeneration.PCodeInstruction.OpCode;
+import lib.tools.SemanticFunctions;
+import lib.tools.SemanticFunctions.Operator;
+
+public class adac_4 {
+
+	//Se declara la tabla de simbolos
+	static SymbolTable st;
+	static SemanticFunctions sf;
+
+	static int synt_errors = 0;
+
+	public static void panicMode(Token err, int type) {
+		synt_errors++;
+		System.err.println("ERROR SINTACTICO: (" + err.beginLine + "," 
+			+ err.beginColumn + "): " + err);
+		System.err.println("----> Iniciando recuperacion en modo panico..."
+			+ "\n----> Saltando todo hasta token de conjunto de sincronizacion");
+		Token t = getNextToken();
+		if (type == 0) {
+			while(t.kind != EOF) {
+				System.err.println("Descartando token ("
+					+ adac_4Constants.tokenImage[t.kind] + "," + t.image + ")");
+				t = getNextToken();
+			}
+		} else {
+			while(t.kind != SCOLON && t.kind != END && t.kind != EOF) {
+				System.err.println("Descartando token ("
+					+ adac_4Constants.tokenImage[t.kind] + "," + t.image + ")");
+				t = getNextToken();
+			}
+		}
+	}
+
+
+    public static void main(String[] args) throws java.io.FileNotFoundException, 
+			ParseException 
+	{
+    	adac_4 parser;
+
+    	try {
+			// Inicializacion de la tabla de simbolos.
+			st = new SymbolTable();
+			sf = new SemanticFunctions(st);
+
+			// Entrada.
+	    	if(args.length == 0) parser = new adac_4(System.in);
+			else parser = new adac_4(new java.io.FileInputStream(args[0])); 
+
+			// Invoca símbolo inicial de la gramática.
+			String code = parser.main();
+			String code_file = args[0].split("\\.(?=[^\\.]+$)")[0] + ".pcode";
+			if ((synt_errors + sf.getErrors()) == 0) {
+				System.out.println("Compilation succeded.");
+				BufferedWriter writer = new BufferedWriter(
+					new FileWriter(code_file));
+				writer.write(code);
+				writer.close();
+			}
+			else {
+				System.out.println("\nCompilation failed due to errors: " 
+					+ synt_errors + " syntatic error(s), " 
+					+ sf.getWarnings() + " warning(s), " 
+					+ sf.getErrors() + " error(s).");
+			}
+
+		} catch (java.io.FileNotFoundException e) {
+			System.err.println ("Fichero " + args[0] + " no encontrado.");
+		} catch (TokenMgrError e) {
+        	System.err.println("LEX_ERROR: " + e.getMessage());
+        } catch (IOException e) {
+			System.err.println("An error occurred.");
+			e.printStackTrace();
+		}
+    }
+}
+PARSER_END(adac_4)
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// ANALIZADOR LEXICO.
+//-----------------------------------------------------------------------------
+// Se ignoran espacios, saltos de linea, caracteres que no aportan informacion
+// al analisis lexico.
+SKIP: {
+	" " | "\t" | "\r" | "\n" | "\r\n"
+}
+
+//-----------------------------------------------------------------------------
+// Funcion global para todos los tokens. Imprimir por pantalla la linea, la 
+// columna, el tipo de token y el valor del token que ha hecho match.
+//TOKEN_MGR_DECLS: {
+//	static void CommonTokenAction(Token t){
+//		System.out.println("(" + t.beginLine + "," + t.beginColumn + "): " 
+//			+ adac_4Constants.tokenImage[t.kind] + " \"" + t + "\"");
+//	}
+//}
+
+//-----------------------------------------------------------------------------
+// Conjuntos.
+TOKEN: {
+ 		< #LETTER: ["a"-"z","A"-"Z"] >
+	|	< #DIGIT: ["0"-"9"] >
+}
+
+//-----------------------------------------------------------------------------
+// Comentarios: SPECIAL_TOKEN ya que interesa ignorar los comentarios y no 
+// procesarlos.
+SPECIAL_TOKEN: {
+	< COMMENT: "--"(~["\n"])*("\n")? >
+}
+
+//-----------------------------------------------------------------------------
+// Sintaxis general.
+TOKEN: {
+		< SCOLON: ";" >
+	|	< COLON: "," >
+	|	< LPAREN: "(" > 
+	|	< RPAREN: ")" > 
+	|	< LBRACK: "[" > 
+	|	< RBRACK: "]" >
+}
+
+//-----------------------------------------------------------------------------
+// Tipos y constantes: enteros, booleanos y caracteres, tanto como dato simple
+// como array. En algunas funciones se permite el uso de strings pero no como
+// variables.
+TOKEN: {
+		< INT: "integer" >				
+	|	< BOOL: "boolean" >				
+	|	< CHAR: "character" >			
+	|	< INTVAL: (< DIGIT >)+ >	
+	|   < CHARVAL: "'"(~[])"'" >			
+	|   < BOOLVAL: "true" | "false" >
+	|	< STRING: "\""(~["\""])*"\"" >
+}
+
+//-----------------------------------------------------------------------------
+// Operaciones de asignacion y aritmeticologicas.
+TOKEN: {
+    	< ASS: ":=" > 
+    |	< ADD: "+" >		
+    |	< SUB: "-" >		
+    |	< MUL: "*" >		
+    |	< DIV: "div" >		
+    |	< MOD: "mod" >		
+    |	< EQ: "=" >		
+    |	< NE: "<>" >	
+    |	< LT: "<" >	
+    |	< GT: ">" >
+    |	< LE: "<=" >	
+    |	< GE: ">=" >	
+    |	< AND: "and" >		
+    |	< OR: "or" >		
+    |	< NOT: "not" >		
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de funciones y procedimientos.
+TOKEN: {
+		< FUNC: "function" >
+	|	< PROC: "procedure" >
+	|	< IS: "is" >			
+	|	< VAL: "val" >		
+	|	< REF: "ref" >		
+	|	< RETURN: "return" >	
+}
+
+
+//-----------------------------------------------------------------------------
+// Declaracion de funciones existentes en adac.
+TOKEN: {
+		< PUT: "put" >
+	|	< PUTLINE: "put_line" >
+	| 	< CHAR2INT: "char2int" >
+	|	< INT2CHAR: "int2char" >
+	|   < SKIPLINE: "skip_line" >
+	|	< GET: "get" >
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de estructuras de control: if & while.
+TOKEN: {
+    	< IF: "if" > 
+	| 	< THEN: "then" >
+	| 	< ELSE: "else" >
+	|	< WHILE: "while" >
+    |	< DO: "do" >	
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de cuerpo.
+TOKEN: {
+		< BEGIN: "begin" > 
+	| 	< END: "end" >
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de nombres.
+TOKEN: {
+	< ID: ("_" | < LETTER > | < LETTER >"_")(< LETTER > | < LETTER >"_" | < DIGIT > | < DIGIT >"_")* >
+}
+
+//-----------------------------------------------------------------------------
+// Errores.
+SPECIAL_TOKEN: {
+	< UNKNOWN: (~[]) >	
+		{ 
+			System.err.println("ERROR LEXICO: (" + 
+				matchedToken.beginLine + "," + matchedToken.beginColumn + 
+				"): simbolo no reconocido: " + matchedToken);
+		}
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// ANALIZADOR SINTATICO & SEMANTICO.
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// Declaracion del procedimiento principal del fichero.
+String main() :
+{
+	Attributes main = new Attributes(Types.PROCEDURE, Types.UNDEFINED, null, true);
+	Token t;
+	String label;
+	CodeBlock cmain;
+	CodeBlock funcs = new CodeBlock();
+} 
+{	
+	try {
+		<PROC> t = <ID> <IS> 
+			{
+				label = CGUtils.newLabel();
+				sf.AddMethod(main, t, label); 
+				cmain = new CodeBlock();
+				cmain.generationMode = CodeBlock.BlockMode.XML;
+				CGUtils.memorySpaces[st.level]=3;
+			}
+		vars_def()
+		procs_funcs_decl(funcs)		//Que esto devuelva un CodeBlock 
+		proc_func_body(main)
+			{
+				//label = CGUtils.newLabel();
+				cmain.addInst(OpCode.ENP, label);
+				//cmain.addLabel(label);
+				cmain.addBlock(funcs);
+				cmain.addLabel(label);
+				cmain.addBlock(main.code);
+				cmain.addInst(OpCode.LVP);
+				cmain.encloseXMLTags(t.image);
+			}
+		<EOF>
+			{
+				//System.err.println(cmain.toString());
+				return cmain.toString();
+			}
+	} catch (ParseException e) {
+		panicMode(e.currentToken.next, 0);
+	}
+
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de procedimientos/funciones del fichero.
+void procs_funcs_decl (CodeBlock funcs):
+{
+} {
+	(proc_func_decl(funcs))*
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de procedimiento/funcion
+void proc_func_decl(CodeBlock proc_func):
+{
+	Attributes at = new Attributes();
+	Token t;
+	String label;
+	//CodeBlock proc_func;
+	ArrayList<Symbol> params_invertidos;
+	CodeBlock funciones_dentro_de_funcion = new CodeBlock();
+	String label_params;
+	
+} {
+	proc_or_func(at)
+	func_return(at)
+	t = <ID> { 
+		label_params=CGUtils.newLabel();
+		label= CGUtils.newLabel();
+		sf.EvaluateReturnTypeDef(at, t); sf.AddMethod(at, t, label_params); 
+		//proc_func = new CodeBlock();
+		CGUtils.memorySpaces[st.level]=3;
+
+		}	//Se crea el bloque de la funcion
+	<LPAREN>
+	{at.code.addLabel(label_params);}
+	params_def(at)		//Aqui hacer recuperacion de parametros. Para cada symbol hacer lo de la diapo . Mirar si deberia hacerlo en otro orden
+	{
+		for(int i=at.params.size()-1;i>=0;i--){
+			Symbol s = at.params.get(i);
+			if(s.parClass == ParameterClass.REF){
+				at.code.addComment("Se anyade el parametro en el for este y es ref " + s.name);
+				s.dir = CGUtils.memorySpaces[st.level]++;
+				long aux = s.dir;
+				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
+				at.code.addInst(PCodeInstruction.OpCode.ASGI);
+			}else if(s.parClass == ParameterClass.VAL && s.type != Types.ARRAY){
+				at.code.addComment("Se anyade el parametro en el for este y es valor y no array " + s.name);
+				s.dir = CGUtils.memorySpaces[st.level]++;
+				long aux = s.dir;
+				at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
+				at.code.addInst(PCodeInstruction.OpCode.ASGI);
+			}else if(s.parClass == ParameterClass.VAL && s.type == Types.ARRAY){
+				s.dir = CGUtils.memorySpaces[st.level]++;
+				SymbolArray vec = (SymbolArray) s;
+				CGUtils.memorySpaces[st.level] += vec.maxInd;
+				at.code.addComment("Se suma al nivel " + st.level + "el tamanyo " + vec.maxInd);
+				//Se recorre el vector y se recupera cada Posicion 
+				for(int j=vec.maxInd; j >= 0; j--) {
+					at.code.addComment("Se anyade el parametro en el for este y es valor y array " + s.name);
+					long aux = s.dir + (long) j;	//Revisarlo
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel, (int)aux);	//Aqui da error
+					at.code.addInst(PCodeInstruction.OpCode.ASGI);
+				}
+			}
+		}
+		at.code.addInst(OpCode.JMP, label);
+	}
+	<RPAREN>
+	<IS>
+	vars_def()
+	procs_funcs_decl(funciones_dentro_de_funcion)		//Anyades el codigo de lo que se define dentro //Luego anyadir que devuelva un CodeBlock
+	{
+		at.code.addBlock(funciones_dentro_de_funcion);
+		at.code.addLabel(label);
+	}
+	proc_func_body(at)		//Anyades el codigo de la funcion con el label y tal
+	{
+		proc_func.addBlock(at.code);
+		proc_func.addInst(OpCode.CSF);
+		proc_func.encloseXMLTags(t.image);
+	}
+}
+
+//-----------------------------------------------------------------------------
+// Declaracion de si es procedimiento o funcion.
+void proc_or_func(Attributes at):
+{} {
+		<PROC> { at.type = Types.PROCEDURE; } 
+	| 	<FUNC> { at.type = Types.FUNCTION;  }
+}
+
+//-----------------------------------------------------------------------------
+// Tipo de dato que devuelve la funcion.
+void func_return(Attributes at):
+{} {
+	vars_type(at)
+	| {} { at.baseType = Types.UNDEFINED; }
+}
+
+//-----------------------------------------------------------------------------
+// Parametros de procedimiento/funcion.
+void params_def(Attributes at):
+{
+	Attributes aux = new Attributes(at.params);
+} {
+	(param_class(aux) vars_decl(aux) (<SCOLON> param_class(aux) vars_decl(aux))*)?
+		{ at.code.addBlock(aux.code); }
+}
+
+//-----------------------------------------------------------------------------
+// Clase del parametro: por valor o por referencia.
+void param_class(Attributes at):
+{} {
+		<VAL> { at.parClass = ParameterClass.VAL; }
+	| 	<REF> { at.parClass = ParameterClass.REF; }
+}
+
+//-----------------------------------------------------------------------------
+// Variables de procedimiento/funcion.
+void vars_def():
+{
+	Attributes at = new Attributes(ParameterClass.NONE);
+} {
+	( vars_decl(at) <SCOLON> )*
+}
+
+//-----------------------------------------------------------------------------
+// Tipos de variable y variables asociadas.
+void vars_decl(Attributes at):
+{} {
+	vars_type(at) vars_list(at)
+}
+
+
+//-----------------------------------------------------------------------------
+// Tipos de una variable.
+void vars_type(Attributes at):
+{
+	Token t;
+} {
+		t = <INT>  { at.baseType = Types.INT;  at.line = t.beginLine; at.column = t.beginColumn; }
+	| 	t = <BOOL> { at.baseType = Types.BOOL; at.line = t.beginLine; at.column = t.beginColumn; }
+	| 	t = <CHAR> { at.baseType = Types.CHAR; at.line = t.beginLine; at.column = t.beginColumn; }
+}
+
+//-----------------------------------------------------------------------------
+// Variables del mismo tipo.
+void vars_list(Attributes at):
+{}
+{
+	var(at) (<COLON> var(at))*
+}
+
+//-----------------------------------------------------------------------------
+// Nombre de la variable.	//Aqui se guarda la variable en la pila
+void var(Attributes at):
+{
+	Token t, ind;
+} 
+{
+	LOOKAHEAD(2) t = <ID> <LBRACK> ind = <INTVAL> <RBRACK> 
+		{ 
+			sf.AddVar(at, t, ind, Types.ARRAY); 
+			
+			}	//Anyadir 1 al memorySpaces y asiganr dir
+	| t = <ID>
+		{ sf.AddVar(at, t, null, Types.UNDEFINED); }
+}
+
+//-----------------------------------------------------------------------------
+// Cuerpo de procedimiento/funcion.
+void proc_func_body(Attributes at):
+{
+	Token t;
+} {
+	try {
+		<BEGIN> 
+		instructions_list(at) 
+		t = <END> { sf.EvaluateReturn(at, t); st.removeBlock(); }
+	} catch (ParseException e) {
+		panicMode(e.currentToken.next, 1);
+	}
+
+}
+
+//-----------------------------------------------------------------------------
+// Conjunto de instrucciones.
+void instructions_list(Attributes at):
+{} {
+	(instruction(at))*
+}
+
+//-----------------------------------------------------------------------------
+// Instruccion:
+//	- Procedimientos predefinidos: get, put, putline, skipline.
+//  - Procedimientos del usuario.
+//	- Asignacion.
+//	- While/If-Else.
+//	- Return.
+void instruction(Attributes at):
+{
+	Attributes fst = new Attributes(), snd = new Attributes();
+	Token t;
+	String label_else;
+	String label_fin_if;
+	String label_exp_while;
+	String label_fin_while;
+} {
+		<GET> <LPAREN> assignable(fst) { //A lo mejor el get hay que cambiarlo ya que en assignable los metere en la pila en vez de en la funcion del get
+				sf.EvaluateGet(fst); 
+				at.code.addBlock(fst.code);
+			}		//En el get se le pasa un asignable, se necesita el nivel de ese assignable 
+			( <COLON> assignable(fst) { sf.EvaluateGet(fst); } )* <RPAREN> <SCOLON>
+	| 	<PUT> <LPAREN> expression(fst) { 
+					sf.EvaluatePut(fst); 
+					at.code.addBlock(fst.code); 
+					at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+					if(fst.baseType==Types.INT){
+						at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+					}else if(fst.baseType==Types.CHAR){
+						at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+					}else{
+						for (int i = 0; i < fst.stringVal.length()-2; i++) {
+							at.code.addInst(OpCode.WRT, 0);
+						}
+					}
+						} 
+			(<COLON> expression(fst) { 
+						sf.EvaluatePut(fst); 
+						at.code.addBlock(fst.code); 
+						at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+							if(fst.baseType==Types.INT){
+								at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+							}else if(fst.baseType==Types.CHAR){
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+							}else{
+								for (int i = 0; i < fst.stringVal.length()-2; i++) {
+									at.code.addInst(OpCode.WRT, 0);
+								}
+							}
+						})* <RPAREN> <SCOLON> 
+
+	| 	<PUTLINE> { at.code.addInst(OpCode.STC, '\n'); at.code.addInst(OpCode.WRT, 0); }
+		<LPAREN> (expression(fst)
+			{ 
+				sf.EvaluatePutline(fst);
+				at.code.addBlock(fst.code);
+				at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+				if(fst.baseType==Types.INT){
+					at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+				}else if(fst.baseType==Types.CHAR){
+					at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				}else{
+					for (int i = 0; i < fst.stringVal.length()-2; i++) {
+						at.code.addInst(OpCode.WRT, 0);
+					}
+				}
+			}
+		(<COLON> expression(fst) 
+			{ 
+				sf.EvaluatePutline(fst);
+				at.code.addBlock(fst.code);
+				at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+				if(fst.baseType==Types.INT){
+					at.code.addInst(PCodeInstruction.OpCode.WRT,1);
+				}else if(fst.baseType==Types.CHAR){
+					at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				}else{
+					for (int i = 0; i < fst.stringVal.length()-2; i++) {
+						at.code.addInst(OpCode.WRT, 0);
+					}
+				}
+			}
+		)*)? <RPAREN> <SCOLON> 
+			{ 
+				//at.code.addInst(OpCode.WRT, 0);
+				at.code.encloseXMLTags("Putline");
+			}
+
+	| 	<SKIPLINE> <LPAREN> <RPAREN> {
+			at.code.addInst(PCodeInstruction.OpCode.STC,'\n');
+			at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+		} <SCOLON>
+
+	| 	LOOKAHEAD(2) t = <ID> { fst = new Attributes(sf.GetProcedure(t)); }
+			<LPAREN> (expression(fst) { sf.EvaluateProcedureParameter(fst); }
+			(<COLON> expression(fst)  { sf.EvaluateProcedureParameter(fst); })*)? 
+			<RPAREN> <SCOLON> { sf.EvaluateProcedure(at, fst, t); }
+
+	| 	assignable(fst) <ASS> expression(snd) { 
+								sf.EvaluateAssignation(fst, snd); 
+								at.code.addBlock(fst.code);	//Se anyaden los bloques en orden
+								at.code.addBlock(snd.code);
+								at.code.addInst(PCodeInstruction.OpCode.ASG);
+							} <SCOLON> 
+	|	<WHILE> {
+					label_exp_while=CGUtils.newLabel();
+					at.code.addLabel(label_exp_while);
+				}
+			expression(fst) { 
+					sf.EvaluateCondition(fst); 
+					label_fin_while = CGUtils.newLabel();
+					at.code.addBlock(fst.code);	//Aqui hay que anyadir el codigo de expression que sera un store constant de 0 o 1 lo mas seguro
+					at.code.addInst(PCodeInstruction.OpCode.JMF,label_fin_while);
+				}
+			<DO> instructions_list(at) <END>{
+											at.code.addInst(PCodeInstruction.OpCode.JMP,label_exp_while);
+											at.code.addLabel(label_fin_while);
+										}
+	| 	<IF> expression(fst) { 
+				//Aqui habria que anyadir el codigo de expression
+				sf.EvaluateCondition(fst); 
+				label_else = CGUtils.newLabel();
+				at.code.addBlock(fst.code);	//Se anyade el codigo de la expression (que lo mas seguroque haga un store constan de 0 o 1 para indicar true o false)
+				at.code.addInst(PCodeInstruction.OpCode.JMF,label_else);
+			} <THEN> instructions_list(at) {
+										label_fin_if=CGUtils.newLabel();
+										at.code.addInst(PCodeInstruction.OpCode.JMP,label_fin_if);
+										at.code.addLabel(label_else);
+										at.code.encloseXMLTags("then");
+									}
+			(<ELSE> instructions_list(at))? <END> {
+													at.code.addLabel(label_fin_if);
+													at.code.encloseXMLTags("if_else");
+													
+												}
+	| 	t = <RETURN> expression(fst) { 
+			sf.EvaluateReturn(at, fst, t); 
+			at.code.addBlock(fst.code);
+			at.code.addComment("Se hace return ");
+			at.code.addInst(OpCode.CSF);	//Como hay un return se pone CSF porque es el final de la funcion
+			} <SCOLON> 	//Apilar el return de una funcion //////////////////////////////////
+}
+
+//-----------------------------------------------------------------------------
+// Elementos asignables.
+void assignable(Attributes at):
+{
+	Attributes aux = new Attributes();
+	Token t;
+	String label_codigo_correcto;
+	String label_error_index;
+}
+{
+	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { 
+							sf.EvaluateArray(at, aux, t); 
+							at.code.addBlock(aux.code);
+							try
+							{
+								at.code.addComment("Comprobando el indice del vector");
+								//Comprobar que el indice no se sale 
+								label_codigo_correcto= CGUtils.newLabel();
+								label_error_index = CGUtils.newLabel();
+								SymbolArray vec = (SymbolArray) st.getSymbol(t.image);
+								at.code.addInst(PCodeInstruction.OpCode.DUP);
+								at.code.addInst(PCodeInstruction.OpCode.STC,0);
+								at.code.addInst(PCodeInstruction.OpCode.GTE);
+								at.code.addInst(PCodeInstruction.OpCode.JMF,label_error_index);
+								at.code.addInst(PCodeInstruction.OpCode.DUP);
+								at.code.addInst(PCodeInstruction.OpCode.STC,vec.maxInd);
+								at.code.addInst(PCodeInstruction.OpCode.LTE);
+								at.code.addInst(PCodeInstruction.OpCode.JMT,label_codigo_correcto);
+								at.code.addLabel(label_error_index);
+								//Meter el mensaje de error y LVP
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.STC,117);
+								at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+								at.code.addInst(PCodeInstruction.OpCode.LVP);
+								at.code.addLabel(label_codigo_correcto);
+								//Ahora se carga la componentes correcta del vector
+								long auxDir = vec.dir;
+								at.code.addComment("Accediendo al index del vector " + vec.name);
+								if(vec.parClass == ParameterClass.REF){
+									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+									at.code.addInst(PCodeInstruction.OpCode.DRF);	
+									at.code.addInst(PCodeInstruction.OpCode.PLUS);
+								}else if(vec.parClass == ParameterClass.VAL){
+									at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
+								}else if(vec.parClass == ParameterClass.NONE){
+									at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+									at.code.addInst(PCodeInstruction.OpCode.PLUS);
+								}
+								//at.code.addInst(PCodeInstruction.OpCode.PLUS);
+
+							}catch(SymbolNotFoundException e){
+
+							}
+												}
+	| t = <ID> { 
+				sf.EvaluateVar(at, t);
+				at.code.addComment("Comprobar variable " + t.image); 
+				//Anyadir a at el codigo de esta variable que sera para escritura
+				try {
+					Symbol s = st.getSymbol(t.image);
+					long auxDir=s.dir;
+					if(s.parClass==ParameterClass.VAL){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+					}else if(s.parClass==ParameterClass.REF){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+						at.code.addInst(PCodeInstruction.OpCode.DRF);	
+					}else if(s.parClass==ParameterClass.NONE){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+					}
+				} catch (SymbolNotFoundException e) {
+					
+				}
+				
+			}
+}
+
+
+//-----------------------------------------------------------------------------
+// Expresion relacional.
+void expression(Attributes at): 
+{
+	Attributes aux = new Attributes();
+}
+{
+	simple_expr(at) (relational_op(aux) simple_expr(aux) { sf.EvaluateOperation(at, aux); })?
+}
+
+//-----------------------------------------------------------------------------
+// Expresion aritmetica.
+void simple_expr(Attributes at): 
+{
+	Attributes aux = new Attributes();
+	Token t = null;
+} 
+{
+	((t = <ADD> | t = <SUB>) { at.op = Operator.INT_OP; })? term(at) { sf.EvaluateOperation(at, t); }
+		(additive_op(aux) term(aux) { sf.EvaluateOperation(at, aux); })*
+}
+
+//-----------------------------------------------------------------------------
+// Expresion multiplicativa.
+void term(Attributes at):
+{
+	Attributes aux = new Attributes();
+}
+{
+	factor(at) (multiplicative_op(aux) factor(aux) { sf.EvaluateOperation(at, aux); })*
+}
+
+void factor(Attributes at):
+{
+	Attributes aux = new Attributes();
+	Token t;
+	CodeBlock cblock;
+	String label_codigo_correcto;
+	String label_error_index;
+} {
+	  	t = <NOT> factor(at) { 
+			sf.EvaluateCondition(at, t);
+			at.code.addInst(PCodeInstruction.OpCode.NGB);	//Se pone el negado
+		}
+	| 	<LPAREN> expression(at) <RPAREN> 
+	| 	t = <INT2CHAR> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateInt2Char(at, aux, t); at.code.addBlock(aux.code); }
+	| 	t = <CHAR2INT> <LPAREN> expression(aux) <RPAREN> { sf.EvaluateChar2Int(at, aux, t); at.code.addBlock(aux.code); }
+	
+	| 	LOOKAHEAD(2) t = <ID> { aux = new Attributes(sf.GetFunction(t)); } 
+			<LPAREN> (expression(aux) { sf.EvaluateFunctionParameter(aux); }
+			(<COLON>  expression(aux) { sf.EvaluateFunctionParameter(aux); })*)?
+			<RPAREN> { sf.EvaluateFunction(at, aux, t); }
+
+	| 	LOOKAHEAD(2) t = <ID> <LBRACK> expression(aux) <RBRACK> { 
+			sf.EvaluateArray(at, aux, t); 
+			//Anyadir la expresion del [] 
+			at.code.addComment("Expresion de los [] del vector");
+			at.code.addBlock(aux.code);
+			try {
+				at.code.addComment("Comprobando el indice del vector");
+				//Comprobar que el indice no se sale 
+				label_codigo_correcto= CGUtils.newLabel();
+				label_error_index = CGUtils.newLabel();
+				SymbolArray vec = (SymbolArray) st.getSymbol(t.image);
+				at.code.addInst(PCodeInstruction.OpCode.DUP);
+				at.code.addInst(PCodeInstruction.OpCode.STC,0);
+				at.code.addInst(PCodeInstruction.OpCode.GTE);
+				at.code.addInst(PCodeInstruction.OpCode.JMF,label_error_index);
+				at.code.addInst(PCodeInstruction.OpCode.DUP);
+				at.code.addInst(PCodeInstruction.OpCode.STC,vec.maxInd);
+				at.code.addInst(PCodeInstruction.OpCode.LTE);
+				at.code.addInst(PCodeInstruction.OpCode.JMT,label_codigo_correcto);
+				at.code.addLabel(label_error_index);
+				//Meter el mensaje de error y LVP
+				at.code.addInst(PCodeInstruction.OpCode.STC,117);
+				at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				at.code.addInst(PCodeInstruction.OpCode.STC,117);
+				at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				at.code.addInst(PCodeInstruction.OpCode.STC,117);
+				at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				at.code.addInst(PCodeInstruction.OpCode.STC,117);
+				at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				at.code.addInst(PCodeInstruction.OpCode.STC,117);
+				at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				at.code.addInst(PCodeInstruction.OpCode.STC,117);
+				at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				at.code.addInst(PCodeInstruction.OpCode.STC,117);
+				at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				at.code.addInst(PCodeInstruction.OpCode.STC,117);
+				at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+				at.code.addInst(PCodeInstruction.OpCode.LVP);
+				at.code.addLabel(label_codigo_correcto);
+				//Ahora se carga la componentes correcta del vector
+				long auxDir = vec.dir;
+				at.code.addComment("Accediendo al index del vector " + vec.name);
+				if(vec.parClass == ParameterClass.REF){
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+					at.code.addInst(PCodeInstruction.OpCode.PLUS);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);	
+				}else if(vec.parClass == ParameterClass.VAL){
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+					at.code.addInst(PCodeInstruction.OpCode.PLUS);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+					//at.code.addInst(PCodeInstruction.OpCode.PLUS);
+				}else if(vec.parClass == ParameterClass.NONE){
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+					at.code.addInst(PCodeInstruction.OpCode.PLUS);
+					at.code.addInst(PCodeInstruction.OpCode.DRF);
+					//at.code.addInst(PCodeInstruction.OpCode.PLUS);
+				}					
+			} catch (SymbolNotFoundException e){}
+		} 
+	| 	t = <ID> { 
+			at.code.addComment("Comprobar variable " + t.image); 
+			if (at.parameter) { 
+				sf.EvaluateParam(at, t); 
+			} else {
+				sf.EvaluateVar(at, t); 
+				try {
+					Symbol s = st.getSymbol(t.image);
+					long auxDir=s.dir;
+					if(s.parClass==ParameterClass.VAL){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+						at.code.addInst(PCodeInstruction.OpCode.DRF);
+					}else if(s.parClass==ParameterClass.REF){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);	
+						at.code.addInst(PCodeInstruction.OpCode.DRF);
+						at.code.addInst(PCodeInstruction.OpCode.DRF);		
+					}else if(s.parClass==ParameterClass.NONE){
+						at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)auxDir);
+						at.code.addInst(PCodeInstruction.OpCode.DRF);	
+					}
+				} catch (SymbolNotFoundException e) {
+					
+				}
+			} 
+		}
+	| 	t = <INTVAL>  { sf.EvaluateInt(at, t);    }
+	| 	t = <CHARVAL> { sf.EvaluateChar(at, t);   }
+	| 	t = <BOOLVAL> { sf.EvaluateBool(at, t);   }
+	| 	t = <STRING>  { sf.EvaluateString(at, t); }
+}
+
+void relational_op(Attributes at):
+{
+	Token t;
+} {
+	( t = <EQ> | t = <LT> | t = <GT> | t = <LE> | t = <GE> | t = <NE> )
+		{ sf.EvaluateOperator(at, t, Operator.CMP_OP); }
+}
+
+void additive_op(Attributes at):
+{
+	Token t;
+} {
+	( t = <ADD> | t = <SUB> )
+		{ sf.EvaluateOperator(at, t, Operator.INT_OP); }
+	| t = <OR> 
+		{ sf.EvaluateOperator(at, t, Operator.BOOL_OP); }
+}
+
+void multiplicative_op(Attributes at):
+{
+	Token t;
+} {
+	( t = <MUL> | t = <MOD> | t = <DIV> ) 
+		{ sf.EvaluateOperator(at, t, Operator.INT_OP); }
+	| t = <AND>
+		{ sf.EvaluateOperator(at, t, Operator.BOOL_OP); }
+}

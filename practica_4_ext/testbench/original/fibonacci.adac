@@ -1,0 +1,58 @@
+procedure fibonacci is
+
+integer i, n, r;
+
+-----------------------------------------------------------
+procedure cambiar_de_linea () is
+-----------------------------------------------------------
+begin
+  put (int2char (13), int2char (10));
+end
+
+-----------------------------------------------------------
+procedure dato (ref integer dato) is
+-----------------------------------------------------------
+boolean correcto;
+    
+begin
+  dato := 0;
+  correcto := false;
+  while not correcto do
+     put ("Escribe un numero positivo: ");
+     get (dato);
+     correcto := dato > 0;
+     if not correcto then
+        put_line ("El numero debe ser positivo.");
+     end
+  end
+end
+
+-----------------------------------------------------------
+procedure fib (val integer n; ref integer r) is
+-----------------------------------------------------------
+integer r1, r2;
+
+begin
+  if n > 1 then
+     fib (n - 1, r1);
+     fib (n - 2, r2);
+     r := r1 + r2;
+  else
+     r := n;
+  end
+end
+
+-----------------------------------------------------------
+begin
+  put_line ("Este programa pide un número positivo n y calcula fib(n) con la fórmula recursiva fib(n) = fib(n-1) + fib(n-2)");
+  put_line ("A partir de 30 será muy lento por la recursividad.");
+  put_line ("");
+  dato (n);
+  i := 1;
+  while i <= n do
+    fib (i, r);
+    put_line ("fib(", i,") = ", r);
+    i := i + 1;
+  end
+  cambiar_de_linea ();
+end

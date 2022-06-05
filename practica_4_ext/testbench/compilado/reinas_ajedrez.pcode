@@ -1,0 +1,1927 @@
+<ajedrez>
+  ENP L0
+<libre>
+<mostrar_tablero>
+<iniciar_tablero>
+<colocar_reina>
+<desmarcar_componente>
+<marcar_componente>
+<asignar_componente>
+<ocupada>
+<componente>
+<sitio>
+<linea>
+<max>
+<min>
+<if_else>
+<then>
+L1:
+; --Se anyade el parametro en el for este y es valor y no array y
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array x
+  SRF  0  4
+  ASGI
+  JMP L2
+L2:
+; --Comprobar variable x
+  SRF  0  4
+  DRF
+; --Comprobar variable y
+  SRF  0  3
+  DRF
+  GT
+  JMF L3
+; --Comprobar variable y
+  SRF  0  3
+  DRF
+; --Se hace return 
+  CSF
+  JMP L4
+L3:
+</then>
+; --Comprobar variable x
+  SRF  0  4
+  DRF
+; --Se hace return 
+  CSF
+L4:
+</if_else>
+  CSF
+</min>
+<if_else>
+<then>
+L5:
+; --Se anyade el parametro en el for este y es valor y no array y
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array x
+  SRF  0  4
+  ASGI
+  JMP L6
+L6:
+; --Comprobar variable x
+  SRF  0  4
+  DRF
+; --Comprobar variable y
+  SRF  0  3
+  DRF
+  GT
+  JMF L7
+; --Comprobar variable x
+  SRF  0  4
+  DRF
+; --Se hace return 
+  CSF
+  JMP L8
+L7:
+</then>
+; --Comprobar variable y
+  SRF  0  3
+  DRF
+; --Se hace return 
+  CSF
+L8:
+</if_else>
+  CSF
+</max>
+L9:
+  JMP L10
+L10:
+  STC 13
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  STC 13
+  STC 10
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  CSF
+</linea>
+L11:
+; --Se anyade el parametro en el for este y es valor y no array columna
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array fila
+  SRF  0  4
+  ASGI
+  JMP L12
+L12:
+; --Comprobar variable fila
+  SRF  0  4
+  DRF
+  STC  1
+  SBT
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  TMS
+; --Comprobar variable columna
+  SRF  0  3
+  DRF
+  PLUS
+  STC  1
+  SBT
+; --Se hace return 
+  CSF
+  CSF
+</sitio>
+L13:
+; --Se anyade el parametro en el for este y es valor y no array columna
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array fila
+  SRF  0  4
+  ASGI
+; --Se anyade el parametro en el for este y es ref tablero
+  SRF  0  5
+  ASGI
+  JMP L14
+L14:
+; --Expresion de los [] del vector
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama a la funcion sitio
+  OSF  6  1 L11
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L16
+  DUP
+  STC 999
+  LTE
+  JMT L15
+L16:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L15:
+; --Accediendo al index del vector tablero
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+; --Se hace return 
+  CSF
+  CSF
+</componente>
+L17:
+; --Se anyade el parametro en el for este y es valor y no array columna
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array fila
+  SRF  0  4
+  ASGI
+; --Se anyade el parametro en el for este y es ref tablero
+  SRF  0  5
+  ASGI
+  JMP L18
+L18:
+; --Expresion de los [] del vector
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama a la funcion sitio
+  OSF  6  1 L11
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L20
+  DUP
+  STC 999
+  LTE
+  JMT L19
+L20:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L19:
+; --Accediendo al index del vector tablero
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+  STC  0
+  GT
+; --Se hace return 
+  CSF
+  CSF
+</ocupada>
+L21:
+; --Se anyade el parametro en el for este y es valor y no array valor
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array columna
+  SRF  0  4
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array fila
+  SRF  0  5
+  ASGI
+; --Se anyade el parametro en el for este y es ref tablero
+  SRF  0  6
+  ASGI
+  JMP L22
+L22:
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  5
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama a la funcion sitio
+  OSF  7  1 L11
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L24
+  DUP
+  STC 999
+  LTE
+  JMT L23
+L24:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L23:
+; --Accediendo al index del vector tablero
+  SRF  0  6
+  DRF
+  PLUS
+; --Comprobar variable valor
+  SRF  0  3
+  DRF
+  ASG
+  CSF
+</asignar_componente>
+L25:
+; --Se anyade el parametro en el for este y es valor y no array columna
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array fila
+  SRF  0  4
+  ASGI
+; --Se anyade el parametro en el for este y es ref tablero
+  SRF  0  5
+  ASGI
+  JMP L26
+L26:
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama a la funcion sitio
+  OSF  6  1 L11
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L28
+  DUP
+  STC 999
+  LTE
+  JMT L27
+L28:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L27:
+; --Accediendo al index del vector tablero
+  SRF  0  5
+  DRF
+  PLUS
+; --Expresion de los [] del vector
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama a la funcion sitio
+  OSF  6  1 L11
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L30
+  DUP
+  STC 999
+  LTE
+  JMT L29
+L30:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L29:
+; --Accediendo al index del vector tablero
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+  STC  1
+  PLUS
+  ASG
+  CSF
+</marcar_componente>
+L31:
+; --Se anyade el parametro en el for este y es valor y no array columna
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array fila
+  SRF  0  4
+  ASGI
+; --Se anyade el parametro en el for este y es ref tablero
+  SRF  0  5
+  ASGI
+  JMP L32
+L32:
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama a la funcion sitio
+  OSF  6  1 L11
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L34
+  DUP
+  STC 999
+  LTE
+  JMT L33
+L34:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L33:
+; --Accediendo al index del vector tablero
+  SRF  0  5
+  DRF
+  PLUS
+; --Expresion de los [] del vector
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama a la funcion sitio
+  OSF  6  1 L11
+; --Comprobando el indice del vector
+  DUP
+  STC  0
+  GTE
+  JMF L36
+  DUP
+  STC 999
+  LTE
+  JMT L35
+L36:
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  STC 117
+  WRT  0
+  LVP
+L35:
+; --Accediendo al index del vector tablero
+  SRF  0  5
+  DRF
+  PLUS
+  DRF
+  STC  1
+  SBT
+  ASG
+  CSF
+</desmarcar_componente>
+L37:
+; --Se anyade el parametro en el for este y es valor y no array columna
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array fila
+  SRF  0  4
+  ASGI
+  JMP L38
+L38:
+; --Comprobar variable reinas
+; --Se anyade el parametro !!!!!reinas
+  SRF  1 1004
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama al procedure marcar_componente
+  OSF  7  1 L25
+; --Comprobar variable f
+  SRF  0  5
+  STC  1
+  ASG
+L39:
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+  JMF L40
+; --Comprobar variable tablero
+; --Se anyade el parametro !!!!!tablero
+  SRF  1  4
+; --Comprobar variable f
+; --Se anyade el parametro y es NONE
+  SRF  0  5
+  DRF
+; --Se anyade el parametro !!!!!f
+; --Comprobar variable columna
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama al procedure marcar_componente
+  OSF  7  1 L25
+; --Comprobar variable f
+  SRF  0  5
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L39
+L40:
+; --Comprobar variable c
+  SRF  0  6
+  STC  1
+  ASG
+L41:
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+  JMF L42
+; --Comprobar variable tablero
+; --Se anyade el parametro !!!!!tablero
+  SRF  1  4
+; --Comprobar variable fila
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0  6
+  DRF
+; --Se anyade el parametro !!!!!c
+; --Se llama al procedure marcar_componente
+  OSF  7  1 L25
+; --Comprobar variable c
+  SRF  0  6
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L41
+L42:
+; --Comprobar variable f
+  SRF  0  5
+; --Comprobar variable fila
+  SRF  0  4
+  DRF
+  ASG
+; --Comprobar variable c
+  SRF  0  6
+; --Comprobar variable columna
+  SRF  0  3
+  DRF
+  ASG
+L43:
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+  STC  1
+  GT
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+  STC  1
+  GT
+  AND
+  JMF L44
+; --Comprobar variable f
+  SRF  0  5
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+  STC  1
+  SBT
+  ASG
+; --Comprobar variable c
+  SRF  0  6
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+  STC  1
+  SBT
+  ASG
+  JMP L43
+L44:
+L45:
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+  AND
+  JMF L46
+; --Comprobar variable tablero
+; --Se anyade el parametro !!!!!tablero
+  SRF  1  4
+; --Comprobar variable f
+; --Se anyade el parametro y es NONE
+  SRF  0  5
+  DRF
+; --Se anyade el parametro !!!!!f
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0  6
+  DRF
+; --Se anyade el parametro !!!!!c
+; --Se llama al procedure marcar_componente
+  OSF  7  1 L25
+; --Comprobar variable f
+  SRF  0  5
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+  STC  1
+  PLUS
+  ASG
+; --Comprobar variable c
+  SRF  0  6
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L45
+L46:
+; --Comprobar variable f
+  SRF  0  5
+; --Comprobar variable fila
+  SRF  0  4
+  DRF
+  ASG
+; --Comprobar variable c
+  SRF  0  6
+; --Comprobar variable columna
+  SRF  0  3
+  DRF
+  ASG
+L47:
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+  STC  1
+  GT
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LT
+  AND
+  JMF L48
+; --Comprobar variable f
+  SRF  0  5
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+  STC  1
+  SBT
+  ASG
+; --Comprobar variable c
+  SRF  0  6
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L47
+L48:
+L49:
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+  STC  1
+  GTE
+  AND
+  JMF L50
+; --Comprobar variable tablero
+; --Se anyade el parametro !!!!!tablero
+  SRF  1  4
+; --Comprobar variable f
+; --Se anyade el parametro y es NONE
+  SRF  0  5
+  DRF
+; --Se anyade el parametro !!!!!f
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0  6
+  DRF
+; --Se anyade el parametro !!!!!c
+; --Se llama al procedure marcar_componente
+  OSF  7  1 L25
+; --Comprobar variable f
+  SRF  0  5
+; --Comprobar variable f
+  SRF  0  5
+  DRF
+  STC  1
+  PLUS
+  ASG
+; --Comprobar variable c
+  SRF  0  6
+; --Comprobar variable c
+  SRF  0  6
+  DRF
+  STC  1
+  SBT
+  ASG
+  JMP L49
+L50:
+  CSF
+</colocar_reina>
+L51:
+  JMP L52
+L52:
+; --Comprobar variable f
+  SRF  0  3
+  STC  1
+  ASG
+L53:
+; --Comprobar variable f
+  SRF  0  3
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+  JMF L54
+; --Comprobar variable c
+  SRF  0  4
+  STC  1
+  ASG
+L55:
+; --Comprobar variable c
+  SRF  0  4
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+  JMF L56
+; --Comprobar variable tablero
+; --Se anyade el parametro !!!!!tablero
+  SRF  1  4
+; --Comprobar variable f
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!f
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!c
+  STC  0
+; --Se llama al procedure asignar_componente
+  OSF  5  1 L21
+; --Comprobar variable reinas
+; --Se anyade el parametro !!!!!reinas
+  SRF  1 1004
+; --Comprobar variable f
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Se anyade el parametro !!!!!f
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!c
+  STC  0
+; --Se llama al procedure asignar_componente
+  OSF  5  1 L21
+; --Comprobar variable c
+  SRF  0  4
+; --Comprobar variable c
+  SRF  0  4
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L55
+L56:
+; --Comprobar variable f
+  SRF  0  3
+; --Comprobar variable f
+  SRF  0  3
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L53
+L54:
+  CSF
+</iniciar_tablero>
+<if_else>
+<then>
+<Putline>
+L57:
+; --Se anyade el parametro en el for este y es ref tablero
+  SRF  0  3
+  ASGI
+  JMP L58
+L58:
+; --Se llama al procedure linea
+  OSF  6  1 L9
+  STC 10
+  WRT  0
+<String_"Esta es una solución:">
+  STC 58
+  STC 110
+  STC 243
+  STC 105
+  STC 99
+  STC 117
+  STC 108
+  STC 111
+  STC 115
+  STC 32
+  STC 97
+  STC 110
+  STC 117
+  STC 32
+  STC 115
+  STC 101
+  STC 32
+  STC 97
+  STC 116
+  STC 115
+  STC 69
+</String_"Esta es una solución:">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+; --Se llama al procedure linea
+  OSF  6  1 L9
+; --Comprobar variable f
+  SRF  0  4
+  STC  1
+  ASG
+L59:
+; --Comprobar variable f
+  SRF  0  4
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+  JMF L60
+; --Comprobar variable c
+  SRF  0  5
+  STC  1
+  ASG
+L61:
+; --Comprobar variable c
+  SRF  0  5
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+  JMF L62
+; --Comprobar variable tablero
+; --Se anyade el parametro !!!!!tablero
+  SRF  0  3
+  DRF
+; --Comprobar variable f
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+; --Se anyade el parametro !!!!!f
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0  5
+  DRF
+; --Se anyade el parametro !!!!!c
+; --Se llama a la funcion componente
+  OSF  6  1 L13
+  STC  0
+  GT
+  JMF L63
+<String_" o">
+  STC 111
+  STC 32
+</String_" o">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  JMP L64
+L63:
+</then>
+<String_" .">
+  STC 46
+  STC 32
+</String_" .">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+L64:
+</if_else>
+; --Comprobar variable c
+  SRF  0  5
+; --Comprobar variable c
+  SRF  0  5
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L61
+L62:
+; --Se llama al procedure linea
+  OSF  6  1 L9
+; --Comprobar variable f
+  SRF  0  4
+; --Comprobar variable f
+  SRF  0  4
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L59
+L60:
+  CSF
+</mostrar_tablero>
+<if_else>
+<if_else>
+<if_else>
+<then>
+<then>
+<then>
+L65:
+; --Se anyade el parametro en el for este y es ref columna
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es ref fila
+  SRF  0  4
+  ASGI
+  JMP L66
+L66:
+; --Comprobar variable fila
+  SRF  0  4
+  DRF
+  STC  1
+  ASG
+; --Comprobar variable columna
+  SRF  0  3
+  DRF
+  STC  1
+  ASG
+; --Comprobar variable endal
+  SRF  0  5
+  STC  0
+  ASG
+L67:
+; --Comprobar variable endal
+  SRF  0  5
+  DRF
+  NGB
+  JMF L68
+; --Comprobar variable fila
+  SRF  0  4
+  DRF
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  GT
+  JMF L69
+; --Comprobar variable endal
+  SRF  0  5
+  STC  1
+  ASG
+  JMP L70
+L69:
+</then>
+; --Comprobar variable columna
+  SRF  0  3
+  DRF
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  GT
+  JMF L71
+; --Comprobar variable columna
+  SRF  0  3
+  DRF
+  STC  1
+  ASG
+; --Comprobar variable fila
+  SRF  0  4
+  DRF
+; --Comprobar variable fila
+  SRF  0  4
+  DRF
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L72
+L71:
+</then>
+; --Comprobar variable tablero
+; --Se anyade el parametro !!!!!tablero
+  SRF  1  4
+; --Comprobar variable fila
+; --Se anyade el parametro y es REF
+  SRF  0  4
+  DRF
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es REF
+  SRF  0  3
+  DRF
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama a la funcion ocupada
+  OSF  6  1 L17
+  JMF L73
+; --Comprobar variable columna
+  SRF  0  3
+  DRF
+; --Comprobar variable columna
+  SRF  0  3
+  DRF
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L74
+L73:
+</then>
+; --Comprobar variable endal
+  SRF  0  5
+  STC  1
+  ASG
+L74:
+</if_else>
+L72:
+</if_else>
+L70:
+</if_else>
+  JMP L67
+L68:
+; --Comprobar variable fila
+  SRF  0  4
+  DRF
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  1  3
+  DRF
+  LTE
+; --Se hace return 
+  CSF
+  CSF
+</libre>
+L0:
+<Putline>
+<if_else>
+<then>
+<Putline>
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  STC  8
+  ASG
+  STC 10
+  WRT  0
+<String_"Este programa intenta colocar ">
+  STC 32
+  STC 114
+  STC 97
+  STC 99
+  STC 111
+  STC 108
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 116
+  STC 110
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa intenta colocar ">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"Este programa intenta colocar ">
+  STC 32
+  STC 114
+  STC 97
+  STC 99
+  STC 111
+  STC 108
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 116
+  STC 110
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa intenta colocar ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+; --Se va a anyadir el string del putline y se muestra tamano_tablero
+  WRT  1
+<String_" reinas en un tablero de ajedrez de ">
+<String_"Este programa intenta colocar ">
+  STC 32
+  STC 114
+  STC 97
+  STC 99
+  STC 111
+  STC 108
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 116
+  STC 110
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa intenta colocar ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 122
+  STC 101
+  STC 114
+  STC 100
+  STC 101
+  STC 106
+  STC 97
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 108
+  STC 98
+  STC 97
+  STC 116
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 115
+  STC 97
+  STC 110
+  STC 105
+  STC 101
+  STC 114
+  STC 32
+</String_" reinas en un tablero de ajedrez de ">
+; --Se va a anyadir el string del putline y se muestra tamano_tablero
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_" reinas en un tablero de ajedrez de ">
+<String_"Este programa intenta colocar ">
+  STC 32
+  STC 114
+  STC 97
+  STC 99
+  STC 111
+  STC 108
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 116
+  STC 110
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa intenta colocar ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 122
+  STC 101
+  STC 114
+  STC 100
+  STC 101
+  STC 106
+  STC 97
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 108
+  STC 98
+  STC 97
+  STC 116
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 115
+  STC 97
+  STC 110
+  STC 105
+  STC 101
+  STC 114
+  STC 32
+</String_" reinas en un tablero de ajedrez de ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+; --Se va a anyadir el string del putline y se muestra tamano_tablero
+  WRT  1
+<String_" reinas en un tablero de ajedrez de ">
+<String_"Este programa intenta colocar ">
+  STC 32
+  STC 114
+  STC 97
+  STC 99
+  STC 111
+  STC 108
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 116
+  STC 110
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa intenta colocar ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 122
+  STC 101
+  STC 114
+  STC 100
+  STC 101
+  STC 106
+  STC 97
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 108
+  STC 98
+  STC 97
+  STC 116
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 115
+  STC 97
+  STC 110
+  STC 105
+  STC 101
+  STC 114
+  STC 32
+</String_" reinas en un tablero de ajedrez de ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 39
+; --Se va a anyadir el string del putline y se muestra tamano_tablero
+  WRT  0
+<String_" reinas en un tablero de ajedrez de ">
+<String_"Este programa intenta colocar ">
+  STC 32
+  STC 114
+  STC 97
+  STC 99
+  STC 111
+  STC 108
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 116
+  STC 110
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa intenta colocar ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 122
+  STC 101
+  STC 114
+  STC 100
+  STC 101
+  STC 106
+  STC 97
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 108
+  STC 98
+  STC 97
+  STC 116
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 115
+  STC 97
+  STC 110
+  STC 105
+  STC 101
+  STC 114
+  STC 32
+</String_" reinas en un tablero de ajedrez de ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 39
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+; --Se va a anyadir el string del putline y se muestra tamano_tablero
+  WRT  1
+<String_" sin que se ataquen.">
+<String_" reinas en un tablero de ajedrez de ">
+<String_"Este programa intenta colocar ">
+  STC 32
+  STC 114
+  STC 97
+  STC 99
+  STC 111
+  STC 108
+  STC 111
+  STC 99
+  STC 32
+  STC 97
+  STC 116
+  STC 110
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa intenta colocar ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 122
+  STC 101
+  STC 114
+  STC 100
+  STC 101
+  STC 106
+  STC 97
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 108
+  STC 98
+  STC 97
+  STC 116
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 115
+  STC 97
+  STC 110
+  STC 105
+  STC 101
+  STC 114
+  STC 32
+</String_" reinas en un tablero de ajedrez de ">
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 39
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  STC 46
+  STC 110
+  STC 101
+  STC 117
+  STC 113
+  STC 97
+  STC 116
+  STC 97
+  STC 32
+  STC 101
+  STC 115
+  STC 32
+  STC 101
+  STC 117
+  STC 113
+  STC 32
+  STC 110
+  STC 105
+  STC 115
+  STC 32
+</String_" sin que se ataquen.">
+; --Se va a anyadir el string del putline y se muestra tamano_tablero
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+; --Comprobar variable fila
+  SRF  0 2005
+  STC  1
+  ASG
+; --Comprobar variable nreinas
+  SRF  0 2004
+  STC  0
+  ASG
+L75:
+; --Comprobar variable fila
+  SRF  0 2005
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  LTE
+; --Comprobar variable nreinas
+  SRF  0 2004
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  LT
+  AND
+  JMF L76
+; --Comprobar variable columna
+  SRF  0 2006
+  STC  1
+  ASG
+L77:
+; --Comprobar variable columna
+  SRF  0 2006
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  LTE
+; --Comprobar variable nreinas
+  SRF  0 2004
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  LT
+  AND
+  JMF L78
+; --Comprobar variable nreinas
+  SRF  0 2004
+  STC  1
+  ASG
+; --Se llama al procedure iniciar_tablero
+  OSF 2009  0 L51
+; --Comprobar variable fila
+; --Se anyade el parametro y es NONE
+  SRF  0 2005
+  DRF
+; --Se anyade el parametro !!!!!fila
+; --Comprobar variable columna
+; --Se anyade el parametro y es NONE
+  SRF  0 2006
+  DRF
+; --Se anyade el parametro !!!!!columna
+; --Se llama al procedure colocar_reina
+  OSF 2009  0 L37
+L79:
+; --Comprobar variable nreinas
+  SRF  0 2004
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  LT
+; --Comprobar variable f
+; --Se anyade el parametro y es NONE
+  SRF  0 2007
+  DRF
+; --Se anyade el parametro !!!!!f
+  POP
+  SRF  0 2007
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0 2008
+  DRF
+; --Se anyade el parametro !!!!!c
+  POP
+  SRF  0 2008
+; --Se llama a la funcion libre
+  OSF 2009  0 L65
+  AND
+  JMF L80
+; --Comprobar variable f
+; --Se anyade el parametro y es NONE
+  SRF  0 2007
+  DRF
+; --Se anyade el parametro !!!!!f
+; --Comprobar variable c
+; --Se anyade el parametro y es NONE
+  SRF  0 2008
+  DRF
+; --Se anyade el parametro !!!!!c
+; --Se llama al procedure colocar_reina
+  OSF 2009  0 L37
+; --Comprobar variable nreinas
+  SRF  0 2004
+; --Comprobar variable nreinas
+  SRF  0 2004
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L79
+L80:
+; --Comprobar variable nreinas
+  SRF  0 2004
+  DRF
+; --Comprobar variable tamano_tablero
+  SRF  0  3
+  DRF
+  EQ
+  JMF L81
+; --Comprobar variable reinas
+; --Se anyade el parametro !!!!!reinas
+  SRF  0 1004
+; --Se llama al procedure mostrar_tablero
+  OSF 2009  0 L57
+  JMP L82
+L81:
+</then>
+L82:
+</if_else>
+; --Comprobar variable columna
+  SRF  0 2006
+; --Comprobar variable columna
+  SRF  0 2006
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L77
+L78:
+; --Comprobar variable fila
+  SRF  0 2005
+; --Comprobar variable fila
+  SRF  0 2005
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L75
+L76:
+  STC 10
+  WRT  0
+<String_"">
+</String_"">
+; --Se va a anyadir el string del putline y se muestra 
+</Putline>
+  LVP
+</ajedrez>

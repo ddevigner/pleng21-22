@@ -1,0 +1,160 @@
+<cambio_base>
+  ENP L0
+<dec_b>
+<b_dec>
+<if_else>
+<then>
+L1:
+; --Se anyade el parametro en el for este y es valor y no array b
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array n
+  SRF  0  4
+  ASGI
+  JMP L2
+L2:
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+  STC  0
+  EQ
+  JMF L3
+  STC  0
+; --Se hace return 
+  CSF
+  JMP L4
+L3:
+</then>
+; --Comprobar variable uc
+  SRF  0  5
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+  STC 10
+  MOD
+  ASG
+; --Comprobar variable valRec
+  SRF  0  6
+; --Comprobar variable n
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+  STC 10
+  DIV
+; --Comprobar variable b
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se llama a la funcion b_dec
+  OSF  7  1 L1
+  ASG
+; --Comprobar variable valRec
+  SRF  0  6
+  DRF
+; --Comprobar variable b
+  SRF  0  3
+  DRF
+  TMS
+; --Comprobar variable uc
+  SRF  0  5
+  DRF
+  PLUS
+; --Se hace return 
+  CSF
+L4:
+</if_else>
+  CSF
+</b_dec>
+<if_else>
+<then>
+L5:
+; --Se anyade el parametro en el for este y es valor y no array b
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array n
+  SRF  0  4
+  ASGI
+  JMP L6
+L6:
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+; --Comprobar variable b
+  SRF  0  3
+  DRF
+  LT
+  JMF L7
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+; --Se hace return 
+  CSF
+  JMP L8
+L7:
+</then>
+; --Comprobar variable resto
+  SRF  0  5
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+; --Comprobar variable b
+  SRF  0  3
+  DRF
+  MOD
+  ASG
+; --Comprobar variable valRec
+  SRF  0  6
+; --Comprobar variable n
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Comprobar variable b
+  SRF  0  3
+  DRF
+  DIV
+; --Comprobar variable b
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Se llama a la funcion dec_b
+  OSF  7  1 L5
+  ASG
+; --Comprobar variable valRec
+  SRF  0  6
+  DRF
+  STC 10
+  TMS
+; --Comprobar variable resto
+  SRF  0  5
+  DRF
+  PLUS
+; --Se hace return 
+  CSF
+L8:
+</if_else>
+  CSF
+</dec_b>
+L0:
+; --Comprobar variable num
+  SRF  0  3
+  STC  4
+  ASG
+; --Comprobar variable base
+  SRF  0  4
+  STC  2
+  ASG
+; --Comprobar variable enB
+  SRF  0  5
+; --Comprobar variable num
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Comprobar variable base
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+; --Se llama a la funcion dec_b
+  OSF  6  0 L5
+  ASG
+  LVP
+</cambio_base>
