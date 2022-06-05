@@ -24,12 +24,52 @@ L3:
   STC  0
   LTE
   JMF L4
-<String_"Algo">
+<String_"Escribe un numero (>0): ">
+  STC 32
+  STC 58
+  STC 41
+  STC 48
+  STC 62
+  STC 40
+  STC 32
   STC 111
-  STC 103
-  STC 108
-  STC 65
-</String_"Algo">
+  STC 114
+  STC 101
+  STC 109
+  STC 117
+  STC 110
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 101
+  STC 98
+  STC 105
+  STC 114
+  STC 99
+  STC 115
+  STC 69
+</String_"Escribe un numero (>0): ">
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
   WRT  0
   WRT  0
   WRT  0
@@ -47,11 +87,53 @@ L3:
   JMF L5
   STC 10
   WRT  0
-<String_">0">
+<String_"El numero debe ser > 0.">
+  STC 46
   STC 48
+  STC 32
   STC 62
-</String_">0">
+  STC 32
+  STC 114
+  STC 101
+  STC 115
+  STC 32
+  STC 101
+  STC 98
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 109
+  STC 117
+  STC 110
+  STC 32
+  STC 108
+  STC 69
+</String_"El numero debe ser > 0.">
 ; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
   WRT  0
   WRT  0
 </Putline>
