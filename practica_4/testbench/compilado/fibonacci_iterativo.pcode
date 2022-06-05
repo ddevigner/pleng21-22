@@ -7,7 +7,6 @@ L1:
   JMP L2
 L2:
   STC 13
-; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   STC 10
 ; --Se va a anyadir el string del putline y se muestra 
@@ -63,7 +62,6 @@ L5:
   STC 115
   STC 69
 </String_"Escribe un numero positivo: ">
-; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -306,7 +304,6 @@ L9:
   STC 108
   STC 69
 </String_"El numero debe ser postivo.">
-; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0

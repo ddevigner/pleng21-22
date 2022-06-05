@@ -59,7 +59,6 @@ L3:
   STC 97
   STC 68
 </String_"Dame un numero PAR mayor que 2: ">
-; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -188,7 +187,6 @@ L10:
 ; --Comprobar variable k
   SRF  0  3
   DRF
-; --Se va a anyadir el string del putl y se muestra k
   WRT  1
 <String_" es la suma de: ">
   STC 32
@@ -273,7 +271,6 @@ L11:
 ; --Comprobar variable a
   SRF  0  6
   DRF
-; --Se va a anyadir el string del putl y se muestra a
   WRT  1
 <String_"+">
   STC 43

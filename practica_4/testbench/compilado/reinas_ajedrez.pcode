@@ -89,7 +89,6 @@ L9:
   JMP L10
 L10:
   STC 13
-; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   STC 10
 ; --Se va a anyadir el string del putline y se muestra 
@@ -159,21 +158,29 @@ L14:
   LTE
   JMT L15
 L16:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L15:
@@ -221,21 +228,29 @@ L18:
   LTE
   JMT L19
 L20:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L19:
@@ -287,21 +302,29 @@ L22:
   LTE
   JMT L23
 L24:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L23:
@@ -349,21 +372,29 @@ L26:
   LTE
   JMT L27
 L28:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L27:
@@ -394,21 +425,29 @@ L27:
   LTE
   JMT L29
 L30:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L29:
@@ -456,21 +495,29 @@ L32:
   LTE
   JMT L33
 L34:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L33:
@@ -501,21 +548,29 @@ L33:
   LTE
   JMT L35
 L36:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L35:
@@ -1010,7 +1065,6 @@ L61:
   STC 111
   STC 32
 </String_" o">
-; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   JMP L64
@@ -1020,7 +1074,6 @@ L63:
   STC 46
   STC 32
 </String_" .">
-; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
 L64:

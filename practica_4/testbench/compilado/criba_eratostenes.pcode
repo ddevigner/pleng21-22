@@ -57,7 +57,6 @@ L3:
   STC 97
   STC 68
 </String_"Dame un numero entre 1 y 100: ">
-; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -455,21 +454,29 @@ L7:
   LTE
   JMT L9
 L10:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L9:
@@ -834,21 +841,29 @@ L15:
   LTE
   JMT L17
 L18:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L17:
@@ -1029,21 +1044,29 @@ L23:
   LTE
   JMT L25
 L26:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L25:
@@ -1120,21 +1143,29 @@ L29:
   LTE
   JMT L31
 L32:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L31:
@@ -1469,21 +1500,29 @@ L35:
   LTE
   JMT L37
 L38:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L37:
@@ -1544,21 +1583,29 @@ L40:
   LTE
   JMT L42
 L43:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L42:
@@ -1685,21 +1732,29 @@ L45:
   LTE
   JMT L47
 L48:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L47:
@@ -2045,21 +2100,29 @@ L53:
   LTE
   JMT L55
 L56:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L55:
@@ -2275,21 +2338,29 @@ L59:
   LTE
   JMT L61
 L62:
-  STC 117
+  STC 69
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 111
   WRT  0
-  STC 117
+  STC 114
   WRT  0
-  STC 117
+  STC 32
   WRT  0
-  STC 117
+  STC 105
   WRT  0
-  STC 117
+  STC 110
+  WRT  0
+  STC 100
+  WRT  0
+  STC 101
+  WRT  0
+  STC 120
+  WRT  0
+  STC 10
   WRT  0
   LVP
 L61:

@@ -20,7 +20,6 @@ L0:
 ; --Comprobar variable i
   SRF  0  3
   DRF
-; --Se va a anyadir el string del putl y se muestra i
   WRT  1
   JMP L2
 L1:
@@ -28,7 +27,6 @@ L1:
 ; --Comprobar variable j
   SRF  0  4
   DRF
-; --Se va a anyadir el string del putl y se muestra j
   WRT  1
 L2:
 </if_else>

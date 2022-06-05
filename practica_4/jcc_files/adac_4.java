@@ -461,6 +461,7 @@ panicMode(e.currentToken.next, 1);
 //A lo mejor el get hay que cambiarlo ya que en assignable los metere en la pila en vez de en la funcion del get
                                 sf.EvaluateGet(fst);
                                 at.code.addBlock(fst.code);
+                                fst.code.clearBlock();
       label_6:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -474,7 +475,7 @@ panicMode(e.currentToken.next, 1);
         }
         jj_consume_token(COLON);
         assignable(fst);
-sf.EvaluateGet(fst);
+sf.EvaluateGet(fst); at.code.addBlock(fst.code); fst.code.clearBlock();
       }
       jj_consume_token(RPAREN);
       jj_consume_token(SCOLON);
@@ -486,7 +487,7 @@ sf.EvaluateGet(fst);
       expression(fst);
 sf.EvaluatePut(fst);
                                         at.code.addBlock(fst.code);
-                                        at.code.addComment("Se va a anyadir el string del putl y se muestra " + fst.name);
+                                        //at.code.addComment("Se va a anyadir el string del putl y se muestra " + fst.name);
                                         if(fst.baseType==Types.INT){
                                                 at.code.addInst(PCodeInstruction.OpCode.WRT,1);
                                         }else if(fst.baseType==Types.CHAR){
@@ -645,6 +646,7 @@ fst.given.add(snd);
                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                         if(g.vector_indexado){
                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                         }
                                                                                 }else if(g.parClass==ParameterClass.REF){
@@ -655,6 +657,7 @@ fst.given.add(snd);
                                                                                         at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                                         if(g.vector_indexado){
                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                         }
                                                                                 }else if(g.parClass==ParameterClass.NONE){
@@ -664,6 +667,7 @@ fst.given.add(snd);
                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                         if(g.vector_indexado){
                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                         }
                                                                                 }
@@ -749,6 +753,7 @@ fst.given.add(snd);
                                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                                         if(g.vector_indexado){
                                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                                         }
                                                                                                 }else if(g.parClass==ParameterClass.REF){
@@ -759,6 +764,7 @@ fst.given.add(snd);
                                                                                                         at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                                                         if(g.vector_indexado){
                                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                                         }
                                                                                                 }else if(g.parClass==ParameterClass.NONE){
@@ -768,6 +774,7 @@ fst.given.add(snd);
                                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                                         if(g.vector_indexado){
                                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                                         }
                                                                                                 }
@@ -941,22 +948,18 @@ sf.EvaluateArray(at, aux, t);
                                                                 at.code.addInst(PCodeInstruction.OpCode.JMT,label_codigo_correcto);
                                                                 at.code.addLabel(label_error_index);
                                                                 //Meter el mensaje de error y LVP
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'E'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'o'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,' '); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'i'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'n'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'d'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'e'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'x'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'\n'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
                                                                 at.code.addInst(PCodeInstruction.OpCode.LVP);
                                                                 at.code.addLabel(label_codigo_correcto);
                                                                 //Ahora se carga la componentes correcta del vector
@@ -1188,6 +1191,7 @@ at.given.add(aux);
                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                         if(g.vector_indexado){
                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                         }
                                                                                 }else if(g.parClass==ParameterClass.REF){
@@ -1198,6 +1202,7 @@ at.given.add(aux);
                                                                                         at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                                         if(g.vector_indexado){
                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                         }
                                                                                 }else if(g.parClass==ParameterClass.NONE){
@@ -1207,6 +1212,7 @@ at.given.add(aux);
                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                         if(g.vector_indexado){
                                                                                                 at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                at.code.addBlock(g.codeIndex);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                         }
                                                                                 }
@@ -1286,6 +1292,7 @@ at.given.add(aux);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                                 if(g.vector_indexado){
                                                                                                         at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                        at.code.addBlock(g.codeIndex);
                                                                                                         at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                                 }
                                                                                         }else if(g.parClass==ParameterClass.REF){
@@ -1296,6 +1303,7 @@ at.given.add(aux);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                                                 if(g.vector_indexado){
                                                                                                         at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                        at.code.addBlock(g.codeIndex);
                                                                                                         at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                                 }
                                                                                         }else if(g.parClass==ParameterClass.NONE){
@@ -1305,6 +1313,7 @@ at.given.add(aux);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                                 if(g.vector_indexado){
                                                                                                         at.code.addComment("Es variable indexada: " + param.name);
+                                                                                                        at.code.addBlock(g.codeIndex);
                                                                                                         at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                                 }
                                                                                         }
@@ -1377,6 +1386,7 @@ sf.EvaluateArray(at, aux, t);
                                                                                                 //Anyadir la expresion del [] 
                                                                                                 at.code.addComment("Expresion de los [] del vector");
                                                                                                 at.code.addBlock(aux.code);
+                                                                                                at.codeIndex.addBlock(aux.code);        //Con esto se accede al index
                                                                                                 try
                                                         {
                                                                 at.code.addComment("Comprobando el indice del vector");
@@ -1394,22 +1404,18 @@ sf.EvaluateArray(at, aux, t);
                                                                 at.code.addInst(PCodeInstruction.OpCode.JMT,label_codigo_correcto);
                                                                 at.code.addLabel(label_error_index);
                                                                 //Meter el mensaje de error y LVP
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
-                                                                at.code.addInst(PCodeInstruction.OpCode.STC,117);
-                                                                at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'E'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'o'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'r'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,' '); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'i'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'n'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'d'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'e'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'x'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
+                                                                at.code.addInst(PCodeInstruction.OpCode.STC,'\n'); at.code.addInst(PCodeInstruction.OpCode.WRT,0);
                                                                 at.code.addInst(PCodeInstruction.OpCode.LVP);
                                                                 at.code.addLabel(label_codigo_correcto);
                                                                 //Ahora se carga la componentes correcta del vector
@@ -1645,7 +1651,7 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
-  static private boolean jj_3_5()
+  static private boolean jj_3_3()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
@@ -1659,7 +1665,7 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     return false;
   }
 
-  static private boolean jj_3_3()
+  static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;

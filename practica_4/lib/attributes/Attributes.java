@@ -55,6 +55,7 @@ public class Attributes implements Cloneable {
 
     // Code.
     public CodeBlock code;
+    public CodeBlock codeIndex;
 
     public boolean vector_indexado=false;
 
@@ -70,17 +71,20 @@ public class Attributes implements Cloneable {
         hasReturn = false;
         parClass = ParameterClass.NONE;
         this.code = new CodeBlock();
+        this.codeIndex = new CodeBlock();
     }
 
     // Method attributes.
     public Attributes(boolean method) {
         this.method = method;
         this.code = new CodeBlock();
+        this.codeIndex = new CodeBlock();
     }
 
     public Attributes(ArrayList<Symbol> params) {
         this.params = params;
         this.code = new CodeBlock();
+        this.codeIndex = new CodeBlock();
     }
 
     public Attributes(Types methodType, Types returnType, ArrayList<Symbol> params) {
@@ -90,6 +94,7 @@ public class Attributes implements Cloneable {
         this.params = params;
         hasReturn = false;
         this.code = new CodeBlock();
+        this.codeIndex = new CodeBlock();
     }
 
     public Attributes(Types methodType, Types returnType, ArrayList<Symbol> params, boolean main) {
@@ -99,12 +104,14 @@ public class Attributes implements Cloneable {
         this.params = params;
         hasReturn = false;
         this.code = new CodeBlock();
+        this.codeIndex = new CodeBlock();
     }
 
     // Variable attributes.
     public Attributes(ParameterClass parClass) {
         this.parClass = parClass;
         this.code = new CodeBlock();
+        this.codeIndex = new CodeBlock();
     }
 
     /** METODOS **************************************************************/
