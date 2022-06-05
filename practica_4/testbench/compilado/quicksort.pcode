@@ -876,63 +876,103 @@ L50:
 ; --Se anyade el parametro !!!!!t
   SRF  0  5
   DRF
+  STC  0
+  PLUS
   DRF
-  SRF  0  6
+  SRF  0  5
   DRF
+  STC  1
+  PLUS
   DRF
-  SRF  0  7
+  SRF  0  5
   DRF
+  STC  2
+  PLUS
   DRF
-  SRF  0  8
+  SRF  0  5
   DRF
+  STC  3
+  PLUS
   DRF
-  SRF  0  9
+  SRF  0  5
   DRF
+  STC  4
+  PLUS
   DRF
-  SRF  0 10
+  SRF  0  5
   DRF
+  STC  5
+  PLUS
   DRF
-  SRF  0 11
+  SRF  0  5
   DRF
+  STC  6
+  PLUS
   DRF
-  SRF  0 12
+  SRF  0  5
   DRF
+  STC  7
+  PLUS
   DRF
-  SRF  0 13
+  SRF  0  5
   DRF
+  STC  8
+  PLUS
   DRF
-  SRF  0 14
+  SRF  0  5
   DRF
+  STC  9
+  PLUS
   DRF
-  SRF  0 15
+  SRF  0  5
   DRF
+  STC 10
+  PLUS
   DRF
-  SRF  0 16
+  SRF  0  5
   DRF
+  STC 11
+  PLUS
   DRF
-  SRF  0 17
+  SRF  0  5
   DRF
+  STC 12
+  PLUS
   DRF
-  SRF  0 18
+  SRF  0  5
   DRF
+  STC 13
+  PLUS
   DRF
-  SRF  0 19
+  SRF  0  5
   DRF
+  STC 14
+  PLUS
   DRF
-  SRF  0 20
+  SRF  0  5
   DRF
+  STC 15
+  PLUS
   DRF
-  SRF  0 21
+  SRF  0  5
   DRF
+  STC 16
+  PLUS
   DRF
-  SRF  0 22
+  SRF  0  5
   DRF
+  STC 17
+  PLUS
   DRF
-  SRF  0 23
+  SRF  0  5
   DRF
+  STC 18
+  PLUS
   DRF
-  SRF  0 24
+  SRF  0  5
   DRF
+  STC 19
+  PLUS
   DRF
 ; --Se llama al procedure mostrar
   OSF  7  1 L7
@@ -1366,5 +1406,7 @@ L0:
 ; --Se va a anyadir el string del putline y se muestra iteraciones
   WRT  1
 </Putline>
+  STC 10
+  WRT  0
   LVP
 </qsort>

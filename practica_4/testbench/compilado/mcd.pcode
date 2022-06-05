@@ -517,5 +517,7 @@ L0:
 ; --Se va a anyadir el string del putline y se muestra mcd
   WRT  1
 </Putline>
+  STC 10
+  WRT  0
   LVP
 </calcular_mcd>

@@ -2307,5 +2307,7 @@ L81:
   ASG
   JMP L81
 L82:
+  STC 10
+  WRT  0
   LVP
 </juego_de_la_vida>

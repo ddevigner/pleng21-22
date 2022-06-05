@@ -786,5 +786,7 @@ L0:
   STC 10
   WRT  0
 </Putline>
+  STC 10
+  WRT  0
   LVP
 </cambio_base>

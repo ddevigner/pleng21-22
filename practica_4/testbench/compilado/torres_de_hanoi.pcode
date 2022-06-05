@@ -773,5 +773,7 @@ L0:
   WRT  0
   WRT  0
 </Putline>
+  STC 10
+  WRT  0
   LVP
 </hanoi_towers>

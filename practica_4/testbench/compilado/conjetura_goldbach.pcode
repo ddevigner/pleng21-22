@@ -1170,5 +1170,7 @@ L20:
   ASG
   JMP L17
 L18:
+  STC 10
+  WRT  0
   LVP
 </goldbach>

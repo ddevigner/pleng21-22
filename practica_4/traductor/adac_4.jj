@@ -274,6 +274,8 @@ String main() :
 				cmain.addBlock(funcs);
 				cmain.addLabel(label);
 				cmain.addBlock(main.code);
+				cmain.addInst(OpCode.STC, '\n');
+				cmain.addInst(OpCode.WRT,0);
 				cmain.addInst(OpCode.LVP);
 				cmain.encloseXMLTags(t.image);
 			}
@@ -617,8 +619,10 @@ void instruction(Attributes at):
 										}
 										if(g.parClass==ParameterClass.REF){
 											for(int h=0;h<=vec.maxInd;h++){
-												at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+												at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
 												at.code.addInst(PCodeInstruction.OpCode.DRF);
+												at.code.addInst(PCodeInstruction.OpCode.STC,h);
+												at.code.addInst(PCodeInstruction.OpCode.PLUS);
 												at.code.addInst(PCodeInstruction.OpCode.DRF);
 											}
 										}

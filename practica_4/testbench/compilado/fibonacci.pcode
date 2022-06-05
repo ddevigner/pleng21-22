@@ -717,5 +717,7 @@ L13:
 L14:
 ; --Se llama al procedure cambiar_de_linea
   OSF  6  0 L1
+  STC 10
+  WRT  0
   LVP
 </fibonacci>

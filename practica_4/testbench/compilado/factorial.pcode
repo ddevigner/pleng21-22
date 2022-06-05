@@ -340,5 +340,7 @@ L5:
   ASG
   JMP L5
 L6:
+  STC 10
+  WRT  0
   LVP
 </factorial>

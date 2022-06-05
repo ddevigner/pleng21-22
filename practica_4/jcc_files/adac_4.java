@@ -118,6 +118,8 @@ label = CGUtils.newLabel();
                                 cmain.addBlock(funcs);
                                 cmain.addLabel(label);
                                 cmain.addBlock(main.code);
+                                cmain.addInst(OpCode.STC, '\n');
+                                cmain.addInst(OpCode.WRT,0);
                                 cmain.addInst(OpCode.LVP);
                                 cmain.encloseXMLTags(t.image);
       jj_consume_token(0);
@@ -663,8 +665,10 @@ fst.given.add(snd);
                                                                                 }
                                                                                 if(g.parClass==ParameterClass.REF){
                                                                                         for(int h=0;h<=vec.maxInd;h++){
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir + h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.DRF);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.STC,h);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                                         }
                                                                                 }
@@ -1560,21 +1564,14 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_1()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LBRACK)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2()
+  static private boolean jj_3_4()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 
-  static private boolean jj_3_4()
+  static private boolean jj_3_2()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
@@ -1589,6 +1586,13 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
   }
 
   static private boolean jj_3_3()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_1()
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;

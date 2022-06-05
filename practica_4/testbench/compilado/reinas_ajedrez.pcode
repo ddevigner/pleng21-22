@@ -1923,5 +1923,7 @@ L76:
 </String_"">
 ; --Se va a anyadir el string del putline y se muestra 
 </Putline>
+  STC 10
+  WRT  0
   LVP
 </ajedrez>

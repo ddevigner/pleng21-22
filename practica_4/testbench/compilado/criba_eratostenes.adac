@@ -23,10 +23,22 @@ end
 ------------------------------------------------------------------------
 procedure escrib_vect (val boolean v[101]) is
 
-integer i, m;
+integer i, m,h;
 boolean salir;
 ------------------------------------------------------------------------
 begin
+
+        h:=0;
+        put_line("");
+        while h <= n do
+                if(v[h]) then
+                        put_line("Dentro de escribir antes de escribir, " , h , " es primo");
+                else
+                        put_line("Dentro de escribir antes de escribir, " , h , " NO es primo");
+                end
+                h:=h+1;
+
+        end
     i := 2;
     m := 0;
     salir := false;
@@ -65,19 +77,46 @@ end
 ----------------------------------------------------------------
 procedure eliminar_no_primos (ref boolean v[101]) is
 
-integer i, j;
+integer i, j , h;
 ----------------------------------------------------------------
 begin
+        h:=0;
+        put_line("");
+        while h <= n do
+                if(v[h]) then
+                        put_line("Dentro de eliminar pero antes de eliminarlos, " , h , " es primo");
+                else
+                        put_line("Dentro de eliminar pero antes de eliminarlos, " , h , " NO es primo");
+                end
+                h:=h+1;
+
+        end
+        put_line("");
         i := 2;
         while i <= n div 2 do
+                put_line("i es ",i);
                 if v[i] then
                         j := 2 * i;
+                        put_line("j es ",j);
                         while j <= n do
                                 v[j] := false;
+                                put_line("Se pone a false el num ",j);
                                 j := j + i;
                         end
                 end
                 i := i + 1;
+        end
+
+        put_line("");
+        h:=0;
+        while h <= n do
+                if(v[h]) then
+                        put_line("Dentro de eliminar pero despues de eliminarlos, " , h , " es primo");
+                else
+                        put_line("Dentro de eliminar pero despues de eliminarlos, " , h , " NO es primo");
+                end
+                h:=h+1;
+
         end
 end
 ----------------------------------------------------------------
@@ -85,10 +124,34 @@ end
 ------------------------------------------------------------------------
 procedure procesar (ref boolean v[101]) is
 ------------------------------------------------------------------------
-
+integer h;
 begin
+        h:=0;
         inicializar (v);
+        put_line("");
+        while h <= n do
+                if(v[h]) then
+                        put_line("Antes de eliminar, " , h , " es primo");
+                else 
+                         put_line("Antes de eliminar, " , h , " NO es primo");
+                end
+                h:=h+1;
+
+        end
+        put_line("");
         eliminar_no_primos (v);
+        h:=0;
+        put_line("");
+        while h <= n do
+                if(v[h]) then
+                        put_line("Despues de llamar a eliminar, " , h , " es primo");
+                else 
+                         put_line("Despues de llamar a eliminar, " , h , " NO es primo");
+                end
+                h:=h+1;
+
+        end
+        put_line("");
         escrib_vect (v);
 end
 
