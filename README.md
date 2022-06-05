@@ -18,8 +18,12 @@
 
 - [adaccomp](https://github.com/ddevigner/pleng21-22/blob/main/testbench/adaccomp): compilador que traduce de adac (<file>.adac) a código P (<file>.pcode).
     ```bash
-    adaccomp <fichero> [-v] [-r] [-o]
+    adaccomp <fichero> [-v] [-r] [-o] [-x] [-c]
     # -v: verbose. En el fichero .pcode se incluye un comentario indicando el numero de cada p-instruccion.
+    # -r: run time checks. Se genera código para comprobar durante la ejecución los valores de los indices de acceso a vectores.
+    # -o: optimize for speed. Se genera código p más eficiente, incluyendo evaluación de expresiones constantes.
+    # -x: xml. Se genera el fichero .pcode con formato xml.
+    # -c: comments. Se incluyen comentarios en el fichero .pcode.
     ```
 
 - [ensamblador](https://github.com/ddevigner/pleng21-22/blob/main/doc/ensamblador): ensamblador de Maquina P a codigo binario. Genera un binario.
