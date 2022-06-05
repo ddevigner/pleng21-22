@@ -7,8 +7,8 @@
 
 ## 2. Material adicional de soporte
 ### Banco de programas de ejemplo en lenguaje adac.
-- [Ejemplos de adac](): compilacion de programas en adac junto a su fichero en .pcode y su fichero .x.
-- [Test de adac](): script de test, comprueba que todos los ficheros son procesables por el compilador de adac.
+- [Ejemplos](https://github.com/ddevigner/pleng21-22/tree/main/adac_examples) y [tests](https://github.com/ddevigner/pleng21-22/tree/main/adac_tests) de adac: compilacion de programas en adac junto a su fichero en .pcode y su fichero binario.
+- [Test de adac](https://github.com/ddevigner/pleng21-22/blob/main/adac_examples/test_adac.py): script de test, comprueba que todos los ficheros son procesables por el compilador de adac.
 
 ### Entorno de ejecución. Compilados para su uso en Hendrix.
 - [adac_cpp](https://github.com/ddevigner/pleng21-22/blob/main/environment/adac_cpp.jar): compilador que traduce de adac a C++.
