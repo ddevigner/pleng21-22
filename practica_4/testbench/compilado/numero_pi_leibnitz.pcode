@@ -1902,7 +1902,8 @@ L69:
   LVP
 L68:
 ; --Accediendo al index del vector s
-  LVP
+  SRF  0  5
+  PLUS
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 106
@@ -2060,7 +2061,8 @@ L78:
   LVP
 L77:
 ; --Accediendo al index del vector s
-  LVP
+  SRF  0  5
+  PLUS
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 106

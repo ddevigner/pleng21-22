@@ -218,6 +218,8 @@ L10:
   WRT  0
   CSF
 </mostrar>
+<Putline>
+<Putline>
 L13:
 ; --Se anyade el parametro en el for este y es ref j
   SRF  0  3
@@ -227,6 +229,89 @@ L13:
   ASGI
   JMP L14
 L14:
+  STC 10
+  WRT  0
+<String_"Al empezar intercambiar i= ">
+  STC 32
+  STC 61
+  STC 105
+  STC 32
+  STC 114
+  STC 97
+  STC 105
+  STC 98
+  STC 109
+  STC 97
+  STC 99
+  STC 114
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 114
+  STC 97
+  STC 122
+  STC 101
+  STC 112
+  STC 109
+  STC 101
+  STC 32
+  STC 108
+  STC 65
+</String_"Al empezar intercambiar i= ">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+  DRF
+; --Se va a anyadir el string del putline y se muestra i
+  WRT  1
+<String_" j= ">
+  STC 32
+  STC 61
+  STC 106
+  STC 32
+</String_" j= ">
+; --Se va a anyadir el string del putline y se muestra i
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+; --Comprobar variable j
+  SRF  0  3
+  DRF
+  DRF
+; --Se va a anyadir el string del putline y se muestra j
+  WRT  1
+</Putline>
 ; --Comprobar variable k
   SRF  0  5
 ; --Comprobar variable i
@@ -249,6 +334,87 @@ L14:
   SRF  0  5
   DRF
   ASG
+  STC 10
+  WRT  0
+<String_"Al acabar intercambiar i= ">
+  STC 32
+  STC 61
+  STC 105
+  STC 32
+  STC 114
+  STC 97
+  STC 105
+  STC 98
+  STC 109
+  STC 97
+  STC 99
+  STC 114
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 114
+  STC 97
+  STC 98
+  STC 97
+  STC 99
+  STC 97
+  STC 32
+  STC 108
+  STC 65
+</String_"Al acabar intercambiar i= ">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+; --Comprobar variable i
+  SRF  0  4
+  DRF
+  DRF
+; --Se va a anyadir el string del putline y se muestra i
+  WRT  1
+<String_" j= ">
+  STC 32
+  STC 61
+  STC 106
+  STC 32
+</String_" j= ">
+; --Se va a anyadir el string del putline y se muestra i
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+; --Comprobar variable j
+  SRF  0  3
+  DRF
+  DRF
+; --Se va a anyadir el string del putline y se muestra j
+  WRT  1
+</Putline>
   CSF
 </intercambiar>
 <if_else>

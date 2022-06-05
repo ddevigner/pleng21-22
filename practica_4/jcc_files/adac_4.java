@@ -638,7 +638,11 @@ fst.given.add(snd);
                                                                 if(g.type!=Types.ARRAY){
                                                                         if(e.parClass==ParameterClass.REF){
                                                                                 if(g.parClass==ParameterClass.VAL){
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        //at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                        long auxDir = param.dir;
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                 }else if(g.parClass==ParameterClass.REF){
                                                                                         Symbol param = st.getSymbol(g.name);
                                                                                         long auxDir = param.dir;
@@ -684,7 +688,8 @@ fst.given.add(snd);
                                                                                 }
                                                                         }else if(e.parClass==ParameterClass.REF){
                                                                                 if(g.parClass==ParameterClass.VAL){
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        //at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
                                                                                 }
                                                                                 if(g.parClass==ParameterClass.REF){
                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
@@ -725,7 +730,11 @@ fst.given.add(snd);
                                                                                 if(g.type!=Types.ARRAY){
                                                                                         if(e.parClass==ParameterClass.REF){
                                                                                                 if(g.parClass==ParameterClass.VAL){
-                                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                                        //at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                                        long auxDir = param.dir;
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                                 }else if(g.parClass==ParameterClass.REF){
                                                                                                         Symbol param = st.getSymbol(g.name);
                                                                                                         long auxDir = param.dir;
@@ -770,7 +779,8 @@ fst.given.add(snd);
                                                                                 }
                                                                         }else if(e.parClass==ParameterClass.REF){
                                                                                 if(g.parClass==ParameterClass.VAL){
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        //at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
                                                                                 }
                                                                                 if(g.parClass==ParameterClass.REF){
                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
@@ -933,7 +943,9 @@ sf.EvaluateArray(at, aux, t);
                                                                         at.code.addInst(PCodeInstruction.OpCode.DRF);
                                                                         at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                 }else if(vec.parClass == ParameterClass.VAL){
-                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
+                                                                        //at.code.addInst(PCodeInstruction.OpCode.LVP);//Si escribes en una por valor se acava el programa
+                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
+                                                                        at.code.addInst(PCodeInstruction.OpCode.PLUS);
                                                                 }else if(vec.parClass == ParameterClass.NONE){
                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxDir);
                                                                         at.code.addInst(PCodeInstruction.OpCode.PLUS);
@@ -1145,7 +1157,11 @@ at.given.add(aux);
                                                                 if(g.type!=Types.ARRAY){
                                                                         if(e.parClass==ParameterClass.REF){
                                                                                 if(g.parClass==ParameterClass.VAL){
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        //at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        Symbol param = st.getSymbol(g.name);
+                                                                                        long auxDir = param.dir;
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                 }else if(g.parClass==ParameterClass.REF){
                                                                                         Symbol param = st.getSymbol(g.name);
                                                                                         long auxDir = param.dir;
@@ -1187,7 +1203,8 @@ at.given.add(aux);
                                                                                 }
                                                                         }else if(e.parClass==ParameterClass.REF){
                                                                                 if(g.parClass==ParameterClass.VAL){
-                                                                                        at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        //at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                        at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
                                                                                 }
                                                                                 if(g.parClass==ParameterClass.REF){
                                                                                         at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
@@ -1226,7 +1243,11 @@ at.given.add(aux);
                                                                         if(g.type!=Types.ARRAY){
                                                                                 if(e.parClass==ParameterClass.REF){
                                                                                         if(g.parClass==ParameterClass.VAL){
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                                //at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                                Symbol param = st.getSymbol(g.name);
+                                                                                                long auxDir = param.dir;
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.POP);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
                                                                                         }else if(g.parClass==ParameterClass.REF){
                                                                                                 Symbol param = st.getSymbol(g.name);
                                                                                                 long auxDir = param.dir;
@@ -1270,7 +1291,8 @@ at.given.add(aux);
                                                                                         }
                                                                                 }else if(e.parClass==ParameterClass.REF){
                                                                                         if(g.parClass==ParameterClass.VAL){
-                                                                                                at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                                //at.code.addInst(PCodeInstruction.OpCode.LVP);
+                                                                                                at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);
                                                                                         }
                                                                                         if(g.parClass==ParameterClass.REF){
                                                                                                 at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-vec.nivel,(int)auxVecDir);

@@ -34,9 +34,11 @@ procedure intercambiar (ref integer i, j) is
 --------------------------------------------------------------------
 integer k;
  begin
+  put_line("Al empezar intercambiar i= ",i," j= ",j);
   k := i;
   i := j;
   j := k;
+  put_line("Al acabar intercambiar i= ",i," j= ",j);
  end
 
 --------------------------------------------------------------------
