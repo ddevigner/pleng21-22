@@ -80,6 +80,8 @@ L5:
 L4:
   CSF
 </inicializar>
+<Putline>
+<Putline>
 L7:
 ; --Se suma al nivel 2el tamanyo 19
 ; --Se anyade el parametro en el for este y es valor y array t
@@ -157,6 +159,66 @@ L9:
   DRF
   LT
   JMF L10
+  STC 10
+  WRT  0
+<String_"Esta en el bucle de mostrar">
+  STC 114
+  STC 97
+  STC 114
+  STC 116
+  STC 115
+  STC 111
+  STC 109
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 101
+  STC 108
+  STC 99
+  STC 117
+  STC 98
+  STC 32
+  STC 108
+  STC 101
+  STC 32
+  STC 110
+  STC 101
+  STC 32
+  STC 97
+  STC 116
+  STC 115
+  STC 69
+</String_"Esta en el bucle de mostrar">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Expresion de los [] del vector
 ; --Comprobar variable i
   SRF  0 23
@@ -216,10 +278,64 @@ L10:
   STC 10
 ; --Se va a anyadir el string del putline y se muestra 
   WRT  0
+  STC 10
+  WRT  0
+<String_"Acaba el bucle de mostrar">
+  STC 114
+  STC 97
+  STC 114
+  STC 116
+  STC 115
+  STC 111
+  STC 109
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 101
+  STC 108
+  STC 99
+  STC 117
+  STC 98
+  STC 32
+  STC 108
+  STC 101
+  STC 32
+  STC 97
+  STC 98
+  STC 97
+  STC 99
+  STC 65
+</String_"Acaba el bucle de mostrar">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
   CSF
 </mostrar>
-<Putline>
-<Putline>
 L13:
 ; --Se anyade el parametro en el for este y es ref j
   SRF  0  3
@@ -229,89 +345,6 @@ L13:
   ASGI
   JMP L14
 L14:
-  STC 10
-  WRT  0
-<String_"Al empezar intercambiar i= ">
-  STC 32
-  STC 61
-  STC 105
-  STC 32
-  STC 114
-  STC 97
-  STC 105
-  STC 98
-  STC 109
-  STC 97
-  STC 99
-  STC 114
-  STC 101
-  STC 116
-  STC 110
-  STC 105
-  STC 32
-  STC 114
-  STC 97
-  STC 122
-  STC 101
-  STC 112
-  STC 109
-  STC 101
-  STC 32
-  STC 108
-  STC 65
-</String_"Al empezar intercambiar i= ">
-; --Se va a anyadir el string del putline y se muestra 
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-; --Comprobar variable i
-  SRF  0  4
-  DRF
-  DRF
-; --Se va a anyadir el string del putline y se muestra i
-  WRT  1
-<String_" j= ">
-  STC 32
-  STC 61
-  STC 106
-  STC 32
-</String_" j= ">
-; --Se va a anyadir el string del putline y se muestra i
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-; --Comprobar variable j
-  SRF  0  3
-  DRF
-  DRF
-; --Se va a anyadir el string del putline y se muestra j
-  WRT  1
-</Putline>
 ; --Comprobar variable k
   SRF  0  5
 ; --Comprobar variable i
@@ -334,87 +367,6 @@ L14:
   SRF  0  5
   DRF
   ASG
-  STC 10
-  WRT  0
-<String_"Al acabar intercambiar i= ">
-  STC 32
-  STC 61
-  STC 105
-  STC 32
-  STC 114
-  STC 97
-  STC 105
-  STC 98
-  STC 109
-  STC 97
-  STC 99
-  STC 114
-  STC 101
-  STC 116
-  STC 110
-  STC 105
-  STC 32
-  STC 114
-  STC 97
-  STC 98
-  STC 97
-  STC 99
-  STC 97
-  STC 32
-  STC 108
-  STC 65
-</String_"Al acabar intercambiar i= ">
-; --Se va a anyadir el string del putline y se muestra 
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-; --Comprobar variable i
-  SRF  0  4
-  DRF
-  DRF
-; --Se va a anyadir el string del putline y se muestra i
-  WRT  1
-<String_" j= ">
-  STC 32
-  STC 61
-  STC 106
-  STC 32
-</String_" j= ">
-; --Se va a anyadir el string del putline y se muestra i
-  WRT  0
-  WRT  0
-  WRT  0
-  WRT  0
-; --Comprobar variable j
-  SRF  0  3
-  DRF
-  DRF
-; --Se va a anyadir el string del putline y se muestra j
-  WRT  1
-</Putline>
   CSF
 </intercambiar>
 <if_else>
@@ -465,6 +417,8 @@ L18:
 </if_else>
   CSF
 </ordenar>
+<Putline>
+<Putline>
 L19:
 ; --Se anyade el parametro en el for este y es ref me
   SRF  0  3
@@ -680,6 +634,54 @@ L31:
   DRF
   LT
   JMF L32
+  STC 10
+  WRT  0
+<String_"Antes de intercambiar">
+  STC 114
+  STC 97
+  STC 105
+  STC 98
+  STC 109
+  STC 97
+  STC 99
+  STC 114
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 116
+  STC 110
+  STC 65
+</String_"Antes de intercambiar">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Expresion de los [] del vector
 ; --Comprobar variable k
   SRF  0  8
@@ -720,6 +722,8 @@ L33:
   POP
   SRF  0  6
   DRF
+; --Es variable indexada: t
+  PLUS
 ; --Expresion de los [] del vector
 ; --Comprobar variable me
   SRF  0  3
@@ -761,8 +765,62 @@ L35:
   POP
   SRF  0  6
   DRF
+; --Es variable indexada: t
+  PLUS
 ; --Se llama al procedure intercambiar
   OSF  9  1 L13
+  STC 10
+  WRT  0
+<String_"Despues de intercambiar">
+  STC 114
+  STC 97
+  STC 105
+  STC 98
+  STC 109
+  STC 97
+  STC 99
+  STC 114
+  STC 101
+  STC 116
+  STC 110
+  STC 105
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 117
+  STC 112
+  STC 115
+  STC 101
+  STC 68
+</String_"Despues de intercambiar">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Comprobar variable k
   SRF  0  8
 ; --Comprobar variable k
@@ -932,6 +990,8 @@ L45:
   POP
   SRF  0  6
   DRF
+; --Es variable indexada: t
+  PLUS
 ; --Expresion de los [] del vector
 ; --Comprobar variable me
   SRF  0  3
@@ -973,6 +1033,8 @@ L47:
   POP
   SRF  0  6
   DRF
+; --Es variable indexada: t
+  PLUS
 ; --Se llama al procedure intercambiar
   OSF  9  1 L13
   CSF
@@ -981,6 +1043,10 @@ L47:
 <then>
 <if_else>
 <then>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
 L49:
 ; --Se anyade el parametro en el for este y es valor y no array der
   SRF  0  3
@@ -1001,6 +1067,44 @@ L50:
   DRF
   GT
   JMF L51
+  STC 10
+  WRT  0
+<String_"Antes de mostrar">
+  STC 114
+  STC 97
+  STC 114
+  STC 116
+  STC 115
+  STC 111
+  STC 109
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 116
+  STC 110
+  STC 65
+</String_"Antes de mostrar">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Comprobar variable t
 ; --Se anyade el parametro !!!!!t
   SRF  0  5
@@ -1105,6 +1209,48 @@ L50:
   DRF
 ; --Se llama al procedure mostrar
   OSF  7  1 L7
+  STC 10
+  WRT  0
+<String_"Despues de mostrar">
+  STC 114
+  STC 97
+  STC 114
+  STC 116
+  STC 115
+  STC 111
+  STC 109
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 117
+  STC 112
+  STC 115
+  STC 101
+  STC 68
+</String_"Despues de mostrar">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Comprobar variable der
   SRF  0  3
   DRF
@@ -1115,6 +1261,44 @@ L50:
   STC  1
   EQ
   JMF L52
+  STC 10
+  WRT  0
+<String_"Antes de ordenar">
+  STC 114
+  STC 97
+  STC 110
+  STC 101
+  STC 100
+  STC 114
+  STC 111
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 116
+  STC 110
+  STC 65
+</String_"Antes de ordenar">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
 ; --Expresion de los [] del vector
 ; --Comprobar variable izq
   SRF  0  4
@@ -1155,6 +1339,8 @@ L53:
   POP
   SRF  0  5
   DRF
+; --Es variable indexada: t
+  PLUS
 ; --Expresion de los [] del vector
 ; --Comprobar variable der
   SRF  0  3
@@ -1195,8 +1381,52 @@ L55:
   POP
   SRF  0  5
   DRF
+; --Es variable indexada: t
+  PLUS
 ; --Se llama al procedure ordenar
   OSF  7  1 L15
+  STC 10
+  WRT  0
+<String_"Despues de ordenar">
+  STC 114
+  STC 97
+  STC 110
+  STC 101
+  STC 100
+  STC 114
+  STC 111
+  STC 32
+  STC 101
+  STC 100
+  STC 32
+  STC 115
+  STC 101
+  STC 117
+  STC 112
+  STC 115
+  STC 101
+  STC 68
+</String_"Despues de ordenar">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
   JMP L57
 L52:
 </then>

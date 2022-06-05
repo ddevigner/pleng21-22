@@ -1341,7 +1341,7 @@ L0:
   DRF
 ; --Se va a anyadir el string del putline y se muestra tamano_tablero
   WRT  1
-  STC 39
+  STC 42
 ; --Se va a anyadir el string del putline y se muestra tamano_tablero
   WRT  0
 ; --Comprobar variable tamano_tablero

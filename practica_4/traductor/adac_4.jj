@@ -597,17 +597,29 @@ void instruction(Attributes at):
 											long auxDir = param.dir;
 											at.code.addInst(PCodeInstruction.OpCode.POP);
 											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+											if(g.vector_indexado){
+												at.code.addComment("Es variable indexada: " + param.name);
+												at.code.addInst(PCodeInstruction.OpCode.PLUS);
+											}
 										}else if(g.parClass==ParameterClass.REF){
 											Symbol param = st.getSymbol(g.name);
 											long auxDir = param.dir;
 											at.code.addInst(PCodeInstruction.OpCode.POP);
 											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
 											at.code.addInst(PCodeInstruction.OpCode.DRF);
+											if(g.vector_indexado){
+												at.code.addComment("Es variable indexada: " + param.name);
+												at.code.addInst(PCodeInstruction.OpCode.PLUS);
+											}
 										}else if(g.parClass==ParameterClass.NONE){
 											Symbol param = st.getSymbol(g.name);
 											long auxDir = param.dir;
 											at.code.addInst(PCodeInstruction.OpCode.POP);
 											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+											if(g.vector_indexado){
+												at.code.addComment("Es variable indexada: " + param.name);
+												at.code.addInst(PCodeInstruction.OpCode.PLUS);
+											}
 										}
 									}
 								}
@@ -677,17 +689,29 @@ void instruction(Attributes at):
 													long auxDir = param.dir;
 													at.code.addInst(PCodeInstruction.OpCode.POP);
 													at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+													if(g.vector_indexado){
+														at.code.addComment("Es variable indexada: " + param.name);
+														at.code.addInst(PCodeInstruction.OpCode.PLUS);
+													}
 												}else if(g.parClass==ParameterClass.REF){
 													Symbol param = st.getSymbol(g.name);
 													long auxDir = param.dir;
 													at.code.addInst(PCodeInstruction.OpCode.POP);
 													at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
 													at.code.addInst(PCodeInstruction.OpCode.DRF);
+													if(g.vector_indexado){
+														at.code.addComment("Es variable indexada: " + param.name);
+														at.code.addInst(PCodeInstruction.OpCode.PLUS);
+													}
 												}else if(g.parClass==ParameterClass.NONE){
 													Symbol param = st.getSymbol(g.name);
 													long auxDir = param.dir;
 													at.code.addInst(PCodeInstruction.OpCode.POP);
 													at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+													if(g.vector_indexado){
+														at.code.addComment("Es variable indexada: " + param.name);
+														at.code.addInst(PCodeInstruction.OpCode.PLUS);
+													}
 												}
 											}
 										}
@@ -854,7 +878,7 @@ void assignable(Attributes at):
 									at.code.addInst(PCodeInstruction.OpCode.PLUS);
 								}
 								//at.code.addInst(PCodeInstruction.OpCode.PLUS);
-
+								//at.vector_indexado=true;
 							}catch(SymbolNotFoundException e){
 
 							}
@@ -960,17 +984,29 @@ void factor(Attributes at):
 											long auxDir = param.dir;
 											at.code.addInst(PCodeInstruction.OpCode.POP);
 											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+											if(g.vector_indexado){
+												at.code.addComment("Es variable indexada: " + param.name);
+												at.code.addInst(PCodeInstruction.OpCode.PLUS);
+											}
 										}else if(g.parClass==ParameterClass.REF){
 											Symbol param = st.getSymbol(g.name);
 											long auxDir = param.dir;
 											at.code.addInst(PCodeInstruction.OpCode.POP);
 											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
 											at.code.addInst(PCodeInstruction.OpCode.DRF);
+											if(g.vector_indexado){
+												at.code.addComment("Es variable indexada: " + param.name);
+												at.code.addInst(PCodeInstruction.OpCode.PLUS);
+											}
 										}else if(g.parClass==ParameterClass.NONE){
 											Symbol param = st.getSymbol(g.name);
 											long auxDir = param.dir;
 											at.code.addInst(PCodeInstruction.OpCode.POP);
 											at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+											if(g.vector_indexado){
+												at.code.addComment("Es variable indexada: " + param.name);
+												at.code.addInst(PCodeInstruction.OpCode.PLUS);
+											}
 										}
 									}
 								}
@@ -1034,17 +1070,29 @@ void factor(Attributes at):
 												long auxDir = param.dir;
 												at.code.addInst(PCodeInstruction.OpCode.POP);
 												at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+												if(g.vector_indexado){
+													at.code.addComment("Es variable indexada: " + param.name);
+													at.code.addInst(PCodeInstruction.OpCode.PLUS);
+												}
 											}else if(g.parClass==ParameterClass.REF){
 												Symbol param = st.getSymbol(g.name);
 												long auxDir = param.dir;
 												at.code.addInst(PCodeInstruction.OpCode.POP);
 												at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
 												at.code.addInst(PCodeInstruction.OpCode.DRF);
+												if(g.vector_indexado){
+													at.code.addComment("Es variable indexada: " + param.name);
+													at.code.addInst(PCodeInstruction.OpCode.PLUS);
+												}
 											}else if(g.parClass==ParameterClass.NONE){
 												Symbol param = st.getSymbol(g.name);
 												long auxDir = param.dir;
 												at.code.addInst(PCodeInstruction.OpCode.POP);
 												at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-param.nivel,(int)auxDir);
+												if(g.vector_indexado){
+													at.code.addComment("Es variable indexada: " + param.name);
+													at.code.addInst(PCodeInstruction.OpCode.PLUS);
+												}
 											}
 										}
 									}
@@ -1160,7 +1208,7 @@ void factor(Attributes at):
 									at.code.addInst(PCodeInstruction.OpCode.DRF);
 									//at.code.addInst(PCodeInstruction.OpCode.PLUS);
 								}
-								
+								at.vector_indexado=true;
 							}catch(SymbolNotFoundException e){
 
 							}

@@ -118,7 +118,7 @@ L9:
   DRF
 ; --Se va a anyadir el string del putl y se muestra s
   WRT  1
-  STC 39
+  STC 46
 ; --Se va a anyadir el string del putline y se muestra s
   WRT  0
 ; --Comprobar variable i

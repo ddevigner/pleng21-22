@@ -23,10 +23,12 @@ procedure mostrar (val integer t[20]) is
  begin
   i := 0;
   while i < n do
+    put_line("Esta en el bucle de mostrar");
     put(t[i], " ");
     i := i + 1;
   end
   put(int2char(13),int2char(10));
+  put_line("Acaba el bucle de mostrar");
  end
 
 --------------------------------------------------------------------
@@ -34,11 +36,11 @@ procedure intercambiar (ref integer i, j) is
 --------------------------------------------------------------------
 integer k;
  begin
-  put_line("Al empezar intercambiar i= ",i," j= ",j);
+  --put_line("Al empezar intercambiar i= ",i," j= ",j);
   k := i;
   i := j;
   j := k;
-  put_line("Al acabar intercambiar i= ",i," j= ",j);
+  --put_line("Al acabar intercambiar i= ",i," j= ",j);
  end
 
 --------------------------------------------------------------------
@@ -68,7 +70,9 @@ procedure divide (ref integer t[20]; val integer izq, der; ref integer me) is
    me := me - 1;
   end
   while k < me do
+    put_line("Antes de intercambiar");
     intercambiar(t[k], t[me]);
+    put_line("Despues de intercambiar");
     k := k + 1;
     while t[k] <= p do
      k := k + 1;
@@ -87,9 +91,13 @@ procedure quicksort (ref integer t[20]; val integer izq, der) is
  integer me;
  begin
   if der > izq then
+    put_line("Antes de mostrar");
     mostrar(t);
+    put_line("Despues de mostrar");
     if (der - izq) = 1 then
+      put_line("Antes de ordenar");
      ordenar(t[izq], t[der]);
+     put_line("Despues de ordenar");
     else
       divide(t, izq, der, me);
       quicksort(t, izq, me - 1);

@@ -375,7 +375,7 @@ public class SemanticFunctions {
 					fst.baseType, snd.baseType);
 			}
 		}
-
+		fst.vector_indexado=false;
 		//Se anyade a at (en esta funcion se llama fst) el codigo de snd y luego el codigo del operando
 		fst.code.addBlock(snd.code);
 		snd.code.clearBlock();
@@ -815,7 +815,7 @@ public class SemanticFunctions {
 	public void EvaluateChar(Attributes at, Token t) {
 		at.baseType = Types.CHAR;
 		at.parClass = ParameterClass.VAL;
-		at.charVal  = t.image.charAt(0);
+		at.charVal  = t.image.charAt(1);
 		at.line = t.beginLine;
 		at.column = t.beginColumn;
 

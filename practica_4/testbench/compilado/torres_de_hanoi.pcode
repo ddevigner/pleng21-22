@@ -523,9 +523,9 @@ L0:
   SRF  0  4
   DRF
 ; --Se anyade el parametro !!!!!n
-  STC 39
-  STC 39
-  STC 39
+  STC 65
+  STC 67
+  STC 66
 ; --Se llama al procedure hanoi
   OSF  5  0 L1
   STC 10

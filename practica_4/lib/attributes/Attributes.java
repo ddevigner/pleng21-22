@@ -56,6 +56,8 @@ public class Attributes implements Cloneable {
     // Code.
     public CodeBlock code;
 
+    public boolean vector_indexado=false;
+
 
     /** CONSTRUCTORES ********************************************************/
     // Empty Attributes.
