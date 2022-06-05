@@ -1,0 +1,517 @@
+<calcular_mcd>
+  ENP L0
+<mcd>
+<dato>
+<if_else>
+<then>
+<Putline>
+L1:
+; --Se anyade el parametro en el for este y es ref d
+  SRF  0  3
+  ASGI
+  JMP L2
+L2:
+; --Comprobar variable d
+  SRF  0  3
+  DRF
+  STC  0
+  ASG
+L3:
+; --Comprobar variable d
+  SRF  0  3
+  DRF
+  DRF
+  STC  0
+  LTE
+  JMF L4
+<String_"Escribe un numero (>0): ">
+  STC 32
+  STC 58
+  STC 41
+  STC 48
+  STC 62
+  STC 40
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 109
+  STC 117
+  STC 110
+  STC 32
+  STC 110
+  STC 117
+  STC 32
+  STC 101
+  STC 98
+  STC 105
+  STC 114
+  STC 99
+  STC 115
+  STC 69
+</String_"Escribe un numero (>0): ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+; --Comprobar variable d
+  SRF  0  3
+  DRF
+  RD  1
+; --Comprobar variable d
+  SRF  0  3
+  DRF
+  DRF
+  STC  0
+  LTE
+  JMF L5
+  STC 10
+  WRT  0
+<String_"El numero debe ser > 0.">
+  STC 46
+  STC 48
+  STC 32
+  STC 62
+  STC 32
+  STC 114
+  STC 101
+  STC 115
+  STC 32
+  STC 101
+  STC 98
+  STC 101
+  STC 100
+  STC 32
+  STC 111
+  STC 114
+  STC 101
+  STC 109
+  STC 117
+  STC 110
+  STC 32
+  STC 108
+  STC 69
+</String_"El numero debe ser > 0.">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  JMP L6
+L5:
+</then>
+L6:
+</if_else>
+  JMP L3
+L4:
+  CSF
+</dato>
+L7:
+; --Se anyade el parametro en el for este y es valor y no array b
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array a
+  SRF  0  4
+  ASGI
+  JMP L8
+L8:
+; --Comprobar variable j
+  SRF  0  6
+; --Comprobar variable a
+  SRF  0  4
+  DRF
+  ASG
+; --Comprobar variable k
+  SRF  0  7
+; --Comprobar variable b
+  SRF  0  3
+  DRF
+  ASG
+; --Comprobar variable i
+  SRF  0  5
+; --Comprobar variable a
+  SRF  0  4
+  DRF
+; --Comprobar variable b
+  SRF  0  3
+  DRF
+  MOD
+  ASG
+L9:
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+  STC  0
+  NEQ
+  JMF L10
+; --Comprobar variable j
+  SRF  0  6
+; --Comprobar variable k
+  SRF  0  7
+  DRF
+  ASG
+; --Comprobar variable k
+  SRF  0  7
+; --Comprobar variable i
+  SRF  0  5
+  DRF
+  ASG
+; --Comprobar variable i
+  SRF  0  5
+; --Comprobar variable j
+  SRF  0  6
+  DRF
+; --Comprobar variable k
+  SRF  0  7
+  DRF
+  MOD
+  ASG
+  JMP L9
+L10:
+; --Comprobar variable k
+  SRF  0  7
+  DRF
+; --Se hace return 
+  CSF
+  CSF
+</mcd>
+L0:
+<Putline>
+<Putline>
+<Putline>
+  STC 10
+  WRT  0
+<String_"Este programa pide dos números positivos y calcula su máximo común divisor.">
+  STC 46
+  STC 114
+  STC 111
+  STC 115
+  STC 105
+  STC 118
+  STC 105
+  STC 100
+  STC 32
+  STC 110
+  STC 186
+  STC 195
+  STC 109
+  STC 111
+  STC 99
+  STC 32
+  STC 111
+  STC 109
+  STC 105
+  STC 120
+  STC 161
+  STC 195
+  STC 109
+  STC 32
+  STC 117
+  STC 115
+  STC 32
+  STC 97
+  STC 108
+  STC 117
+  STC 99
+  STC 108
+  STC 97
+  STC 99
+  STC 32
+  STC 121
+  STC 32
+  STC 115
+  STC 111
+  STC 118
+  STC 105
+  STC 116
+  STC 105
+  STC 115
+  STC 111
+  STC 112
+  STC 32
+  STC 115
+  STC 111
+  STC 114
+  STC 101
+  STC 109
+  STC 186
+  STC 195
+  STC 110
+  STC 32
+  STC 115
+  STC 111
+  STC 100
+  STC 32
+  STC 101
+  STC 100
+  STC 105
+  STC 112
+  STC 32
+  STC 97
+  STC 109
+  STC 97
+  STC 114
+  STC 103
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 101
+  STC 116
+  STC 115
+  STC 69
+</String_"Este programa pide dos números positivos y calcula su máximo común divisor.">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+; --Comprobar variable i
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+  POP
+  SRF -1  3
+; --Comprobar variable j
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+  POP
+  SRF -1  4
+  STC 10
+  WRT  0
+<String_"">
+</String_"">
+; --Se va a anyadir el string del putline y se muestra null
+</Putline>
+  STC 10
+  WRT  0
+<String_"mcd(">
+  STC 40
+  STC 100
+  STC 99
+  STC 109
+</String_"mcd(">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"mcd(">
+  STC 40
+  STC 100
+  STC 99
+  STC 109
+</String_"mcd(">
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+; --Se va a anyadir el string del putline y se muestra i
+  WRT  1
+<String_",">
+<String_"mcd(">
+  STC 40
+  STC 100
+  STC 99
+  STC 109
+</String_"mcd(">
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+  STC 44
+</String_",">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+<String_",">
+<String_"mcd(">
+  STC 40
+  STC 100
+  STC 99
+  STC 109
+</String_"mcd(">
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+  STC 44
+</String_",">
+; --Comprobar variable j
+  SRF  0  4
+  DRF
+; --Se va a anyadir el string del putline y se muestra j
+  WRT  1
+<String_") = ">
+<String_",">
+<String_"mcd(">
+  STC 40
+  STC 100
+  STC 99
+  STC 109
+</String_"mcd(">
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+  STC 44
+</String_",">
+; --Comprobar variable j
+  SRF  0  4
+  DRF
+  STC 32
+  STC 61
+  STC 32
+  STC 41
+</String_") = ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_") = ">
+<String_",">
+<String_"mcd(">
+  STC 40
+  STC 100
+  STC 99
+  STC 109
+</String_"mcd(">
+; --Comprobar variable i
+  SRF  0  3
+  DRF
+  STC 44
+</String_",">
+; --Comprobar variable j
+  SRF  0  4
+  DRF
+  STC 32
+  STC 61
+  STC 32
+  STC 41
+</String_") = ">
+; --Comprobar variable i
+; --Se anyade el parametro y es NONE
+  SRF  0  3
+  DRF
+; --Comprobar variable j
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+; --Se va a anyadir el string del putline y se muestra mcd
+  WRT  1
+</Putline>
+  LVP
+</calcular_mcd>

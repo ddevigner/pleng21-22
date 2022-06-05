@@ -1,0 +1,36 @@
+<hello>
+  ENP L0
+L0:
+<Putline>
+  STC 10
+  WRT  0
+<String_"Hello World!">
+  STC 33
+  STC 100
+  STC 108
+  STC 114
+  STC 111
+  STC 87
+  STC 32
+  STC 111
+  STC 108
+  STC 108
+  STC 101
+  STC 72
+</String_"Hello World!">
+; --Se va a anyadir el string del putline y se muestra 
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  LVP
+</hello>

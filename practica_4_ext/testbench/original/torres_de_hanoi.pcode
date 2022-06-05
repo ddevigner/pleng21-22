@@ -1,0 +1,757 @@
+<hanoi_towers>
+  ENP L0
+<hanoi>
+<if_else>
+<then>
+<Putline>
+L1:
+; --Se anyade el parametro en el for este y es valor y no array spare
+  SRF  0  3
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array target
+  SRF  0  4
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array source
+  SRF  0  5
+  ASGI
+; --Se anyade el parametro en el for este y es valor y no array n
+  SRF  0  6
+  ASGI
+  JMP L2
+L2:
+; --Comprobar variable n
+  SRF  0  6
+  DRF
+  STC  1
+  EQ
+  JMF L3
+  STC 10
+  WRT  0
+<String_"Move disk from tower ">
+  STC 32
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 116
+  STC 32
+  STC 109
+  STC 111
+  STC 114
+  STC 102
+  STC 32
+  STC 107
+  STC 115
+  STC 105
+  STC 100
+  STC 32
+  STC 101
+  STC 118
+  STC 111
+  STC 77
+</String_"Move disk from tower ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"Move disk from tower ">
+  STC 32
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 116
+  STC 32
+  STC 109
+  STC 111
+  STC 114
+  STC 102
+  STC 32
+  STC 107
+  STC 115
+  STC 105
+  STC 100
+  STC 32
+  STC 101
+  STC 118
+  STC 111
+  STC 77
+</String_"Move disk from tower ">
+; --Comprobar variable source
+  SRF  0  5
+  DRF
+; --Se va a anyadir el string del putline y se muestra source
+  WRT  0
+<String_" to tower ">
+<String_"Move disk from tower ">
+  STC 32
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 116
+  STC 32
+  STC 109
+  STC 111
+  STC 114
+  STC 102
+  STC 32
+  STC 107
+  STC 115
+  STC 105
+  STC 100
+  STC 32
+  STC 101
+  STC 118
+  STC 111
+  STC 77
+</String_"Move disk from tower ">
+; --Comprobar variable source
+  SRF  0  5
+  DRF
+  STC 32
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 116
+  STC 32
+  STC 111
+  STC 116
+  STC 32
+</String_" to tower ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_" to tower ">
+<String_"Move disk from tower ">
+  STC 32
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 116
+  STC 32
+  STC 109
+  STC 111
+  STC 114
+  STC 102
+  STC 32
+  STC 107
+  STC 115
+  STC 105
+  STC 100
+  STC 32
+  STC 101
+  STC 118
+  STC 111
+  STC 77
+</String_"Move disk from tower ">
+; --Comprobar variable source
+  SRF  0  5
+  DRF
+  STC 32
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 116
+  STC 32
+  STC 111
+  STC 116
+  STC 32
+</String_" to tower ">
+; --Comprobar variable target
+  SRF  0  4
+  DRF
+; --Se va a anyadir el string del putline y se muestra target
+  WRT  0
+<String_". ">
+<String_" to tower ">
+<String_"Move disk from tower ">
+  STC 32
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 116
+  STC 32
+  STC 109
+  STC 111
+  STC 114
+  STC 102
+  STC 32
+  STC 107
+  STC 115
+  STC 105
+  STC 100
+  STC 32
+  STC 101
+  STC 118
+  STC 111
+  STC 77
+</String_"Move disk from tower ">
+; --Comprobar variable source
+  SRF  0  5
+  DRF
+  STC 32
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 116
+  STC 32
+  STC 111
+  STC 116
+  STC 32
+</String_" to tower ">
+; --Comprobar variable target
+  SRF  0  4
+  DRF
+  STC 32
+  STC 46
+</String_". ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+</Putline>
+; --Comprobar variable steps
+  SRF  1  3
+; --Comprobar variable steps
+  SRF  1  3
+  DRF
+  STC  1
+  PLUS
+  ASG
+  JMP L4
+L3:
+</then>
+; --Comprobar variable n
+; --Se anyade el parametro y es VAL
+  SRF  0  6
+  DRF
+  STC  1
+  SBT
+; --Comprobar variable source
+; --Se anyade el parametro y es VAL
+  SRF  0  5
+  DRF
+; --Comprobar variable spare
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Comprobar variable target
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+  STC  1
+; --Comprobar variable source
+; --Se anyade el parametro y es VAL
+  SRF  0  5
+  DRF
+; --Comprobar variable target
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Comprobar variable spare
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Comprobar variable n
+; --Se anyade el parametro y es VAL
+  SRF  0  6
+  DRF
+  STC  1
+  SBT
+; --Comprobar variable spare
+; --Se anyade el parametro y es VAL
+  SRF  0  3
+  DRF
+; --Comprobar variable target
+; --Se anyade el parametro y es VAL
+  SRF  0  4
+  DRF
+; --Comprobar variable source
+; --Se anyade el parametro y es VAL
+  SRF  0  5
+  DRF
+L4:
+</if_else>
+  CSF
+</hanoi>
+L0:
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+<Putline>
+  STC 10
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"Recursive algorithm to solve the Hanoi Towers problem.">
+  STC 46
+  STC 109
+  STC 101
+  STC 108
+  STC 98
+  STC 111
+  STC 114
+  STC 112
+  STC 32
+  STC 115
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 84
+  STC 32
+  STC 105
+  STC 111
+  STC 110
+  STC 97
+  STC 72
+  STC 32
+  STC 101
+  STC 104
+  STC 116
+  STC 32
+  STC 101
+  STC 118
+  STC 108
+  STC 111
+  STC 115
+  STC 32
+  STC 111
+  STC 116
+  STC 32
+  STC 109
+  STC 104
+  STC 116
+  STC 105
+  STC 114
+  STC 111
+  STC 103
+  STC 108
+  STC 97
+  STC 32
+  STC 101
+  STC 118
+  STC 105
+  STC 115
+  STC 114
+  STC 117
+  STC 99
+  STC 101
+  STC 82
+</String_"Recursive algorithm to solve the Hanoi Towers problem.">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"https://en.wikipedia.org/wiki/Tower_of_Hanoi#Recursive_solution">
+  STC 110
+  STC 111
+  STC 105
+  STC 116
+  STC 117
+  STC 108
+  STC 111
+  STC 115
+  STC 95
+  STC 101
+  STC 118
+  STC 105
+  STC 115
+  STC 114
+  STC 117
+  STC 99
+  STC 101
+  STC 82
+  STC 35
+  STC 105
+  STC 111
+  STC 110
+  STC 97
+  STC 72
+  STC 95
+  STC 102
+  STC 111
+  STC 95
+  STC 114
+  STC 101
+  STC 119
+  STC 111
+  STC 84
+  STC 47
+  STC 105
+  STC 107
+  STC 105
+  STC 119
+  STC 47
+  STC 103
+  STC 114
+  STC 111
+  STC 46
+  STC 97
+  STC 105
+  STC 100
+  STC 101
+  STC 112
+  STC 105
+  STC 107
+  STC 105
+  STC 119
+  STC 46
+  STC 110
+  STC 101
+  STC 47
+  STC 47
+  STC 58
+  STC 115
+  STC 112
+  STC 116
+  STC 116
+  STC 104
+</String_"https://en.wikipedia.org/wiki/Tower_of_Hanoi#Recursive_solution">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+</Putline>
+; --Comprobar variable steps
+  SRF  0  3
+  STC  0
+  ASG
+; --Comprobar variable n
+  SRF  0  4
+  STC  3
+  ASG
+  STC 10
+  WRT  0
+<String_"Solving for ">
+  STC 32
+  STC 114
+  STC 111
+  STC 102
+  STC 32
+  STC 103
+  STC 110
+  STC 105
+  STC 118
+  STC 108
+  STC 111
+  STC 83
+</String_"Solving for ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"Solving for ">
+  STC 32
+  STC 114
+  STC 111
+  STC 102
+  STC 32
+  STC 103
+  STC 110
+  STC 105
+  STC 118
+  STC 108
+  STC 111
+  STC 83
+</String_"Solving for ">
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+; --Se va a anyadir el string del putline y se muestra n
+  WRT  1
+<String_" disks.">
+<String_"Solving for ">
+  STC 32
+  STC 114
+  STC 111
+  STC 102
+  STC 32
+  STC 103
+  STC 110
+  STC 105
+  STC 118
+  STC 108
+  STC 111
+  STC 83
+</String_"Solving for ">
+; --Comprobar variable n
+  SRF  0  4
+  DRF
+  STC 46
+  STC 115
+  STC 107
+  STC 115
+  STC 105
+  STC 100
+  STC 32
+</String_" disks.">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+</Putline>
+; --Comprobar variable n
+; --Se anyade el parametro y es NONE
+  SRF  0  4
+  DRF
+  STC 39
+  STC 39
+  STC 39
+  STC 10
+  WRT  0
+</Putline>
+  STC 10
+  WRT  0
+<String_"Finished in ">
+  STC 32
+  STC 110
+  STC 105
+  STC 32
+  STC 100
+  STC 101
+  STC 104
+  STC 115
+  STC 105
+  STC 110
+  STC 105
+  STC 70
+</String_"Finished in ">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+<String_"Finished in ">
+  STC 32
+  STC 110
+  STC 105
+  STC 32
+  STC 100
+  STC 101
+  STC 104
+  STC 115
+  STC 105
+  STC 110
+  STC 105
+  STC 70
+</String_"Finished in ">
+; --Comprobar variable steps
+  SRF  0  3
+  DRF
+; --Se va a anyadir el string del putline y se muestra steps
+  WRT  1
+<String_" steps.">
+<String_"Finished in ">
+  STC 32
+  STC 110
+  STC 105
+  STC 32
+  STC 100
+  STC 101
+  STC 104
+  STC 115
+  STC 105
+  STC 110
+  STC 105
+  STC 70
+</String_"Finished in ">
+; --Comprobar variable steps
+  SRF  0  3
+  DRF
+  STC 46
+  STC 115
+  STC 112
+  STC 101
+  STC 116
+  STC 115
+  STC 32
+</String_" steps.">
+; --Se va a anyadir el string del putline y se muestra null
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+  WRT  0
+</Putline>
+  LVP
+</hanoi_towers>

@@ -70,9 +70,11 @@ integer i, j;
 begin
         i := 2;
         while i <= n div 2 do
+                put_line("Es i: ", i);
                 if v[i] then
                         j := 2 * i;
                         while j <= n do
+                                put_line("Es j: ", j);
                                 v[j] := false;
                                 j := j + i;
                         end

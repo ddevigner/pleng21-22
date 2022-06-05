@@ -1,0 +1,110 @@
+--------------------------------------------------------------------
+procedure numero_euler is
+-- e aproximado con una serie infinita
+--  https://en.wikipedia.org/wiki/List_of_representations_of_e#As_an_infinite_series
+
+--------------------------------------------------------------------
+integer n, e[101], sumando[101], resultado[101], ndigitos;
+
+--------------------------------------------------------------------
+procedure iniciar (ref integer s[101]) is
+--------------------------------------------------------------------
+integer i;
+begin
+   i := 0;
+   while i <= ndigitos do
+      s[i] := 0;
+      i := i + 1;
+   end
+end
+
+--------------------------------------------------------------------
+procedure mostrar_numero (ref integer s[101]) is
+--------------------------------------------------------------------
+integer i;
+begin
+   put (s[0],'.');
+   i := 1;
+   while i <= ndigitos do
+      if (((i-1) mod 5) = 0) then
+         put (" ");
+      end
+      put (s[i]);
+      i := i + 1;
+   end
+   put (int2char(13),int2char(10));
+end
+
+--------------------------------------------------------------------
+procedure sumar (ref integer s[101], r[101]) is
+--------------------------------------------------------------------
+integer i, n;
+
+begin
+   i := ndigitos;
+   while i > 0 do
+	  n := s[i] + r[i];
+	  if n > 9
+		 then
+	        s[i] := n mod 10;
+	        s[i-1] := s[i-1] + (n div 10);
+		 else
+	        s[i] := n;
+      end
+      i := i - 1;
+   end
+end
+
+--------------------------------------------------------------------
+procedure dividir (ref integer s[101], r[101]; val integer n) is
+--------------------------------------------------------------------
+integer i;
+begin
+   i := 0;
+   while i < ndigitos do
+      if (s[i] div n) > 0 then
+         r[i] := s[i] div n;
+         s[i+1] := (((s[i] mod n) * 10)) + s[i+1];
+	   else
+         r[i] := 0;
+         s[i+1] := (s[i] * 10) + s[i+1];
+	   end
+      i := i + 1;
+   end
+end
+
+--------------------------------------------------------------------
+procedure asignar (ref integer s[101], r[101]) is
+--------------------------------------------------------------------
+integer i;
+begin
+   i := 0;
+   while i <= ndigitos do
+      s[i] := r[i];
+      i := i + 1;
+   end
+end
+
+--------------------------------------------------------------------
+begin
+   ndigitos := 20;
+   
+   put_line ("Aproximación del número de Euler e utilizando la serie infinita e = 1/0! + 1/1! + 1/2! + 1/3! ...");
+   put_line ("");
+   
+   iniciar (sumando);
+   iniciar (e);
+   sumando[0] := 1;
+   e[0] := 2;
+   n := 1;
+   while n < ndigitos do
+         dividir (sumando, resultado, n);
+         sumar (e, resultado);
+         put ("e con ", n+1, " componentes de la serie: ");
+         mostrar_numero (e);
+         asignar (sumando, resultado);
+         n := n + 1;
+   end
+   put_line ("");
+   put_line ("La convergencia es rápida porque los términos de la suma son 1/k!");
+end
