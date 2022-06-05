@@ -343,14 +343,16 @@ void proc_func_decl(CodeBlock proc_func):
 				CGUtils.memorySpaces[st.level] += vec.maxInd;
 				at.code.addComment("Se suma al nivel " + st.level + "el tamanyo " + vec.maxInd);
 				//Se recorre el vector y se recupera cada Posicion 
-				for(int j=vec.maxInd; j >= 0; j--) {
+				for(int j=vec.maxInd;j>=0;j--){
 					at.code.addComment("Se anyade el parametro en el for este y es valor y array " + s.name);
 					long aux = s.dir + (long) j;	//Revisarlo
-					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel, (int)aux);	//Aqui da error
+					at.code.addInst(PCodeInstruction.OpCode.SRF,st.level-s.nivel,(int)aux);	//Aqui da error
 					at.code.addInst(PCodeInstruction.OpCode.ASGI);
 				}
 			}
 		}
+
+
 		at.code.addInst(OpCode.JMP, label);
 	}
 	<RPAREN>
@@ -639,6 +641,9 @@ void instruction(Attributes at):
 										}
 									}
 								}
+
+
+
 							}catch(SymbolNotFoundException e){
 
 							}
