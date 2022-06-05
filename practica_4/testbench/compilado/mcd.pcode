@@ -50,7 +50,7 @@ L3:
   STC 115
   STC 69
 </String_"Escribe un numero (>0): ">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -413,64 +413,22 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"mcd(">
-  STC 40
-  STC 100
-  STC 99
-  STC 109
-</String_"mcd(">
 ; --Comprobar variable i
   SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra i
   WRT  1
 <String_",">
-<String_"mcd(">
-  STC 40
-  STC 100
-  STC 99
-  STC 109
-</String_"mcd(">
-; --Comprobar variable i
-  SRF  0  3
-  DRF
   STC 44
 </String_",">
 ; --Se va a anyadir el string del putline y se muestra i
   WRT  0
-<String_",">
-<String_"mcd(">
-  STC 40
-  STC 100
-  STC 99
-  STC 109
-</String_"mcd(">
-; --Comprobar variable i
-  SRF  0  3
-  DRF
-  STC 44
-</String_",">
 ; --Comprobar variable j
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra j
   WRT  1
 <String_") = ">
-<String_",">
-<String_"mcd(">
-  STC 40
-  STC 100
-  STC 99
-  STC 109
-</String_"mcd(">
-; --Comprobar variable i
-  SRF  0  3
-  DRF
-  STC 44
-</String_",">
-; --Comprobar variable j
-  SRF  0  4
-  DRF
   STC 32
   STC 61
   STC 32
@@ -481,27 +439,6 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_") = ">
-<String_",">
-<String_"mcd(">
-  STC 40
-  STC 100
-  STC 99
-  STC 109
-</String_"mcd(">
-; --Comprobar variable i
-  SRF  0  3
-  DRF
-  STC 44
-</String_",">
-; --Comprobar variable j
-  SRF  0  4
-  DRF
-  STC 32
-  STC 61
-  STC 32
-  STC 41
-</String_") = ">
 ; --Comprobar variable i
 ; --Se anyade el parametro y es NONE
   SRF  0  3

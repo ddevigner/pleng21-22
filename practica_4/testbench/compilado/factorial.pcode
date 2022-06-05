@@ -298,9 +298,6 @@ L5:
 ; --Se va a anyadir el string del putline y se muestra n
   WRT  1
 <String_"! = ">
-; --Comprobar variable n
-  SRF  0  3
-  DRF
   STC 32
   STC 61
   STC 32
@@ -311,15 +308,6 @@ L5:
   WRT  0
   WRT  0
   WRT  0
-<String_"! = ">
-; --Comprobar variable n
-  SRF  0  3
-  DRF
-  STC 32
-  STC 61
-  STC 32
-  STC 33
-</String_"! = ">
 ; --Comprobar variable n
 ; --Se anyade el parametro y es NONE
   SRF  0  3

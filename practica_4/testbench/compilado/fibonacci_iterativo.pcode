@@ -7,9 +7,8 @@ L1:
   JMP L2
 L2:
   STC 13
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
-  STC 13
   STC 10
 ; --Se va a anyadir el string del putline y se muestra 
   WRT  0
@@ -64,7 +63,7 @@ L5:
   STC 115
   STC 69
 </String_"Escribe un numero positivo: ">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -307,7 +306,7 @@ L9:
   STC 108
   STC 69
 </String_"El numero debe ser postivo.">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -1040,27 +1039,12 @@ L13:
   WRT  0
   WRT  0
   WRT  0
-<String_"fib(">
-  STC 40
-  STC 98
-  STC 105
-  STC 102
-</String_"fib(">
 ; --Comprobar variable i
   SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra i
   WRT  1
 <String_") = ">
-<String_"fib(">
-  STC 40
-  STC 98
-  STC 105
-  STC 102
-</String_"fib(">
-; --Comprobar variable i
-  SRF  0  3
-  DRF
   STC 32
   STC 61
   STC 32
@@ -1071,21 +1055,6 @@ L13:
   WRT  0
   WRT  0
   WRT  0
-<String_") = ">
-<String_"fib(">
-  STC 40
-  STC 98
-  STC 105
-  STC 102
-</String_"fib(">
-; --Comprobar variable i
-  SRF  0  3
-  DRF
-  STC 32
-  STC 61
-  STC 32
-  STC 41
-</String_") = ">
 ; --Comprobar variable fn
   SRF  0  5
   DRF

@@ -486,7 +486,7 @@ sf.EvaluateGet(fst);
       expression(fst);
 sf.EvaluatePut(fst);
                                         at.code.addBlock(fst.code);
-                                        at.code.addComment("Se va a anyadir el string del putline y se muestra " + fst.name);
+                                        at.code.addComment("Se va a anyadir el string del putl y se muestra " + fst.name);
                                         if(fst.baseType==Types.INT){
                                                 at.code.addInst(PCodeInstruction.OpCode.WRT,1);
                                         }else if(fst.baseType==Types.CHAR){
@@ -496,6 +496,7 @@ sf.EvaluatePut(fst);
                                                         at.code.addInst(OpCode.WRT, 0);
                                                 }
                                         }
+                                        fst.code.clearBlock();
       label_7:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -521,6 +522,7 @@ sf.EvaluatePut(fst);
                                                                         at.code.addInst(OpCode.WRT, 0);
                                                                 }
                                                         }
+                                                        fst.code.clearBlock();
       }
       jj_consume_token(RPAREN);
       jj_consume_token(SCOLON);
@@ -555,6 +557,7 @@ sf.EvaluatePutline(fst);
                                                 at.code.addInst(OpCode.WRT, 0);
                                         }
                                 }
+                                fst.code.clearBlock();
         label_8:
         while (true) {
           switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -580,6 +583,7 @@ sf.EvaluatePutline(fst);
                                                 at.code.addInst(OpCode.WRT, 0);
                                         }
                                 }
+                                fst.code.clearBlock();
         }
         break;
         }
@@ -1564,20 +1568,6 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
     finally { jj_save(4, xla); }
   }
 
-  static private boolean jj_3_4()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2()
- {
-    if (jj_scan_token(ID)) return true;
-    if (jj_scan_token(LPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_5()
  {
     if (jj_scan_token(ID)) return true;
@@ -1589,6 +1579,20 @@ sf.EvaluateOperator(at, t, Operator.BOOL_OP);
  {
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LBRACK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_4()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_2()
+ {
+    if (jj_scan_token(ID)) return true;
+    if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 

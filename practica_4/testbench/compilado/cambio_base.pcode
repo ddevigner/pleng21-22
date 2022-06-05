@@ -211,71 +211,12 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"Este programa convierte n=">
-  STC 61
-  STC 110
-  STC 32
-  STC 101
-  STC 116
-  STC 114
-  STC 101
-  STC 105
-  STC 118
-  STC 110
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa convierte n=">
 ; --Comprobar variable num
   SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra num
   WRT  1
 <String_" a base b=">
-<String_"Este programa convierte n=">
-  STC 61
-  STC 110
-  STC 32
-  STC 101
-  STC 116
-  STC 114
-  STC 101
-  STC 105
-  STC 118
-  STC 110
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa convierte n=">
-; --Comprobar variable num
-  SRF  0  3
-  DRF
   STC 61
   STC 98
   STC 32
@@ -298,101 +239,12 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_" a base b=">
-<String_"Este programa convierte n=">
-  STC 61
-  STC 110
-  STC 32
-  STC 101
-  STC 116
-  STC 114
-  STC 101
-  STC 105
-  STC 118
-  STC 110
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa convierte n=">
-; --Comprobar variable num
-  SRF  0  3
-  DRF
-  STC 61
-  STC 98
-  STC 32
-  STC 101
-  STC 115
-  STC 97
-  STC 98
-  STC 32
-  STC 97
-  STC 32
-</String_" a base b=">
 ; --Comprobar variable base
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra base
   WRT  1
 <String_", y luego efecúa la conversión inversa.">
-<String_" a base b=">
-<String_"Este programa convierte n=">
-  STC 61
-  STC 110
-  STC 32
-  STC 101
-  STC 116
-  STC 114
-  STC 101
-  STC 105
-  STC 118
-  STC 110
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa convierte n=">
-; --Comprobar variable num
-  SRF  0  3
-  DRF
-  STC 61
-  STC 98
-  STC 32
-  STC 101
-  STC 115
-  STC 97
-  STC 98
-  STC 32
-  STC 97
-  STC 32
-</String_" a base b=">
-; --Comprobar variable base
-  SRF  0  4
-  DRF
   STC 46
   STC 97
   STC 115
@@ -488,11 +340,6 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"n: ">
-  STC 32
-  STC 58
-  STC 110
-</String_"n: ">
 ; --Comprobar variable num
   SRF  0  3
   DRF
@@ -510,11 +357,6 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"b: ">
-  STC 32
-  STC 58
-  STC 98
-</String_"b: ">
 ; --Comprobar variable base
   SRF  0  4
   DRF
@@ -553,72 +395,22 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"dec_b(">
-  STC 40
-  STC 98
-  STC 95
-  STC 99
-  STC 101
-  STC 100
-</String_"dec_b(">
 ; --Comprobar variable num
   SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra num
   WRT  1
 <String_",">
-<String_"dec_b(">
-  STC 40
-  STC 98
-  STC 95
-  STC 99
-  STC 101
-  STC 100
-</String_"dec_b(">
-; --Comprobar variable num
-  SRF  0  3
-  DRF
   STC 44
 </String_",">
 ; --Se va a anyadir el string del putline y se muestra num
   WRT  0
-<String_",">
-<String_"dec_b(">
-  STC 40
-  STC 98
-  STC 95
-  STC 99
-  STC 101
-  STC 100
-</String_"dec_b(">
-; --Comprobar variable num
-  SRF  0  3
-  DRF
-  STC 44
-</String_",">
 ; --Comprobar variable base
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra base
   WRT  1
 <String_"): ">
-<String_",">
-<String_"dec_b(">
-  STC 40
-  STC 98
-  STC 95
-  STC 99
-  STC 101
-  STC 100
-</String_"dec_b(">
-; --Comprobar variable num
-  SRF  0  3
-  DRF
-  STC 44
-</String_",">
-; --Comprobar variable base
-  SRF  0  4
-  DRF
   STC 32
   STC 58
   STC 41
@@ -627,28 +419,6 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"): ">
-<String_",">
-<String_"dec_b(">
-  STC 40
-  STC 98
-  STC 95
-  STC 99
-  STC 101
-  STC 100
-</String_"dec_b(">
-; --Comprobar variable num
-  SRF  0  3
-  DRF
-  STC 44
-</String_",">
-; --Comprobar variable base
-  SRF  0  4
-  DRF
-  STC 32
-  STC 58
-  STC 41
-</String_"): ">
 ; --Comprobar variable enB
   SRF  0  5
   DRF
@@ -672,72 +442,22 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"b_dec(">
-  STC 40
-  STC 99
-  STC 101
-  STC 100
-  STC 95
-  STC 98
-</String_"b_dec(">
 ; --Comprobar variable enB
   SRF  0  5
   DRF
 ; --Se va a anyadir el string del putline y se muestra enB
   WRT  1
 <String_",">
-<String_"b_dec(">
-  STC 40
-  STC 99
-  STC 101
-  STC 100
-  STC 95
-  STC 98
-</String_"b_dec(">
-; --Comprobar variable enB
-  SRF  0  5
-  DRF
   STC 44
 </String_",">
 ; --Se va a anyadir el string del putline y se muestra enB
   WRT  0
-<String_",">
-<String_"b_dec(">
-  STC 40
-  STC 99
-  STC 101
-  STC 100
-  STC 95
-  STC 98
-</String_"b_dec(">
-; --Comprobar variable enB
-  SRF  0  5
-  DRF
-  STC 44
-</String_",">
 ; --Comprobar variable base
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra base
   WRT  1
 <String_"): ">
-<String_",">
-<String_"b_dec(">
-  STC 40
-  STC 99
-  STC 101
-  STC 100
-  STC 95
-  STC 98
-</String_"b_dec(">
-; --Comprobar variable enB
-  SRF  0  5
-  DRF
-  STC 44
-</String_",">
-; --Comprobar variable base
-  SRF  0  4
-  DRF
   STC 32
   STC 58
   STC 41
@@ -746,28 +466,6 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"): ">
-<String_",">
-<String_"b_dec(">
-  STC 40
-  STC 99
-  STC 101
-  STC 100
-  STC 95
-  STC 98
-</String_"b_dec(">
-; --Comprobar variable enB
-  SRF  0  5
-  DRF
-  STC 44
-</String_",">
-; --Comprobar variable base
-  SRF  0  4
-  DRF
-  STC 32
-  STC 58
-  STC 41
-</String_"): ">
 ; --Comprobar variable enB
 ; --Se anyade el parametro y es NONE
   SRF  0  5

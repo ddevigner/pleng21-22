@@ -116,43 +116,8 @@ L9:
   DRF
   PLUS
   DRF
-; --Se va a anyadir el string del putline y se muestra s
+; --Se va a anyadir el string del putl y se muestra s
   WRT  1
-; --Expresion de los [] del vector
-  STC  0
-; --Comprobando el indice del vector
-  DUP
-  STC  0
-  GTE
-  JMF L10
-  DUP
-  STC 100
-  LTE
-  JMT L9
-L10:
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  LVP
-L9:
-; --Accediendo al index del vector s
-  SRF  0  3
-  DRF
-  PLUS
-  DRF
   STC 39
 ; --Se va a anyadir el string del putline y se muestra s
   WRT  0
@@ -182,7 +147,7 @@ L11:
 <String_" ">
   STC 32
 </String_" ">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   JMP L14
 L13:
@@ -226,7 +191,7 @@ L15:
   DRF
   PLUS
   DRF
-; --Se va a anyadir el string del putline y se muestra s
+; --Se va a anyadir el string del putl y se muestra s
   WRT  1
 ; --Comprobar variable i
   SRF  0  4
@@ -239,9 +204,8 @@ L15:
   JMP L11
 L12:
   STC 13
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
-  STC 13
   STC 10
 ; --Se va a anyadir el string del putline y se muestra 
   WRT  0
@@ -1417,21 +1381,13 @@ L73:
   STC 32
   STC 101
 </String_"e con ">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0
   WRT  0
   WRT  0
   WRT  0
-<String_"e con ">
-  STC 32
-  STC 110
-  STC 111
-  STC 99
-  STC 32
-  STC 101
-</String_"e con ">
 ; --Comprobar variable n
   SRF  0  3
   DRF
@@ -1440,19 +1396,6 @@ L73:
 ; --Se va a anyadir el string del putline y se muestra n
   WRT  1
 <String_" componentes de la serie: ">
-<String_"e con ">
-  STC 32
-  STC 110
-  STC 111
-  STC 99
-  STC 32
-  STC 101
-</String_"e con ">
-; --Comprobar variable n
-  SRF  0  3
-  DRF
-  STC  1
-  PLUS
   STC 32
   STC 58
   STC 101

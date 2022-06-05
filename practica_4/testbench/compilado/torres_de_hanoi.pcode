@@ -72,61 +72,12 @@ L2:
   WRT  0
   WRT  0
   WRT  0
-<String_"Move disk from tower ">
-  STC 32
-  STC 114
-  STC 101
-  STC 119
-  STC 111
-  STC 116
-  STC 32
-  STC 109
-  STC 111
-  STC 114
-  STC 102
-  STC 32
-  STC 107
-  STC 115
-  STC 105
-  STC 100
-  STC 32
-  STC 101
-  STC 118
-  STC 111
-  STC 77
-</String_"Move disk from tower ">
 ; --Comprobar variable source
   SRF  0  5
   DRF
 ; --Se va a anyadir el string del putline y se muestra source
   WRT  0
 <String_" to tower ">
-<String_"Move disk from tower ">
-  STC 32
-  STC 114
-  STC 101
-  STC 119
-  STC 111
-  STC 116
-  STC 32
-  STC 109
-  STC 111
-  STC 114
-  STC 102
-  STC 32
-  STC 107
-  STC 115
-  STC 105
-  STC 100
-  STC 32
-  STC 101
-  STC 118
-  STC 111
-  STC 77
-</String_"Move disk from tower ">
-; --Comprobar variable source
-  SRF  0  5
-  DRF
   STC 32
   STC 114
   STC 101
@@ -149,91 +100,12 @@ L2:
   WRT  0
   WRT  0
   WRT  0
-<String_" to tower ">
-<String_"Move disk from tower ">
-  STC 32
-  STC 114
-  STC 101
-  STC 119
-  STC 111
-  STC 116
-  STC 32
-  STC 109
-  STC 111
-  STC 114
-  STC 102
-  STC 32
-  STC 107
-  STC 115
-  STC 105
-  STC 100
-  STC 32
-  STC 101
-  STC 118
-  STC 111
-  STC 77
-</String_"Move disk from tower ">
-; --Comprobar variable source
-  SRF  0  5
-  DRF
-  STC 32
-  STC 114
-  STC 101
-  STC 119
-  STC 111
-  STC 116
-  STC 32
-  STC 111
-  STC 116
-  STC 32
-</String_" to tower ">
 ; --Comprobar variable target
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra target
   WRT  0
 <String_". ">
-<String_" to tower ">
-<String_"Move disk from tower ">
-  STC 32
-  STC 114
-  STC 101
-  STC 119
-  STC 111
-  STC 116
-  STC 32
-  STC 109
-  STC 111
-  STC 114
-  STC 102
-  STC 32
-  STC 107
-  STC 115
-  STC 105
-  STC 100
-  STC 32
-  STC 101
-  STC 118
-  STC 111
-  STC 77
-</String_"Move disk from tower ">
-; --Comprobar variable source
-  SRF  0  5
-  DRF
-  STC 32
-  STC 114
-  STC 101
-  STC 119
-  STC 111
-  STC 116
-  STC 32
-  STC 111
-  STC 116
-  STC 32
-</String_" to tower ">
-; --Comprobar variable target
-  SRF  0  4
-  DRF
   STC 32
   STC 46
 </String_". ">
@@ -620,43 +492,12 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"Solving for ">
-  STC 32
-  STC 114
-  STC 111
-  STC 102
-  STC 32
-  STC 103
-  STC 110
-  STC 105
-  STC 118
-  STC 108
-  STC 111
-  STC 83
-</String_"Solving for ">
 ; --Comprobar variable n
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra n
   WRT  1
 <String_" disks.">
-<String_"Solving for ">
-  STC 32
-  STC 114
-  STC 111
-  STC 102
-  STC 32
-  STC 103
-  STC 110
-  STC 105
-  STC 118
-  STC 108
-  STC 111
-  STC 83
-</String_"Solving for ">
-; --Comprobar variable n
-  SRF  0  4
-  DRF
   STC 46
   STC 115
   STC 107
@@ -719,43 +560,12 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"Finished in ">
-  STC 32
-  STC 110
-  STC 105
-  STC 32
-  STC 100
-  STC 101
-  STC 104
-  STC 115
-  STC 105
-  STC 110
-  STC 105
-  STC 70
-</String_"Finished in ">
 ; --Comprobar variable steps
   SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra steps
   WRT  1
 <String_" steps.">
-<String_"Finished in ">
-  STC 32
-  STC 110
-  STC 105
-  STC 32
-  STC 100
-  STC 101
-  STC 104
-  STC 115
-  STC 105
-  STC 110
-  STC 105
-  STC 70
-</String_"Finished in ">
-; --Comprobar variable steps
-  SRF  0  3
-  DRF
   STC 46
   STC 115
   STC 112

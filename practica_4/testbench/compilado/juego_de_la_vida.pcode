@@ -1653,7 +1653,7 @@ L77:
 <String_"*">
   STC 42
 </String_"*">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   JMP L80
 L79:
@@ -1661,7 +1661,7 @@ L79:
 <String_" ">
   STC 32
 </String_" ">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
 L80:
 </if_else>
@@ -1676,9 +1676,8 @@ L80:
   JMP L75
 L76:
   STC 13
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
-  STC 13
   STC 10
 ; --Se va a anyadir el string del putline y se muestra 
   WRT  0

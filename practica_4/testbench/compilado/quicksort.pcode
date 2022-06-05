@@ -193,45 +193,9 @@ L11:
   SRF  0  3
   PLUS
   DRF
-; --Se va a anyadir el string del putline y se muestra t
+; --Se va a anyadir el string del putl y se muestra t
   WRT  1
 <String_" ">
-; --Expresion de los [] del vector
-; --Comprobar variable i
-  SRF  0 23
-  DRF
-; --Comprobando el indice del vector
-  DUP
-  STC  0
-  GTE
-  JMF L12
-  DUP
-  STC 19
-  LTE
-  JMT L11
-L12:
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  STC 117
-  WRT  0
-  LVP
-L11:
-; --Accediendo al index del vector t
-  SRF  0  3
-  PLUS
-  DRF
   STC 32
 </String_" ">
 ; --Se va a anyadir el string del putline y se muestra t
@@ -247,9 +211,8 @@ L11:
   JMP L9
 L10:
   STC 13
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
-  STC 13
   STC 10
 ; --Se va a anyadir el string del putline y se muestra 
   WRT  0
@@ -1385,21 +1348,6 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"Iteraciones: ">
-  STC 32
-  STC 58
-  STC 115
-  STC 101
-  STC 110
-  STC 111
-  STC 105
-  STC 99
-  STC 97
-  STC 114
-  STC 101
-  STC 116
-  STC 73
-</String_"Iteraciones: ">
 ; --Comprobar variable iteraciones
   SRF  0 24
   DRF

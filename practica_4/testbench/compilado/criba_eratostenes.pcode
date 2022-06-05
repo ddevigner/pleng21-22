@@ -57,7 +57,7 @@ L3:
   STC 97
   STC 68
 </String_"Dame un numero entre 1 y 100: ">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   WRT  0
@@ -559,95 +559,12 @@ L9:
   WRT  0
   WRT  0
   WRT  0
-<String_"Dentro de escribir antes de escribir, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 105
-  STC 98
-  STC 105
-  STC 114
-  STC 99
-  STC 115
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 97
-  STC 32
-  STC 114
-  STC 105
-  STC 98
-  STC 105
-  STC 114
-  STC 99
-  STC 115
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de escribir antes de escribir, ">
 ; --Comprobar variable h
   SRF  0 106
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" es primo">
-<String_"Dentro de escribir antes de escribir, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 105
-  STC 98
-  STC 105
-  STC 114
-  STC 99
-  STC 115
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 97
-  STC 32
-  STC 114
-  STC 105
-  STC 98
-  STC 105
-  STC 114
-  STC 99
-  STC 115
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de escribir antes de escribir, ">
-; --Comprobar variable h
-  SRF  0 106
-  DRF
   STC 111
   STC 109
   STC 105
@@ -753,95 +670,12 @@ L11:
   WRT  0
   WRT  0
   WRT  0
-<String_"Dentro de escribir antes de escribir, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 105
-  STC 98
-  STC 105
-  STC 114
-  STC 99
-  STC 115
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 97
-  STC 32
-  STC 114
-  STC 105
-  STC 98
-  STC 105
-  STC 114
-  STC 99
-  STC 115
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de escribir antes de escribir, ">
 ; --Comprobar variable h
   SRF  0 106
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" NO es primo">
-<String_"Dentro de escribir antes de escribir, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 105
-  STC 98
-  STC 105
-  STC 114
-  STC 99
-  STC 115
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 97
-  STC 32
-  STC 114
-  STC 105
-  STC 98
-  STC 105
-  STC 114
-  STC 99
-  STC 115
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de escribir antes de escribir, ">
-; --Comprobar variable h
-  SRF  0 106
-  DRF
   STC 111
   STC 109
   STC 105
@@ -946,61 +780,12 @@ L8:
   WRT  0
   WRT  0
   WRT  0
-<String_"Numeros primos hasta ">
-  STC 32
-  STC 97
-  STC 116
-  STC 115
-  STC 97
-  STC 104
-  STC 32
-  STC 115
-  STC 111
-  STC 109
-  STC 105
-  STC 114
-  STC 112
-  STC 32
-  STC 115
-  STC 111
-  STC 114
-  STC 101
-  STC 109
-  STC 117
-  STC 78
-</String_"Numeros primos hasta ">
 ; --Comprobar variable n
   SRF  1  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra n
   WRT  1
 <String_": ">
-<String_"Numeros primos hasta ">
-  STC 32
-  STC 97
-  STC 116
-  STC 115
-  STC 97
-  STC 104
-  STC 32
-  STC 115
-  STC 111
-  STC 109
-  STC 105
-  STC 114
-  STC 112
-  STC 32
-  STC 115
-  STC 111
-  STC 114
-  STC 101
-  STC 109
-  STC 117
-  STC 78
-</String_"Numeros primos hasta ">
-; --Comprobar variable n
-  SRF  1  3
-  DRF
   STC 32
   STC 58
 </String_": ">
@@ -1080,9 +865,6 @@ L17:
 ; --Se va a anyadir el string del putline y se muestra i
   WRT  1
 <String_" es primo.">
-; --Comprobar variable i
-  SRF  0 104
-  DRF
   STC 46
   STC 111
   STC 109
@@ -1154,31 +936,12 @@ L14:
   WRT  0
   WRT  0
   WRT  0
-<String_"Hasta ">
-  STC 32
-  STC 97
-  STC 116
-  STC 115
-  STC 97
-  STC 72
-</String_"Hasta ">
 ; --Comprobar variable n
   SRF  1  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra n
   WRT  1
 <String_" hay ">
-<String_"Hasta ">
-  STC 32
-  STC 97
-  STC 116
-  STC 115
-  STC 97
-  STC 72
-</String_"Hasta ">
-; --Comprobar variable n
-  SRF  1  3
-  DRF
   STC 32
   STC 121
   STC 97
@@ -1191,51 +954,12 @@ L14:
   WRT  0
   WRT  0
   WRT  0
-<String_" hay ">
-<String_"Hasta ">
-  STC 32
-  STC 97
-  STC 116
-  STC 115
-  STC 97
-  STC 72
-</String_"Hasta ">
-; --Comprobar variable n
-  SRF  1  3
-  DRF
-  STC 32
-  STC 121
-  STC 97
-  STC 104
-  STC 32
-</String_" hay ">
 ; --Comprobar variable m
   SRF  0 105
   DRF
 ; --Se va a anyadir el string del putline y se muestra m
   WRT  1
 <String_" números primos.">
-<String_" hay ">
-<String_"Hasta ">
-  STC 32
-  STC 97
-  STC 116
-  STC 115
-  STC 97
-  STC 72
-</String_"Hasta ">
-; --Comprobar variable n
-  SRF  1  3
-  DRF
-  STC 32
-  STC 121
-  STC 97
-  STC 104
-  STC 32
-</String_" hay ">
-; --Comprobar variable m
-  SRF  0 105
-  DRF
   STC 46
   STC 115
   STC 111
@@ -1517,111 +1241,12 @@ L31:
   WRT  0
   WRT  0
   WRT  0
-<String_"Dentro de eliminar pero antes de eliminarlos, ">
-  STC 32
-  STC 44
-  STC 115
-  STC 111
-  STC 108
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 97
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 112
-  STC 32
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de eliminar pero antes de eliminarlos, ">
 ; --Comprobar variable h
   SRF  0  6
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" es primo">
-<String_"Dentro de eliminar pero antes de eliminarlos, ">
-  STC 32
-  STC 44
-  STC 115
-  STC 111
-  STC 108
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 97
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 112
-  STC 32
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de eliminar pero antes de eliminarlos, ">
-; --Comprobar variable h
-  SRF  0  6
-  DRF
   STC 111
   STC 109
   STC 105
@@ -1743,111 +1368,12 @@ L33:
   WRT  0
   WRT  0
   WRT  0
-<String_"Dentro de eliminar pero antes de eliminarlos, ">
-  STC 32
-  STC 44
-  STC 115
-  STC 111
-  STC 108
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 97
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 112
-  STC 32
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de eliminar pero antes de eliminarlos, ">
 ; --Comprobar variable h
   SRF  0  6
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" NO es primo">
-<String_"Dentro de eliminar pero antes de eliminarlos, ">
-  STC 32
-  STC 44
-  STC 115
-  STC 111
-  STC 108
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 97
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 112
-  STC 32
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de eliminar pero antes de eliminarlos, ">
-; --Comprobar variable h
-  SRF  0  6
-  DRF
   STC 111
   STC 109
   STC 105
@@ -1923,13 +1449,6 @@ L35:
   WRT  0
   WRT  0
   WRT  0
-<String_"i es ">
-  STC 32
-  STC 115
-  STC 101
-  STC 32
-  STC 105
-</String_"i es ">
 ; --Comprobar variable i
   SRF  0  4
   DRF
@@ -1997,13 +1516,6 @@ L37:
   WRT  0
   WRT  0
   WRT  0
-<String_"j es ">
-  STC 32
-  STC 115
-  STC 101
-  STC 32
-  STC 106
-</String_"j es ">
 ; --Comprobar variable j
   SRF  0  5
   DRF
@@ -2107,31 +1619,6 @@ L42:
   WRT  0
   WRT  0
   WRT  0
-<String_"Se pone a false el num ">
-  STC 32
-  STC 109
-  STC 117
-  STC 110
-  STC 32
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 115
-  STC 108
-  STC 97
-  STC 102
-  STC 32
-  STC 97
-  STC 32
-  STC 101
-  STC 110
-  STC 111
-  STC 112
-  STC 32
-  STC 101
-  STC 83
-</String_"Se pone a false el num ">
 ; --Comprobar variable j
   SRF  0  5
   DRF
@@ -2323,115 +1810,12 @@ L47:
   WRT  0
   WRT  0
   WRT  0
-<String_"Dentro de eliminar pero despues de eliminarlos, ">
-  STC 32
-  STC 44
-  STC 115
-  STC 111
-  STC 108
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 117
-  STC 112
-  STC 115
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 112
-  STC 32
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de eliminar pero despues de eliminarlos, ">
 ; --Comprobar variable h
   SRF  0  6
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" es primo">
-<String_"Dentro de eliminar pero despues de eliminarlos, ">
-  STC 32
-  STC 44
-  STC 115
-  STC 111
-  STC 108
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 117
-  STC 112
-  STC 115
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 112
-  STC 32
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de eliminar pero despues de eliminarlos, ">
-; --Comprobar variable h
-  SRF  0  6
-  DRF
   STC 111
   STC 109
   STC 105
@@ -2557,115 +1941,12 @@ L49:
   WRT  0
   WRT  0
   WRT  0
-<String_"Dentro de eliminar pero despues de eliminarlos, ">
-  STC 32
-  STC 44
-  STC 115
-  STC 111
-  STC 108
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 117
-  STC 112
-  STC 115
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 112
-  STC 32
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de eliminar pero despues de eliminarlos, ">
 ; --Comprobar variable h
   SRF  0  6
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" NO es primo">
-<String_"Dentro de eliminar pero despues de eliminarlos, ">
-  STC 32
-  STC 44
-  STC 115
-  STC 111
-  STC 108
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 117
-  STC 112
-  STC 115
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 112
-  STC 32
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 116
-  STC 110
-  STC 101
-  STC 68
-</String_"Dentro de eliminar pero despues de eliminarlos, ">
-; --Comprobar variable h
-  SRF  0  6
-  DRF
   STC 111
   STC 109
   STC 105
@@ -2831,57 +2112,12 @@ L55:
   WRT  0
   WRT  0
   WRT  0
-<String_"Antes de eliminar, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 65
-</String_"Antes de eliminar, ">
 ; --Comprobar variable h
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" es primo">
-<String_"Antes de eliminar, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 65
-</String_"Antes de eliminar, ">
-; --Comprobar variable h
-  SRF  0  4
-  DRF
   STC 111
   STC 109
   STC 105
@@ -2949,57 +2185,12 @@ L57:
   WRT  0
   WRT  0
   WRT  0
-<String_"Antes de eliminar, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 65
-</String_"Antes de eliminar, ">
 ; --Comprobar variable h
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" NO es primo">
-<String_"Antes de eliminar, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 116
-  STC 110
-  STC 65
-</String_"Antes de eliminar, ">
-; --Comprobar variable h
-  SRF  0  4
-  DRF
   STC 111
   STC 109
   STC 105
@@ -3173,79 +2364,12 @@ L61:
   WRT  0
   WRT  0
   WRT  0
-<String_"Despues de llamar a eliminar, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 97
-  STC 32
-  STC 114
-  STC 97
-  STC 109
-  STC 97
-  STC 108
-  STC 108
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 117
-  STC 112
-  STC 115
-  STC 101
-  STC 68
-</String_"Despues de llamar a eliminar, ">
 ; --Comprobar variable h
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" es primo">
-<String_"Despues de llamar a eliminar, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 97
-  STC 32
-  STC 114
-  STC 97
-  STC 109
-  STC 97
-  STC 108
-  STC 108
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 117
-  STC 112
-  STC 115
-  STC 101
-  STC 68
-</String_"Despues de llamar a eliminar, ">
-; --Comprobar variable h
-  SRF  0  4
-  DRF
   STC 111
   STC 109
   STC 105
@@ -3335,79 +2459,12 @@ L63:
   WRT  0
   WRT  0
   WRT  0
-<String_"Despues de llamar a eliminar, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 97
-  STC 32
-  STC 114
-  STC 97
-  STC 109
-  STC 97
-  STC 108
-  STC 108
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 117
-  STC 112
-  STC 115
-  STC 101
-  STC 68
-</String_"Despues de llamar a eliminar, ">
 ; --Comprobar variable h
   SRF  0  4
   DRF
 ; --Se va a anyadir el string del putline y se muestra h
   WRT  1
 <String_" NO es primo">
-<String_"Despues de llamar a eliminar, ">
-  STC 32
-  STC 44
-  STC 114
-  STC 97
-  STC 110
-  STC 105
-  STC 109
-  STC 105
-  STC 108
-  STC 101
-  STC 32
-  STC 97
-  STC 32
-  STC 114
-  STC 97
-  STC 109
-  STC 97
-  STC 108
-  STC 108
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 115
-  STC 101
-  STC 117
-  STC 112
-  STC 115
-  STC 101
-  STC 68
-</String_"Despues de llamar a eliminar, ">
-; --Comprobar variable h
-  SRF  0  4
-  DRF
   STC 111
   STC 109
   STC 105

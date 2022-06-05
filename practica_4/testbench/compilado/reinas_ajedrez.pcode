@@ -89,9 +89,8 @@ L9:
   JMP L10
 L10:
   STC 13
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
-  STC 13
   STC 10
 ; --Se va a anyadir el string del putline y se muestra 
   WRT  0
@@ -1011,7 +1010,7 @@ L61:
   STC 111
   STC 32
 </String_" o">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
   JMP L64
@@ -1021,7 +1020,7 @@ L63:
   STC 46
   STC 32
 </String_" .">
-; --Se va a anyadir el string del putline y se muestra 
+; --Se va a anyadir el string del putl y se muestra 
   WRT  0
   WRT  0
 L64:
@@ -1257,79 +1256,12 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_"Este programa intenta colocar ">
-  STC 32
-  STC 114
-  STC 97
-  STC 99
-  STC 111
-  STC 108
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 116
-  STC 110
-  STC 101
-  STC 116
-  STC 110
-  STC 105
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa intenta colocar ">
 ; --Comprobar variable tamano_tablero
   SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra tamano_tablero
   WRT  1
 <String_" reinas en un tablero de ajedrez de ">
-<String_"Este programa intenta colocar ">
-  STC 32
-  STC 114
-  STC 97
-  STC 99
-  STC 111
-  STC 108
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 116
-  STC 110
-  STC 101
-  STC 116
-  STC 110
-  STC 105
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa intenta colocar ">
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
   STC 32
   STC 101
   STC 100
@@ -1404,326 +1336,20 @@ L0:
   WRT  0
   WRT  0
   WRT  0
-<String_" reinas en un tablero de ajedrez de ">
-<String_"Este programa intenta colocar ">
-  STC 32
-  STC 114
-  STC 97
-  STC 99
-  STC 111
-  STC 108
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 116
-  STC 110
-  STC 101
-  STC 116
-  STC 110
-  STC 105
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa intenta colocar ">
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 122
-  STC 101
-  STC 114
-  STC 100
-  STC 101
-  STC 106
-  STC 97
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 108
-  STC 98
-  STC 97
-  STC 116
-  STC 32
-  STC 110
-  STC 117
-  STC 32
-  STC 110
-  STC 101
-  STC 32
-  STC 115
-  STC 97
-  STC 110
-  STC 105
-  STC 101
-  STC 114
-  STC 32
-</String_" reinas en un tablero de ajedrez de ">
 ; --Comprobar variable tamano_tablero
   SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra tamano_tablero
   WRT  1
-<String_" reinas en un tablero de ajedrez de ">
-<String_"Este programa intenta colocar ">
-  STC 32
-  STC 114
-  STC 97
-  STC 99
-  STC 111
-  STC 108
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 116
-  STC 110
-  STC 101
-  STC 116
-  STC 110
-  STC 105
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa intenta colocar ">
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 122
-  STC 101
-  STC 114
-  STC 100
-  STC 101
-  STC 106
-  STC 97
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 108
-  STC 98
-  STC 97
-  STC 116
-  STC 32
-  STC 110
-  STC 117
-  STC 32
-  STC 110
-  STC 101
-  STC 32
-  STC 115
-  STC 97
-  STC 110
-  STC 105
-  STC 101
-  STC 114
-  STC 32
-</String_" reinas en un tablero de ajedrez de ">
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
   STC 39
 ; --Se va a anyadir el string del putline y se muestra tamano_tablero
   WRT  0
-<String_" reinas en un tablero de ajedrez de ">
-<String_"Este programa intenta colocar ">
-  STC 32
-  STC 114
-  STC 97
-  STC 99
-  STC 111
-  STC 108
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 116
-  STC 110
-  STC 101
-  STC 116
-  STC 110
-  STC 105
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa intenta colocar ">
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 122
-  STC 101
-  STC 114
-  STC 100
-  STC 101
-  STC 106
-  STC 97
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 108
-  STC 98
-  STC 97
-  STC 116
-  STC 32
-  STC 110
-  STC 117
-  STC 32
-  STC 110
-  STC 101
-  STC 32
-  STC 115
-  STC 97
-  STC 110
-  STC 105
-  STC 101
-  STC 114
-  STC 32
-</String_" reinas en un tablero de ajedrez de ">
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
-  STC 39
 ; --Comprobar variable tamano_tablero
   SRF  0  3
   DRF
 ; --Se va a anyadir el string del putline y se muestra tamano_tablero
   WRT  1
 <String_" sin que se ataquen.">
-<String_" reinas en un tablero de ajedrez de ">
-<String_"Este programa intenta colocar ">
-  STC 32
-  STC 114
-  STC 97
-  STC 99
-  STC 111
-  STC 108
-  STC 111
-  STC 99
-  STC 32
-  STC 97
-  STC 116
-  STC 110
-  STC 101
-  STC 116
-  STC 110
-  STC 105
-  STC 32
-  STC 97
-  STC 109
-  STC 97
-  STC 114
-  STC 103
-  STC 111
-  STC 114
-  STC 112
-  STC 32
-  STC 101
-  STC 116
-  STC 115
-  STC 69
-</String_"Este programa intenta colocar ">
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 122
-  STC 101
-  STC 114
-  STC 100
-  STC 101
-  STC 106
-  STC 97
-  STC 32
-  STC 101
-  STC 100
-  STC 32
-  STC 111
-  STC 114
-  STC 101
-  STC 108
-  STC 98
-  STC 97
-  STC 116
-  STC 32
-  STC 110
-  STC 117
-  STC 32
-  STC 110
-  STC 101
-  STC 32
-  STC 115
-  STC 97
-  STC 110
-  STC 105
-  STC 101
-  STC 114
-  STC 32
-</String_" reinas en un tablero de ajedrez de ">
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
-  STC 39
-; --Comprobar variable tamano_tablero
-  SRF  0  3
-  DRF
   STC 46
   STC 110
   STC 101
