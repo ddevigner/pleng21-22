@@ -6,8 +6,12 @@
 - [Practica 4](https://github.com/ddevigner/pleng21-22/tree/main/practica_4): implementacion de la generacion de codigo del lenguaje ADAC, diseño completo del compilador.
 
 ## 2. Material adicional de soporte
-### Programas. Compilados para su uso en Hendrix.
-- [adac_cpp](https://github.com/ddevigner/pleng21-22/tree/main/testbench/adac_cpp/): compilador que traduce de adac a C++.
+### Banco de programas de ejemplo en lenguaje adac.
+- [Ejemplos de adac](): compilacion de programas en adac junto a su fichero en .pcode y su fichero .x.
+- [Test de adac](): script de test, comprueba que todos los ficheros son procesables por el compilador de adac.
+
+### Entorno de ejecución. Compilados para su uso en Hendrix.
+- [adac_cpp](https://github.com/ddevigner/pleng21-22/blob/main/environment/adac_cpp.jar): compilador que traduce de adac a C++.
     ```bash
     # Entrada estandar.
     java -jar adac_cpp.jar
@@ -16,41 +20,22 @@
     java -jar adac_cpp.jar <fichero>.adac [> <fichero_output>]
     ```
 
-- [adaccomp](https://github.com/ddevigner/pleng21-22/blob/main/testbench/adaccomp): compilador que traduce de adac (<file>.adac) a código P (<file>.pcode).
+- [adaccomp](https://github.com/ddevigner/pleng21-22/blob/main/environment/adaccomp): compilador que traduce de adac (<file>.adac) a código P (<file>.pcode).
     ```bash
-    adaccomp <fichero> [-v] [-r] [-o]
+    adaccomp <fichero> [-v] [-r] [-o] [-x] [-c]
     # -v: verbose. En el fichero .pcode se incluye un comentario indicando el numero de cada p-instruccion.
+    # -r: run time checks. Se genera código para comprobar durante la ejecución los valores de los indices de acceso a vectores.
+    # -o: optimize for speed. Se genera código p más eficiente, incluyendo evaluación de expresiones constantes.
+    # -x: xml. Se genera el fichero .pcode con formato xml.
+    # -c: comments. Se incluyen comentarios en el fichero .pcode.
     ```
 
-- [ensamblador](https://github.com/ddevigner/pleng21-22/blob/main/doc/ensamblador): ensamblador de Maquina P a codigo binario. Genera un binario.
+- [ensamblador](https://github.com/ddevigner/pleng21-22/blob/main/environment/ensamblador): ensamblador de Maquina P a codigo binario. Genera un binario.
     ```bash
     ensamblador <fichero>.pcode
     ```
 
-- [maquinap](https://github.com/ddevigner/pleng21-22/blob/main/doc/maquinap): ejecuta un binario de Maquina P.
+- [maquinap](https://github.com/ddevigner/pleng21-22/blob/main/environment/maquinap): ejecuta un binario de Maquina P.
     ```bash
     maquinap <binario>
     ```
-
-### Banco de tests:
-- [text_stats.adac](https://github.com/ddevigner/pleng21-22/blob/main/doc/text_stats.adac): estima numero de caracteres, palabras y lineas de un fichero de texto.
-    ```bash
-    adaccomp text_stats.adac
-    ensamblador text_stats.pcode
-    maquinap text_stats < <fichero>
-    ```
-
-- [invertir_pgm.adac](https://github.com/ddevigner/pleng21-22/blob/main/doc/invertir_pgm.adac): carga de stdin una imagen en blanco y negro, formato PGM sin comentarios, y guarda en stdout la imagen invertida, en formato PGM sin comentarios
-    ```bash
-    adaccomp invertir_pgm.adac
-    ensamblador invertir_pgm.pcode
-    maquinap invertir_pgm < <imagen_entrada>.pgm > <imagen_salida>.pgm
-    ```
-
-- [einstein.pgm](https://github.com/ddevigner/pleng21-22/blob/main/doc/einstein.pgm): imagen binaria en formato PGM sin comentarios.
-
-### Proyectos de ejemplo:
-- [Calculadora de enteros](https://github.com/ddevigner/pleng21-22/tree/main/material/calc_enteros): diferentes fases de una calculadora de enteros implementada con JavaCC.
-- [Comando wc](https://github.com/ddevigner/pleng21-22/tree/main/material/wc): comando wc completamente implementado en JavaCC.
-- [JavaCC first proyect](https://github.com/ddevigner/pleng21-22/tree/main/material/javacc_first_contact): un primer proyecto de contacto implementado y compilado en JavaCC.
-- [JavaCC syntax files](https://github.com/ddevigner/pleng21-22/tree/main/material/javacc_syntax_examples): archivos de ejemplo que muestran la implementacion de un fichero JavaCC y su sintaxis.
