@@ -1,5 +1,5 @@
 Sergio Gabete César (774631) & Devid Dokash (780131).
-Práctica 3: Construcción de un analizador semantico para "adac"
+Práctica 4: Construcción completa de un compilador de lenguaje "adac".
 Blah, blah, blah
 
 Para la recuperacion de errores se ha optado por el metodo en modo panico en dos 
@@ -20,3 +20,7 @@ lib
      |--- exceptions: excepciones del analisis semantico, los nombres de los archivos son autoexplicativos.
      |--- SemanticFunctions.java: implementa funciones de analisis semantico y detecta errores.
 |--- traductor/adac_4.jj: analizador semantico.
+
+ERRORES QUE NO HAN PODIDO AVERIGUARSE:
+-> Extrañamente, si un String contenía el caracter '>' no permitía compilar el 
+pcode.

@@ -5,7 +5,7 @@
 // - Coms: https://javacc.github.io/javacc/tutorials/token-manager.html. Imple-
 // mentacion del analizador sintactico.
 // - Version: 3.
-// - Version-Info: analizador semantico.
+// - Version-Info: analizador semantico y generacion de codigo.
 //-----------------------------------------------------------------------------
 
 options {
